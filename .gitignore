@@ -1,0 +1,13 @@
+
+/work
+bin
+obj
+/TestResults
+/vendor
+/reference
+*.suo
+/_ReSharper.RosSharp
+*.user
+Thumbs.db
+Doc/build
+/Release
