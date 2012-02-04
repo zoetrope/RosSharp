@@ -79,12 +79,37 @@ namespace RosSharp.Tests
 
             var client = new MasterClient();
 
-            var state = client.GetSystemState("/chatter");
+            var state = client.GetSystemState("/test");
             state.Code.Is(1);
             state.StatusMessage.Is("current system state");
             state.Publishers.Count.Is(3);
-            state.Subscribers.Count.Is(3);
+            state.Subscribers.Count.Is(2);
             state.Services.Count.Is(2);
+        }
+
+        [TestMethod]
+        [HostType("Moles")]
+        public void TestGetSystemState_Error()
+        {
+            var result = new object[3]
+                        {
+                            -1,
+                            "caller_id must be a string",
+                            new object[3] {new object[0], new object[0], new object[0]}
+                        };
+            var master = new SIMaster();
+            master.GetSystemStateString = x => result;
+
+            MXmlRpcProxyGen.Create<IMaster>(() => master);
+
+            var client = new MasterClient();
+
+            var state = client.GetSystemState(null);
+            state.Code.Is(-1);
+            state.StatusMessage.Is("caller_id must be a string");
+            state.Publishers.Count.Is(0);
+            state.Subscribers.Count.Is(0);
+            state.Services.Count.Is(0);
         }
     }
 }

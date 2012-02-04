@@ -12,7 +12,7 @@ namespace Talker
         {
             var client = new MasterClient();
 
-            var state = client.GetSystemState("/chatter");
+            var state = client.GetSystemState(null);
         }
     }
 }

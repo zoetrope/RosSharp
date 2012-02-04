@@ -24,29 +24,45 @@ namespace RosSharp
         {
             var ret = _master.GetSystemState(callerId);
 
+            return ParseSystemState(ret);
+        }
+
+        private SystemState ParseSystemState(object[] ret)
+        {
             var state = new SystemState()
             {
                 Code = (int)ret[0],
-                StatusMessage = (string)ret[1],
-                Publishers = ((object[][][])ret[2])[0]
-                    .Select(x=>new PublisherSystemState(){
+                StatusMessage = (string)ret[1]
+
+            };
+
+            if (state.Code == 1)
+            {
+                state.Publishers = ((object[][][])ret[2])[0]
+                    .Select(x => new PublisherSystemState()
+                    {
                         TopicName = (string)x[0],
                         Publishers = ((object[])x[1]).Cast<string>().ToList()
-                    }).ToList(),
-                Subscribers = ((object[][][])ret[2])[0]
+                    }).ToList();
+                state.Subscribers = ((object[][][])ret[2])[1]
                     .Select(x => new SubscriberSystemState()
                     {
                         TopicName = (string)x[0],
                         Subscribers = ((object[])x[1]).Cast<string>().ToList()
-                    }).ToList(),
-                Services = ((object[][][])ret[2])[0]
+                    }).ToList();
+                state.Services = ((object[][][])ret[2])[2]
                     .Select(x => new ServiceSystemState()
                     {
                         ServiceName = (string)x[0],
-                        Services= ((object[])x[1]).Cast<string>().ToList()
-                    }).ToList(),
-
-            };
+                        Services = ((object[])x[1]).Cast<string>().ToList()
+                    }).ToList();
+            }
+            else
+            {
+                state.Publishers = new List<PublisherSystemState>();
+                state.Subscribers = new List<SubscriberSystemState>();
+                state.Services = new List<ServiceSystemState>();
+            }
 
             return state;
         }

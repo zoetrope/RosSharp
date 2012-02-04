@@ -118,10 +118,6 @@
             <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.GetSystemState(System.String)"/>
             </summary>
         </member>
-        <member name="P:RosSharp.Moles.MMasterClient.HogeObject">
-            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.Hoge(System.Object)"/>
-            </summary>
-        </member>
         <member name="P:RosSharp.Moles.MMasterClient.RegisterSubscriber">
             <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.RegisterSubscriber"/>
             </summary>
@@ -147,10 +143,6 @@
         </member>
         <member name="P:RosSharp.Moles.MMasterClient.AllInstances.GetSystemStateString">
             <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.GetSystemState(System.String)"/>
-            </summary>
-        </member>
-        <member name="P:RosSharp.Moles.MMasterClient.AllInstances.HogeObject">
-            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.Hoge(System.Object)"/>
             </summary>
         </member>
         <member name="P:RosSharp.Moles.MMasterClient.AllInstances.RegisterSubscriber">
