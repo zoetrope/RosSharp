@@ -16,55 +16,7 @@ namespace RosSharp
         public MasterClient()
         {
             _master = XmlRpcProxyGen.Create<IMaster>();
-            
-            (_master as XmlRpcClientProtocol).Url = "http://192.168.11.4:11311/";
-        }
-
-        public SystemState GetSystemState(string callerId)
-        {
-            var ret = _master.GetSystemState(callerId);
-
-            return ParseSystemState(ret);
-        }
-
-        private SystemState ParseSystemState(object[] ret)
-        {
-            var state = new SystemState()
-            {
-                Code = (int)ret[0],
-                StatusMessage = (string)ret[1]
-
-            };
-
-            if (state.Code == 1)
-            {
-                state.Publishers = ((object[][][])ret[2])[0]
-                    .Select(x => new PublisherSystemState()
-                    {
-                        TopicName = (string)x[0],
-                        Publishers = ((object[])x[1]).Cast<string>().ToList()
-                    }).ToList();
-                state.Subscribers = ((object[][][])ret[2])[1]
-                    .Select(x => new SubscriberSystemState()
-                    {
-                        TopicName = (string)x[0],
-                        Subscribers = ((object[])x[1]).Cast<string>().ToList()
-                    }).ToList();
-                state.Services = ((object[][][])ret[2])[2]
-                    .Select(x => new ServiceSystemState()
-                    {
-                        ServiceName = (string)x[0],
-                        Services = ((object[])x[1]).Cast<string>().ToList()
-                    }).ToList();
-            }
-            else
-            {
-                state.Publishers = new List<PublisherSystemState>();
-                state.Subscribers = new List<SubscriberSystemState>();
-                state.Services = new List<ServiceSystemState>();
-            }
-
-            return state;
+            _master.Url = "http://192.168.11.4:11311/";
         }
 
         public List<Uri> RegisterSubscriber()
@@ -77,13 +29,71 @@ namespace RosSharp
 
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Looking Uri about publishers and subscribers
+        /// </summary>
+        /// <param name="callerId">ROS Caller ID</param>
+        /// <param name="nodeName">Name of node to lookup</param>
+        /// <returns>Uri of the node with associated nodeName/callerId</returns>
+        public Uri LookupNode(string callerId, string nodeName)
+        {
+            var ret = _master.LookupNode(callerId, nodeName);
+
+            if ((int)ret[0] == 1)
+            {
+                return new Uri((string)ret[2]);
+            }
+            else
+            {
+                throw new InvalidOperationException((string)ret[1]);
+            }
+
+        }
+
+        /// <summary>
+        /// Get system state
+        /// </summary>
+        /// <param name="callerId">ROS Caller ID</param>
+        /// <returns>system state (publishers, subscribers, services)</returns>
+        public SystemState GetSystemState(string callerId)
+        {
+            var ret = _master.GetSystemState(callerId);
+
+            if ((int)ret[0] == 1)
+            {
+                return new SystemState()
+                {
+                    Publishers = ((object[][][])ret[2])[0]
+                    .Select(x => new PublisherSystemState()
+                    {
+                        TopicName = (string)x[0],
+                        Publishers = ((object[])x[1]).Cast<string>().ToList()
+                    }).ToList(),
+                    Subscribers = ((object[][][])ret[2])[1]
+                    .Select(x => new SubscriberSystemState()
+                    {
+                        TopicName = (string)x[0],
+                        Subscribers = ((object[])x[1]).Cast<string>().ToList()
+                    }).ToList(),
+                    Services = ((object[][][])ret[2])[2]
+                    .Select(x => new ServiceSystemState()
+                    {
+                        ServiceName = (string)x[0],
+                        Services = ((object[])x[1]).Cast<string>().ToList()
+                    }).ToList()
+                };
+            }
+            else
+            {
+                throw new InvalidOperationException((string)ret[1]);
+            }
+        }
+        
     }
 
     public class SystemState
     {
-        public int Code { get; set; }
-        public string StatusMessage { get; set; }
-
         public List<PublisherSystemState> Publishers { get; set; }
         public List<SubscriberSystemState> Subscribers { get; set; }
         public List<ServiceSystemState> Services { get; set; }

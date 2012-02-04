@@ -13,7 +13,70 @@ namespace RosSharp.Tests
     {
         [TestMethod]
         [HostType("Moles")]
-        public void TestGetSystemState()
+        public void TestLookupNode_Success()
+        {
+            var result = new object[3]
+            {
+                1,
+                "node api",
+                "http://192.168.11.4:59511/"
+            };
+
+            var master = new SIMaster();
+            master.LookupNodeStringString = (_, __) => result;
+            master.UrlSetString = _ => { };
+
+            MXmlRpcProxyGen.Create<IMaster>(() => master);
+            var client = new MasterClient();
+
+            client.LookupNode("/test", "/rosout").Is(new Uri("http://192.168.11.4:59511/"));
+
+        }
+
+        [TestMethod]
+        [HostType("Moles")]
+        public void TestLookupNode_UnknownError()
+        {
+            var result = new object[3]
+            {
+                -1,
+                "unknown node [/hogehoge]",
+                ""
+            };
+
+            var master = new SIMaster();
+            master.LookupNodeStringString = (_, __) => result;
+            master.UrlSetString = _ => { };
+
+            MXmlRpcProxyGen.Create<IMaster>(() => master);
+            var client = new MasterClient();
+
+            AssertEx.Throws<InvalidOperationException>(() => client.LookupNode("/test", "/hogehoge"));
+        }
+        [TestMethod]
+        [HostType("Moles")]
+        public void TestLookupNode_ParameterError()
+        {
+            var result = new object[3]
+            {
+                -1,
+                "ERROR: parameter [node] must be a non-empty string",
+                ""
+            };
+
+            var master = new SIMaster();
+            master.LookupNodeStringString = (_, __) => result;
+            master.UrlSetString = _ => { };
+
+            MXmlRpcProxyGen.Create<IMaster>(() => master);
+            var client = new MasterClient();
+
+            AssertEx.Throws<InvalidOperationException>(() => client.LookupNode("/test", null));
+        }
+
+        [TestMethod]
+        [HostType("Moles")]
+        public void TestGetSystemState_Success()
         {
             var result = new object[3]
             {
@@ -73,15 +136,14 @@ namespace RosSharp.Tests
             };
 
             var master = new SIMaster();
-            master.GetSystemStateString = x => result;
+            master.GetSystemStateString = _ => result;
+            master.UrlSetString = _ => { };
 
             MXmlRpcProxyGen.Create<IMaster>(() => master);
 
             var client = new MasterClient();
 
             var state = client.GetSystemState("/test");
-            state.Code.Is(1);
-            state.StatusMessage.Is("current system state");
             state.Publishers.Count.Is(3);
             state.Subscribers.Count.Is(2);
             state.Services.Count.Is(2);
@@ -89,7 +151,7 @@ namespace RosSharp.Tests
 
         [TestMethod]
         [HostType("Moles")]
-        public void TestGetSystemState_Error()
+        public void TestGetSystemState_ParameterError()
         {
             var result = new object[3]
                         {
@@ -98,18 +160,13 @@ namespace RosSharp.Tests
                             new object[3] {new object[0], new object[0], new object[0]}
                         };
             var master = new SIMaster();
-            master.GetSystemStateString = x => result;
+            master.GetSystemStateString = _ => result;
+            master.UrlSetString = _ => { };
 
             MXmlRpcProxyGen.Create<IMaster>(() => master);
-
             var client = new MasterClient();
 
-            var state = client.GetSystemState(null);
-            state.Code.Is(-1);
-            state.StatusMessage.Is("caller_id must be a string");
-            state.Publishers.Count.Is(0);
-            state.Subscribers.Count.Is(0);
-            state.Services.Count.Is(0);
+            AssertEx.Throws<InvalidOperationException>(() => client.GetSystemState(null));
         }
     }
 }

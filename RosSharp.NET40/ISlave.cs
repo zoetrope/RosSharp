@@ -3,7 +3,7 @@
 namespace RosSharp
 {
     [XmlRpcUrl("")]
-    public interface ISlave
+    public interface ISlave : IXmlRpcProxy
     {
         [XmlRpcMethod("getBusStats")]
         object[] GetBusStats(string callerId);

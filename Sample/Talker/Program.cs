@@ -12,7 +12,9 @@ namespace Talker
         {
             var client = new MasterClient();
 
-            var state = client.GetSystemState(null);
+            //var state = client.GetSystemState("/talker");
+            
+            client.LookupNode("/talker", null);
         }
     }
 }

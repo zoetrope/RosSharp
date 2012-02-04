@@ -3,7 +3,7 @@
 namespace RosSharp
 {
     [XmlRpcUrl("")]
-    public interface IMaster
+    public interface IMaster : IXmlRpcProxy
     {
         [XmlRpcMethod("registerService")]
         object[] RegisterService(string callerId, string service, string serviceApi, string callerApi);

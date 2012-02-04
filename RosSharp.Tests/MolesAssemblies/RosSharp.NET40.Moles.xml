@@ -118,24 +118,28 @@
             <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.GetSystemState(System.String)"/>
             </summary>
         </member>
+        <member name="P:RosSharp.Moles.MMasterClient.LookupNodeStringString">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.LookupNode(System.String,System.String)"/>
+            </summary>
+        </member>
         <member name="P:RosSharp.Moles.MMasterClient.RegisterSubscriber">
             <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.RegisterSubscriber"/>
-            </summary>
-        </member>
-        <member name="P:RosSharp.Moles.MMasterClient._GetSystemStateb__4ObjectArray">
-            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.&lt;GetSystemState&gt;b__4(System.Object[])"/>
-            </summary>
-        </member>
-        <member name="P:RosSharp.Moles.MMasterClient._GetSystemStateb__5ObjectArray">
-            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.&lt;GetSystemState&gt;b__5(System.Object[])"/>
             </summary>
         </member>
         <member name="P:RosSharp.Moles.MMasterClient._GetSystemStateb__6ObjectArray">
             <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.&lt;GetSystemState&gt;b__6(System.Object[])"/>
             </summary>
         </member>
-        <member name="P:RosSharp.Moles.MMasterClient._RegisterSubscriberb__a">
-            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.&lt;RegisterSubscriber&gt;b__a"/>
+        <member name="P:RosSharp.Moles.MMasterClient._GetSystemStateb__7ObjectArray">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.&lt;GetSystemState&gt;b__7(System.Object[])"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient._GetSystemStateb__8ObjectArray">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.&lt;GetSystemState&gt;b__8(System.Object[])"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient._RegisterSubscriberb__0">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.&lt;RegisterSubscriber&gt;b__0"/>
             </summary>
         </member>
         <member name="T:RosSharp.Moles.MMasterClient.AllInstances">
@@ -143,6 +147,10 @@
         </member>
         <member name="P:RosSharp.Moles.MMasterClient.AllInstances.GetSystemStateString">
             <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.GetSystemState(System.String)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient.AllInstances.LookupNodeStringString">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.LookupNode(System.String,System.String)"/>
             </summary>
         </member>
         <member name="P:RosSharp.Moles.MMasterClient.AllInstances.RegisterSubscriber">
@@ -667,14 +675,6 @@
         <member name="P:RosSharp.Moles.MSystemState.Behavior">
             <summary>Assigns the behavior for all methods of the moled type</summary>
         </member>
-        <member name="P:RosSharp.Moles.MSystemState.CodeGet">
-            <summary>Sets the mole of <see cref="P:RosSharp.SystemState.Code"/>
-            </summary>
-        </member>
-        <member name="P:RosSharp.Moles.MSystemState.CodeSetInt32">
-            <summary>Sets the mole of <see cref="P:RosSharp.SystemState.Code"/>
-            </summary>
-        </member>
         <member name="P:RosSharp.Moles.MSystemState.Constructor">
             <summary>Sets the mole of <see cref="M:RosSharp.SystemState.#ctor"/>
             </summary>
@@ -695,14 +695,6 @@
             <summary>Sets the mole of <see cref="P:RosSharp.SystemState.Services"/>
             </summary>
         </member>
-        <member name="P:RosSharp.Moles.MSystemState.StatusMessageGet">
-            <summary>Sets the mole of <see cref="P:RosSharp.SystemState.StatusMessage"/>
-            </summary>
-        </member>
-        <member name="P:RosSharp.Moles.MSystemState.StatusMessageSetString">
-            <summary>Sets the mole of <see cref="P:RosSharp.SystemState.StatusMessage"/>
-            </summary>
-        </member>
         <member name="P:RosSharp.Moles.MSystemState.SubscribersGet">
             <summary>Sets the mole of <see cref="P:RosSharp.SystemState.Subscribers"/>
             </summary>
@@ -713,14 +705,6 @@
         </member>
         <member name="T:RosSharp.Moles.MSystemState.AllInstances">
             <summary>Define moles for all instances members</summary>
-        </member>
-        <member name="P:RosSharp.Moles.MSystemState.AllInstances.CodeGet">
-            <summary>Sets the mole of <see cref="P:RosSharp.SystemState.Code"/>
-            </summary>
-        </member>
-        <member name="P:RosSharp.Moles.MSystemState.AllInstances.CodeSetInt32">
-            <summary>Sets the mole of <see cref="P:RosSharp.SystemState.Code"/>
-            </summary>
         </member>
         <member name="P:RosSharp.Moles.MSystemState.AllInstances.PublishersGet">
             <summary>Sets the mole of <see cref="P:RosSharp.SystemState.Publishers"/>
@@ -736,14 +720,6 @@
         </member>
         <member name="P:RosSharp.Moles.MSystemState.AllInstances.ServicesSetListOfServiceSystemState">
             <summary>Sets the mole of <see cref="P:RosSharp.SystemState.Services"/>
-            </summary>
-        </member>
-        <member name="P:RosSharp.Moles.MSystemState.AllInstances.StatusMessageGet">
-            <summary>Sets the mole of <see cref="P:RosSharp.SystemState.StatusMessage"/>
-            </summary>
-        </member>
-        <member name="P:RosSharp.Moles.MSystemState.AllInstances.StatusMessageSetString">
-            <summary>Sets the mole of <see cref="P:RosSharp.SystemState.StatusMessage"/>
             </summary>
         </member>
         <member name="P:RosSharp.Moles.MSystemState.AllInstances.SubscribersGet">
@@ -793,6 +769,140 @@
         <member name="M:RosSharp.Moles.SIMaster.#ctor">
             <summary>Initializes a new instance of type SIMaster</summary>
         </member>
+        <member name="F:RosSharp.Moles.SIMaster.AllowAutoRedirectGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.AllowAutoRedirect"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.AllowAutoRedirectSetBoolean">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.AllowAutoRedirect"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.AttachBackingFieldToAllowAutoRedirect">
+            <summary>Attaches delegates to emulate SIMaster.AllowAutoRedirect as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.AttachBackingFieldToConnectionGroupName">
+            <summary>Attaches delegates to emulate SIMaster.ConnectionGroupName as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.AttachBackingFieldToCredentials">
+            <summary>Attaches delegates to emulate SIMaster.Credentials as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.AttachBackingFieldToEnableCompression">
+            <summary>Attaches delegates to emulate SIMaster.EnableCompression as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.AttachBackingFieldToExpect100Continue">
+            <summary>Attaches delegates to emulate SIMaster.Expect100Continue as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.AttachBackingFieldToIndentation">
+            <summary>Attaches delegates to emulate SIMaster.Indentation as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.AttachBackingFieldToKeepAlive">
+            <summary>Attaches delegates to emulate SIMaster.KeepAlive as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.AttachBackingFieldToNonStandard">
+            <summary>Attaches delegates to emulate SIMaster.NonStandard as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.AttachBackingFieldToPreAuthenticate">
+            <summary>Attaches delegates to emulate SIMaster.PreAuthenticate as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.AttachBackingFieldToProtocolVersion">
+            <summary>Attaches delegates to emulate SIMaster.ProtocolVersion as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.AttachBackingFieldToProxy">
+            <summary>Attaches delegates to emulate SIMaster.Proxy as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.AttachBackingFieldToTimeout">
+            <summary>Attaches delegates to emulate SIMaster.Timeout as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.AttachBackingFieldToUrl">
+            <summary>Attaches delegates to emulate SIMaster.Url as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.AttachBackingFieldToUseEmptyElementTags">
+            <summary>Attaches delegates to emulate SIMaster.UseEmptyElementTags as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.AttachBackingFieldToUseEmptyParamsTag">
+            <summary>Attaches delegates to emulate SIMaster.UseEmptyParamsTag as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.AttachBackingFieldToUseIndentation">
+            <summary>Attaches delegates to emulate SIMaster.UseIndentation as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.AttachBackingFieldToUseIntTag">
+            <summary>Attaches delegates to emulate SIMaster.UseIntTag as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.AttachBackingFieldToUseNagleAlgorithm">
+            <summary>Attaches delegates to emulate SIMaster.UseNagleAlgorithm as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.AttachBackingFieldToUseStringTag">
+            <summary>Attaches delegates to emulate SIMaster.UseStringTag as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.AttachBackingFieldToUserAgent">
+            <summary>Attaches delegates to emulate SIMaster.UserAgent as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.AttachBackingFieldToXmlEncoding">
+            <summary>Attaches delegates to emulate SIMaster.XmlEncoding as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.AttachBackingFieldToXmlRpcMethod">
+            <summary>Attaches delegates to emulate SIMaster.XmlRpcMethod as a property with a backing field</summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.AttachLoggerXmlRpcLogger">
+            <summary>Sets the stub of <see cref="M:CookComputing.XmlRpc.IXmlRpcProxy.AttachLogger(CookComputing.XmlRpc.XmlRpcLogger)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.ClientCertificatesGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ClientCertificates"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.ConnectionGroupNameGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ConnectionGroupName"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.ConnectionGroupNameSetString">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ConnectionGroupName"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#AttachLogger(CookComputing.XmlRpc.XmlRpcLogger)">
+            <summary>Sets the stub of <see cref="M:CookComputing.XmlRpc.IXmlRpcProxy.AttachLogger(CookComputing.XmlRpc.XmlRpcLogger)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#SystemListMethods">
+            <summary>Sets the stub of <see cref="M:CookComputing.XmlRpc.IXmlRpcProxy.SystemListMethods"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#SystemMethodHelp(System.String)">
+            <summary>Sets the stub of <see cref="M:CookComputing.XmlRpc.IXmlRpcProxy.SystemMethodHelp(System.String)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#SystemMethodSignature(System.String)">
+            <summary>Sets the stub of <see cref="M:CookComputing.XmlRpc.IXmlRpcProxy.SystemMethodSignature(System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.CookieContainerGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.CookieContainer"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.CredentialsGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Credentials"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.CredentialsSetICredentials">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Credentials"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.EnableCompressionGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.EnableCompression"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.EnableCompressionSetBoolean">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.EnableCompression"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.Expect100ContinueGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Expect100Continue"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.Expect100ContinueSetBoolean">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Expect100Continue"/>
+            </summary>
+        </member>
         <member name="F:RosSharp.Moles.SIMaster.GetMasterUriString">
             <summary>Sets the stub of <see cref="M:RosSharp.IMaster.GetMasterUri(System.String)"/>
             </summary>
@@ -805,12 +915,68 @@
             <summary>Sets the stub of <see cref="M:RosSharp.IMaster.GetSystemState(System.String)"/>
             </summary>
         </member>
+        <member name="F:RosSharp.Moles.SIMaster.HeadersGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Headers"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.IdGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Id"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.IndentationGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Indentation"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.IndentationSetInt32">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Indentation"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.KeepAliveGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.KeepAlive"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.KeepAliveSetBoolean">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.KeepAlive"/>
+            </summary>
+        </member>
         <member name="F:RosSharp.Moles.SIMaster.LookupNodeStringString">
             <summary>Sets the stub of <see cref="M:RosSharp.IMaster.LookupNode(System.String,System.String)"/>
             </summary>
         </member>
         <member name="F:RosSharp.Moles.SIMaster.LookupServiceStringString">
             <summary>Sets the stub of <see cref="M:RosSharp.IMaster.LookupService(System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.NonStandardGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.NonStandard"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.NonStandardSetXmlRpcNonStandard">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.NonStandard"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.PreAuthenticateGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.PreAuthenticate"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.PreAuthenticateSetBoolean">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.PreAuthenticate"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.ProtocolVersionGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ProtocolVersion"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.ProtocolVersionSetVersion">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ProtocolVersion"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.ProxyGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Proxy"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.ProxySetIWebProxy">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Proxy"/>
             </summary>
         </member>
         <member name="F:RosSharp.Moles.SIMaster.RegisterPublisherStringStringStringString">
@@ -823,6 +989,20 @@
         </member>
         <member name="F:RosSharp.Moles.SIMaster.RegisterSubscriberStringStringStringString">
             <summary>Sets the stub of <see cref="M:RosSharp.IMaster.RegisterSubscriber(System.String,System.String,System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.RequestEventEvent">
+            <summary>Event RequestEvent</summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.ResponseCookiesGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ResponseCookies"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.ResponseEventEvent">
+            <summary>Event ResponseEvent</summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.ResponseHeadersGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ResponseHeaders"/>
             </summary>
         </member>
         <member name="M:RosSharp.Moles.SIMaster.rsnet::RosSharp#IMaster#GetMasterUri(System.String)">
@@ -869,6 +1049,26 @@
             <summary>Sets the stub of <see cref="M:RosSharp.IMaster.UnregisterSubscriber(System.String,System.String,System.String)"/>
             </summary>
         </member>
+        <member name="F:RosSharp.Moles.SIMaster.SystemListMethods">
+            <summary>Sets the stub of <see cref="M:CookComputing.XmlRpc.IXmlRpcProxy.SystemListMethods"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.SystemMethodHelpString">
+            <summary>Sets the stub of <see cref="M:CookComputing.XmlRpc.IXmlRpcProxy.SystemMethodHelp(System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.SystemMethodSignatureString">
+            <summary>Sets the stub of <see cref="M:CookComputing.XmlRpc.IXmlRpcProxy.SystemMethodSignature(System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.TimeoutGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Timeout"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.TimeoutSetInt32">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Timeout"/>
+            </summary>
+        </member>
         <member name="F:RosSharp.Moles.SIMaster.UnregisterPublisherStringStringString">
             <summary>Sets the stub of <see cref="M:RosSharp.IMaster.UnregisterPublisher(System.String,System.String,System.String)"/>
             </summary>
@@ -879,6 +1079,198 @@
         </member>
         <member name="F:RosSharp.Moles.SIMaster.UnregisterSubscriberStringStringString">
             <summary>Sets the stub of <see cref="M:RosSharp.IMaster.UnregisterSubscriber(System.String,System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.UrlGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Url"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.UrlSetString">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Url"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.UseEmptyElementTagsGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseEmptyElementTags"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.UseEmptyElementTagsSetBoolean">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseEmptyElementTags"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.UseEmptyParamsTagGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseEmptyParamsTag"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.UseEmptyParamsTagSetBoolean">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseEmptyParamsTag"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.UseIndentationGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseIndentation"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.UseIndentationSetBoolean">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseIndentation"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.UseIntTagGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseIntTag"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.UseIntTagSetBoolean">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseIntTag"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.UseNagleAlgorithmGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseNagleAlgorithm"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.UseNagleAlgorithmSetBoolean">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseNagleAlgorithm"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.UseStringTagGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseStringTag"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.UseStringTagSetBoolean">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseStringTag"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.UserAgentGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UserAgent"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.UserAgentSetString">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UserAgent"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.XmlEncodingGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.XmlEncoding"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.XmlEncodingSetEncoding">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.XmlEncoding"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.XmlRpcMethodGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.XmlRpcMethod"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.XmlRpcMethodSetString">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.XmlRpcMethod"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIMaster.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#AllowAutoRedirect">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.AllowAutoRedirect"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIMaster.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#ClientCertificates">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ClientCertificates"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIMaster.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#ConnectionGroupName">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ConnectionGroupName"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIMaster.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#CookieContainer">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.CookieContainer"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIMaster.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#Credentials">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Credentials"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIMaster.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#EnableCompression">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.EnableCompression"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIMaster.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#Expect100Continue">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Expect100Continue"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIMaster.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#Headers">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Headers"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIMaster.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#Id">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Id"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIMaster.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#Indentation">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Indentation"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIMaster.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#KeepAlive">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.KeepAlive"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIMaster.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#NonStandard">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.NonStandard"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIMaster.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#PreAuthenticate">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.PreAuthenticate"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIMaster.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#ProtocolVersion">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ProtocolVersion"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIMaster.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#Proxy">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Proxy"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIMaster.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#ResponseCookies">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ResponseCookies"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIMaster.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#ResponseHeaders">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ResponseHeaders"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIMaster.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#Timeout">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Timeout"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIMaster.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#Url">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Url"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIMaster.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#UseEmptyElementTags">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseEmptyElementTags"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIMaster.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#UseEmptyParamsTag">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseEmptyParamsTag"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIMaster.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#UseIndentation">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseIndentation"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIMaster.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#UseIntTag">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseIntTag"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIMaster.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#UseNagleAlgorithm">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseNagleAlgorithm"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIMaster.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#UseStringTag">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseStringTag"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIMaster.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#UserAgent">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UserAgent"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIMaster.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#XmlEncoding">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.XmlEncoding"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIMaster.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#XmlRpcMethod">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.XmlRpcMethod"/>
             </summary>
         </member>
         <member name="T:RosSharp.Moles.SINode">
@@ -923,8 +1315,142 @@
         <member name="M:RosSharp.Moles.SIParameterServer.#ctor">
             <summary>Initializes a new instance of type SIParameterServer</summary>
         </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.AllowAutoRedirectGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.AllowAutoRedirect"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.AllowAutoRedirectSetBoolean">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.AllowAutoRedirect"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.AttachBackingFieldToAllowAutoRedirect">
+            <summary>Attaches delegates to emulate SIParameterServer.AllowAutoRedirect as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.AttachBackingFieldToConnectionGroupName">
+            <summary>Attaches delegates to emulate SIParameterServer.ConnectionGroupName as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.AttachBackingFieldToCredentials">
+            <summary>Attaches delegates to emulate SIParameterServer.Credentials as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.AttachBackingFieldToEnableCompression">
+            <summary>Attaches delegates to emulate SIParameterServer.EnableCompression as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.AttachBackingFieldToExpect100Continue">
+            <summary>Attaches delegates to emulate SIParameterServer.Expect100Continue as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.AttachBackingFieldToIndentation">
+            <summary>Attaches delegates to emulate SIParameterServer.Indentation as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.AttachBackingFieldToKeepAlive">
+            <summary>Attaches delegates to emulate SIParameterServer.KeepAlive as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.AttachBackingFieldToNonStandard">
+            <summary>Attaches delegates to emulate SIParameterServer.NonStandard as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.AttachBackingFieldToPreAuthenticate">
+            <summary>Attaches delegates to emulate SIParameterServer.PreAuthenticate as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.AttachBackingFieldToProtocolVersion">
+            <summary>Attaches delegates to emulate SIParameterServer.ProtocolVersion as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.AttachBackingFieldToProxy">
+            <summary>Attaches delegates to emulate SIParameterServer.Proxy as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.AttachBackingFieldToTimeout">
+            <summary>Attaches delegates to emulate SIParameterServer.Timeout as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.AttachBackingFieldToUrl">
+            <summary>Attaches delegates to emulate SIParameterServer.Url as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.AttachBackingFieldToUseEmptyElementTags">
+            <summary>Attaches delegates to emulate SIParameterServer.UseEmptyElementTags as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.AttachBackingFieldToUseEmptyParamsTag">
+            <summary>Attaches delegates to emulate SIParameterServer.UseEmptyParamsTag as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.AttachBackingFieldToUseIndentation">
+            <summary>Attaches delegates to emulate SIParameterServer.UseIndentation as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.AttachBackingFieldToUseIntTag">
+            <summary>Attaches delegates to emulate SIParameterServer.UseIntTag as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.AttachBackingFieldToUseNagleAlgorithm">
+            <summary>Attaches delegates to emulate SIParameterServer.UseNagleAlgorithm as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.AttachBackingFieldToUseStringTag">
+            <summary>Attaches delegates to emulate SIParameterServer.UseStringTag as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.AttachBackingFieldToUserAgent">
+            <summary>Attaches delegates to emulate SIParameterServer.UserAgent as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.AttachBackingFieldToXmlEncoding">
+            <summary>Attaches delegates to emulate SIParameterServer.XmlEncoding as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.AttachBackingFieldToXmlRpcMethod">
+            <summary>Attaches delegates to emulate SIParameterServer.XmlRpcMethod as a property with a backing field</summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.AttachLoggerXmlRpcLogger">
+            <summary>Sets the stub of <see cref="M:CookComputing.XmlRpc.IXmlRpcProxy.AttachLogger(CookComputing.XmlRpc.XmlRpcLogger)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.ClientCertificatesGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ClientCertificates"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.ConnectionGroupNameGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ConnectionGroupName"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.ConnectionGroupNameSetString">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ConnectionGroupName"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#AttachLogger(CookComputing.XmlRpc.XmlRpcLogger)">
+            <summary>Sets the stub of <see cref="M:CookComputing.XmlRpc.IXmlRpcProxy.AttachLogger(CookComputing.XmlRpc.XmlRpcLogger)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#SystemListMethods">
+            <summary>Sets the stub of <see cref="M:CookComputing.XmlRpc.IXmlRpcProxy.SystemListMethods"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#SystemMethodHelp(System.String)">
+            <summary>Sets the stub of <see cref="M:CookComputing.XmlRpc.IXmlRpcProxy.SystemMethodHelp(System.String)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#SystemMethodSignature(System.String)">
+            <summary>Sets the stub of <see cref="M:CookComputing.XmlRpc.IXmlRpcProxy.SystemMethodSignature(System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.CookieContainerGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.CookieContainer"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.CredentialsGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Credentials"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.CredentialsSetICredentials">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Credentials"/>
+            </summary>
+        </member>
         <member name="F:RosSharp.Moles.SIParameterServer.DeleteParamStringString">
             <summary>Sets the stub of <see cref="M:RosSharp.IParameterServer.DeleteParam(System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.EnableCompressionGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.EnableCompression"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.EnableCompressionSetBoolean">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.EnableCompression"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.Expect100ContinueGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Expect100Continue"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.Expect100ContinueSetBoolean">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Expect100Continue"/>
             </summary>
         </member>
         <member name="F:RosSharp.Moles.SIParameterServer.GetParamNamesString">
@@ -937,6 +1463,76 @@
         </member>
         <member name="F:RosSharp.Moles.SIParameterServer.HasParamStringString">
             <summary>Sets the stub of <see cref="M:RosSharp.IParameterServer.HasParam(System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.HeadersGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Headers"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.IdGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Id"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.IndentationGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Indentation"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.IndentationSetInt32">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Indentation"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.KeepAliveGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.KeepAlive"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.KeepAliveSetBoolean">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.KeepAlive"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.NonStandardGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.NonStandard"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.NonStandardSetXmlRpcNonStandard">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.NonStandard"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.PreAuthenticateGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.PreAuthenticate"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.PreAuthenticateSetBoolean">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.PreAuthenticate"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.ProtocolVersionGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ProtocolVersion"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.ProtocolVersionSetVersion">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ProtocolVersion"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.ProxyGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Proxy"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.ProxySetIWebProxy">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Proxy"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.RequestEventEvent">
+            <summary>Event RequestEvent</summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.ResponseCookiesGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ResponseCookies"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.ResponseEventEvent">
+            <summary>Event ResponseEvent</summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.ResponseHeadersGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ResponseHeaders"/>
             </summary>
         </member>
         <member name="M:RosSharp.Moles.SIParameterServer.rsnet::RosSharp#IParameterServer#DeleteParam(System.String,System.String)">
@@ -983,8 +1579,220 @@
             <summary>Sets the stub of <see cref="M:RosSharp.IParameterServer.SubscribeParam(System.String,System.String,System.String)"/>
             </summary>
         </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.SystemListMethods">
+            <summary>Sets the stub of <see cref="M:CookComputing.XmlRpc.IXmlRpcProxy.SystemListMethods"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.SystemMethodHelpString">
+            <summary>Sets the stub of <see cref="M:CookComputing.XmlRpc.IXmlRpcProxy.SystemMethodHelp(System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.SystemMethodSignatureString">
+            <summary>Sets the stub of <see cref="M:CookComputing.XmlRpc.IXmlRpcProxy.SystemMethodSignature(System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.TimeoutGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Timeout"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.TimeoutSetInt32">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Timeout"/>
+            </summary>
+        </member>
         <member name="F:RosSharp.Moles.SIParameterServer.UnsubscribeParamStringStringString">
             <summary>Sets the stub of <see cref="M:RosSharp.IParameterServer.UnsubscribeParam(System.String,System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.UrlGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Url"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.UrlSetString">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Url"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.UseEmptyElementTagsGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseEmptyElementTags"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.UseEmptyElementTagsSetBoolean">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseEmptyElementTags"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.UseEmptyParamsTagGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseEmptyParamsTag"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.UseEmptyParamsTagSetBoolean">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseEmptyParamsTag"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.UseIndentationGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseIndentation"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.UseIndentationSetBoolean">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseIndentation"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.UseIntTagGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseIntTag"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.UseIntTagSetBoolean">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseIntTag"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.UseNagleAlgorithmGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseNagleAlgorithm"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.UseNagleAlgorithmSetBoolean">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseNagleAlgorithm"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.UseStringTagGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseStringTag"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.UseStringTagSetBoolean">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseStringTag"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.UserAgentGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UserAgent"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.UserAgentSetString">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UserAgent"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.XmlEncodingGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.XmlEncoding"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.XmlEncodingSetEncoding">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.XmlEncoding"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.XmlRpcMethodGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.XmlRpcMethod"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.XmlRpcMethodSetString">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.XmlRpcMethod"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIParameterServer.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#AllowAutoRedirect">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.AllowAutoRedirect"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIParameterServer.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#ClientCertificates">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ClientCertificates"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIParameterServer.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#ConnectionGroupName">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ConnectionGroupName"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIParameterServer.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#CookieContainer">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.CookieContainer"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIParameterServer.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#Credentials">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Credentials"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIParameterServer.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#EnableCompression">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.EnableCompression"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIParameterServer.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#Expect100Continue">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Expect100Continue"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIParameterServer.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#Headers">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Headers"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIParameterServer.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#Id">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Id"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIParameterServer.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#Indentation">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Indentation"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIParameterServer.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#KeepAlive">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.KeepAlive"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIParameterServer.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#NonStandard">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.NonStandard"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIParameterServer.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#PreAuthenticate">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.PreAuthenticate"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIParameterServer.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#ProtocolVersion">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ProtocolVersion"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIParameterServer.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#Proxy">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Proxy"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIParameterServer.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#ResponseCookies">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ResponseCookies"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIParameterServer.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#ResponseHeaders">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ResponseHeaders"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIParameterServer.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#Timeout">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Timeout"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIParameterServer.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#Url">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Url"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIParameterServer.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#UseEmptyElementTags">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseEmptyElementTags"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIParameterServer.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#UseEmptyParamsTag">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseEmptyParamsTag"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIParameterServer.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#UseIndentation">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseIndentation"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIParameterServer.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#UseIntTag">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseIntTag"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIParameterServer.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#UseNagleAlgorithm">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseNagleAlgorithm"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIParameterServer.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#UseStringTag">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseStringTag"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIParameterServer.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#UserAgent">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UserAgent"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIParameterServer.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#XmlEncoding">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.XmlEncoding"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SIParameterServer.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#XmlRpcMethod">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.XmlRpcMethod"/>
             </summary>
         </member>
         <member name="T:RosSharp.Moles.SISlave">
@@ -993,6 +1801,140 @@
         </member>
         <member name="M:RosSharp.Moles.SISlave.#ctor">
             <summary>Initializes a new instance of type SISlave</summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.AllowAutoRedirectGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.AllowAutoRedirect"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.AllowAutoRedirectSetBoolean">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.AllowAutoRedirect"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.AttachBackingFieldToAllowAutoRedirect">
+            <summary>Attaches delegates to emulate SISlave.AllowAutoRedirect as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.AttachBackingFieldToConnectionGroupName">
+            <summary>Attaches delegates to emulate SISlave.ConnectionGroupName as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.AttachBackingFieldToCredentials">
+            <summary>Attaches delegates to emulate SISlave.Credentials as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.AttachBackingFieldToEnableCompression">
+            <summary>Attaches delegates to emulate SISlave.EnableCompression as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.AttachBackingFieldToExpect100Continue">
+            <summary>Attaches delegates to emulate SISlave.Expect100Continue as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.AttachBackingFieldToIndentation">
+            <summary>Attaches delegates to emulate SISlave.Indentation as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.AttachBackingFieldToKeepAlive">
+            <summary>Attaches delegates to emulate SISlave.KeepAlive as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.AttachBackingFieldToNonStandard">
+            <summary>Attaches delegates to emulate SISlave.NonStandard as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.AttachBackingFieldToPreAuthenticate">
+            <summary>Attaches delegates to emulate SISlave.PreAuthenticate as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.AttachBackingFieldToProtocolVersion">
+            <summary>Attaches delegates to emulate SISlave.ProtocolVersion as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.AttachBackingFieldToProxy">
+            <summary>Attaches delegates to emulate SISlave.Proxy as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.AttachBackingFieldToTimeout">
+            <summary>Attaches delegates to emulate SISlave.Timeout as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.AttachBackingFieldToUrl">
+            <summary>Attaches delegates to emulate SISlave.Url as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.AttachBackingFieldToUseEmptyElementTags">
+            <summary>Attaches delegates to emulate SISlave.UseEmptyElementTags as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.AttachBackingFieldToUseEmptyParamsTag">
+            <summary>Attaches delegates to emulate SISlave.UseEmptyParamsTag as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.AttachBackingFieldToUseIndentation">
+            <summary>Attaches delegates to emulate SISlave.UseIndentation as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.AttachBackingFieldToUseIntTag">
+            <summary>Attaches delegates to emulate SISlave.UseIntTag as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.AttachBackingFieldToUseNagleAlgorithm">
+            <summary>Attaches delegates to emulate SISlave.UseNagleAlgorithm as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.AttachBackingFieldToUseStringTag">
+            <summary>Attaches delegates to emulate SISlave.UseStringTag as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.AttachBackingFieldToUserAgent">
+            <summary>Attaches delegates to emulate SISlave.UserAgent as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.AttachBackingFieldToXmlEncoding">
+            <summary>Attaches delegates to emulate SISlave.XmlEncoding as a property with a backing field</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.AttachBackingFieldToXmlRpcMethod">
+            <summary>Attaches delegates to emulate SISlave.XmlRpcMethod as a property with a backing field</summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.AttachLoggerXmlRpcLogger">
+            <summary>Sets the stub of <see cref="M:CookComputing.XmlRpc.IXmlRpcProxy.AttachLogger(CookComputing.XmlRpc.XmlRpcLogger)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.ClientCertificatesGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ClientCertificates"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.ConnectionGroupNameGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ConnectionGroupName"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.ConnectionGroupNameSetString">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ConnectionGroupName"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#AttachLogger(CookComputing.XmlRpc.XmlRpcLogger)">
+            <summary>Sets the stub of <see cref="M:CookComputing.XmlRpc.IXmlRpcProxy.AttachLogger(CookComputing.XmlRpc.XmlRpcLogger)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#SystemListMethods">
+            <summary>Sets the stub of <see cref="M:CookComputing.XmlRpc.IXmlRpcProxy.SystemListMethods"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#SystemMethodHelp(System.String)">
+            <summary>Sets the stub of <see cref="M:CookComputing.XmlRpc.IXmlRpcProxy.SystemMethodHelp(System.String)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#SystemMethodSignature(System.String)">
+            <summary>Sets the stub of <see cref="M:CookComputing.XmlRpc.IXmlRpcProxy.SystemMethodSignature(System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.CookieContainerGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.CookieContainer"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.CredentialsGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Credentials"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.CredentialsSetICredentials">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Credentials"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.EnableCompressionGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.EnableCompression"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.EnableCompressionSetBoolean">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.EnableCompression"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.Expect100ContinueGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Expect100Continue"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.Expect100ContinueSetBoolean">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Expect100Continue"/>
+            </summary>
         </member>
         <member name="F:RosSharp.Moles.SISlave.GetBusInfoString">
             <summary>Sets the stub of <see cref="M:RosSharp.ISlave.GetBusInfo(System.String)"/>
@@ -1018,16 +1960,86 @@
             <summary>Sets the stub of <see cref="M:RosSharp.ISlave.GetSubscriptions(System.String)"/>
             </summary>
         </member>
+        <member name="F:RosSharp.Moles.SISlave.HeadersGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Headers"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.IdGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Id"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.IndentationGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Indentation"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.IndentationSetInt32">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Indentation"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.KeepAliveGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.KeepAlive"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.KeepAliveSetBoolean">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.KeepAlive"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.NonStandardGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.NonStandard"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.NonStandardSetXmlRpcNonStandard">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.NonStandard"/>
+            </summary>
+        </member>
         <member name="F:RosSharp.Moles.SISlave.ParamUpdateStringStringObject">
             <summary>Sets the stub of <see cref="M:RosSharp.ISlave.ParamUpdate(System.String,System.String,System.Object)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.PreAuthenticateGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.PreAuthenticate"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.PreAuthenticateSetBoolean">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.PreAuthenticate"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.ProtocolVersionGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ProtocolVersion"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.ProtocolVersionSetVersion">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ProtocolVersion"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.ProxyGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Proxy"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.ProxySetIWebProxy">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Proxy"/>
             </summary>
         </member>
         <member name="F:RosSharp.Moles.SISlave.PublisherUpdateStringStringStringArray">
             <summary>Sets the stub of <see cref="M:RosSharp.ISlave.PublisherUpdate(System.String,System.String,System.String[])"/>
             </summary>
         </member>
+        <member name="F:RosSharp.Moles.SISlave.RequestEventEvent">
+            <summary>Event RequestEvent</summary>
+        </member>
         <member name="F:RosSharp.Moles.SISlave.RequestTopicStringStringObjectArray">
             <summary>Sets the stub of <see cref="M:RosSharp.ISlave.RequestTopic(System.String,System.String,System.Object[])"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.ResponseCookiesGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ResponseCookies"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.ResponseEventEvent">
+            <summary>Event ResponseEvent</summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.ResponseHeadersGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ResponseHeaders"/>
             </summary>
         </member>
         <member name="M:RosSharp.Moles.SISlave.rsnet::RosSharp#ISlave#GetBusInfo(System.String)">
@@ -1072,6 +2084,218 @@
         </member>
         <member name="F:RosSharp.Moles.SISlave.ShutdownStringString">
             <summary>Sets the stub of <see cref="M:RosSharp.ISlave.Shutdown(System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.SystemListMethods">
+            <summary>Sets the stub of <see cref="M:CookComputing.XmlRpc.IXmlRpcProxy.SystemListMethods"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.SystemMethodHelpString">
+            <summary>Sets the stub of <see cref="M:CookComputing.XmlRpc.IXmlRpcProxy.SystemMethodHelp(System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.SystemMethodSignatureString">
+            <summary>Sets the stub of <see cref="M:CookComputing.XmlRpc.IXmlRpcProxy.SystemMethodSignature(System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.TimeoutGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Timeout"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.TimeoutSetInt32">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Timeout"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.UrlGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Url"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.UrlSetString">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Url"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.UseEmptyElementTagsGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseEmptyElementTags"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.UseEmptyElementTagsSetBoolean">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseEmptyElementTags"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.UseEmptyParamsTagGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseEmptyParamsTag"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.UseEmptyParamsTagSetBoolean">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseEmptyParamsTag"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.UseIndentationGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseIndentation"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.UseIndentationSetBoolean">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseIndentation"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.UseIntTagGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseIntTag"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.UseIntTagSetBoolean">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseIntTag"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.UseNagleAlgorithmGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseNagleAlgorithm"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.UseNagleAlgorithmSetBoolean">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseNagleAlgorithm"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.UseStringTagGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseStringTag"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.UseStringTagSetBoolean">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseStringTag"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.UserAgentGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UserAgent"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.UserAgentSetString">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UserAgent"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.XmlEncodingGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.XmlEncoding"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.XmlEncodingSetEncoding">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.XmlEncoding"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.XmlRpcMethodGet">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.XmlRpcMethod"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.XmlRpcMethodSetString">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.XmlRpcMethod"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SISlave.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#AllowAutoRedirect">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.AllowAutoRedirect"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SISlave.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#ClientCertificates">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ClientCertificates"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SISlave.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#ConnectionGroupName">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ConnectionGroupName"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SISlave.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#CookieContainer">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.CookieContainer"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SISlave.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#Credentials">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Credentials"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SISlave.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#EnableCompression">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.EnableCompression"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SISlave.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#Expect100Continue">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Expect100Continue"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SISlave.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#Headers">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Headers"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SISlave.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#Id">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Id"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SISlave.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#Indentation">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Indentation"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SISlave.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#KeepAlive">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.KeepAlive"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SISlave.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#NonStandard">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.NonStandard"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SISlave.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#PreAuthenticate">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.PreAuthenticate"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SISlave.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#ProtocolVersion">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ProtocolVersion"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SISlave.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#Proxy">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Proxy"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SISlave.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#ResponseCookies">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ResponseCookies"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SISlave.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#ResponseHeaders">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.ResponseHeaders"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SISlave.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#Timeout">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Timeout"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SISlave.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#Url">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.Url"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SISlave.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#UseEmptyElementTags">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseEmptyElementTags"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SISlave.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#UseEmptyParamsTag">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseEmptyParamsTag"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SISlave.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#UseIndentation">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseIndentation"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SISlave.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#UseIntTag">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseIntTag"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SISlave.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#UseNagleAlgorithm">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseNagleAlgorithm"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SISlave.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#UseStringTag">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UseStringTag"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SISlave.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#UserAgent">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.UserAgent"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SISlave.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#XmlEncoding">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.XmlEncoding"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SISlave.ccxrv::CookComputing#XmlRpc#IXmlRpcProxy#XmlRpcMethod">
+            <summary>Sets the stub of <see cref="P:CookComputing.XmlRpc.IXmlRpcProxy.XmlRpcMethod"/>
             </summary>
         </member>
         <member name="T:RosSharp.Moles.SITopic">
