@@ -36,18 +36,9 @@ namespace RosSharp
         /// <returns>Uri of the node with associated nodeName/callerId</returns>
         public IObservable<Uri> LookupNodeAsync(string callerId, string nodeName)
         {
-            return Observable.Start(()=> _master.LookupNode(callerId, nodeName))
-                .Select(ret =>
-                {
-                    if ((int)ret[0] == 1)
-                    {
-                        return new Uri((string)ret[2]);
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException((string)ret[1]);
-                    }
-                });
+            return Observable.Start(() => _master.LookupNode(callerId, nodeName))
+                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
+                .Select(ret => new Uri((string)ret[2]));
 
         }
 
@@ -59,37 +50,29 @@ namespace RosSharp
         public IObservable<SystemState> GetSystemStateAsync(string callerId)
         {
             return Observable.Start(() => _master.GetSystemState(callerId))
+                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
                 .Select(ret =>
-                {
-                    if ((int)ret[0] == 1)
+                    new SystemState()
                     {
-                        return new SystemState()
-                                   {
-                                       Publishers = ((object[][][])ret[2])[0]
-                                           .Select(x => new PublisherSystemState()
-                                                            {
-                                                                TopicName = (string)x[0],
-                                                                Publishers = ((object[])x[1]).Cast<string>().ToList()
-                                                            }).ToList(),
-                                       Subscribers = ((object[][][])ret[2])[1]
-                                           .Select(x => new SubscriberSystemState()
-                                                            {
-                                                                TopicName = (string)x[0],
-                                                                Subscribers = ((object[])x[1]).Cast<string>().ToList()
-                                                            }).ToList(),
-                                       Services = ((object[][][])ret[2])[2]
-                                           .Select(x => new ServiceSystemState()
-                                                            {
-                                                                ServiceName = (string)x[0],
-                                                                Services = ((object[])x[1]).Cast<string>().ToList()
-                                                            }).ToList()
-                                   };
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException((string)ret[1]);
-                    }
-                });
+                        Publishers = ((object[][][])ret[2])[0]
+                        .Select(x => new PublisherSystemState()
+                                    {
+                                        TopicName = (string)x[0],
+                                        Publishers = ((object[])x[1]).Cast<string>().ToList()
+                                    }).ToList(),
+                        Subscribers = ((object[][][])ret[2])[1]
+                        .Select(x => new SubscriberSystemState()
+                                    {
+                                        TopicName = (string)x[0],
+                                        Subscribers = ((object[])x[1]).Cast<string>().ToList()
+                                    }).ToList(),
+                        Services = ((object[][][])ret[2])[2]
+                        .Select(x => new ServiceSystemState()
+                                    {
+                                        ServiceName = (string)x[0],
+                                        Services = ((object[])x[1]).Cast<string>().ToList()
+                                    }).ToList()
+                    });
         }
         
     }

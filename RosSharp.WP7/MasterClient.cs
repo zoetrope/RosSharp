@@ -31,17 +31,8 @@ namespace RosSharp
         {
             return Observable.FromAsyncPattern<string, string, object[]>(_proxy.BeginLookupNode, _proxy.EndLookupNode)
                 .Invoke(callerId, nodeName)
-                .Select(ret =>
-                {
-                    if ((int)ret[0] == 1)
-                    {
-                        return new Uri((string)ret[2]);
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException((string)ret[1]);
-                    }
-                });
+                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
+                .Select(ret => new Uri((string)ret[2]));
         }
 
     }
