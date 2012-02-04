@@ -1,0 +1,1301 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>RosSharp.NET40.Moles</name>
+    </assembly>
+    <members>
+        <member name="T:RosSharp.Moles.MDefaultNode">
+            <summary>Mole type of <see cref="T:RosSharp.DefaultNode"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MDefaultNode.#ctor">
+            <summary>Initializes a new mole</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MDefaultNode.#ctor(RosSharp.DefaultNode)">
+            <summary>Initializes a new mole for the given instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MDefaultNode.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MDefaultNode.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MDefaultNode.Bind(RosSharp.INode)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MDefaultNode.CreatePublisherGraphName``1(Microsoft.Moles.Framework.MolesDelegates.Func{RosSharp.GraphName,RosSharp.Publisher{``0}})">
+            <summary>Sets the mole of <see cref="M:RosSharp.DefaultNode.CreatePublisher``1(RosSharp.GraphName)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.MDefaultNode.CreatePublisherString``1(Microsoft.Moles.Framework.MolesDelegates.Func{System.String,RosSharp.Publisher{``0}})">
+            <summary>Sets the mole of <see cref="M:RosSharp.DefaultNode.CreatePublisher``1(System.String)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.MDefaultNode.CreateSubscriberGraphName``1(Microsoft.Moles.Framework.MolesDelegates.Func{RosSharp.GraphName,RosSharp.Subscriber{``0}})">
+            <summary>Sets the mole of <see cref="M:RosSharp.DefaultNode.CreateSubscriber``1(RosSharp.GraphName)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.MDefaultNode.CreateSubscriberString``1(Microsoft.Moles.Framework.MolesDelegates.Func{System.String,RosSharp.Subscriber{``0}})">
+            <summary>Sets the mole of <see cref="M:RosSharp.DefaultNode.CreateSubscriber``1(System.String)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MDefaultNode.Behavior">
+            <summary>Assigns the behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MDefaultNode.Constructor">
+            <summary>Sets the mole of <see cref="M:RosSharp.DefaultNode.#ctor"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.MDefaultNode.AllInstances">
+            <summary>Define moles for all instances members</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MDefaultNode.AllInstances.CreatePublisherGraphName``1(Microsoft.Moles.Framework.MolesDelegates.Func{RosSharp.DefaultNode,RosSharp.GraphName,RosSharp.Publisher{``0}})">
+            <summary>Sets the mole of <see cref="M:RosSharp.DefaultNode.CreatePublisher``1(RosSharp.GraphName)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.MDefaultNode.AllInstances.CreatePublisherString``1(Microsoft.Moles.Framework.MolesDelegates.Func{RosSharp.DefaultNode,System.String,RosSharp.Publisher{``0}})">
+            <summary>Sets the mole of <see cref="M:RosSharp.DefaultNode.CreatePublisher``1(System.String)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.MDefaultNode.AllInstances.CreateSubscriberGraphName``1(Microsoft.Moles.Framework.MolesDelegates.Func{RosSharp.DefaultNode,RosSharp.GraphName,RosSharp.Subscriber{``0}})">
+            <summary>Sets the mole of <see cref="M:RosSharp.DefaultNode.CreateSubscriber``1(RosSharp.GraphName)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.MDefaultNode.AllInstances.CreateSubscriberString``1(Microsoft.Moles.Framework.MolesDelegates.Func{RosSharp.DefaultNode,System.String,RosSharp.Subscriber{``0}})">
+            <summary>Sets the mole of <see cref="M:RosSharp.DefaultNode.CreateSubscriber``1(System.String)"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.MGraphName">
+            <summary>Mole type of <see cref="T:RosSharp.GraphName"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MGraphName.#ctor">
+            <summary>Initializes a new mole</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MGraphName.#ctor(RosSharp.GraphName)">
+            <summary>Initializes a new mole for the given instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MGraphName.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MGraphName.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MGraphName.Behavior">
+            <summary>Assigns the behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MGraphName.Constructor">
+            <summary>Sets the mole of <see cref="M:RosSharp.GraphName.#ctor"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.MGraphName.AllInstances">
+            <summary>Define moles for all instances members</summary>
+        </member>
+        <member name="T:RosSharp.Moles.MMasterClient">
+            <summary>Mole type of <see cref="T:RosSharp.MasterClient"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MMasterClient.#ctor">
+            <summary>Initializes a new mole</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MMasterClient.#ctor(RosSharp.MasterClient)">
+            <summary>Initializes a new mole for the given instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MMasterClient.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MMasterClient.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient.Behavior">
+            <summary>Assigns the behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient.Constructor">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.#ctor"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient.GetSystemStateString">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.GetSystemState(System.String)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient.HogeObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.Hoge(System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient.RegisterSubscriber">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.RegisterSubscriber"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient._GetSystemStateb__4ObjectArray">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.&lt;GetSystemState&gt;b__4(System.Object[])"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient._GetSystemStateb__5ObjectArray">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.&lt;GetSystemState&gt;b__5(System.Object[])"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient._GetSystemStateb__6ObjectArray">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.&lt;GetSystemState&gt;b__6(System.Object[])"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient._RegisterSubscriberb__a">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.&lt;RegisterSubscriber&gt;b__a"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.MMasterClient.AllInstances">
+            <summary>Define moles for all instances members</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient.AllInstances.GetSystemStateString">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.GetSystemState(System.String)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient.AllInstances.HogeObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.Hoge(System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient.AllInstances.RegisterSubscriber">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.RegisterSubscriber"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.MMessageSerializationFactory">
+            <summary>Mole type of <see cref="T:RosSharp.MessageSerializationFactory"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MMessageSerializationFactory.#ctor">
+            <summary>Initializes a new mole</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MMessageSerializationFactory.#ctor(RosSharp.MessageSerializationFactory)">
+            <summary>Initializes a new mole for the given instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MMessageSerializationFactory.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MMessageSerializationFactory.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MMessageSerializationFactory.CreateMessageSerializerString``1(Microsoft.Moles.Framework.MolesDelegates.Func{System.String,RosSharp.MessageSerializer{``0}})">
+            <summary>Sets the mole of <see cref="M:RosSharp.MessageSerializationFactory.CreateMessageSerializer``1(System.String)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMessageSerializationFactory.Behavior">
+            <summary>Assigns the behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMessageSerializationFactory.Constructor">
+            <summary>Sets the mole of <see cref="M:RosSharp.MessageSerializationFactory.#ctor"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.MMessageSerializationFactory.AllInstances">
+            <summary>Define moles for all instances members</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MMessageSerializationFactory.AllInstances.CreateMessageSerializerString``1(Microsoft.Moles.Framework.MolesDelegates.Func{RosSharp.MessageSerializationFactory,System.String,RosSharp.MessageSerializer{``0}})">
+            <summary>Sets the mole of <see cref="M:RosSharp.MessageSerializationFactory.CreateMessageSerializer``1(System.String)"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.MMessageSerializer`1">
+            <summary>Mole type of <see cref="T:RosSharp.MessageSerializer`1"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MMessageSerializer`1.#ctor">
+            <summary>Initializes a new mole</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MMessageSerializer`1.#ctor(RosSharp.MessageSerializer{`0})">
+            <summary>Initializes a new mole for the given instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MMessageSerializer`1.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MMessageSerializer`1.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMessageSerializer`1.Behavior">
+            <summary>Assigns the behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMessageSerializer`1.Constructor">
+            <summary>Sets the mole of <see cref="M:RosSharp.MessageSerializer`1.#ctor"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMessageSerializer`1.DeserializeStream">
+            <summary>Sets the mole of <see cref="M:RosSharp.MessageSerializer`1.Deserialize(System.IO.Stream)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMessageSerializer`1.SerializeStreamTDataType">
+            <summary>Sets the mole of <see cref="M:RosSharp.MessageSerializer`1.Serialize(System.IO.Stream,`1)"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.MMessageSerializer`1.AllInstances">
+            <summary>Define moles for all instances members</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMessageSerializer`1.AllInstances.DeserializeStream">
+            <summary>Sets the mole of <see cref="M:RosSharp.MessageSerializer`1.Deserialize(System.IO.Stream)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMessageSerializer`1.AllInstances.SerializeStreamTDataType">
+            <summary>Sets the mole of <see cref="M:RosSharp.MessageSerializer`1.Serialize(System.IO.Stream,`1)"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.MPublisher`1">
+            <summary>Mole type of <see cref="T:RosSharp.Publisher`1"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MPublisher`1.#ctor">
+            <summary>Initializes a new mole</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MPublisher`1.#ctor(RosSharp.Publisher{`0})">
+            <summary>Initializes a new mole for the given instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MPublisher`1.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MPublisher`1.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MPublisher`1.Bind(RosSharp.ITopic)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MPublisher`1.Bind(System.IObserver{`0})">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MPublisher`1.Behavior">
+            <summary>Assigns the behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MPublisher`1.Constructor">
+            <summary>Sets the mole of <see cref="M:RosSharp.Publisher`1.#ctor"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MPublisher`1.OnCompleted">
+            <summary>Sets the mole of <see cref="M:RosSharp.Publisher`1.OnCompleted"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MPublisher`1.OnErrorException">
+            <summary>Sets the mole of <see cref="M:RosSharp.Publisher`1.OnError(System.Exception)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MPublisher`1.OnNextTDataType">
+            <summary>Sets the mole of <see cref="M:RosSharp.Publisher`1.OnNext(`1)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MPublisher`1.TopicMessageTypeGet">
+            <summary>Sets the mole of <see cref="P:RosSharp.Publisher`1.TopicMessageType"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MPublisher`1.TopicNameGet">
+            <summary>Sets the mole of <see cref="P:RosSharp.Publisher`1.TopicName"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.MPublisher`1.AllInstances">
+            <summary>Define moles for all instances members</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MPublisher`1.AllInstances.OnCompleted">
+            <summary>Sets the mole of <see cref="M:RosSharp.Publisher`1.OnCompleted"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MPublisher`1.AllInstances.OnErrorException">
+            <summary>Sets the mole of <see cref="M:RosSharp.Publisher`1.OnError(System.Exception)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MPublisher`1.AllInstances.OnNextTDataType">
+            <summary>Sets the mole of <see cref="M:RosSharp.Publisher`1.OnNext(`1)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MPublisher`1.AllInstances.TopicMessageTypeGet">
+            <summary>Sets the mole of <see cref="P:RosSharp.Publisher`1.TopicMessageType"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MPublisher`1.AllInstances.TopicNameGet">
+            <summary>Sets the mole of <see cref="P:RosSharp.Publisher`1.TopicName"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.MPublisherSystemState">
+            <summary>Mole type of <see cref="T:RosSharp.PublisherSystemState"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MPublisherSystemState.#ctor">
+            <summary>Initializes a new mole</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MPublisherSystemState.#ctor(RosSharp.PublisherSystemState)">
+            <summary>Initializes a new mole for the given instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MPublisherSystemState.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MPublisherSystemState.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MPublisherSystemState.Behavior">
+            <summary>Assigns the behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MPublisherSystemState.Constructor">
+            <summary>Sets the mole of <see cref="M:RosSharp.PublisherSystemState.#ctor"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MPublisherSystemState.PublishersGet">
+            <summary>Sets the mole of <see cref="P:RosSharp.PublisherSystemState.Publishers"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MPublisherSystemState.PublishersSetListOfString">
+            <summary>Sets the mole of <see cref="P:RosSharp.PublisherSystemState.Publishers"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MPublisherSystemState.TopicNameGet">
+            <summary>Sets the mole of <see cref="P:RosSharp.PublisherSystemState.TopicName"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MPublisherSystemState.TopicNameSetString">
+            <summary>Sets the mole of <see cref="P:RosSharp.PublisherSystemState.TopicName"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.MPublisherSystemState.AllInstances">
+            <summary>Define moles for all instances members</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MPublisherSystemState.AllInstances.PublishersGet">
+            <summary>Sets the mole of <see cref="P:RosSharp.PublisherSystemState.Publishers"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MPublisherSystemState.AllInstances.PublishersSetListOfString">
+            <summary>Sets the mole of <see cref="P:RosSharp.PublisherSystemState.Publishers"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MPublisherSystemState.AllInstances.TopicNameGet">
+            <summary>Sets the mole of <see cref="P:RosSharp.PublisherSystemState.TopicName"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MPublisherSystemState.AllInstances.TopicNameSetString">
+            <summary>Sets the mole of <see cref="P:RosSharp.PublisherSystemState.TopicName"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.MROS">
+            <summary>Mole type of <see cref="T:RosSharp.ROS"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MROS.#ctor">
+            <summary>Initializes a new mole</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MROS.#ctor(RosSharp.ROS)">
+            <summary>Initializes a new mole for the given instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MROS.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MROS.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MROS.Behavior">
+            <summary>Assigns the behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MROS.Constructor">
+            <summary>Sets the mole of <see cref="M:RosSharp.ROS.#ctor"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MROS.CreateNode">
+            <summary>Sets the mole of <see cref="M:RosSharp.ROS.CreateNode"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MROS.Initialize">
+            <summary>Sets the mole of <see cref="M:RosSharp.ROS.Initialize"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.MROS.AllInstances">
+            <summary>Define moles for all instances members</summary>
+        </member>
+        <member name="T:RosSharp.Moles.MRegistrar">
+            <summary>Mole type of <see cref="T:RosSharp.Registrar"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MRegistrar.#ctor">
+            <summary>Initializes a new mole</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MRegistrar.#ctor(RosSharp.Registrar)">
+            <summary>Initializes a new mole for the given instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MRegistrar.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MRegistrar.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MRegistrar.Behavior">
+            <summary>Assigns the behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MRegistrar.Constructor">
+            <summary>Sets the mole of <see cref="M:RosSharp.Registrar.#ctor"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.MRegistrar.AllInstances">
+            <summary>Define moles for all instances members</summary>
+        </member>
+        <member name="T:RosSharp.Moles.MRosNode">
+            <summary>Mole type of <see cref="T:RosSharp.RosNode"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MRosNode.#ctor">
+            <summary>Initializes a new mole</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MRosNode.#ctor(RosSharp.RosNode)">
+            <summary>Initializes a new mole for the given instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MRosNode.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MRosNode.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MRosNode.Bind(RosSharp.INode)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MRosNode.CreatePublisherGraphName``1(Microsoft.Moles.Framework.MolesDelegates.Func{RosSharp.GraphName,RosSharp.Publisher{``0}})">
+            <summary>Sets the mole of <see cref="M:RosSharp.RosNode.CreatePublisher``1(RosSharp.GraphName)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.MRosNode.CreatePublisherString``1(Microsoft.Moles.Framework.MolesDelegates.Func{System.String,RosSharp.Publisher{``0}})">
+            <summary>Sets the mole of <see cref="M:RosSharp.RosNode.CreatePublisher``1(System.String)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.MRosNode.CreateSubscriberGraphName``1(Microsoft.Moles.Framework.MolesDelegates.Func{RosSharp.GraphName,RosSharp.Subscriber{``0}})">
+            <summary>Sets the mole of <see cref="M:RosSharp.RosNode.CreateSubscriber``1(RosSharp.GraphName)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.MRosNode.CreateSubscriberString``1(Microsoft.Moles.Framework.MolesDelegates.Func{System.String,RosSharp.Subscriber{``0}})">
+            <summary>Sets the mole of <see cref="M:RosSharp.RosNode.CreateSubscriber``1(System.String)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MRosNode.Behavior">
+            <summary>Assigns the behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MRosNode.Constructor">
+            <summary>Sets the mole of <see cref="M:RosSharp.RosNode.#ctor"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.MRosNode.AllInstances">
+            <summary>Define moles for all instances members</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MRosNode.AllInstances.CreatePublisherGraphName``1(Microsoft.Moles.Framework.MolesDelegates.Func{RosSharp.RosNode,RosSharp.GraphName,RosSharp.Publisher{``0}})">
+            <summary>Sets the mole of <see cref="M:RosSharp.RosNode.CreatePublisher``1(RosSharp.GraphName)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.MRosNode.AllInstances.CreatePublisherString``1(Microsoft.Moles.Framework.MolesDelegates.Func{RosSharp.RosNode,System.String,RosSharp.Publisher{``0}})">
+            <summary>Sets the mole of <see cref="M:RosSharp.RosNode.CreatePublisher``1(System.String)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.MRosNode.AllInstances.CreateSubscriberGraphName``1(Microsoft.Moles.Framework.MolesDelegates.Func{RosSharp.RosNode,RosSharp.GraphName,RosSharp.Subscriber{``0}})">
+            <summary>Sets the mole of <see cref="M:RosSharp.RosNode.CreateSubscriber``1(RosSharp.GraphName)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.MRosNode.AllInstances.CreateSubscriberString``1(Microsoft.Moles.Framework.MolesDelegates.Func{RosSharp.RosNode,System.String,RosSharp.Subscriber{``0}})">
+            <summary>Sets the mole of <see cref="M:RosSharp.RosNode.CreateSubscriber``1(System.String)"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.MServiceSystemState">
+            <summary>Mole type of <see cref="T:RosSharp.ServiceSystemState"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MServiceSystemState.#ctor">
+            <summary>Initializes a new mole</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MServiceSystemState.#ctor(RosSharp.ServiceSystemState)">
+            <summary>Initializes a new mole for the given instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MServiceSystemState.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MServiceSystemState.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MServiceSystemState.Behavior">
+            <summary>Assigns the behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MServiceSystemState.Constructor">
+            <summary>Sets the mole of <see cref="M:RosSharp.ServiceSystemState.#ctor"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MServiceSystemState.ServiceNameGet">
+            <summary>Sets the mole of <see cref="P:RosSharp.ServiceSystemState.ServiceName"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MServiceSystemState.ServiceNameSetString">
+            <summary>Sets the mole of <see cref="P:RosSharp.ServiceSystemState.ServiceName"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MServiceSystemState.ServicesGet">
+            <summary>Sets the mole of <see cref="P:RosSharp.ServiceSystemState.Services"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MServiceSystemState.ServicesSetListOfString">
+            <summary>Sets the mole of <see cref="P:RosSharp.ServiceSystemState.Services"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.MServiceSystemState.AllInstances">
+            <summary>Define moles for all instances members</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MServiceSystemState.AllInstances.ServiceNameGet">
+            <summary>Sets the mole of <see cref="P:RosSharp.ServiceSystemState.ServiceName"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MServiceSystemState.AllInstances.ServiceNameSetString">
+            <summary>Sets the mole of <see cref="P:RosSharp.ServiceSystemState.ServiceName"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MServiceSystemState.AllInstances.ServicesGet">
+            <summary>Sets the mole of <see cref="P:RosSharp.ServiceSystemState.Services"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MServiceSystemState.AllInstances.ServicesSetListOfString">
+            <summary>Sets the mole of <see cref="P:RosSharp.ServiceSystemState.Services"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.MSubscriber`1">
+            <summary>Mole type of <see cref="T:RosSharp.Subscriber`1"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MSubscriber`1.#ctor">
+            <summary>Initializes a new mole</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MSubscriber`1.#ctor(RosSharp.Subscriber{`0})">
+            <summary>Initializes a new mole for the given instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MSubscriber`1.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MSubscriber`1.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MSubscriber`1.Bind(RosSharp.ITopic)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MSubscriber`1.Bind(System.IObservable{`0})">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSubscriber`1.Behavior">
+            <summary>Assigns the behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSubscriber`1.Constructor">
+            <summary>Sets the mole of <see cref="M:RosSharp.Subscriber`1.#ctor"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSubscriber`1.SubscribeIObserverOfTDataType">
+            <summary>Sets the mole of <see cref="M:RosSharp.Subscriber`1.Subscribe(System.IObserver`1{`1})"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSubscriber`1.TopicMessageTypeGet">
+            <summary>Sets the mole of <see cref="P:RosSharp.Subscriber`1.TopicMessageType"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSubscriber`1.TopicNameGet">
+            <summary>Sets the mole of <see cref="P:RosSharp.Subscriber`1.TopicName"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.MSubscriber`1.AllInstances">
+            <summary>Define moles for all instances members</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSubscriber`1.AllInstances.SubscribeIObserverOfTDataType">
+            <summary>Sets the mole of <see cref="M:RosSharp.Subscriber`1.Subscribe(System.IObserver`1{`1})"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSubscriber`1.AllInstances.TopicMessageTypeGet">
+            <summary>Sets the mole of <see cref="P:RosSharp.Subscriber`1.TopicMessageType"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSubscriber`1.AllInstances.TopicNameGet">
+            <summary>Sets the mole of <see cref="P:RosSharp.Subscriber`1.TopicName"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.MSubscriberSystemState">
+            <summary>Mole type of <see cref="T:RosSharp.SubscriberSystemState"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MSubscriberSystemState.#ctor">
+            <summary>Initializes a new mole</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MSubscriberSystemState.#ctor(RosSharp.SubscriberSystemState)">
+            <summary>Initializes a new mole for the given instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MSubscriberSystemState.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MSubscriberSystemState.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSubscriberSystemState.Behavior">
+            <summary>Assigns the behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSubscriberSystemState.Constructor">
+            <summary>Sets the mole of <see cref="M:RosSharp.SubscriberSystemState.#ctor"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSubscriberSystemState.SubscribersGet">
+            <summary>Sets the mole of <see cref="P:RosSharp.SubscriberSystemState.Subscribers"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSubscriberSystemState.SubscribersSetListOfString">
+            <summary>Sets the mole of <see cref="P:RosSharp.SubscriberSystemState.Subscribers"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSubscriberSystemState.TopicNameGet">
+            <summary>Sets the mole of <see cref="P:RosSharp.SubscriberSystemState.TopicName"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSubscriberSystemState.TopicNameSetString">
+            <summary>Sets the mole of <see cref="P:RosSharp.SubscriberSystemState.TopicName"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.MSubscriberSystemState.AllInstances">
+            <summary>Define moles for all instances members</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSubscriberSystemState.AllInstances.SubscribersGet">
+            <summary>Sets the mole of <see cref="P:RosSharp.SubscriberSystemState.Subscribers"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSubscriberSystemState.AllInstances.SubscribersSetListOfString">
+            <summary>Sets the mole of <see cref="P:RosSharp.SubscriberSystemState.Subscribers"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSubscriberSystemState.AllInstances.TopicNameGet">
+            <summary>Sets the mole of <see cref="P:RosSharp.SubscriberSystemState.TopicName"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSubscriberSystemState.AllInstances.TopicNameSetString">
+            <summary>Sets the mole of <see cref="P:RosSharp.SubscriberSystemState.TopicName"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.MSystemState">
+            <summary>Mole type of <see cref="T:RosSharp.SystemState"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MSystemState.#ctor">
+            <summary>Initializes a new mole</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MSystemState.#ctor(RosSharp.SystemState)">
+            <summary>Initializes a new mole for the given instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MSystemState.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MSystemState.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSystemState.Behavior">
+            <summary>Assigns the behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSystemState.CodeGet">
+            <summary>Sets the mole of <see cref="P:RosSharp.SystemState.Code"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSystemState.CodeSetInt32">
+            <summary>Sets the mole of <see cref="P:RosSharp.SystemState.Code"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSystemState.Constructor">
+            <summary>Sets the mole of <see cref="M:RosSharp.SystemState.#ctor"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSystemState.PublishersGet">
+            <summary>Sets the mole of <see cref="P:RosSharp.SystemState.Publishers"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSystemState.PublishersSetListOfPublisherSystemState">
+            <summary>Sets the mole of <see cref="P:RosSharp.SystemState.Publishers"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSystemState.ServicesGet">
+            <summary>Sets the mole of <see cref="P:RosSharp.SystemState.Services"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSystemState.ServicesSetListOfServiceSystemState">
+            <summary>Sets the mole of <see cref="P:RosSharp.SystemState.Services"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSystemState.StatusMessageGet">
+            <summary>Sets the mole of <see cref="P:RosSharp.SystemState.StatusMessage"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSystemState.StatusMessageSetString">
+            <summary>Sets the mole of <see cref="P:RosSharp.SystemState.StatusMessage"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSystemState.SubscribersGet">
+            <summary>Sets the mole of <see cref="P:RosSharp.SystemState.Subscribers"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSystemState.SubscribersSetListOfSubscriberSystemState">
+            <summary>Sets the mole of <see cref="P:RosSharp.SystemState.Subscribers"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.MSystemState.AllInstances">
+            <summary>Define moles for all instances members</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSystemState.AllInstances.CodeGet">
+            <summary>Sets the mole of <see cref="P:RosSharp.SystemState.Code"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSystemState.AllInstances.CodeSetInt32">
+            <summary>Sets the mole of <see cref="P:RosSharp.SystemState.Code"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSystemState.AllInstances.PublishersGet">
+            <summary>Sets the mole of <see cref="P:RosSharp.SystemState.Publishers"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSystemState.AllInstances.PublishersSetListOfPublisherSystemState">
+            <summary>Sets the mole of <see cref="P:RosSharp.SystemState.Publishers"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSystemState.AllInstances.ServicesGet">
+            <summary>Sets the mole of <see cref="P:RosSharp.SystemState.Services"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSystemState.AllInstances.ServicesSetListOfServiceSystemState">
+            <summary>Sets the mole of <see cref="P:RosSharp.SystemState.Services"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSystemState.AllInstances.StatusMessageGet">
+            <summary>Sets the mole of <see cref="P:RosSharp.SystemState.StatusMessage"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSystemState.AllInstances.StatusMessageSetString">
+            <summary>Sets the mole of <see cref="P:RosSharp.SystemState.StatusMessage"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSystemState.AllInstances.SubscribersGet">
+            <summary>Sets the mole of <see cref="P:RosSharp.SystemState.Subscribers"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSystemState.AllInstances.SubscribersSetListOfSubscriberSystemState">
+            <summary>Sets the mole of <see cref="P:RosSharp.SystemState.Subscribers"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.SDefaultNode">
+            <summary>Stub type of <see cref="T:RosSharp.DefaultNode"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SDefaultNode.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SDefaultNode.InitializeStub">
+            <summary>Initializes a new instance of type SDefaultNode</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SDefaultNode.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SDefaultNode.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="T:RosSharp.Moles.SGraphName">
+            <summary>Stub type of <see cref="T:RosSharp.GraphName"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SGraphName.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SGraphName.InitializeStub">
+            <summary>Initializes a new instance of type SGraphName</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SGraphName.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SGraphName.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="T:RosSharp.Moles.SIMaster">
+            <summary>Stub type of <see cref="T:RosSharp.IMaster"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.#ctor">
+            <summary>Initializes a new instance of type SIMaster</summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.GetMasterUriString">
+            <summary>Sets the stub of <see cref="M:RosSharp.IMaster.GetMasterUri(System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.GetPublisherTopicsStringString">
+            <summary>Sets the stub of <see cref="M:RosSharp.IMaster.GetPublisherTopics(System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.GetSystemStateString">
+            <summary>Sets the stub of <see cref="M:RosSharp.IMaster.GetSystemState(System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.LookupNodeStringString">
+            <summary>Sets the stub of <see cref="M:RosSharp.IMaster.LookupNode(System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.LookupServiceStringString">
+            <summary>Sets the stub of <see cref="M:RosSharp.IMaster.LookupService(System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.RegisterPublisherStringStringStringString">
+            <summary>Sets the stub of <see cref="M:RosSharp.IMaster.RegisterPublisher(System.String,System.String,System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.RegisterServiceStringStringStringString">
+            <summary>Sets the stub of <see cref="M:RosSharp.IMaster.RegisterService(System.String,System.String,System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.RegisterSubscriberStringStringStringString">
+            <summary>Sets the stub of <see cref="M:RosSharp.IMaster.RegisterSubscriber(System.String,System.String,System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.rsnet::RosSharp#IMaster#GetMasterUri(System.String)">
+            <summary>Sets the stub of <see cref="M:RosSharp.IMaster.GetMasterUri(System.String)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.rsnet::RosSharp#IMaster#GetPublisherTopics(System.String,System.String)">
+            <summary>Sets the stub of <see cref="M:RosSharp.IMaster.GetPublisherTopics(System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.rsnet::RosSharp#IMaster#GetSystemState(System.String)">
+            <summary>Sets the stub of <see cref="M:RosSharp.IMaster.GetSystemState(System.String)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.rsnet::RosSharp#IMaster#LookupNode(System.String,System.String)">
+            <summary>Sets the stub of <see cref="M:RosSharp.IMaster.LookupNode(System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.rsnet::RosSharp#IMaster#LookupService(System.String,System.String)">
+            <summary>Sets the stub of <see cref="M:RosSharp.IMaster.LookupService(System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.rsnet::RosSharp#IMaster#RegisterPublisher(System.String,System.String,System.String,System.String)">
+            <summary>Sets the stub of <see cref="M:RosSharp.IMaster.RegisterPublisher(System.String,System.String,System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.rsnet::RosSharp#IMaster#RegisterService(System.String,System.String,System.String,System.String)">
+            <summary>Sets the stub of <see cref="M:RosSharp.IMaster.RegisterService(System.String,System.String,System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.rsnet::RosSharp#IMaster#RegisterSubscriber(System.String,System.String,System.String,System.String)">
+            <summary>Sets the stub of <see cref="M:RosSharp.IMaster.RegisterSubscriber(System.String,System.String,System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.rsnet::RosSharp#IMaster#UnregisterPublisher(System.String,System.String,System.String)">
+            <summary>Sets the stub of <see cref="M:RosSharp.IMaster.UnregisterPublisher(System.String,System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.rsnet::RosSharp#IMaster#UnregisterService(System.String,System.String,System.String)">
+            <summary>Sets the stub of <see cref="M:RosSharp.IMaster.UnregisterService(System.String,System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIMaster.rsnet::RosSharp#IMaster#UnregisterSubscriber(System.String,System.String,System.String)">
+            <summary>Sets the stub of <see cref="M:RosSharp.IMaster.UnregisterSubscriber(System.String,System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.UnregisterPublisherStringStringString">
+            <summary>Sets the stub of <see cref="M:RosSharp.IMaster.UnregisterPublisher(System.String,System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.UnregisterServiceStringStringString">
+            <summary>Sets the stub of <see cref="M:RosSharp.IMaster.UnregisterService(System.String,System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIMaster.UnregisterSubscriberStringStringString">
+            <summary>Sets the stub of <see cref="M:RosSharp.IMaster.UnregisterSubscriber(System.String,System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.SINode">
+            <summary>Stub type of <see cref="T:RosSharp.INode"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SINode.#ctor">
+            <summary>Initializes a new instance of type SINode</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SINode.CreatePublisherGraphName``1(Microsoft.Moles.Framework.MolesDelegates.Func{RosSharp.GraphName,RosSharp.Publisher{``0}})">
+            <summary>Sets stubs of CreatePublisher(GraphName topicName)</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SINode.CreatePublisherString``1(Microsoft.Moles.Framework.MolesDelegates.Func{System.String,RosSharp.Publisher{``0}})">
+            <summary>Sets stubs of CreatePublisher(String topicName)</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SINode.CreateSubscriberGraphName``1(Microsoft.Moles.Framework.MolesDelegates.Func{RosSharp.GraphName,RosSharp.Subscriber{``0}})">
+            <summary>Sets stubs of CreateSubscriber(GraphName topicName)</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SINode.CreateSubscriberString``1(Microsoft.Moles.Framework.MolesDelegates.Func{System.String,RosSharp.Subscriber{``0}})">
+            <summary>Sets stubs of CreateSubscriber(String topicName)</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SINode.rsnet::RosSharp#INode#CreatePublisher``1(RosSharp.GraphName)">
+            <summary>Sets the stub of <see cref="M:RosSharp.INode.CreatePublisher``1(RosSharp.GraphName)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SINode.rsnet::RosSharp#INode#CreatePublisher``1(System.String)">
+            <summary>Sets the stub of <see cref="M:RosSharp.INode.CreatePublisher``1(System.String)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SINode.rsnet::RosSharp#INode#CreateSubscriber``1(RosSharp.GraphName)">
+            <summary>Sets the stub of <see cref="M:RosSharp.INode.CreateSubscriber``1(RosSharp.GraphName)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SINode.rsnet::RosSharp#INode#CreateSubscriber``1(System.String)">
+            <summary>Sets the stub of <see cref="M:RosSharp.INode.CreateSubscriber``1(System.String)"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.SIParameterServer">
+            <summary>Stub type of <see cref="T:RosSharp.IParameterServer"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.#ctor">
+            <summary>Initializes a new instance of type SIParameterServer</summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.DeleteParamStringString">
+            <summary>Sets the stub of <see cref="M:RosSharp.IParameterServer.DeleteParam(System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.GetParamNamesString">
+            <summary>Sets the stub of <see cref="M:RosSharp.IParameterServer.GetParamNames(System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.GetParamStringString">
+            <summary>Sets the stub of <see cref="M:RosSharp.IParameterServer.GetParam(System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.HasParamStringString">
+            <summary>Sets the stub of <see cref="M:RosSharp.IParameterServer.HasParam(System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.rsnet::RosSharp#IParameterServer#DeleteParam(System.String,System.String)">
+            <summary>Sets the stub of <see cref="M:RosSharp.IParameterServer.DeleteParam(System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.rsnet::RosSharp#IParameterServer#GetParam(System.String,System.String)">
+            <summary>Sets the stub of <see cref="M:RosSharp.IParameterServer.GetParam(System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.rsnet::RosSharp#IParameterServer#GetParamNames(System.String)">
+            <summary>Sets the stub of <see cref="M:RosSharp.IParameterServer.GetParamNames(System.String)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.rsnet::RosSharp#IParameterServer#HasParam(System.String,System.String)">
+            <summary>Sets the stub of <see cref="M:RosSharp.IParameterServer.HasParam(System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.rsnet::RosSharp#IParameterServer#SearchParam(System.String,System.String)">
+            <summary>Sets the stub of <see cref="M:RosSharp.IParameterServer.SearchParam(System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.rsnet::RosSharp#IParameterServer#SetParam(System.String,System.String,System.Object)">
+            <summary>Sets the stub of <see cref="M:RosSharp.IParameterServer.SetParam(System.String,System.String,System.Object)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.rsnet::RosSharp#IParameterServer#SubscribeParam(System.String,System.String,System.String)">
+            <summary>Sets the stub of <see cref="M:RosSharp.IParameterServer.SubscribeParam(System.String,System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SIParameterServer.rsnet::RosSharp#IParameterServer#UnsubscribeParam(System.String,System.String,System.String)">
+            <summary>Sets the stub of <see cref="M:RosSharp.IParameterServer.UnsubscribeParam(System.String,System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.SearchParamStringString">
+            <summary>Sets the stub of <see cref="M:RosSharp.IParameterServer.SearchParam(System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.SetParamStringStringObject">
+            <summary>Sets the stub of <see cref="M:RosSharp.IParameterServer.SetParam(System.String,System.String,System.Object)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.SubscribeParamStringStringString">
+            <summary>Sets the stub of <see cref="M:RosSharp.IParameterServer.SubscribeParam(System.String,System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SIParameterServer.UnsubscribeParamStringStringString">
+            <summary>Sets the stub of <see cref="M:RosSharp.IParameterServer.UnsubscribeParam(System.String,System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.SISlave">
+            <summary>Stub type of <see cref="T:RosSharp.ISlave"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.#ctor">
+            <summary>Initializes a new instance of type SISlave</summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.GetBusInfoString">
+            <summary>Sets the stub of <see cref="M:RosSharp.ISlave.GetBusInfo(System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.GetBusStatsString">
+            <summary>Sets the stub of <see cref="M:RosSharp.ISlave.GetBusStats(System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.GetMasterUriString">
+            <summary>Sets the stub of <see cref="M:RosSharp.ISlave.GetMasterUri(System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.GetPidString">
+            <summary>Sets the stub of <see cref="M:RosSharp.ISlave.GetPid(System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.GetPublicationsString">
+            <summary>Sets the stub of <see cref="M:RosSharp.ISlave.GetPublications(System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.GetSubscriptionsString">
+            <summary>Sets the stub of <see cref="M:RosSharp.ISlave.GetSubscriptions(System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.ParamUpdateStringStringObject">
+            <summary>Sets the stub of <see cref="M:RosSharp.ISlave.ParamUpdate(System.String,System.String,System.Object)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.PublisherUpdateStringStringStringArray">
+            <summary>Sets the stub of <see cref="M:RosSharp.ISlave.PublisherUpdate(System.String,System.String,System.String[])"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.RequestTopicStringStringObjectArray">
+            <summary>Sets the stub of <see cref="M:RosSharp.ISlave.RequestTopic(System.String,System.String,System.Object[])"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.rsnet::RosSharp#ISlave#GetBusInfo(System.String)">
+            <summary>Sets the stub of <see cref="M:RosSharp.ISlave.GetBusInfo(System.String)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.rsnet::RosSharp#ISlave#GetBusStats(System.String)">
+            <summary>Sets the stub of <see cref="M:RosSharp.ISlave.GetBusStats(System.String)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.rsnet::RosSharp#ISlave#GetMasterUri(System.String)">
+            <summary>Sets the stub of <see cref="M:RosSharp.ISlave.GetMasterUri(System.String)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.rsnet::RosSharp#ISlave#GetPid(System.String)">
+            <summary>Sets the stub of <see cref="M:RosSharp.ISlave.GetPid(System.String)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.rsnet::RosSharp#ISlave#GetPublications(System.String)">
+            <summary>Sets the stub of <see cref="M:RosSharp.ISlave.GetPublications(System.String)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.rsnet::RosSharp#ISlave#GetSubscriptions(System.String)">
+            <summary>Sets the stub of <see cref="M:RosSharp.ISlave.GetSubscriptions(System.String)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.rsnet::RosSharp#ISlave#ParamUpdate(System.String,System.String,System.Object)">
+            <summary>Sets the stub of <see cref="M:RosSharp.ISlave.ParamUpdate(System.String,System.String,System.Object)"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.rsnet::RosSharp#ISlave#PublisherUpdate(System.String,System.String,System.String[])">
+            <summary>Sets the stub of <see cref="M:RosSharp.ISlave.PublisherUpdate(System.String,System.String,System.String[])"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.rsnet::RosSharp#ISlave#RequestTopic(System.String,System.String,System.Object[])">
+            <summary>Sets the stub of <see cref="M:RosSharp.ISlave.RequestTopic(System.String,System.String,System.Object[])"/>
+            </summary>
+        </member>
+        <member name="M:RosSharp.Moles.SISlave.rsnet::RosSharp#ISlave#Shutdown(System.String,System.String)">
+            <summary>Sets the stub of <see cref="M:RosSharp.ISlave.Shutdown(System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SISlave.ShutdownStringString">
+            <summary>Sets the stub of <see cref="M:RosSharp.ISlave.Shutdown(System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.SITopic">
+            <summary>Stub type of <see cref="T:RosSharp.ITopic"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SITopic.#ctor">
+            <summary>Initializes a new instance of type SITopic</summary>
+        </member>
+        <member name="F:RosSharp.Moles.SITopic.TopicMessageTypeGet">
+            <summary>Sets the stub of <see cref="P:RosSharp.ITopic.TopicMessageType"/>
+            </summary>
+        </member>
+        <member name="F:RosSharp.Moles.SITopic.TopicNameGet">
+            <summary>Sets the stub of <see cref="P:RosSharp.ITopic.TopicName"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SITopic.rsnet::RosSharp#ITopic#TopicMessageType">
+            <summary>Sets the stub of <see cref="P:RosSharp.ITopic.TopicMessageType"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.SITopic.rsnet::RosSharp#ITopic#TopicName">
+            <summary>Sets the stub of <see cref="P:RosSharp.ITopic.TopicName"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.SMasterClient">
+            <summary>Stub type of <see cref="T:RosSharp.MasterClient"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SMasterClient.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SMasterClient.InitializeStub">
+            <summary>Initializes a new instance of type SMasterClient</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SMasterClient.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SMasterClient.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="T:RosSharp.Moles.SMessageSerializationFactory">
+            <summary>Stub type of <see cref="T:RosSharp.MessageSerializationFactory"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SMessageSerializationFactory.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SMessageSerializationFactory.InitializeStub">
+            <summary>Initializes a new instance of type SMessageSerializationFactory</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SMessageSerializationFactory.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SMessageSerializationFactory.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="T:RosSharp.Moles.SMessageSerializer`1">
+            <summary>Stub type of <see cref="T:RosSharp.MessageSerializer`1"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SMessageSerializer`1.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SMessageSerializer`1.InitializeStub">
+            <summary>Initializes a new instance of type SMessageSerializer</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SMessageSerializer`1.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SMessageSerializer`1.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="T:RosSharp.Moles.SPublisher`1">
+            <summary>Stub type of <see cref="T:RosSharp.Publisher`1"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SPublisher`1.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SPublisher`1.InitializeStub">
+            <summary>Initializes a new instance of type SPublisher</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SPublisher`1.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SPublisher`1.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="T:RosSharp.Moles.SPublisherSystemState">
+            <summary>Stub type of <see cref="T:RosSharp.PublisherSystemState"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SPublisherSystemState.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SPublisherSystemState.InitializeStub">
+            <summary>Initializes a new instance of type SPublisherSystemState</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SPublisherSystemState.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SPublisherSystemState.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="T:RosSharp.Moles.SROS">
+            <summary>Stub type of <see cref="T:RosSharp.ROS"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SROS.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SROS.InitializeStub">
+            <summary>Initializes a new instance of type SROS</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SROS.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SROS.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="T:RosSharp.Moles.SRegistrar">
+            <summary>Stub type of <see cref="T:RosSharp.Registrar"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SRegistrar.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SRegistrar.InitializeStub">
+            <summary>Initializes a new instance of type SRegistrar</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SRegistrar.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SRegistrar.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="T:RosSharp.Moles.SRosNode">
+            <summary>Stub type of <see cref="T:RosSharp.RosNode"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SRosNode.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SRosNode.InitializeStub">
+            <summary>Initializes a new instance of type SRosNode</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SRosNode.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SRosNode.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="T:RosSharp.Moles.SServiceSystemState">
+            <summary>Stub type of <see cref="T:RosSharp.ServiceSystemState"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SServiceSystemState.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SServiceSystemState.InitializeStub">
+            <summary>Initializes a new instance of type SServiceSystemState</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SServiceSystemState.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SServiceSystemState.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="T:RosSharp.Moles.SSubscriber`1">
+            <summary>Stub type of <see cref="T:RosSharp.Subscriber`1"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SSubscriber`1.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SSubscriber`1.InitializeStub">
+            <summary>Initializes a new instance of type SSubscriber</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SSubscriber`1.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SSubscriber`1.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="T:RosSharp.Moles.SSubscriberSystemState">
+            <summary>Stub type of <see cref="T:RosSharp.SubscriberSystemState"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SSubscriberSystemState.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SSubscriberSystemState.InitializeStub">
+            <summary>Initializes a new instance of type SSubscriberSystemState</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SSubscriberSystemState.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SSubscriberSystemState.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="T:RosSharp.Moles.SSystemState">
+            <summary>Stub type of <see cref="T:RosSharp.SystemState"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SSystemState.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SSystemState.InitializeStub">
+            <summary>Initializes a new instance of type SSystemState</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SSystemState.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SSystemState.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+    </members>
+</doc>
