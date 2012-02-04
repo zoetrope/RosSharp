@@ -114,43 +114,47 @@
             <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.#ctor"/>
             </summary>
         </member>
-        <member name="P:RosSharp.Moles.MMasterClient.GetSystemStateString">
-            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.GetSystemState(System.String)"/>
+        <member name="P:RosSharp.Moles.MMasterClient.GetSystemStateAsyncString">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.GetSystemStateAsync(System.String)"/>
             </summary>
         </member>
-        <member name="P:RosSharp.Moles.MMasterClient.LookupNodeStringString">
-            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.LookupNode(System.String,System.String)"/>
+        <member name="P:RosSharp.Moles.MMasterClient.LookupNodeAsyncStringString">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.LookupNodeAsync(System.String,System.String)"/>
             </summary>
         </member>
         <member name="P:RosSharp.Moles.MMasterClient.RegisterSubscriber">
             <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.RegisterSubscriber"/>
             </summary>
         </member>
-        <member name="P:RosSharp.Moles.MMasterClient._GetSystemStateb__6ObjectArray">
-            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.&lt;GetSystemState&gt;b__6(System.Object[])"/>
+        <member name="P:RosSharp.Moles.MMasterClient._GetSystemStateAsyncb__aObjectArray">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.&lt;GetSystemStateAsync&gt;b__a(System.Object[])"/>
             </summary>
         </member>
-        <member name="P:RosSharp.Moles.MMasterClient._GetSystemStateb__7ObjectArray">
-            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.&lt;GetSystemState&gt;b__7(System.Object[])"/>
+        <member name="P:RosSharp.Moles.MMasterClient._GetSystemStateAsyncb__bObjectArray">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.&lt;GetSystemStateAsync&gt;b__b(System.Object[])"/>
             </summary>
         </member>
-        <member name="P:RosSharp.Moles.MMasterClient._GetSystemStateb__8ObjectArray">
-            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.&lt;GetSystemState&gt;b__8(System.Object[])"/>
+        <member name="P:RosSharp.Moles.MMasterClient._GetSystemStateAsyncb__cObjectArray">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.&lt;GetSystemStateAsync&gt;b__c(System.Object[])"/>
             </summary>
         </member>
-        <member name="P:RosSharp.Moles.MMasterClient._RegisterSubscriberb__0">
-            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.&lt;RegisterSubscriber&gt;b__0"/>
+        <member name="P:RosSharp.Moles.MMasterClient._GetSystemStateAsyncb__dObjectArray">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.&lt;GetSystemStateAsync&gt;b__d(System.Object[])"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient._LookupNodeAsyncb__1ObjectArray">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.&lt;LookupNodeAsync&gt;b__1(System.Object[])"/>
             </summary>
         </member>
         <member name="T:RosSharp.Moles.MMasterClient.AllInstances">
             <summary>Define moles for all instances members</summary>
         </member>
-        <member name="P:RosSharp.Moles.MMasterClient.AllInstances.GetSystemStateString">
-            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.GetSystemState(System.String)"/>
+        <member name="P:RosSharp.Moles.MMasterClient.AllInstances.GetSystemStateAsyncString">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.GetSystemStateAsync(System.String)"/>
             </summary>
         </member>
-        <member name="P:RosSharp.Moles.MMasterClient.AllInstances.LookupNodeStringString">
-            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.LookupNode(System.String,System.String)"/>
+        <member name="P:RosSharp.Moles.MMasterClient.AllInstances.LookupNodeAsyncStringString">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.LookupNodeAsync(System.String,System.String)"/>
             </summary>
         </member>
         <member name="P:RosSharp.Moles.MMasterClient.AllInstances.RegisterSubscriber">

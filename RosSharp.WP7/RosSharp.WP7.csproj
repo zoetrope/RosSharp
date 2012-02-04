@@ -62,15 +62,8 @@
     <Reference Include="mscorlib.extensions" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\RosSharp.NET40\IMaster.cs">
-      <Link>IMaster.cs</Link>
-    </Compile>
-    <Compile Include="..\RosSharp.NET40\IParameterServer.cs">
-      <Link>IParameterServer.cs</Link>
-    </Compile>
-    <Compile Include="..\RosSharp.NET40\ISlave.cs">
-      <Link>ISlave.cs</Link>
-    </Compile>
+    <Compile Include="MasterClient.cs" />
+    <Compile Include="MasterProxy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

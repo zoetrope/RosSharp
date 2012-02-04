@@ -78,6 +78,9 @@
     <Compile Include="..\RosSharp.NET40\ISlave.cs">
       <Link>ISlave.cs</Link>
     </Compile>
+    <Compile Include="..\RosSharp.NET40\MasterClient.cs">
+      <Link>MasterClient.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

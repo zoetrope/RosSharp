@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Linq;
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace RosSharp.Tests
             MXmlRpcProxyGen.Create<IMaster>(() => master);
             var client = new MasterClient();
 
-            client.LookupNode("/test", "/rosout").Is(new Uri("http://192.168.11.4:59511/"));
+            client.LookupNodeAsync("/test", "/rosout").First().Is(new Uri("http://192.168.11.4:59511/"));
 
         }
 
@@ -51,7 +52,7 @@ namespace RosSharp.Tests
             MXmlRpcProxyGen.Create<IMaster>(() => master);
             var client = new MasterClient();
 
-            AssertEx.Throws<InvalidOperationException>(() => client.LookupNode("/test", "/hogehoge"));
+            AssertEx.Throws<InvalidOperationException>(() => client.LookupNodeAsync("/test", "/hogehoge").First());
         }
         [TestMethod]
         [HostType("Moles")]
@@ -71,7 +72,7 @@ namespace RosSharp.Tests
             MXmlRpcProxyGen.Create<IMaster>(() => master);
             var client = new MasterClient();
 
-            AssertEx.Throws<InvalidOperationException>(() => client.LookupNode("/test", null));
+            AssertEx.Throws<InvalidOperationException>(() => client.LookupNodeAsync("/test", null).First());
         }
 
         [TestMethod]
@@ -143,7 +144,7 @@ namespace RosSharp.Tests
 
             var client = new MasterClient();
 
-            var state = client.GetSystemState("/test");
+            var state = client.GetSystemStateAsync("/test").First();
             state.Publishers.Count.Is(3);
             state.Subscribers.Count.Is(2);
             state.Services.Count.Is(2);
@@ -166,7 +167,7 @@ namespace RosSharp.Tests
             MXmlRpcProxyGen.Create<IMaster>(() => master);
             var client = new MasterClient();
 
-            AssertEx.Throws<InvalidOperationException>(() => client.GetSystemState(null));
+            AssertEx.Throws<InvalidOperationException>(() => client.GetSystemStateAsync(null).First());
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Talker
 
             //var state = client.GetSystemState("/talker");
             
-            client.LookupNode("/talker", null);
+            client.LookupNodeAsync("/talker", null);
         }
     }
 }
