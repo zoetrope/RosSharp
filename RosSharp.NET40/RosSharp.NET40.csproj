@@ -50,7 +50,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefaultNode.cs" />
+    <Compile Include="IMaster.cs" />
     <Compile Include="INode.cs" />
+    <Compile Include="IParameterServer.cs" />
+    <Compile Include="ISlave.cs" />
     <Compile Include="ITopic.cs" />
     <Compile Include="MasterClient.cs" />
     <Compile Include="MasterProxy.cs">
@@ -63,9 +66,12 @@
     <Compile Include="ROS.cs" />
     <Compile Include="RosNode.cs" />
     <Compile Include="Subscriber.cs" />
-    <Compile Include="IMaster.cs" />
-    <Compile Include="IParameterServer.cs" />
-    <Compile Include="ISlave.cs" />
+    <Compile Include="ParameterServerProxy.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="SlaveProxy.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

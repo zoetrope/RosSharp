@@ -75,6 +75,12 @@
     <Compile Include="..\RosSharp.NET40\MasterProxy.cs">
       <Link>MasterProxy.cs</Link>
     </Compile>
+    <Compile Include="..\RosSharp.NET40\ParameterServerProxy.cs">
+      <Link>ParameterServerProxy.cs</Link>
+    </Compile>
+    <Compile Include="..\RosSharp.NET40\SlaveProxy.cs">
+      <Link>SlaveProxy.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -528,6 +528,169 @@
             <summary>Sets the mole of <see cref="M:RosSharp.MessageSerializer`1.Serialize(System.IO.Stream,`1)"/>
             </summary>
         </member>
+        <member name="T:RosSharp.Moles.MParameterServerProxy">
+            <summary>Mole type of <see cref="T:RosSharp.ParameterServerProxy"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MParameterServerProxy.#ctor">
+            <summary>Initializes a new mole</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MParameterServerProxy.#ctor(RosSharp.ParameterServerProxy)">
+            <summary>Initializes a new mole for the given instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MParameterServerProxy.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MParameterServerProxy.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MParameterServerProxy.Bind(CookComputing.XmlRpc.IXmlRpcProxy)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MParameterServerProxy.Bind(System.ComponentModel.IComponent)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MParameterServerProxy.Bind(System.IDisposable)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.BeginDeleteParamStringStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerProxy.BeginDeleteParam(System.String,System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.BeginGetParamNamesStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerProxy.BeginGetParamNames(System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.BeginGetParamStringStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerProxy.BeginGetParam(System.String,System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.BeginHasParamStringStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerProxy.BeginHasParam(System.String,System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.BeginSearchParamStringStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerProxy.BeginSearchParam(System.String,System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.BeginSetParamStringStringObjectAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerProxy.BeginSetParam(System.String,System.String,System.Object,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.BeginSubscribeParamStringStringStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerProxy.BeginSubscribeParam(System.String,System.String,System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.BeginUnsubscribeParamStringStringStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerProxy.BeginUnsubscribeParam(System.String,System.String,System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.Behavior">
+            <summary>Assigns the behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.Constructor">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerProxy.#ctor"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.EndDeleteParamIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerProxy.EndDeleteParam(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.EndGetParamIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerProxy.EndGetParam(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.EndGetParamNamesIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerProxy.EndGetParamNames(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.EndHasParamIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerProxy.EndHasParam(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.EndSearchParamIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerProxy.EndSearchParam(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.EndSetParamIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerProxy.EndSetParam(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.EndSubscribeParamIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerProxy.EndSubscribeParam(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.EndUnsubscribeParamIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerProxy.EndUnsubscribeParam(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.MParameterServerProxy.AllInstances">
+            <summary>Define moles for all instances members</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.AllInstances.BeginDeleteParamStringStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerProxy.BeginDeleteParam(System.String,System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.AllInstances.BeginGetParamNamesStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerProxy.BeginGetParamNames(System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.AllInstances.BeginGetParamStringStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerProxy.BeginGetParam(System.String,System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.AllInstances.BeginHasParamStringStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerProxy.BeginHasParam(System.String,System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.AllInstances.BeginSearchParamStringStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerProxy.BeginSearchParam(System.String,System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.AllInstances.BeginSetParamStringStringObjectAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerProxy.BeginSetParam(System.String,System.String,System.Object,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.AllInstances.BeginSubscribeParamStringStringStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerProxy.BeginSubscribeParam(System.String,System.String,System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.AllInstances.BeginUnsubscribeParamStringStringStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerProxy.BeginUnsubscribeParam(System.String,System.String,System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.AllInstances.EndDeleteParamIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerProxy.EndDeleteParam(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.AllInstances.EndGetParamIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerProxy.EndGetParam(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.AllInstances.EndGetParamNamesIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerProxy.EndGetParamNames(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.AllInstances.EndHasParamIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerProxy.EndHasParam(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.AllInstances.EndSearchParamIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerProxy.EndSearchParam(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.AllInstances.EndSetParamIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerProxy.EndSetParam(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.AllInstances.EndSubscribeParamIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerProxy.EndSubscribeParam(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerProxy.AllInstances.EndUnsubscribeParamIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerProxy.EndUnsubscribeParam(System.IAsyncResult)"/>
+            </summary>
+        </member>
         <member name="T:RosSharp.Moles.MPublisher`1">
             <summary>Mole type of <see cref="T:RosSharp.Publisher`1"/>
             .</summary>
@@ -835,6 +998,201 @@
         </member>
         <member name="P:RosSharp.Moles.MServiceSystemState.AllInstances.ServicesSetListOfString">
             <summary>Sets the mole of <see cref="P:RosSharp.ServiceSystemState.Services"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.MSlaveProxy">
+            <summary>Mole type of <see cref="T:RosSharp.SlaveProxy"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MSlaveProxy.#ctor">
+            <summary>Initializes a new mole</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MSlaveProxy.#ctor(RosSharp.SlaveProxy)">
+            <summary>Initializes a new mole for the given instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MSlaveProxy.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MSlaveProxy.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MSlaveProxy.Bind(CookComputing.XmlRpc.IXmlRpcProxy)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MSlaveProxy.Bind(System.ComponentModel.IComponent)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MSlaveProxy.Bind(System.IDisposable)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.BeginGetBusInfoStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.BeginGetBusInfo(System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.BeginGetBusStatsStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.BeginGetBusStats(System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.BeginGetMasterUriStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.BeginGetMasterUri(System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.BeginGetPidStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.BeginGetPid(System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.BeginGetPublicationsStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.BeginGetPublications(System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.BeginGetSubscriptionsStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.BeginGetSubscriptions(System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.BeginParamUpdateStringStringObjectAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.BeginParamUpdate(System.String,System.String,System.Object,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.BeginPublisherUpdateStringStringStringArrayAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.BeginPublisherUpdate(System.String,System.String,System.String[],System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.BeginRequestTopicStringStringObjectArrayAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.BeginRequestTopic(System.String,System.String,System.Object[],System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.BeginShutdownStringStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.BeginShutdown(System.String,System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.Behavior">
+            <summary>Assigns the behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.Constructor">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.#ctor"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.EndGetBusInfoIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.EndGetBusInfo(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.EndGetBusStatsIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.EndGetBusStats(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.EndGetMasterUriIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.EndGetMasterUri(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.EndGetPidIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.EndGetPid(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.EndGetPublicationsIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.EndGetPublications(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.EndGetSubscriptionsIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.EndGetSubscriptions(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.EndParamUpdateIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.EndParamUpdate(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.EndPublisherUpdateIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.EndPublisherUpdate(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.EndRequestTopicIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.EndRequestTopic(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.EndShutdownIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.EndShutdown(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.MSlaveProxy.AllInstances">
+            <summary>Define moles for all instances members</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.AllInstances.BeginGetBusInfoStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.BeginGetBusInfo(System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.AllInstances.BeginGetBusStatsStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.BeginGetBusStats(System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.AllInstances.BeginGetMasterUriStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.BeginGetMasterUri(System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.AllInstances.BeginGetPidStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.BeginGetPid(System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.AllInstances.BeginGetPublicationsStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.BeginGetPublications(System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.AllInstances.BeginGetSubscriptionsStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.BeginGetSubscriptions(System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.AllInstances.BeginParamUpdateStringStringObjectAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.BeginParamUpdate(System.String,System.String,System.Object,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.AllInstances.BeginPublisherUpdateStringStringStringArrayAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.BeginPublisherUpdate(System.String,System.String,System.String[],System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.AllInstances.BeginRequestTopicStringStringObjectArrayAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.BeginRequestTopic(System.String,System.String,System.Object[],System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.AllInstances.BeginShutdownStringStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.BeginShutdown(System.String,System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.AllInstances.EndGetBusInfoIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.EndGetBusInfo(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.AllInstances.EndGetBusStatsIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.EndGetBusStats(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.AllInstances.EndGetMasterUriIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.EndGetMasterUri(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.AllInstances.EndGetPidIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.EndGetPid(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.AllInstances.EndGetPublicationsIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.EndGetPublications(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.AllInstances.EndGetSubscriptionsIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.EndGetSubscriptions(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.AllInstances.EndParamUpdateIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.EndParamUpdate(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.AllInstances.EndPublisherUpdateIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.EndPublisherUpdate(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.AllInstances.EndRequestTopicIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.EndRequestTopic(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveProxy.AllInstances.EndShutdownIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveProxy.EndShutdown(System.IAsyncResult)"/>
             </summary>
         </member>
         <member name="T:RosSharp.Moles.MSubscriber`1">
@@ -2680,6 +3038,22 @@
         <member name="P:RosSharp.Moles.SMessageSerializer`1.InstanceBehavior">
             <summary>Gets or sets the instance behavior.</summary>
         </member>
+        <member name="T:RosSharp.Moles.SParameterServerProxy">
+            <summary>Stub type of <see cref="T:RosSharp.ParameterServerProxy"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SParameterServerProxy.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SParameterServerProxy.InitializeStub">
+            <summary>Initializes a new instance of type SParameterServerProxy</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SParameterServerProxy.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SParameterServerProxy.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
         <member name="T:RosSharp.Moles.SPublisher`1">
             <summary>Stub type of <see cref="T:RosSharp.Publisher`1"/>
             .</summary>
@@ -2774,6 +3148,22 @@
             <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
         </member>
         <member name="P:RosSharp.Moles.SServiceSystemState.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="T:RosSharp.Moles.SSlaveProxy">
+            <summary>Stub type of <see cref="T:RosSharp.SlaveProxy"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SSlaveProxy.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SSlaveProxy.InitializeStub">
+            <summary>Initializes a new instance of type SSlaveProxy</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SSlaveProxy.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SSlaveProxy.InstanceBehavior">
             <summary>Gets or sets the instance behavior.</summary>
         </member>
         <member name="T:RosSharp.Moles.SSubscriber`1">
