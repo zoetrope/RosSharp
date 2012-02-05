@@ -23,11 +23,10 @@ namespace RosSharp.Tests
                 "http://192.168.11.4:59511/"
             };
 
-            var master = new SIMaster();
-            master.LookupNodeStringString = (_, __) => result;
-            master.UrlSetString = _ => { };
+            MXmlRpcClientProtocol.AllInstances.UrlSetString = (t1, t2) => { };
+            MMasterProxy.AllInstances.BeginLookupNodeStringStringAsyncCallbackObject = (t1, t2, t3, t4, t5) => { t4(null); return null; };
+            MMasterProxy.AllInstances.EndLookupNodeIAsyncResult = (t1, t2) => result;
 
-            MXmlRpcProxyGen.Create<IMaster>(() => master);
             var client = new MasterClient();
 
             client.LookupNodeAsync("/test", "/rosout").First().Is(new Uri("http://192.168.11.4:59511/"));
@@ -65,11 +64,10 @@ namespace RosSharp.Tests
                 ""
             };
 
-            var master = new SIMaster();
-            master.LookupNodeStringString = (_, __) => result;
-            master.UrlSetString = _ => { };
+            MXmlRpcClientProtocol.AllInstances.UrlSetString = (t1, t2) => { };
+            MMasterProxy.AllInstances.BeginLookupNodeStringStringAsyncCallbackObject = (t1, t2, t3, t4, t5) => { t4(null); return null; };
+            MMasterProxy.AllInstances.EndLookupNodeIAsyncResult= (t1, t2) => result;
 
-            MXmlRpcProxyGen.Create<IMaster>(() => master);
             var client = new MasterClient();
 
             AssertEx.Throws<InvalidOperationException>(() => client.LookupNodeAsync("/test", null).First());
@@ -136,11 +134,9 @@ namespace RosSharp.Tests
                 }
             };
 
-            var master = new SIMaster();
-            master.GetSystemStateString = _ => result;
-            master.UrlSetString = _ => { };
-
-            MXmlRpcProxyGen.Create<IMaster>(() => master);
+            MXmlRpcClientProtocol.AllInstances.UrlSetString = (t1, t2) => { };
+            MMasterProxy.AllInstances.BeginGetSystemStateStringAsyncCallbackObject = (t1, t2, t3, t4) => { t3(null); return null; };
+            MMasterProxy.AllInstances.EndGetSystemStateIAsyncResult = (t1, t2) => result;
 
             var client = new MasterClient();
 
@@ -160,14 +156,54 @@ namespace RosSharp.Tests
                             "caller_id must be a string",
                             new object[3] {new object[0], new object[0], new object[0]}
                         };
-            var master = new SIMaster();
-            master.GetSystemStateString = _ => result;
-            master.UrlSetString = _ => { };
+            MXmlRpcClientProtocol.AllInstances.UrlSetString = (t1, t2) => { };
+            MMasterProxy.AllInstances.BeginGetSystemStateStringAsyncCallbackObject = (t1, t2, t3, t4) => { t3(null); return null; };
+            MMasterProxy.AllInstances.EndGetSystemStateIAsyncResult = (t1, t2) => result;
 
-            MXmlRpcProxyGen.Create<IMaster>(() => master);
+            var client = new MasterClient();
+            AssertEx.Throws<InvalidOperationException>(() => client.GetSystemStateAsync(null).First());
+        }
+
+
+        [TestMethod]
+        [HostType("Moles")]
+        public void TestGetUri_Success()
+        {
+            var result = new object[3]
+            {
+                1,
+                "",
+                "http://192.168.11.4:11311/"
+            };
+
+            MXmlRpcClientProtocol.AllInstances.UrlSetString = (t1, t2) => { };
+            MMasterProxy.AllInstances.BeginGetUriStringAsyncCallbackObject = (t1, t2, t3, t4) => { t3(null); return null; };
+            MMasterProxy.AllInstances.EndGetUriIAsyncResult= (t1, t2) => result;
+
             var client = new MasterClient();
 
-            AssertEx.Throws<InvalidOperationException>(() => client.GetSystemStateAsync(null).First());
+            client.GetUriAsync("/test").First().Is(new Uri("http://192.168.11.4:11311/"));
+
+        }
+        [TestMethod]
+        [HostType("Moles")]
+        public void TestGetUri_ParameterError()
+        {
+            var result = new object[3]
+            {
+                -1,
+                "caller_id must be a string",
+                ""
+            };
+
+            MXmlRpcClientProtocol.AllInstances.UrlSetString = (t1, t2) => { };
+            MMasterProxy.AllInstances.BeginGetUriStringAsyncCallbackObject = (t1, t2, t3, t4) => { t3(null); return null; };
+            MMasterProxy.AllInstances.EndGetUriIAsyncResult = (t1, t2) => result;
+
+            var client = new MasterClient();
+
+            AssertEx.Throws<InvalidOperationException>(() => client.GetUriAsync(null).First());
+
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using RosSharp;
 
@@ -12,9 +13,12 @@ namespace Talker
         {
             var client = new MasterClient();
 
-            //var state = client.GetSystemState("/talker");
+            //var state = client.GetSystemStateAsync("/talker").First();
             
-            client.LookupNodeAsync("/talker", null);
+            //var uri = client.LookupNodeAsync("/talker", "/rosout").First();
+
+            var uri = client.GetUriAsync("/talker").First();
+            //var uri = client.GetUriAsync(null);
         }
     }
 }

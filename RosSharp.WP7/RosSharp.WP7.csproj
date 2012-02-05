@@ -62,8 +62,12 @@
     <Reference Include="mscorlib.extensions" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MasterClient.cs" />
-    <Compile Include="MasterProxy.cs" />
+    <Compile Include="..\RosSharp.NET40\MasterClient.cs">
+      <Link>MasterClient.cs</Link>
+    </Compile>
+    <Compile Include="..\RosSharp.NET40\MasterProxy.cs">
+      <Link>MasterProxy.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

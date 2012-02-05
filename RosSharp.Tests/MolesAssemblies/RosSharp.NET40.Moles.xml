@@ -114,16 +114,56 @@
             <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.#ctor"/>
             </summary>
         </member>
+        <member name="P:RosSharp.Moles.MMasterClient.GetPublisherTopicsAsyncStringString">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.GetPublisherTopicsAsync(System.String,System.String)"/>
+            </summary>
+        </member>
         <member name="P:RosSharp.Moles.MMasterClient.GetSystemStateAsyncString">
             <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.GetSystemStateAsync(System.String)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient.GetUriAsyncString">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.GetUriAsync(System.String)"/>
             </summary>
         </member>
         <member name="P:RosSharp.Moles.MMasterClient.LookupNodeAsyncStringString">
             <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.LookupNodeAsync(System.String,System.String)"/>
             </summary>
         </member>
-        <member name="P:RosSharp.Moles.MMasterClient.RegisterSubscriber">
-            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.RegisterSubscriber"/>
+        <member name="P:RosSharp.Moles.MMasterClient.LookupServiceAsyncStringString">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.LookupServiceAsync(System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient.RegisterPublisherAsyncStringStringStringString">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.RegisterPublisherAsync(System.String,System.String,System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient.RegisterServiceAsyncStringStringStringString">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.RegisterServiceAsync(System.String,System.String,System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient.RegisterSubscriberAsyncStringStringStringString">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.RegisterSubscriberAsync(System.String,System.String,System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient.UnregisterPublisherAsyncStringStringString">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.UnregisterPublisherAsync(System.String,System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient.UnregisterServiceAsyncStringStringString">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.UnregisterServiceAsync(System.String,System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient.UnregisterSubscriberAsyncStringStringString">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.UnregisterSubscriberAsync(System.String,System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient._GetSystemStateAsyncb__8ObjectArray">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.&lt;GetSystemStateAsync&gt;b__8(System.Object[])"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient._GetSystemStateAsyncb__9ObjectArray">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.&lt;GetSystemStateAsync&gt;b__9(System.Object[])"/>
             </summary>
         </member>
         <member name="P:RosSharp.Moles.MMasterClient._GetSystemStateAsyncb__aObjectArray">
@@ -138,8 +178,16 @@
             <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.&lt;GetSystemStateAsync&gt;b__c(System.Object[])"/>
             </summary>
         </member>
-        <member name="P:RosSharp.Moles.MMasterClient._GetSystemStateAsyncb__dObjectArray">
-            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.&lt;GetSystemStateAsync&gt;b__d(System.Object[])"/>
+        <member name="P:RosSharp.Moles.MMasterClient._GetUriAsyncb__12ObjectArray">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.&lt;GetUriAsync&gt;b__12(System.Object[])"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient._GetUriAsyncb__13ObjectArray">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.&lt;GetUriAsync&gt;b__13(System.Object[])"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient._LookupNodeAsyncb__0ObjectArray">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.&lt;LookupNodeAsync&gt;b__0(System.Object[])"/>
             </summary>
         </member>
         <member name="P:RosSharp.Moles.MMasterClient._LookupNodeAsyncb__1ObjectArray">
@@ -149,16 +197,259 @@
         <member name="T:RosSharp.Moles.MMasterClient.AllInstances">
             <summary>Define moles for all instances members</summary>
         </member>
+        <member name="P:RosSharp.Moles.MMasterClient.AllInstances.GetPublisherTopicsAsyncStringString">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.GetPublisherTopicsAsync(System.String,System.String)"/>
+            </summary>
+        </member>
         <member name="P:RosSharp.Moles.MMasterClient.AllInstances.GetSystemStateAsyncString">
             <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.GetSystemStateAsync(System.String)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient.AllInstances.GetUriAsyncString">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.GetUriAsync(System.String)"/>
             </summary>
         </member>
         <member name="P:RosSharp.Moles.MMasterClient.AllInstances.LookupNodeAsyncStringString">
             <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.LookupNodeAsync(System.String,System.String)"/>
             </summary>
         </member>
-        <member name="P:RosSharp.Moles.MMasterClient.AllInstances.RegisterSubscriber">
-            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.RegisterSubscriber"/>
+        <member name="P:RosSharp.Moles.MMasterClient.AllInstances.LookupServiceAsyncStringString">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.LookupServiceAsync(System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient.AllInstances.RegisterPublisherAsyncStringStringStringString">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.RegisterPublisherAsync(System.String,System.String,System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient.AllInstances.RegisterServiceAsyncStringStringStringString">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.RegisterServiceAsync(System.String,System.String,System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient.AllInstances.RegisterSubscriberAsyncStringStringStringString">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.RegisterSubscriberAsync(System.String,System.String,System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient.AllInstances.UnregisterPublisherAsyncStringStringString">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.UnregisterPublisherAsync(System.String,System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient.AllInstances.UnregisterServiceAsyncStringStringString">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.UnregisterServiceAsync(System.String,System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterClient.AllInstances.UnregisterSubscriberAsyncStringStringString">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.UnregisterSubscriberAsync(System.String,System.String,System.String)"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.MMasterProxy">
+            <summary>Mole type of <see cref="T:RosSharp.MasterProxy"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MMasterProxy.#ctor">
+            <summary>Initializes a new mole</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MMasterProxy.#ctor(RosSharp.MasterProxy)">
+            <summary>Initializes a new mole for the given instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MMasterProxy.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MMasterProxy.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MMasterProxy.Bind(CookComputing.XmlRpc.IXmlRpcProxy)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MMasterProxy.Bind(System.ComponentModel.IComponent)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MMasterProxy.Bind(System.IDisposable)">
+            <summary>Binds the members of the interface to the mole.</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.BeginGetPublisherTopicsStringStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.BeginGetPublisherTopics(System.String,System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.BeginGetSystemStateStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.BeginGetSystemState(System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.BeginGetUriStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.BeginGetUri(System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.BeginLookupNodeStringStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.BeginLookupNode(System.String,System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.BeginLookupServiceStringStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.BeginLookupService(System.String,System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.BeginRegisterPublisherStringStringStringStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.BeginRegisterPublisher(System.String,System.String,System.String,System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.BeginRegisterServiceStringStringStringStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.BeginRegisterService(System.String,System.String,System.String,System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.BeginRegisterSubscriberStringStringStringStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.BeginRegisterSubscriber(System.String,System.String,System.String,System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.BeginUnregisterPublisherStringStringStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.BeginUnregisterPublisher(System.String,System.String,System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.BeginUnregisterServiceStringStringStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.BeginUnregisterService(System.String,System.String,System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.BeginUnregisterSubscriberStringStringStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.BeginUnregisterSubscriber(System.String,System.String,System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.Behavior">
+            <summary>Assigns the behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.Constructor">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.#ctor"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.EndGetPublisherTopicsIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.EndGetPublisherTopics(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.EndGetSystemStateIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.EndGetSystemState(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.EndGetUriIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.EndGetUri(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.EndLookupNodeIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.EndLookupNode(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.EndLookupServiceIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.EndLookupService(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.EndRegisterPublisherIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.EndRegisterPublisher(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.EndRegisterServiceIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.EndRegisterService(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.EndRegisterSubscriberIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.EndRegisterSubscriber(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.EndUnregisterPublisherIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.EndUnregisterPublisher(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.EndUnregisterServiceIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.EndUnregisterService(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.EndUnregisterSubscriberIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.EndUnregisterSubscriber(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.MMasterProxy.AllInstances">
+            <summary>Define moles for all instances members</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.AllInstances.BeginGetPublisherTopicsStringStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.BeginGetPublisherTopics(System.String,System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.AllInstances.BeginGetSystemStateStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.BeginGetSystemState(System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.AllInstances.BeginGetUriStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.BeginGetUri(System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.AllInstances.BeginLookupNodeStringStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.BeginLookupNode(System.String,System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.AllInstances.BeginLookupServiceStringStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.BeginLookupService(System.String,System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.AllInstances.BeginRegisterPublisherStringStringStringStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.BeginRegisterPublisher(System.String,System.String,System.String,System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.AllInstances.BeginRegisterServiceStringStringStringStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.BeginRegisterService(System.String,System.String,System.String,System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.AllInstances.BeginRegisterSubscriberStringStringStringStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.BeginRegisterSubscriber(System.String,System.String,System.String,System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.AllInstances.BeginUnregisterPublisherStringStringStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.BeginUnregisterPublisher(System.String,System.String,System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.AllInstances.BeginUnregisterServiceStringStringStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.BeginUnregisterService(System.String,System.String,System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.AllInstances.BeginUnregisterSubscriberStringStringStringAsyncCallbackObject">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.BeginUnregisterSubscriber(System.String,System.String,System.String,System.AsyncCallback,System.Object)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.AllInstances.EndGetPublisherTopicsIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.EndGetPublisherTopics(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.AllInstances.EndGetSystemStateIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.EndGetSystemState(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.AllInstances.EndGetUriIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.EndGetUri(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.AllInstances.EndLookupNodeIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.EndLookupNode(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.AllInstances.EndLookupServiceIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.EndLookupService(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.AllInstances.EndRegisterPublisherIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.EndRegisterPublisher(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.AllInstances.EndRegisterServiceIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.EndRegisterService(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.AllInstances.EndRegisterSubscriberIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.EndRegisterSubscriber(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.AllInstances.EndUnregisterPublisherIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.EndUnregisterPublisher(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.AllInstances.EndUnregisterServiceIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.EndUnregisterService(System.IAsyncResult)"/>
+            </summary>
+        </member>
+        <member name="P:RosSharp.Moles.MMasterProxy.AllInstances.EndUnregisterSubscriberIAsyncResult">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterProxy.EndUnregisterSubscriber(System.IAsyncResult)"/>
             </summary>
         </member>
         <member name="T:RosSharp.Moles.MMessageSerializationFactory">
@@ -2339,6 +2630,22 @@
             <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
         </member>
         <member name="P:RosSharp.Moles.SMasterClient.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="T:RosSharp.Moles.SMasterProxy">
+            <summary>Stub type of <see cref="T:RosSharp.MasterProxy"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SMasterProxy.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SMasterProxy.InitializeStub">
+            <summary>Initializes a new instance of type SMasterProxy</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SMasterProxy.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SMasterProxy.InstanceBehavior">
             <summary>Gets or sets the instance behavior.</summary>
         </member>
         <member name="T:RosSharp.Moles.SMessageSerializationFactory">

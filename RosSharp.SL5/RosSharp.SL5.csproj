@@ -69,17 +69,11 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\RosSharp.NET40\IMaster.cs">
-      <Link>IMaster.cs</Link>
-    </Compile>
-    <Compile Include="..\RosSharp.NET40\IParameterServer.cs">
-      <Link>IParameterServer.cs</Link>
-    </Compile>
-    <Compile Include="..\RosSharp.NET40\ISlave.cs">
-      <Link>ISlave.cs</Link>
-    </Compile>
     <Compile Include="..\RosSharp.NET40\MasterClient.cs">
       <Link>MasterClient.cs</Link>
+    </Compile>
+    <Compile Include="..\RosSharp.NET40\MasterProxy.cs">
+      <Link>MasterProxy.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

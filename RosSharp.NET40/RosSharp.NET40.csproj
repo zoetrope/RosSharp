@@ -53,6 +53,9 @@
     <Compile Include="INode.cs" />
     <Compile Include="ITopic.cs" />
     <Compile Include="MasterClient.cs" />
+    <Compile Include="MasterProxy.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="MessageSerializationFactory.cs" />
     <Compile Include="MessageSerializer.cs" />
     <Compile Include="Publisher.cs" />
