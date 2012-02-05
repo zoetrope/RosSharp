@@ -2,18 +2,20 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{417B1A0A-5FF8-4423-9F62-FE61AA299239}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{25D53A55-E534-4CCA-9358-A51971838437}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>RosSharp</RootNamespace>
-    <AssemblyName>RosSharp.NET40</AssemblyName>
+    <AssemblyName>RosCore</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,7 +24,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -31,16 +34,19 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CookComputing.XmlRpcServerV2">
+      <HintPath>..\..\Lib\XML-RPC.NET-3.0.0\CookComputing.XmlRpcServerV2.dll</HintPath>
+    </Reference>
     <Reference Include="CookComputing.XmlRpcV2">
-      <HintPath>..\Lib\XML-RPC.NET-3.0.0\CookComputing.XmlRpcV2.dll</HintPath>
+      <HintPath>..\..\Lib\XML-RPC.NET-3.0.0\CookComputing.XmlRpcV2.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Interactive">
-      <HintPath>..\packages\Ix_Experimental-Main.1.1.10823\lib\Net4\System.Interactive.dll</HintPath>
+      <HintPath>..\..\packages\Ix_Experimental-Main.1.1.10823\lib\Net4\System.Interactive.dll</HintPath>
     </Reference>
     <Reference Include="System.Reactive, Version=1.0.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rx-Main.1.0.11226\lib\Net4\System.Reactive.dll</HintPath>
+      <HintPath>..\..\packages\Rx-Main.1.0.11226\lib\Net4\System.Reactive.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -49,35 +55,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DefaultNode.cs" />
-    <Compile Include="IMaster.cs" />
-    <Compile Include="INode.cs" />
-    <Compile Include="IParameterServer.cs" />
-    <Compile Include="ISlave.cs" />
-    <Compile Include="ITopic.cs" />
-    <Compile Include="MasterClient.cs" />
-    <Compile Include="MasterProxy.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="MessageSerializationFactory.cs" />
-    <Compile Include="MessageSerializer.cs" />
-    <Compile Include="ParameterServerClient.cs" />
-    <Compile Include="Publisher.cs" />
-    <Compile Include="Registrar.cs" />
-    <Compile Include="ROS.cs" />
-    <Compile Include="RosNode.cs" />
-    <Compile Include="SlaveClient.cs" />
-    <Compile Include="Subscriber.cs" />
-    <Compile Include="ParameterServerProxy.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="SlaveProxy.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\RosSharp.NET40\RosSharp.NET40.csproj">
+      <Project>{417B1A0A-5FF8-4423-9F62-FE61AA299239}</Project>
+      <Name>RosSharp.NET40</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -22,6 +22,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Listener", "Sample\Listener
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Talker", "Sample\Talker\Talker.csproj", "{572772C7-D172-497F-A428-D10141BBCA72}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{57BD2B28-6427-4973-A179-C1841417F349}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RosCore", "App\RosCore\RosCore.csproj", "{25D53A55-E534-4CCA-9358-A51971838437}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = RosSharp.vsmdi
@@ -95,6 +99,16 @@ Global
 		{572772C7-D172-497F-A428-D10141BBCA72}.Release|Mixed Platforms.Build.0 = Release|x86
 		{572772C7-D172-497F-A428-D10141BBCA72}.Release|x86.ActiveCfg = Release|x86
 		{572772C7-D172-497F-A428-D10141BBCA72}.Release|x86.Build.0 = Release|x86
+		{25D53A55-E534-4CCA-9358-A51971838437}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{25D53A55-E534-4CCA-9358-A51971838437}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{25D53A55-E534-4CCA-9358-A51971838437}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{25D53A55-E534-4CCA-9358-A51971838437}.Debug|x86.ActiveCfg = Debug|x86
+		{25D53A55-E534-4CCA-9358-A51971838437}.Debug|x86.Build.0 = Debug|x86
+		{25D53A55-E534-4CCA-9358-A51971838437}.Release|Any CPU.ActiveCfg = Release|x86
+		{25D53A55-E534-4CCA-9358-A51971838437}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{25D53A55-E534-4CCA-9358-A51971838437}.Release|Mixed Platforms.Build.0 = Release|x86
+		{25D53A55-E534-4CCA-9358-A51971838437}.Release|x86.ActiveCfg = Release|x86
+		{25D53A55-E534-4CCA-9358-A51971838437}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -102,5 +116,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{C26EE4A1-064B-47F1-B0BC-544DAAED7698} = {B02FD51D-88FD-4A11-9BFE-AF4F3719C802}
 		{572772C7-D172-497F-A428-D10141BBCA72} = {B02FD51D-88FD-4A11-9BFE-AF4F3719C802}
+		{25D53A55-E534-4CCA-9358-A51971838437} = {57BD2B28-6427-4973-A179-C1841417F349}
 	EndGlobalSection
 EndGlobal

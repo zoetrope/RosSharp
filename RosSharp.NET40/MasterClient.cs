@@ -18,34 +18,52 @@ namespace RosSharp
         }
 
 
-        public object[] RegisterServiceAsync(string callerId, string service, string serviceApi, string callerApi)
+        public IObservable<int> RegisterServiceAsync(string callerId, string service, string serviceApi, string callerApi)
         {
-            throw new NotImplementedException();
+            return Observable.FromAsyncPattern<string, string, string, string, object[]>(_proxy.BeginRegisterService, _proxy.EndRegisterService)
+                .Invoke(callerId, service, serviceApi, callerApi)
+                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
+                .Select(ret => (int)ret[2]);
         }
 
-        public object[] UnregisterServiceAsync(string callerId, string service, string serviceApi)
+        public IObservable<int> UnregisterServiceAsync(string callerId, string service, string serviceApi)
         {
-            throw new NotImplementedException();
+            return Observable.FromAsyncPattern<string, string, string, object[]>(_proxy.BeginUnregisterService, _proxy.EndUnregisterService)
+                .Invoke(callerId, service, serviceApi)
+                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
+                .Select(ret => (int)ret[2]);
         }
 
-        public object[] RegisterSubscriberAsync(string callerId, string topic, string topicType, string callerApi)
+        public IObservable<List<Uri>> RegisterSubscriberAsync(string callerId, string topic, string topicType, string callerApi)
         {
-            throw new NotImplementedException();
+            return Observable.FromAsyncPattern<string, string, string, string, object[]>(_proxy.BeginRegisterSubscriber, _proxy.EndRegisterSubscriber)
+                .Invoke(callerId, topic, topicType, callerApi)
+                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
+                .Select(ret => ((string[])ret[2]).Select(x => new Uri(x)).ToList());
         }
 
-        public object[] UnregisterSubscriberAsync(string callerId, string topic, string callerApi)
+        public IObservable<int> UnregisterSubscriberAsync(string callerId, string topic, string callerApi)
         {
-            throw new NotImplementedException();
+            return Observable.FromAsyncPattern<string, string, string, object[]>(_proxy.BeginUnregisterSubscriber, _proxy.EndUnregisterSubscriber)
+                .Invoke(callerId, topic, callerApi)
+                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
+                .Select(ret => (int)ret[2]);
         }
 
-        public object[] RegisterPublisherAsync(string callerId, string topic, string topicType, string callerApi)
+        public IObservable<List<Uri>> RegisterPublisherAsync(string callerId, string topic, string topicType, string callerApi)
         {
-            throw new NotImplementedException();
+            return Observable.FromAsyncPattern<string, string, string, string, object[]>(_proxy.BeginRegisterPublisher, _proxy.EndRegisterPublisher)
+                .Invoke(callerId, topic, topicType, callerApi)
+                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
+                .Select(ret => ((string[])ret[2]).Select(x => new Uri(x)).ToList());
         }
 
-        public object[] UnregisterPublisherAsync(string callerId, string topic, string callerApi)
+        public IObservable<int> UnregisterPublisherAsync(string callerId, string topic, string callerApi)
         {
-            throw new NotImplementedException();
+            return Observable.FromAsyncPattern<string, string, string, object[]>(_proxy.BeginUnregisterPublisher, _proxy.EndUnregisterPublisher)
+                .Invoke(callerId, topic, callerApi)
+                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
+                .Select(ret => (int)ret[2]);
         }
 
         /// <summary>
@@ -63,9 +81,17 @@ namespace RosSharp
 
         }
 
-        public object[] GetPublisherTopicsAsync(string callerId, string subgraph)
+        public IObservable<List<TopicInfo>> GetPublisherTopicsAsync(string callerId, string subgraph)
         {
-            throw new NotImplementedException();
+            return Observable.FromAsyncPattern<string, string, object[]>(_proxy.BeginGetPublisherTopics, _proxy.EndGetPublisherTopics)
+                .Invoke(callerId, subgraph)
+                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
+                .Select(ret =>
+                    ((object[])ret[2]).Select(x => new TopicInfo()
+                    {
+                        TopicName = (string)((object[])x)[0],
+                        TypeName = (string)((object[])x)[1]
+                    }).ToList());
         }
 
         /// <summary>
@@ -111,10 +137,19 @@ namespace RosSharp
                 .Select(ret => new Uri((string)ret[2]));
         }
 
-        public object[] LookupServiceAsync(string callerId, string service)
+        public IObservable<Uri> LookupServiceAsync(string callerId, string service)
         {
-            throw new NotImplementedException();
+            return Observable.FromAsyncPattern<string, string, object[]>(_proxy.BeginLookupService, _proxy.EndLookupService)
+                .Invoke(callerId, service)
+                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
+                .Select(ret => new Uri((string)ret[2]));
         }
+    }
+
+    public class TopicInfo
+    {
+        public string TopicName { get; set; }
+        public string TypeName { get; set; }
     }
 
     public class SystemState

@@ -528,6 +528,32 @@
             <summary>Sets the mole of <see cref="M:RosSharp.MessageSerializer`1.Serialize(System.IO.Stream,`1)"/>
             </summary>
         </member>
+        <member name="T:RosSharp.Moles.MParameterServerClient">
+            <summary>Mole type of <see cref="T:RosSharp.ParameterServerClient"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MParameterServerClient.#ctor">
+            <summary>Initializes a new mole</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MParameterServerClient.#ctor(RosSharp.ParameterServerClient)">
+            <summary>Initializes a new mole for the given instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MParameterServerClient.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MParameterServerClient.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerClient.Behavior">
+            <summary>Assigns the behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MParameterServerClient.Constructor">
+            <summary>Sets the mole of <see cref="M:RosSharp.ParameterServerClient.#ctor"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.MParameterServerClient.AllInstances">
+            <summary>Define moles for all instances members</summary>
+        </member>
         <member name="T:RosSharp.Moles.MParameterServerProxy">
             <summary>Mole type of <see cref="T:RosSharp.ParameterServerProxy"/>
             .</summary>
@@ -999,6 +1025,32 @@
         <member name="P:RosSharp.Moles.MServiceSystemState.AllInstances.ServicesSetListOfString">
             <summary>Sets the mole of <see cref="P:RosSharp.ServiceSystemState.Services"/>
             </summary>
+        </member>
+        <member name="T:RosSharp.Moles.MSlaveClient">
+            <summary>Mole type of <see cref="T:RosSharp.SlaveClient"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MSlaveClient.#ctor">
+            <summary>Initializes a new mole</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MSlaveClient.#ctor(RosSharp.SlaveClient)">
+            <summary>Initializes a new mole for the given instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MSlaveClient.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="M:RosSharp.Moles.MSlaveClient.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveClient.Behavior">
+            <summary>Assigns the behavior for all methods of the moled type</summary>
+        </member>
+        <member name="P:RosSharp.Moles.MSlaveClient.Constructor">
+            <summary>Sets the mole of <see cref="M:RosSharp.SlaveClient.#ctor"/>
+            </summary>
+        </member>
+        <member name="T:RosSharp.Moles.MSlaveClient.AllInstances">
+            <summary>Define moles for all instances members</summary>
         </member>
         <member name="T:RosSharp.Moles.MSlaveProxy">
             <summary>Mole type of <see cref="T:RosSharp.SlaveProxy"/>
@@ -3038,6 +3090,22 @@
         <member name="P:RosSharp.Moles.SMessageSerializer`1.InstanceBehavior">
             <summary>Gets or sets the instance behavior.</summary>
         </member>
+        <member name="T:RosSharp.Moles.SParameterServerClient">
+            <summary>Stub type of <see cref="T:RosSharp.ParameterServerClient"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SParameterServerClient.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SParameterServerClient.InitializeStub">
+            <summary>Initializes a new instance of type SParameterServerClient</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SParameterServerClient.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SParameterServerClient.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
         <member name="T:RosSharp.Moles.SParameterServerProxy">
             <summary>Stub type of <see cref="T:RosSharp.ParameterServerProxy"/>
             .</summary>
@@ -3148,6 +3216,22 @@
             <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
         </member>
         <member name="P:RosSharp.Moles.SServiceSystemState.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="T:RosSharp.Moles.SSlaveClient">
+            <summary>Stub type of <see cref="T:RosSharp.SlaveClient"/>
+            .</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SSlaveClient.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:RosSharp.Moles.SSlaveClient.InitializeStub">
+            <summary>Initializes a new instance of type SSlaveClient</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SSlaveClient.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:RosSharp.Moles.SSlaveClient.InstanceBehavior">
             <summary>Gets or sets the instance behavior.</summary>
         </member>
         <member name="T:RosSharp.Moles.SSlaveProxy">

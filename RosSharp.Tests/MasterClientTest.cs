@@ -14,7 +14,7 @@ namespace RosSharp.Tests
     {
         [TestMethod]
         [HostType("Moles")]
-        public void TestLookupNode_Success()
+        public void LookupNode_Success()
         {
             var result = new object[3]
             {
@@ -35,7 +35,7 @@ namespace RosSharp.Tests
 
         [TestMethod]
         [HostType("Moles")]
-        public void TestLookupNode_UnknownError()
+        public void LookupNode_UnknownError()
         {
             var result = new object[3]
             {
@@ -55,7 +55,7 @@ namespace RosSharp.Tests
         }
         [TestMethod]
         [HostType("Moles")]
-        public void TestLookupNode_ParameterError()
+        public void LookupNode_ParameterError()
         {
             var result = new object[3]
             {
@@ -75,7 +75,7 @@ namespace RosSharp.Tests
 
         [TestMethod]
         [HostType("Moles")]
-        public void TestGetSystemState_Success()
+        public void GetSystemState_Success()
         {
             var result = new object[3]
             {
@@ -148,7 +148,7 @@ namespace RosSharp.Tests
 
         [TestMethod]
         [HostType("Moles")]
-        public void TestGetSystemState_ParameterError()
+        public void GetSystemState_ParameterError()
         {
             var result = new object[3]
                         {
@@ -167,7 +167,7 @@ namespace RosSharp.Tests
 
         [TestMethod]
         [HostType("Moles")]
-        public void TestGetUri_Success()
+        public void GetUri_Success()
         {
             var result = new object[3]
             {
@@ -187,7 +187,7 @@ namespace RosSharp.Tests
         }
         [TestMethod]
         [HostType("Moles")]
-        public void TestGetUri_ParameterError()
+        public void GetUri_ParameterError()
         {
             var result = new object[3]
             {
