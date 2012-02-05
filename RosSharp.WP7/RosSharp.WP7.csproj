@@ -51,9 +51,6 @@
     <Reference Include="System.Reactive, Version=1.0.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Rx-Main.1.0.11226\lib\SL3-WP\System.Reactive.dll</HintPath>
     </Reference>
-    <Reference Include="System.Reactive.Windows.Threading, Version=1.0.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rx-Silverlight.1.0.11226\lib\SL3-WP\System.Reactive.Windows.Threading.dll</HintPath>
-    </Reference>
     <Reference Include="System.Windows" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
@@ -68,12 +65,19 @@
     <Compile Include="..\RosSharp.NET40\MasterProxy.cs">
       <Link>MasterProxy.cs</Link>
     </Compile>
+    <Compile Include="..\RosSharp.NET40\ParameterServerClient.cs">
+      <Link>ParameterServerClient.cs</Link>
+    </Compile>
     <Compile Include="..\RosSharp.NET40\ParameterServerProxy.cs">
       <Link>ParameterServerProxy.cs</Link>
+    </Compile>
+    <Compile Include="..\RosSharp.NET40\SlaveClient.cs">
+      <Link>SlaveClient.cs</Link>
     </Compile>
     <Compile Include="..\RosSharp.NET40\SlaveProxy.cs">
       <Link>SlaveProxy.cs</Link>
     </Compile>
+    <Compile Include="ObservableEx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

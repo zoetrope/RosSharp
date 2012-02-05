@@ -3,7 +3,7 @@
 namespace RosSharp
 {
     [XmlRpcUrl("")]
-    public interface IParameterServer : IXmlRpcProxy
+    public interface IParameterServer
     {
         [XmlRpcMethod("deleteParam")]
         object[] DeleteParam(string callerId, string key);

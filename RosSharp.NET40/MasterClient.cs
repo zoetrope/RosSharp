@@ -20,7 +20,11 @@ namespace RosSharp
 
         public IObservable<int> RegisterServiceAsync(string callerId, string service, string serviceApi, string callerApi)
         {
+#if WINDOWS_PHONE
+            return ObservableEx.FromAsyncPattern<string, string, string, string, object[]>(_proxy.BeginRegisterService, _proxy.EndRegisterService)
+#else
             return Observable.FromAsyncPattern<string, string, string, string, object[]>(_proxy.BeginRegisterService, _proxy.EndRegisterService)
+#endif
                 .Invoke(callerId, service, serviceApi, callerApi)
                 .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
                 .Select(ret => (int)ret[2]);
@@ -28,7 +32,11 @@ namespace RosSharp
 
         public IObservable<int> UnregisterServiceAsync(string callerId, string service, string serviceApi)
         {
+#if WINDOWS_PHONE
+            return ObservableEx.FromAsyncPattern<string, string, string, object[]>(_proxy.BeginUnregisterService, _proxy.EndUnregisterService)
+#else
             return Observable.FromAsyncPattern<string, string, string, object[]>(_proxy.BeginUnregisterService, _proxy.EndUnregisterService)
+#endif
                 .Invoke(callerId, service, serviceApi)
                 .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
                 .Select(ret => (int)ret[2]);
@@ -36,7 +44,11 @@ namespace RosSharp
 
         public IObservable<List<Uri>> RegisterSubscriberAsync(string callerId, string topic, string topicType, string callerApi)
         {
+#if WINDOWS_PHONE
+            return ObservableEx.FromAsyncPattern<string, string, string, string, object[]>(_proxy.BeginRegisterSubscriber, _proxy.EndRegisterSubscriber)
+#else
             return Observable.FromAsyncPattern<string, string, string, string, object[]>(_proxy.BeginRegisterSubscriber, _proxy.EndRegisterSubscriber)
+#endif
                 .Invoke(callerId, topic, topicType, callerApi)
                 .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
                 .Select(ret => ((string[])ret[2]).Select(x => new Uri(x)).ToList());
@@ -44,7 +56,11 @@ namespace RosSharp
 
         public IObservable<int> UnregisterSubscriberAsync(string callerId, string topic, string callerApi)
         {
+#if WINDOWS_PHONE
+            return ObservableEx.FromAsyncPattern<string, string, string, object[]>(_proxy.BeginUnregisterSubscriber, _proxy.EndUnregisterSubscriber)
+#else
             return Observable.FromAsyncPattern<string, string, string, object[]>(_proxy.BeginUnregisterSubscriber, _proxy.EndUnregisterSubscriber)
+#endif
                 .Invoke(callerId, topic, callerApi)
                 .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
                 .Select(ret => (int)ret[2]);
@@ -52,7 +68,11 @@ namespace RosSharp
 
         public IObservable<List<Uri>> RegisterPublisherAsync(string callerId, string topic, string topicType, string callerApi)
         {
+#if WINDOWS_PHONE
+            return ObservableEx.FromAsyncPattern<string, string, string, string, object[]>(_proxy.BeginRegisterPublisher, _proxy.EndRegisterPublisher)
+#else
             return Observable.FromAsyncPattern<string, string, string, string, object[]>(_proxy.BeginRegisterPublisher, _proxy.EndRegisterPublisher)
+#endif
                 .Invoke(callerId, topic, topicType, callerApi)
                 .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
                 .Select(ret => ((string[])ret[2]).Select(x => new Uri(x)).ToList());
@@ -60,7 +80,11 @@ namespace RosSharp
 
         public IObservable<int> UnregisterPublisherAsync(string callerId, string topic, string callerApi)
         {
+#if WINDOWS_PHONE
+            return ObservableEx.FromAsyncPattern<string, string, string, object[]>(_proxy.BeginUnregisterPublisher, _proxy.EndUnregisterPublisher)
+#else
             return Observable.FromAsyncPattern<string, string, string, object[]>(_proxy.BeginUnregisterPublisher, _proxy.EndUnregisterPublisher)
+#endif
                 .Invoke(callerId, topic, callerApi)
                 .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
                 .Select(ret => (int)ret[2]);

@@ -25,7 +25,11 @@ namespace RosSharp
 
         public IObservable<int> SetParamAsync(string callerId, string key, object value)
         {
+#if WINDOWS_PHONE
+            return ObservableEx.FromAsyncPattern<string, string,object, object[]>(_proxy.BeginSetParam, _proxy.EndSetParam)
+#else
             return Observable.FromAsyncPattern<string, string,object, object[]>(_proxy.BeginSetParam, _proxy.EndSetParam)
+#endif
                 .Invoke(callerId, key, value)
                 .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
                 .Select(ret => (int)ret[2]);
@@ -48,14 +52,22 @@ namespace RosSharp
 
         public IObservable<object[]> SubscribeParamAsync(string callerId, string key, string callerApi)
         {
+#if WINDOWS_PHONE
+            return ObservableEx.FromAsyncPattern<string, string, string, object[]>(_proxy.BeginSubscribeParam, _proxy.EndSubscribeParam)
+#else
             return Observable.FromAsyncPattern<string, string, string, object[]>(_proxy.BeginSubscribeParam, _proxy.EndSubscribeParam)
+#endif
                 .Invoke(callerId, key, callerApi)
                 .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); });
         }
 
         public IObservable<int> UnsubscribeParamAsync(string callerId, string key, string callerApi)
         {
+#if WINDOWS_PHONE
+            return ObservableEx.FromAsyncPattern<string, string, string, object[]>(_proxy.BeginUnsubscribeParam, _proxy.EndUnsubscribeParam)
+#else
             return Observable.FromAsyncPattern<string, string, string, object[]>(_proxy.BeginUnsubscribeParam, _proxy.EndUnsubscribeParam)
+#endif
                 .Invoke(callerId, key, callerApi)
                 .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
                 .Select(ret => (int)ret[2]);

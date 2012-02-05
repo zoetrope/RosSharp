@@ -59,14 +59,17 @@
     <Compile Include="MasterProxy.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="MasterServer.cs" />
     <Compile Include="MessageSerializationFactory.cs" />
     <Compile Include="MessageSerializer.cs" />
+    <Compile Include="ParameterServer.cs" />
     <Compile Include="ParameterServerClient.cs" />
     <Compile Include="Publisher.cs" />
     <Compile Include="Registrar.cs" />
     <Compile Include="ROS.cs" />
     <Compile Include="RosNode.cs" />
     <Compile Include="SlaveClient.cs" />
+    <Compile Include="SlaveServer.cs" />
     <Compile Include="Subscriber.cs" />
     <Compile Include="ParameterServerProxy.cs">
       <SubType>Component</SubType>

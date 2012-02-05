@@ -44,11 +44,10 @@ namespace RosSharp.Tests
                 ""
             };
 
-            var master = new SIMaster();
-            master.LookupNodeStringString = (_, __) => result;
-            master.UrlSetString = _ => { };
+            MXmlRpcClientProtocol.AllInstances.UrlSetString = (t1, t2) => { };
+            MMasterProxy.AllInstances.BeginLookupNodeStringStringAsyncCallbackObject = (t1, t2, t3, t4, t5) => { t4(null); return null; };
+            MMasterProxy.AllInstances.EndLookupNodeIAsyncResult = (t1, t2) => result;
 
-            MXmlRpcProxyGen.Create<IMaster>(() => master);
             var client = new MasterClient();
 
             AssertEx.Throws<InvalidOperationException>(() => client.LookupNodeAsync("/test", "/hogehoge").First());
