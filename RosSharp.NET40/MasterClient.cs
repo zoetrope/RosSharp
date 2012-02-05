@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Text;
 using CookComputing.XmlRpc;
 using System.Reactive.Linq;
@@ -11,81 +12,101 @@ namespace RosSharp
     public class MasterClient
     {
         private readonly MasterProxy _proxy;
-        public MasterClient()
+        public MasterClient(Uri uri)
         {
             _proxy = new MasterProxy();
-            _proxy.Url = "http://192.168.11.4:11311/";
+            _proxy.Url = uri.ToString();
         }
 
-
-        public IObservable<int> RegisterServiceAsync(string callerId, string service, string serviceApi, string callerApi)
+        /// <summary>
+        /// Register the Service
+        /// </summary>
+        /// <param name="callerId">ROS Caller ID</param>
+        /// <param name="service">Name of Service</param>
+        /// <param name="serviceApi">URI of Service</param>
+        /// <param name="callerApi">URI of caller node</param>
+        /// <returns>None</returns>
+        public IObservable<Unit> RegisterServiceAsync(string callerId, string service, Uri serviceApi, Uri callerApi)
         {
 #if WINDOWS_PHONE
-            return ObservableEx.FromAsyncPattern<string, string, string, string, object[]>(_proxy.BeginRegisterService, _proxy.EndRegisterService)
+            return ObservableEx
 #else
-            return Observable.FromAsyncPattern<string, string, string, string, object[]>(_proxy.BeginRegisterService, _proxy.EndRegisterService)
+            return Observable
 #endif
-                .Invoke(callerId, service, serviceApi, callerApi)
+                .FromAsyncPattern<string, string, string, string, object[]>(_proxy.BeginRegisterService, _proxy.EndRegisterService)
+                .Invoke(callerId, service, serviceApi.ToString(), callerApi.ToString())
+                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
+                .Select(_ => Unit.Default);
+        }
+
+        /// <summary>
+        /// Unregister the Service
+        /// </summary>
+        /// <param name="callerId">ROS Caller ID</param>
+        /// <param name="service">Name of Service</param>
+        /// <param name="serviceApi">URI of Service</param>
+        /// <returns>Number of Unregistrations</returns>
+        public IObservable<int> UnregisterServiceAsync(string callerId, string service, Uri serviceApi)
+        {
+#if WINDOWS_PHONE
+            return ObservableEx
+#else
+            return Observable
+#endif
+                .FromAsyncPattern<string, string, string, object[]>(_proxy.BeginUnregisterService, _proxy.EndUnregisterService)
+                .Invoke(callerId, service, serviceApi.ToString())
                 .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
                 .Select(ret => (int)ret[2]);
         }
 
-        public IObservable<int> UnregisterServiceAsync(string callerId, string service, string serviceApi)
+        public IObservable<List<Uri>> RegisterSubscriberAsync(string callerId, string topic, string topicType, Uri callerApi)
         {
 #if WINDOWS_PHONE
-            return ObservableEx.FromAsyncPattern<string, string, string, object[]>(_proxy.BeginUnregisterService, _proxy.EndUnregisterService)
+            return ObservableEx
 #else
-            return Observable.FromAsyncPattern<string, string, string, object[]>(_proxy.BeginUnregisterService, _proxy.EndUnregisterService)
+            return Observable
 #endif
-                .Invoke(callerId, service, serviceApi)
+                .FromAsyncPattern<string, string, string, string, object[]>(_proxy.BeginRegisterSubscriber, _proxy.EndRegisterSubscriber)
+                .Invoke(callerId, topic, topicType, callerApi.ToString())
+                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
+                .Select(ret => ((object[])ret[2]).Select(x => new Uri((string)x)).ToList());
+        }
+
+        public IObservable<int> UnregisterSubscriberAsync(string callerId, string topic, Uri callerApi)
+        {
+#if WINDOWS_PHONE
+            return ObservableEx
+#else
+            return Observable
+#endif
+                .FromAsyncPattern<string, string, string, object[]>(_proxy.BeginUnregisterSubscriber, _proxy.EndUnregisterSubscriber)
+                .Invoke(callerId, topic, callerApi.ToString())
                 .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
                 .Select(ret => (int)ret[2]);
         }
 
-        public IObservable<List<Uri>> RegisterSubscriberAsync(string callerId, string topic, string topicType, string callerApi)
+        public IObservable<List<Uri>> RegisterPublisherAsync(string callerId, string topic, string topicType, Uri callerApi)
         {
 #if WINDOWS_PHONE
-            return ObservableEx.FromAsyncPattern<string, string, string, string, object[]>(_proxy.BeginRegisterSubscriber, _proxy.EndRegisterSubscriber)
+            return ObservableEx
 #else
-            return Observable.FromAsyncPattern<string, string, string, string, object[]>(_proxy.BeginRegisterSubscriber, _proxy.EndRegisterSubscriber)
+            return Observable
 #endif
-                .Invoke(callerId, topic, topicType, callerApi)
+                .FromAsyncPattern<string, string, string, string, object[]>(_proxy.BeginRegisterPublisher, _proxy.EndRegisterPublisher)
+                .Invoke(callerId, topic, topicType, callerApi.ToString())
                 .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
-                .Select(ret => ((string[])ret[2]).Select(x => new Uri(x)).ToList());
+                .Select(ret => ((object[])ret[2]).Select(x => new Uri((string)x)).ToList());
         }
 
-        public IObservable<int> UnregisterSubscriberAsync(string callerId, string topic, string callerApi)
+        public IObservable<int> UnregisterPublisherAsync(string callerId, string topic, Uri callerApi)
         {
 #if WINDOWS_PHONE
-            return ObservableEx.FromAsyncPattern<string, string, string, object[]>(_proxy.BeginUnregisterSubscriber, _proxy.EndUnregisterSubscriber)
+            return ObservableEx
 #else
-            return Observable.FromAsyncPattern<string, string, string, object[]>(_proxy.BeginUnregisterSubscriber, _proxy.EndUnregisterSubscriber)
+            return Observable
 #endif
-                .Invoke(callerId, topic, callerApi)
-                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
-                .Select(ret => (int)ret[2]);
-        }
-
-        public IObservable<List<Uri>> RegisterPublisherAsync(string callerId, string topic, string topicType, string callerApi)
-        {
-#if WINDOWS_PHONE
-            return ObservableEx.FromAsyncPattern<string, string, string, string, object[]>(_proxy.BeginRegisterPublisher, _proxy.EndRegisterPublisher)
-#else
-            return Observable.FromAsyncPattern<string, string, string, string, object[]>(_proxy.BeginRegisterPublisher, _proxy.EndRegisterPublisher)
-#endif
-                .Invoke(callerId, topic, topicType, callerApi)
-                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
-                .Select(ret => ((string[])ret[2]).Select(x => new Uri(x)).ToList());
-        }
-
-        public IObservable<int> UnregisterPublisherAsync(string callerId, string topic, string callerApi)
-        {
-#if WINDOWS_PHONE
-            return ObservableEx.FromAsyncPattern<string, string, string, object[]>(_proxy.BeginUnregisterPublisher, _proxy.EndUnregisterPublisher)
-#else
-            return Observable.FromAsyncPattern<string, string, string, object[]>(_proxy.BeginUnregisterPublisher, _proxy.EndUnregisterPublisher)
-#endif
-                .Invoke(callerId, topic, callerApi)
+                .FromAsyncPattern<string, string, string, object[]>(_proxy.BeginUnregisterPublisher, _proxy.EndUnregisterPublisher)
+                .Invoke(callerId, topic, callerApi.ToString())
                 .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
                 .Select(ret => (int)ret[2]);
         }
@@ -152,7 +173,11 @@ namespace RosSharp
                     });
         }
 
-
+        /// <summary>
+        /// Get URI of the master
+        /// </summary>
+        /// <param name="callerId">ROS Caller ID</param>
+        /// <returns>URI of the master</returns>
         public IObservable<Uri> GetUriAsync(string callerId)
         {
             return Observable.FromAsyncPattern<string, object[]>(_proxy.BeginGetUri, _proxy.EndGetUri)

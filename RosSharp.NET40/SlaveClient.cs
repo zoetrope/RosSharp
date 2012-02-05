@@ -71,10 +71,11 @@ namespace RosSharp
         public IObservable<int> ParamUpdateAsync(string callerId, string parameterKey, object parameterValue)
         {
 #if WINDOWS_PHONE
-            return ObservableEx.FromAsyncPattern<string, string, object, object[]>(_proxy.BeginParamUpdate, _proxy.EndParamUpdate)
+            return ObservableEx
 #else
-            return Observable.FromAsyncPattern<string, string, object, object[]>(_proxy.BeginParamUpdate, _proxy.EndParamUpdate)
+            return Observable
 #endif
+                .FromAsyncPattern<string, string, object, object[]>(_proxy.BeginParamUpdate, _proxy.EndParamUpdate)
                 .Invoke(callerId,parameterKey,parameterValue)
                 .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
                 .Select(ret => (int)ret[2]);
@@ -83,10 +84,11 @@ namespace RosSharp
         public IObservable<int> PublisherUpdateAsync(string callerId, string topic, string[] publishers)
         {
 #if WINDOWS_PHONE
-            return ObservableEx.FromAsyncPattern<string, string, string[], object[]>(_proxy.BeginPublisherUpdate, _proxy.EndPublisherUpdate)
+            return ObservableEx
 #else
-            return Observable.FromAsyncPattern<string, string, string[], object[]>(_proxy.BeginPublisherUpdate, _proxy.EndPublisherUpdate)
+            return Observable
 #endif
+                .FromAsyncPattern<string, string, string[], object[]>(_proxy.BeginPublisherUpdate, _proxy.EndPublisherUpdate)
                 .Invoke(callerId,topic,publishers)
                 .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
                 .Select(ret => (int)ret[2]);
@@ -95,10 +97,11 @@ namespace RosSharp
         public IObservable<object[]> RequestTopicAsync(string callerId, string topic, object[] protocols)
         {
 #if WINDOWS_PHONE
-            return ObservableEx.FromAsyncPattern<string, string, object[], object[]>(_proxy.BeginRequestTopic, _proxy.EndRequestTopic)
+            return ObservableEx
 #else
-            return Observable.FromAsyncPattern<string, string, object[], object[]>(_proxy.BeginRequestTopic, _proxy.EndRequestTopic)
+            return Observable
 #endif
+                .FromAsyncPattern<string, string, object[], object[]>(_proxy.BeginRequestTopic, _proxy.EndRequestTopic)
                 .Invoke(callerId, topic, protocols)
                 .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); });
         }

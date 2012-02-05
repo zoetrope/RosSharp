@@ -110,8 +110,8 @@
         <member name="P:RosSharp.Moles.MMasterClient.Behavior">
             <summary>Assigns the behavior for all methods of the moled type</summary>
         </member>
-        <member name="P:RosSharp.Moles.MMasterClient.Constructor">
-            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.#ctor"/>
+        <member name="P:RosSharp.Moles.MMasterClient.ConstructorUri">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.#ctor(System.Uri)"/>
             </summary>
         </member>
         <member name="P:RosSharp.Moles.MMasterClient.GetPublisherTopicsAsyncStringString">
@@ -134,28 +134,28 @@
             <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.LookupServiceAsync(System.String,System.String)"/>
             </summary>
         </member>
-        <member name="P:RosSharp.Moles.MMasterClient.RegisterPublisherAsyncStringStringStringString">
-            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.RegisterPublisherAsync(System.String,System.String,System.String,System.String)"/>
+        <member name="P:RosSharp.Moles.MMasterClient.RegisterPublisherAsyncStringStringStringUri">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.RegisterPublisherAsync(System.String,System.String,System.String,System.Uri)"/>
             </summary>
         </member>
-        <member name="P:RosSharp.Moles.MMasterClient.RegisterServiceAsyncStringStringStringString">
-            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.RegisterServiceAsync(System.String,System.String,System.String,System.String)"/>
+        <member name="P:RosSharp.Moles.MMasterClient.RegisterServiceAsyncStringStringUriUri">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.RegisterServiceAsync(System.String,System.String,System.Uri,System.Uri)"/>
             </summary>
         </member>
-        <member name="P:RosSharp.Moles.MMasterClient.RegisterSubscriberAsyncStringStringStringString">
-            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.RegisterSubscriberAsync(System.String,System.String,System.String,System.String)"/>
+        <member name="P:RosSharp.Moles.MMasterClient.RegisterSubscriberAsyncStringStringStringUri">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.RegisterSubscriberAsync(System.String,System.String,System.String,System.Uri)"/>
             </summary>
         </member>
-        <member name="P:RosSharp.Moles.MMasterClient.UnregisterPublisherAsyncStringStringString">
-            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.UnregisterPublisherAsync(System.String,System.String,System.String)"/>
+        <member name="P:RosSharp.Moles.MMasterClient.UnregisterPublisherAsyncStringStringUri">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.UnregisterPublisherAsync(System.String,System.String,System.Uri)"/>
             </summary>
         </member>
-        <member name="P:RosSharp.Moles.MMasterClient.UnregisterServiceAsyncStringStringString">
-            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.UnregisterServiceAsync(System.String,System.String,System.String)"/>
+        <member name="P:RosSharp.Moles.MMasterClient.UnregisterServiceAsyncStringStringUri">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.UnregisterServiceAsync(System.String,System.String,System.Uri)"/>
             </summary>
         </member>
-        <member name="P:RosSharp.Moles.MMasterClient.UnregisterSubscriberAsyncStringStringString">
-            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.UnregisterSubscriberAsync(System.String,System.String,System.String)"/>
+        <member name="P:RosSharp.Moles.MMasterClient.UnregisterSubscriberAsyncStringStringUri">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.UnregisterSubscriberAsync(System.String,System.String,System.Uri)"/>
             </summary>
         </member>
         <member name="P:RosSharp.Moles.MMasterClient._GetPublisherTopicsAsyncb__21ObjectArray">
@@ -293,28 +293,28 @@
             <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.LookupServiceAsync(System.String,System.String)"/>
             </summary>
         </member>
-        <member name="P:RosSharp.Moles.MMasterClient.AllInstances.RegisterPublisherAsyncStringStringStringString">
-            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.RegisterPublisherAsync(System.String,System.String,System.String,System.String)"/>
+        <member name="P:RosSharp.Moles.MMasterClient.AllInstances.RegisterPublisherAsyncStringStringStringUri">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.RegisterPublisherAsync(System.String,System.String,System.String,System.Uri)"/>
             </summary>
         </member>
-        <member name="P:RosSharp.Moles.MMasterClient.AllInstances.RegisterServiceAsyncStringStringStringString">
-            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.RegisterServiceAsync(System.String,System.String,System.String,System.String)"/>
+        <member name="P:RosSharp.Moles.MMasterClient.AllInstances.RegisterServiceAsyncStringStringUriUri">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.RegisterServiceAsync(System.String,System.String,System.Uri,System.Uri)"/>
             </summary>
         </member>
-        <member name="P:RosSharp.Moles.MMasterClient.AllInstances.RegisterSubscriberAsyncStringStringStringString">
-            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.RegisterSubscriberAsync(System.String,System.String,System.String,System.String)"/>
+        <member name="P:RosSharp.Moles.MMasterClient.AllInstances.RegisterSubscriberAsyncStringStringStringUri">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.RegisterSubscriberAsync(System.String,System.String,System.String,System.Uri)"/>
             </summary>
         </member>
-        <member name="P:RosSharp.Moles.MMasterClient.AllInstances.UnregisterPublisherAsyncStringStringString">
-            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.UnregisterPublisherAsync(System.String,System.String,System.String)"/>
+        <member name="P:RosSharp.Moles.MMasterClient.AllInstances.UnregisterPublisherAsyncStringStringUri">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.UnregisterPublisherAsync(System.String,System.String,System.Uri)"/>
             </summary>
         </member>
-        <member name="P:RosSharp.Moles.MMasterClient.AllInstances.UnregisterServiceAsyncStringStringString">
-            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.UnregisterServiceAsync(System.String,System.String,System.String)"/>
+        <member name="P:RosSharp.Moles.MMasterClient.AllInstances.UnregisterServiceAsyncStringStringUri">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.UnregisterServiceAsync(System.String,System.String,System.Uri)"/>
             </summary>
         </member>
-        <member name="P:RosSharp.Moles.MMasterClient.AllInstances.UnregisterSubscriberAsyncStringStringString">
-            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.UnregisterSubscriberAsync(System.String,System.String,System.String)"/>
+        <member name="P:RosSharp.Moles.MMasterClient.AllInstances.UnregisterSubscriberAsyncStringStringUri">
+            <summary>Sets the mole of <see cref="M:RosSharp.MasterClient.UnregisterSubscriberAsync(System.String,System.String,System.Uri)"/>
             </summary>
         </member>
         <member name="T:RosSharp.Moles.MMasterProxy">
@@ -2495,7 +2495,7 @@
             <summary>Stub type of <see cref="T:RosSharp.MasterClient"/>
             .</summary>
         </member>
-        <member name="M:RosSharp.Moles.SMasterClient.#ctor">
+        <member name="M:RosSharp.Moles.SMasterClient.#ctor(System.Uri)">
             <summary>Initializes a new instance</summary>
         </member>
         <member name="M:RosSharp.Moles.SMasterClient.InitializeStub">
