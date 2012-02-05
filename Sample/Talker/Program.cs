@@ -27,6 +27,18 @@ namespace Talker
             //var ret1 = client.RegisterSubscriberAsync("/test", "topic1", "std_msgs/String", new Uri("http://192.168.11.2:11112")).First();
             //var ret2 = client.RegisterPublisherAsync("/test", "topic1", "std_msgs/String", new Uri("http://192.168.11.2:11112")).First();
             var ret2 = client.RegisterPublisherAsync("/test", "chatter", "std_msgs/String", new Uri("http://192.168.11.2:11112")).First();
+
+            var slave = new SlaveClient(ret2.First());
+
+            //var pid = slave.GetPidAsync("/test").First();
+            //var businfo = slave.GetBusInfoAsync("/test").First();
+
+            //var busstate = slave.GetBusStatsAsync("/test").First(); // 失敗する？
+
+            //var masterUir = slave.GetMasterUriAsync("/test").First();
+
+            //var pubs = slave.GetPublicationsAsync("/test").First();
+            var masterUir = slave.RequestTopicAsync("/test", "/chatter", new object[1] { new string[1] { "TCPROS" } }).First();
         }
     }
 }
