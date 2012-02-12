@@ -45,7 +45,8 @@ namespace Talker
                 .First();
 
             Console.WriteLine("connected.");
-            tcp.Receive();
+            tcp.Receive()
+                .Subscribe(x => Console.WriteLine(Encoding.UTF8.GetString(x)));
 
             tcp.Send().First();
 
