@@ -64,7 +64,12 @@ namespace RosSharp
             var sockAsObservable =  Observable.FromEventPattern<SocketAsyncEventArgs>(
                     ev => arg.Completed += ev, ev => arg.Completed -= ev)
                 .Select(e => e.EventArgs)
-                .Where(args => args.LastOperation == SocketAsyncOperation.Send);
+                .Where(args => args.LastOperation == SocketAsyncOperation.Send)
+                .Take(1)
+                .PublishLast();
+
+            sockAsObservable.Connect();
+
             _socket.SendAsync(arg);
 
             return sockAsObservable;
@@ -77,28 +82,28 @@ namespace RosSharp
 
             var messages = new Subject<byte[]>();
 
-            
-                Observable.FromEventPattern<SocketAsyncEventArgs>(
-                    ev => arg.Completed += ev, ev => arg.Completed -= ev)
-                .Select(e => e.EventArgs)
-                .Where(args => args.LastOperation == SocketAsyncOperation.Receive)
-                .Select(OnReceive)
-                .Scan(new byte[] { }, (abs, bs) =>
-                    {
-                        var rest = AppendData(abs, bs);
-                        byte[] current;
-                        if (CompleteMessage(out current, ref rest))
-                        {
-                            messages.OnNext(current);
-                        }
 
-                        if (_socket.Connected)
-                        {
-                            _socket.ReceiveAsync(arg);
-                        }
-                        return rest;
-                    })
-                    .Subscribe();
+            Observable.FromEventPattern<SocketAsyncEventArgs>(
+                ev => arg.Completed += ev, ev => arg.Completed -= ev)
+            .Select(e => e.EventArgs)
+            .Where(args => args.LastOperation == SocketAsyncOperation.Receive)
+            .Select(OnReceive)
+            .Scan(new byte[] { }, (abs, bs) =>
+                {
+                    var rest = AppendData(abs, bs);
+                    byte[] current;
+                    if (CompleteMessage(out current, ref rest))
+                    {
+                        messages.OnNext(current);
+                    }
+
+                    if (_socket.Connected)
+                    {
+                        _socket.ReceiveAsync(arg);
+                    }
+                    return rest;
+                })
+                .Subscribe();
 
             if (_socket.Connected)
             {

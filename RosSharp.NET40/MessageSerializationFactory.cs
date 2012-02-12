@@ -7,7 +7,7 @@ namespace RosSharp
 {
     public class MessageSerializationFactory
     {
-        public MessageSerializer<TDataType> CreateMessageSerializer<TDataType>(string messageType)
+        public MessageSerializer<TDataType> CreateMessageSerializer<TDataType>(string messageType) where TDataType : IMessage, new()
         {
             return new MessageSerializer<TDataType>();
         }

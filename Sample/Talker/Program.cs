@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Text;
@@ -45,8 +46,19 @@ namespace Talker
                 .First();
 
             Console.WriteLine("connected.");
+
+            var headerSerializer = new TcpRosHeaderSerializer<SubscriberResponseHeader>();
+
             tcp.Receive()
-                .Subscribe(x => Console.WriteLine(Encoding.UTF8.GetString(x)));
+                .Take(1)
+                .Select(x => headerSerializer.Deserialize(new MemoryStream(x)))
+                .Subscribe(x=>Console.WriteLine(x.topic + "/" + x.type));
+
+            var messageSerializer = new MessageSerializer<RosSharp.StdMsgs.String>();
+
+            tcp.Receive()
+                .Select(x => messageSerializer.Deserialize(new MemoryStream(x)))
+                .Subscribe(x => Console.WriteLine(x.Data));
 
             tcp.Send().First();
 
