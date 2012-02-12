@@ -11,13 +11,13 @@ namespace Talker
     {
         static void Main(string[] args)
         {
-            var client = new MasterClient(new Uri("http://192.168.11.4:11311/"));
+            var client = new MasterClient(new Uri("http://192.168.11.5:11311/"));
 
             //var state = client.GetSystemStateAsync("/talker").First();
             
             //var uri = client.LookupNodeAsync("/talker", "/rosout").First();
 
-            //var uri = client.GetUriAsync("/talker").First();
+            var uri = client.GetUriAsync("/talker").First();
             //var uri = client.GetUriAsync(null);
 
 
@@ -38,7 +38,19 @@ namespace Talker
             //var masterUir = slave.GetMasterUriAsync("/test").First();
 
             //var pubs = slave.GetPublicationsAsync("/test").First();
-            var masterUir = slave.RequestTopicAsync("/test", "/chatter", new object[1] { new string[1] { "TCPROS" } }).First();
+            var topicParam = slave.RequestTopicAsync("/test", "/chatter", new object[1] { new string[1] { "TCPROS" } }).First();
+
+            var tcp = new TcpClient();
+            var ret = tcp.Connect(topicParam.HostName, topicParam.PortNumber)
+                .First();
+
+            Console.WriteLine("connected.");
+            tcp.Receive();
+
+            tcp.Send().First();
+
+            Console.WriteLine("Press Any Key.");
+            Console.ReadKey();
         }
     }
 }

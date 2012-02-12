@@ -65,6 +65,9 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\RosSharp.NET40\IMessage.cs">
+      <Link>IMessage.cs</Link>
+    </Compile>
     <Compile Include="..\RosSharp.NET40\MasterClient.cs">
       <Link>MasterClient.cs</Link>
     </Compile>
@@ -83,8 +86,14 @@
     <Compile Include="..\RosSharp.NET40\SlaveProxy.cs">
       <Link>SlaveProxy.cs</Link>
     </Compile>
+    <Compile Include="..\RosSharp.NET40\StdMsgs\String.cs">
+      <Link>StdMsgs\String.cs</Link>
+    </Compile>
     <Compile Include="..\RosSharp.NET40\TcpClient.cs">
       <Link>TcpClient.cs</Link>
+    </Compile>
+    <Compile Include="..\RosSharp.NET40\TcpRosHeader.cs">
+      <Link>TcpRosHeader.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -94,16 +94,29 @@ namespace RosSharp
                 .Select(ret => (int)ret[2]);
         }
 
-        public IObservable<object[]> RequestTopicAsync(string callerId, string topic, object[] protocols)
+        public IObservable<TopicParam> RequestTopicAsync(string callerId, string topic, object[] protocols)
         {
 #if WINDOWS_PHONE
             return ObservableEx
 #else
             return Observable
 #endif
-                .FromAsyncPattern<string, string, object[], object[]>(_proxy.BeginRequestTopic, _proxy.EndRequestTopic)
+.FromAsyncPattern<string, string, object[], object[]>(_proxy.BeginRequestTopic, _proxy.EndRequestTopic)
                 .Invoke(callerId, topic, protocols)
-                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); });
+                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
+                .Select(ret => new TopicParam
+                {
+                    ProtocolName = (string)((object[])ret[2])[0],
+                    HostName = (string)((object[])ret[2])[1],
+                    PortNumber = (int)((object[])ret[2])[2]
+                });
         }
+    }
+
+    public class TopicParam
+    {
+        public string ProtocolName { get; set; }
+        public string HostName { get; set; }
+        public int PortNumber { get; set; }
     }
 }
