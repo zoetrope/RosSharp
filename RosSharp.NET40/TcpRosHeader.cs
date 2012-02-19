@@ -7,14 +7,14 @@ using System.Text;
 
 namespace RosSharp
 {
-    public class SubscriberHeader
+    internal class SubscriberHeader
     {
         public string callerid { get; set; }
         public string topic { get; set; }
         public string md5sum { get; set; }
         public string type { get; set; }
     }
-    public class SubscriberResponseHeader
+    internal class SubscriberResponseHeader
     {
         public string callerid { get; set; }
         public string topic { get; set; }

@@ -28,6 +28,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RosCore", "App\RosCore\RosC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenMsg", "App\GenMsg\GenMsg.csproj", "{FA8BCD2E-A65B-49F5-AD30-24B1F3FD6FE1}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "MsgParser", "App\MsgParser\MsgParser.fsproj", "{EF32BFF6-83BD-4387-AEFF-E3DD557B235B}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = RosSharp.vsmdi
@@ -121,6 +123,16 @@ Global
 		{FA8BCD2E-A65B-49F5-AD30-24B1F3FD6FE1}.Release|Mixed Platforms.Build.0 = Release|x86
 		{FA8BCD2E-A65B-49F5-AD30-24B1F3FD6FE1}.Release|x86.ActiveCfg = Release|x86
 		{FA8BCD2E-A65B-49F5-AD30-24B1F3FD6FE1}.Release|x86.Build.0 = Release|x86
+		{EF32BFF6-83BD-4387-AEFF-E3DD557B235B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF32BFF6-83BD-4387-AEFF-E3DD557B235B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF32BFF6-83BD-4387-AEFF-E3DD557B235B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{EF32BFF6-83BD-4387-AEFF-E3DD557B235B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{EF32BFF6-83BD-4387-AEFF-E3DD557B235B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EF32BFF6-83BD-4387-AEFF-E3DD557B235B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF32BFF6-83BD-4387-AEFF-E3DD557B235B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF32BFF6-83BD-4387-AEFF-E3DD557B235B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{EF32BFF6-83BD-4387-AEFF-E3DD557B235B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{EF32BFF6-83BD-4387-AEFF-E3DD557B235B}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -130,5 +142,6 @@ Global
 		{572772C7-D172-497F-A428-D10141BBCA72} = {B02FD51D-88FD-4A11-9BFE-AF4F3719C802}
 		{25D53A55-E534-4CCA-9358-A51971838437} = {57BD2B28-6427-4973-A179-C1841417F349}
 		{FA8BCD2E-A65B-49F5-AD30-24B1F3FD6FE1} = {57BD2B28-6427-4973-A179-C1841417F349}
+		{EF32BFF6-83BD-4387-AEFF-E3DD557B235B} = {57BD2B28-6427-4973-A179-C1841417F349}
 	EndGlobalSection
 EndGlobal

@@ -63,6 +63,7 @@
     <Compile Include="ChainingAssertion.MSTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MasterClientTest.cs" />
+    <Compile Include="RosTcpClientTest.cs" />
     <Compile Include="SlaveClientTest.cs" />
     <Compile Include="TcpRosHeaderTest.cs" />
   </ItemGroup>

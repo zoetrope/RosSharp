@@ -59,6 +59,9 @@
     <Reference Include="mscorlib.extensions" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\RosSharp.NET40\AsyncSocketExtensions.cs">
+      <Link>AsyncSocketExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\RosSharp.NET40\IMessage.cs">
       <Link>IMessage.cs</Link>
     </Compile>
@@ -68,11 +71,17 @@
     <Compile Include="..\RosSharp.NET40\MasterProxy.cs">
       <Link>MasterProxy.cs</Link>
     </Compile>
+    <Compile Include="..\RosSharp.NET40\MessageSerializer.cs">
+      <Link>MessageSerializer.cs</Link>
+    </Compile>
     <Compile Include="..\RosSharp.NET40\ParameterServerClient.cs">
       <Link>ParameterServerClient.cs</Link>
     </Compile>
     <Compile Include="..\RosSharp.NET40\ParameterServerProxy.cs">
       <Link>ParameterServerProxy.cs</Link>
+    </Compile>
+    <Compile Include="..\RosSharp.NET40\RosTcpClient.cs">
+      <Link>RosTcpClient.cs</Link>
     </Compile>
     <Compile Include="..\RosSharp.NET40\SlaveClient.cs">
       <Link>SlaveClient.cs</Link>
@@ -83,12 +92,10 @@
     <Compile Include="..\RosSharp.NET40\StdMsgs\String.cs">
       <Link>StdMsgs\String.cs</Link>
     </Compile>
-    <Compile Include="..\RosSharp.NET40\TcpClient.cs">
-      <Link>TcpClient.cs</Link>
-    </Compile>
     <Compile Include="..\RosSharp.NET40\TcpRosHeader.cs">
       <Link>TcpRosHeader.cs</Link>
     </Compile>
+    <Compile Include="HashSet.cs" />
     <Compile Include="ObservableEx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

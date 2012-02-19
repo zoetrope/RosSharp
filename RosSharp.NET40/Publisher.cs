@@ -7,6 +7,10 @@ namespace RosSharp
 {
     public class Publisher<TDataType> : ITopic, IObserver<TDataType>
     {
+        public Publisher()
+        {
+        }
+
         public GraphName TopicName
         {
             get { throw new NotImplementedException(); }
@@ -19,17 +23,17 @@ namespace RosSharp
 
         public void OnNext(TDataType value)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void OnError(Exception error)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void OnCompleted()
         {
-            throw new NotImplementedException();
+            
         }
     }
 }
