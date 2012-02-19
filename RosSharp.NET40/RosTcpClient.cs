@@ -25,8 +25,11 @@ namespace RosSharp
             _socket = socket;
         }
 
-        public IObservable<SocketAsyncEventArgs> Connect(string hostName, int portNumber)
+
+
+        public IObservable<SocketAsyncEventArgs> ConnectAsObservable(string hostName, int portNumber)
         {
+            
             var hostEntry = new DnsEndPoint(hostName, portNumber);
 
             _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -34,7 +37,7 @@ namespace RosSharp
             return _socket.ConnectAsObservable(hostEntry);
         }
 
-        public IObservable<SocketAsyncEventArgs> Send(byte[] data)
+        public IObservable<SocketAsyncEventArgs> SendAsObservable(byte[] data)
         {
             return _socket.SendAsObservable(data);
         }

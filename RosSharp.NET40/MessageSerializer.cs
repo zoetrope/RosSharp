@@ -7,6 +7,7 @@ using System.Text;
 
 namespace RosSharp
 {
+    /*
     public class MessageSerializer<TDataType> where TDataType : IMessage, new ()
     {
         public void Serialize(Stream stream, TDataType data)
@@ -14,7 +15,7 @@ namespace RosSharp
             // TODO: 
 
             var v = typeof(TDataType)
-                .GetProperty("Data")
+                .GetProperty("data")
                 .GetValue(data,null);
 
             var buf = Encoding.UTF8.GetBytes((string)v);
@@ -51,7 +52,7 @@ namespace RosSharp
             var ret = new TDataType();
 
 
-            var p = typeof (TDataType).GetProperty("Data");
+            var p = typeof (TDataType).GetProperty("data");
             p.SetValue(ret, set.First(), null);
 
 
@@ -59,4 +60,5 @@ namespace RosSharp
         }
 
     }
+    */
 }

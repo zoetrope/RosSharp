@@ -10,13 +10,13 @@ namespace RosSharp
 {
     public class RosTopic<TDataType> where TDataType:IMessage, new()
     {
-        private RosTcpClient _client;
+        private RosTcpClient _tcpClient;
 
         public RosTopic(Socket socket)
         {
-            _client = new RosTcpClient(socket);
+            _tcpClient = new RosTcpClient(socket);
 
-            _client.ReceiveAsObservable()
+            _tcpClient.ReceiveAsObservable()
                 .Take(1)
                 .Subscribe(OnReceiveHeader);
         }
@@ -43,18 +43,16 @@ namespace RosSharp
             var ms = new MemoryStream();
             serializer.Serialize(ms, header);
 
-            _client.Send(ms.ToArray()).First();
+            _tcpClient.SendAsObservable(ms.ToArray()).First();
 
         }
 
         public void Send(TDataType data)
         {
-            var serializer = new MessageSerializer<TDataType>();
-
             var ms = new MemoryStream();
-            serializer.Serialize(ms, data);
+            data.Serialize(ms);
 
-            _client.Send(ms.ToArray()).First();
+            _tcpClient.SendAsObservable(ms.ToArray()).First();
         }
     }
 }

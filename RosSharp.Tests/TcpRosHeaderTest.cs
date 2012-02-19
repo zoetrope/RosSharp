@@ -15,7 +15,7 @@ namespace RosSharp.Tests
         {
             var serializer = new TcpRosHeaderSerializer<SubscriberHeader>();
 
-            var data = new StdMsgs.String() { Data = "test" };
+            var data = new StdMsgs.String() { data = "test" };
 
             var header = new SubscriberHeader()
             {
@@ -82,7 +82,7 @@ namespace RosSharp.Tests
 
             var header = serializer.Deserialize(ms);
             
-            var data = new StdMsgs.String() { Data = "test" };
+            var data = new StdMsgs.String() { data = "test" };
 
             header.callerid.Is("test");
             header.topic.Is("/chatter");

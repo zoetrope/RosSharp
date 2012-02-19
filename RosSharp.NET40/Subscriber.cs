@@ -9,15 +9,15 @@ namespace RosSharp
 {
     public class Subscriber<TDataType> : ITopic, IObservable<TDataType> where TDataType : IMessage, new ()
     {
-        private RosTcpClient _tcp;
+        private RosTcpClient _tcpClient;
         public Subscriber(TopicParam param)
         {
-            _tcp = new RosTcpClient();
-            var ret = _tcp.Connect(param.HostName, param.PortNumber).First();
+            _tcpClient = new RosTcpClient();
+            var ret = _tcpClient.ConnectAsObservable(param.HostName, param.PortNumber).First();
 
             var headerSerializer = new TcpRosHeaderSerializer<SubscriberResponseHeader>();
 
-            _tcp.ReceiveAsObservable()
+            _tcpClient.ReceiveAsObservable()
                 .Take(1)
                 .Select(x => headerSerializer.Deserialize(new MemoryStream(x)))
                 .Subscribe(x => Console.WriteLine(x.topic + "/" + x.type));
@@ -39,7 +39,7 @@ namespace RosSharp
             serializer.Serialize(stream, header);
             var data = stream.ToArray();
 
-            _tcp.Send(data).First();
+            _tcpClient.SendAsObservable(data).First();
         }
         
         public GraphName TopicName
@@ -54,10 +54,12 @@ namespace RosSharp
 
         public IDisposable Subscribe(IObserver<TDataType> observer)
         {
-            var serializer = new MessageSerializer<TDataType>();
-
-            return _tcp.ReceiveAsObservable()
-                .Select(x => serializer.Deserialize(new MemoryStream(x)))
+            return _tcpClient.ReceiveAsObservable()
+                .Select(x => {
+                    var data = new TDataType();
+                    data.Deserialize(new MemoryStream(x));
+                    return data;
+                })
                 .Subscribe(observer);
         }
     }

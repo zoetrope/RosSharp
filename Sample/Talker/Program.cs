@@ -53,7 +53,7 @@ namespace Talker
             foreach (var i in Enumerable.Range(0,100))
             {
                 Thread.Sleep(TimeSpan.FromSeconds(1));
-                publisher.OnNext(new RosSharp.StdMsgs.String() { Data = "test : " + i });
+                publisher.OnNext(new RosSharp.StdMsgs.String() { data = "test : " + i });
             }
 
             Console.WriteLine("Press Any Key.");

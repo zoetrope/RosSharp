@@ -67,7 +67,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="MasterServer.cs" />
-    <Compile Include="MessageSerializationFactory.cs" />
     <Compile Include="MessageSerializer.cs" />
     <Compile Include="ParameterServer.cs" />
     <Compile Include="ParameterServerClient.cs" />
