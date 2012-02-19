@@ -1,12 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 
 namespace RosSharp
 {
     public class SlaveServer : MarshalByRefObject, ISlave
     {
+        private RosTcpListener _listener;
+        
+        public SlaveServer()
+        {
+            _listener = new RosTcpListener();
+            
+            
+        }
+
+        public IObservable<Socket> Connect()
+        {
+            return _listener.Start(8088);
+        }
+
+
+        public override object InitializeLifetimeService()
+        {
+            return null;
+        }
+
         public object[] GetBusStats(string callerId)
         {
             throw new NotImplementedException();
@@ -54,7 +75,19 @@ namespace RosSharp
 
         public object[] RequestTopic(string callerId, string topic, object[] protocols)
         {
-            throw new NotImplementedException();
+
+            var result = new object[3]
+            {
+                1,
+                "Protocol<TCPROS, AdvertiseAddress<192.168.11.4, 8088>>",
+                new object[3]{
+                    "TCPROS",
+                    "192.168.11.4",
+                    8088
+                }
+            };
+
+            return result;
         }
     }
 }

@@ -108,7 +108,40 @@ namespace RosSharp
 
                 return disposable;
             });
+        }
+
+#if !SILVERLIGHT && !WINDOWS_PHONE
+        public static IObservable<SocketAsyncEventArgs> AcceptAsObservable(this Socket socket, EndPoint endpoint)
+        {
+            var arg = new SocketAsyncEventArgs
+            {
+                AcceptSocket = null
+            };
+
+            return Observable.Create<SocketAsyncEventArgs>(observer =>
+            {
+                var disposable = Observable.FromEventPattern<SocketAsyncEventArgs>(
+                    e => arg.Completed += e, e => arg.Completed -= e)
+                    .Select(e => e.EventArgs)
+                    .Where(args => args.LastOperation == SocketAsyncOperation.Accept)
+                    .Do(x =>
+                    {
+                        if (x.SocketError != SocketError.Success)
+                        {
+                            socket.Close();
+                            throw new Exception();
+                        }
+                    })
+                    .Subscribe(observer);
+
+                socket.AcceptAsync(arg);
+
+                return disposable;
+            });
 
         }
+
+#endif
+
     }
 }

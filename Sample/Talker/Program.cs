@@ -49,11 +49,11 @@ namespace Talker
 
             var publisher = node.CreatePublisher<RosSharp.StdMsgs.String>("chatter");
 
+            
             foreach (var i in Enumerable.Range(0,100))
             {
-                publisher.OnNext(new RosSharp.StdMsgs.String() { Data = "test : " + i });
-
                 Thread.Sleep(TimeSpan.FromSeconds(1));
+                publisher.OnNext(new RosSharp.StdMsgs.String() { Data = "test : " + i });
             }
 
             Console.WriteLine("Press Any Key.");

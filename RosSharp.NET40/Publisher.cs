@@ -5,8 +5,10 @@ using System.Text;
 
 namespace RosSharp
 {
-    public class Publisher<TDataType> : ITopic, IObserver<TDataType>
+    public class Publisher<TDataType> : ITopic, IObserver<TDataType> where TDataType : IMessage, new()
     {
+        private List<RosTopic<TDataType>> _rosTopics = new List<RosTopic<TDataType>>();
+
         public Publisher()
         {
         }
@@ -23,7 +25,7 @@ namespace RosSharp
 
         public void OnNext(TDataType value)
         {
-            
+            _rosTopics.ForEach(x => x.Send(value));
         }
 
         public void OnError(Exception error)
@@ -34,6 +36,11 @@ namespace RosSharp
         public void OnCompleted()
         {
             
+        }
+
+        internal void AddTopic(RosTopic<TDataType> rosTopic)
+        {
+            _rosTopics.Add(rosTopic);
         }
     }
 }

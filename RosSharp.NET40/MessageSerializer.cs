@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace RosSharp
@@ -10,7 +11,18 @@ namespace RosSharp
     {
         public void Serialize(Stream stream, TDataType data)
         {
-            
+            // TODO: 
+
+            var v = typeof(TDataType)
+                .GetProperty("Data")
+                .GetValue(data,null);
+
+            var buf = Encoding.UTF8.GetBytes((string)v);
+
+            stream.Write(BitConverter.GetBytes(buf.Length + 4), 0, 4);
+            stream.Write(BitConverter.GetBytes(buf.Length), 0, 4);
+            stream.Write(buf, 0, buf.Length);
+
         }
 
         public TDataType Deserialize(Stream stream)

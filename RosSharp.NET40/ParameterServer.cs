@@ -7,6 +7,11 @@ namespace RosSharp
 {
     public class ParameterServer : MarshalByRefObject, IParameterServer
     {
+        public override object InitializeLifetimeService()
+        {
+            return null;
+        }
+
         public object[] DeleteParam(string callerId, string key)
         {
             throw new NotImplementedException();

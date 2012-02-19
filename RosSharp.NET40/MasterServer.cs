@@ -7,6 +7,11 @@ namespace RosSharp
 {
     public class MasterServer : MarshalByRefObject, IMaster
     {
+        public override object InitializeLifetimeService()
+        {
+            return null;
+        }
+
         public object[] RegisterService(string callerId, string service, string serviceApi, string callerApi)
         {
             throw new NotImplementedException();

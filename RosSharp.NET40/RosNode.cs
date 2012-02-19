@@ -24,7 +24,9 @@ namespace RosSharp
 
         public Subscriber<TDataType> CreateSubscriber<TDataType>(string topicName) where TDataType : IMessage, new()
         {
-            var ret1 = _masterClient.RegisterSubscriberAsync("/test", "chatter", "std_msgs/String", new Uri("http://192.168.11.2:11112")).First();
+            var ret1 = _masterClient
+                .RegisterSubscriberAsync("/test", "chatter", "std_msgs/String", new Uri("http://192.168.11.2:11112"))
+                .First();//TODO: エラーが起きたとき
 
             var slave = new SlaveClient(ret1.First());
 
@@ -44,16 +46,20 @@ namespace RosSharp
         {
             _slaveServer = new SlaveServer();
 
+            var publisher = new Publisher<TDataType>();
+
+            _slaveServer.Connect().Subscribe(x => publisher.AddTopic(new RosTopic<TDataType>(x)));
+
             var channel = new HttpServerChannel("slave", 5678, new XmlRpcServerFormatterSinkProvider());
             ChannelServices.RegisterChannel(channel, false);
             RemotingServices.Marshal(_slaveServer, "slave");
 
 
-            var ret1 = _masterClient.RegisterPublisherAsync("/test", "chatter", "std_msgs/String", new Uri("http://192.168.11.4:5678/slave")).First();
+            var ret1 = _masterClient.RegisterPublisherAsync("/test", "/chatter", "std_msgs/String", new Uri("http://192.168.11.4:5678/slave")).First();
 
-            var subscriber = new Publisher<TDataType>();
+            
 
-            return subscriber;
+            return publisher;
         }
 
         public Publisher<TDataType> CreatePublisher<TDataType>(GraphName topicName) where TDataType : IMessage, new()

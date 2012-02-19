@@ -75,6 +75,8 @@
     <Compile Include="Registrar.cs" />
     <Compile Include="ROS.cs" />
     <Compile Include="RosNode.cs" />
+    <Compile Include="RosTcpListener.cs" />
+    <Compile Include="RosTopic.cs" />
     <Compile Include="SlaveClient.cs" />
     <Compile Include="SlaveServer.cs" />
     <Compile Include="IMessage.cs" />

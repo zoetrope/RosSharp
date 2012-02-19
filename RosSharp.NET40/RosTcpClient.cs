@@ -16,7 +16,15 @@ namespace RosSharp
     {
         private Socket _socket;
 
-        
+        public RosTcpClient()
+        {
+        }
+
+        public RosTcpClient(Socket socket)
+        {
+            _socket = socket;
+        }
+
         public IObservable<SocketAsyncEventArgs> Connect(string hostName, int portNumber)
         {
             var hostEntry = new DnsEndPoint(hostName, portNumber);
