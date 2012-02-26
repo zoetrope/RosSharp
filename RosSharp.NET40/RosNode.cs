@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Runtime.Remoting;
@@ -36,12 +37,7 @@ namespace RosSharp
 
             return subscriber;
         }
-
-        public Subscriber<TDataType> CreateSubscriber<TDataType>(GraphName topicName) where TDataType : IMessage, new()
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public Publisher<TDataType> CreatePublisher<TDataType>(string topicName) where TDataType : IMessage, new()
         {
             _slaveServer = new SlaveServer();
@@ -61,10 +57,48 @@ namespace RosSharp
 
             return publisher;
         }
-
-        public Publisher<TDataType> CreatePublisher<TDataType>(GraphName topicName) where TDataType : IMessage, new()
+        
+        public Func<TRequest, TResponse> CreateProxy<TService, TRequest, TResponse>(string serviceName)
+            where TService : IService<TRequest, TResponse>, new()
+            where TRequest : IMessage, new()
+            where TResponse : IMessage, new()
         {
-            throw new NotImplementedException();
+            var ret1 = _masterClient
+                .LookupServiceAsync("/test", serviceName).First();
+
+            Console.WriteLine(ret1);
+
+
+            var _tcpClient = new RosTcpClient();
+            var ret = _tcpClient.ConnectAsObservable(ret1.Host, ret1.Port).First();
+
+            var headerSerializer = new TcpRosHeaderSerializer<ServiceResponseHeader>();
+
+            _tcpClient.ReceiveAsObservable()
+                .Take(1)
+                .Select(x => headerSerializer.Deserialize(new MemoryStream(x)))
+                .Subscribe(x => Console.WriteLine(x));
+
+            var service = new TService();
+
+            var header = new ServiceHeader()
+            {
+                callerid = "test",
+                md5sum = service.Md5Sum,
+                service = serviceName  
+            };
+
+            var serializer = new TcpRosHeaderSerializer<ServiceHeader>();
+
+            var stream = new MemoryStream();
+
+            serializer.Serialize(stream, header);
+            var data = stream.ToArray();
+
+            _tcpClient.SendAsObservable(data).First();
+
+            return request => new TResponse();
         }
+        
     }
 }

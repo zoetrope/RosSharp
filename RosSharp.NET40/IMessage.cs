@@ -8,7 +8,7 @@ namespace RosSharp
 {
     public interface IMessage
     {
-        string DataType { get; }
+        string MessageType { get; }
         string Md5Sum { get; }
         string MessageDefinition { get; }
 

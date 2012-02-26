@@ -13,6 +13,8 @@ namespace RosSharp
         public string topic { get; set; }
         public string md5sum { get; set; }
         public string type { get; set; }
+        public string message_definition { get; set; }
+        public string latching { get; set; } // int?
     }
     internal class SubscriberResponseHeader
     {
@@ -22,6 +24,20 @@ namespace RosSharp
         public string type { get; set; }
         public string message_definition { get; set; }
         public string latching { get; set; } // int?
+    }
+
+    internal class ServiceHeader
+    {
+        public string callerid { get; set; }
+        public string service { get; set; }
+        public string md5sum { get; set; }
+    }
+    internal class ServiceResponseHeader
+    {
+        public string callerid { get; set; }
+        public string service { get; set; }
+        public string md5sum { get; set; }
+        public string type { get; set; }
     }
 
     public class TcpRosHeaderSerializer<TDataType> where TDataType : new()

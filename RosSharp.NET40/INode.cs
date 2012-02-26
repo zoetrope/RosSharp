@@ -8,10 +8,13 @@ namespace RosSharp
     public interface INode
     {
         Subscriber<TDataType> CreateSubscriber<TDataType>(string topicName) where TDataType : IMessage, new();
-        Subscriber<TDataType> CreateSubscriber<TDataType>(GraphName topicName) where TDataType : IMessage, new();
 
         Publisher<TDataType> CreatePublisher<TDataType>(string topicName) where TDataType : IMessage, new();
-        Publisher<TDataType> CreatePublisher<TDataType>(GraphName topicName) where TDataType : IMessage, new();
+
+        Func<TRequest, TResponse> CreateProxy<TService, TRequest, TResponse>(string serviceName)
+            where TService : IService<TRequest, TResponse>, new()
+            where TRequest : IMessage, new()
+            where TResponse : IMessage, new();
 
     }
 }

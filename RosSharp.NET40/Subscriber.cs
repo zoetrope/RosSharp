@@ -29,7 +29,7 @@ namespace RosSharp
                 callerid = "test",
                 topic = "/chatter",
                 md5sum = msg.Md5Sum,
-                type = msg.DataType
+                type = msg.MessageType
             };
 
             var serializer = new TcpRosHeaderSerializer<SubscriberHeader>();

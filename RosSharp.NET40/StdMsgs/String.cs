@@ -8,7 +8,7 @@ namespace RosSharp.StdMsgs
 {
     public class String : IMessage
     {
-        public string DataType
+        public string MessageType
         {
             get { return "std_msgs/String"; }
         }

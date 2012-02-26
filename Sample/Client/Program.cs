@@ -6,8 +6,9 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Threading;
 using RosSharp;
+using Server;
 
-namespace Talker
+namespace Client
 {
     class Program
     {
@@ -17,17 +18,11 @@ namespace Talker
 
             var node = ROS.CreateNode();
 
-            var publisher = node.CreatePublisher<RosSharp.StdMsgs.String>("chatter");
-
+            var proxy = node.CreateProxy<AddTwoInts, AddTwoIntsReq, AddTwoIntsRes>("/add_two_ints");
             
-            foreach (var i in Enumerable.Range(0,100))
-            {
-                Thread.Sleep(TimeSpan.FromSeconds(1));
-                publisher.OnNext(new RosSharp.StdMsgs.String() { data = "test : " + i });
-            }
-
             Console.WriteLine("Press Any Key.");
             Console.ReadKey();
         }
+
     }
 }

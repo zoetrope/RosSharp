@@ -22,7 +22,7 @@ namespace RosSharp.Tests
                 callerid = "test",
                 topic = "/chatter",
                 md5sum = data.Md5Sum,
-                type = data.DataType
+                type = data.MessageType
             };
 
             var ms = new MemoryStream();
@@ -87,7 +87,7 @@ namespace RosSharp.Tests
             header.callerid.Is("test");
             header.topic.Is("/chatter");
             header.md5sum.Is(data.Md5Sum);
-            header.type.Is(data.DataType);
+            header.type.Is(data.MessageType);
 
             ms.Close();
         }

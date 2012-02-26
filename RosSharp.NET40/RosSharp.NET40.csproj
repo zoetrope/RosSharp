@@ -60,6 +60,7 @@
     <Compile Include="IMaster.cs" />
     <Compile Include="INode.cs" />
     <Compile Include="IParameterServer.cs" />
+    <Compile Include="IService.cs" />
     <Compile Include="ISlave.cs" />
     <Compile Include="ITopic.cs" />
     <Compile Include="MasterClient.cs" />
