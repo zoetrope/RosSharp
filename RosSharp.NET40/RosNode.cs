@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.NetworkInformation;
 using System.Reactive.Linq;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
@@ -15,11 +17,15 @@ namespace RosSharp
     public class RosNode : INode
     {
         private MasterClient _masterClient;
-        private SlaveServer _slaveServer;
-        public RosNode()
-        {
-            _masterClient = new MasterClient(new Uri("http://192.168.11.5:11311/"));
+        //private SlaveServer _slaveServer;
 
+        private string _localHostName;
+
+        public RosNode(Uri masterUri, string localHostName)
+        {
+            _masterClient = new MasterClient(masterUri);
+
+            _localHostName = localHostName;
 
         }
 
@@ -40,25 +46,27 @@ namespace RosSharp
         
         public Publisher<TDataType> CreatePublisher<TDataType>(string topicName) where TDataType : IMessage, new()
         {
-            _slaveServer = new SlaveServer();
 
             var publisher = new Publisher<TDataType>();
 
-            _slaveServer.Connect().Subscribe(x => publisher.AddTopic(new RosTopic<TDataType>(x)));
+            var _slaveServer = new SlaveServer();
+            _slaveServer.StartAsObservable().Subscribe(x => publisher.AddTopic(new RosTopic<TDataType>(x)));
 
-            var channel = new HttpServerChannel("slave", 5678, new XmlRpcServerFormatterSinkProvider());
+            var channel = new HttpServerChannel("slave", 0, new XmlRpcServerFormatterSinkProvider());
             ChannelServices.RegisterChannel(channel, false);
             RemotingServices.Marshal(_slaveServer, "slave");
 
+            var tmp = new Uri(channel.GetChannelUri());
+            var slaveUri = new Uri("http://" + _localHostName + ":" + tmp.Port + "/slave");
 
-            var ret1 = _masterClient.RegisterPublisherAsync("/test", "/chatter", "std_msgs/String", new Uri("http://192.168.11.4:5678/slave")).First();
+            var ret1 = _masterClient.RegisterPublisherAsync("/test", "/chatter", "std_msgs/String", slaveUri).First();
 
             
 
             return publisher;
         }
-        
-        public Func<TRequest, TResponse> CreateProxy<TService, TRequest, TResponse>(string serviceName)
+
+        public Func<TRequest, IObservable<TResponse>> CreateProxy<TService, TRequest, TResponse>(string serviceName)
             where TService : IService<TRequest, TResponse>, new()
             where TRequest : IMessage, new()
             where TResponse : IMessage, new()
@@ -70,11 +78,11 @@ namespace RosSharp
 
 
             var _tcpClient = new RosTcpClient();
-            var ret = _tcpClient.ConnectAsObservable(ret1.Host, ret1.Port).First();
+            var ret = _tcpClient.ConnectAsync(ret1.Host, ret1.Port).First();
 
             var headerSerializer = new TcpRosHeaderSerializer<ServiceResponseHeader>();
 
-            var rec = _tcpClient.ReceiveAsObservable()
+            var rec = _tcpClient.ReceiveAsync()
                 .Select(x => headerSerializer.Deserialize(new MemoryStream(x)))
                 .Take(1)
                 .PublishLast();
@@ -97,30 +105,66 @@ namespace RosSharp
             serializer.Serialize(stream, header);
             var data = stream.ToArray();
 
-            _tcpClient.SendAsObservable(data).First();
+            _tcpClient.SendAsync(data).First();
 
             var test = rec.First();
             Console.WriteLine(test.callerid);
 
             return request => {
 
-                _tcpClient.ReceiveAsObservable(skip1Byte:true)
-                    .Select(x => {
+                var response = _tcpClient.ReceiveAsync(offset: 1)
+                    .Select(x =>
+                    {
                         var res = new TResponse();
                         res.Deserialize(new MemoryStream(x));
                         return res;
                     })
-                    .Take(1)
-                    .Subscribe(x => Console.WriteLine(x));
+                    .Take(1);
+                    
 
                 var ms = new MemoryStream();
                 request.Serialize(ms);
                 var senddata = ms.ToArray();
-                _tcpClient.SendAsObservable(senddata).First();
+                _tcpClient.SendAsync(senddata).First();
 
-                return new TResponse(); 
+                return response;
             };
         }
-        
+
+        private Dictionary<string, Func<Stream, Stream>> _services = new Dictionary<string, Func<Stream, Stream>>();
+
+        public IDisposable RegisterService<TService, TRequest, TResponse>(string serviceName, Func<TRequest, TResponse> service) where TService : IService<TRequest, TResponse>, new() where TRequest : IMessage, new() where TResponse : IMessage, new()
+        {
+
+            var _slaveServer = new SlaveServer();
+            _slaveServer.StartAsObservable().Subscribe(x => Console.WriteLine(x.SocketType));
+
+            var channel = new HttpServerChannel("slave", 0, new XmlRpcServerFormatterSinkProvider());
+            
+            
+            ChannelServices.RegisterChannel(channel, false);
+            RemotingServices.Marshal(_slaveServer, "slave");
+
+            var func = new Func<Stream, Stream>(stream =>
+            {
+                var req = new TRequest();
+                req.Deserialize(stream);
+                var res = service(req);
+                var ms = new MemoryStream();
+                res.Serialize(ms);
+                return ms;
+            });
+
+
+
+            var ret1 = _masterClient
+                .RegisterServiceAsync("/test", "chatter", 
+                new Uri("rostcp://192.168.11.2:11112"),
+                new Uri("http://192.168.11.2:11112"))
+                .First();//TODO: エラーが起きたとき
+
+
+            throw new NotImplementedException();
+        }
     }
 }

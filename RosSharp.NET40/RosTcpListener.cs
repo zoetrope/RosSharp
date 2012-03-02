@@ -12,7 +12,7 @@ namespace RosSharp
     {
         private Socket _socket;
 
-        public IObservable<Socket> Start(int portNumber)
+        public IObservable<Socket> StartAsObservable(int portNumber)
         {
             var hostEntry = new IPEndPoint(IPAddress.Any, portNumber);
 

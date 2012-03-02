@@ -30,7 +30,7 @@ namespace RosSharp.Tests
 
             var client = new RosTcpClient();
 
-            var result = client.ConnectAsObservable("127.0.0.1", 50000).Subscribe(observer);
+            var result = client.ConnectAsync("127.0.0.1", 50000).Subscribe(observer);
 
             scheduler.AdvanceTo(10);
 
@@ -72,7 +72,7 @@ namespace RosSharp.Tests
 
             var serializer = new TcpRosHeaderSerializer<SubscriberResponseHeader>();
 
-            var result = client.ReceiveAsObservable()
+            var result = client.ReceiveAsync()
                 .Select(x=>serializer.Deserialize(new MemoryStream(x)))
                 .Subscribe(observer);
 

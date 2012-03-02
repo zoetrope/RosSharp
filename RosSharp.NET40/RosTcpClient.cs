@@ -27,7 +27,7 @@ namespace RosSharp
 
 
 
-        public IObservable<SocketAsyncEventArgs> ConnectAsObservable(string hostName, int portNumber)
+        public IObservable<SocketAsyncEventArgs> ConnectAsync(string hostName, int portNumber)
         {
             
             var hostEntry = new DnsEndPoint(hostName, portNumber);
@@ -37,19 +37,19 @@ namespace RosSharp
             return _socket.ConnectAsObservable(hostEntry);
         }
 
-        public IObservable<SocketAsyncEventArgs> SendAsObservable(byte[] data)
+        public IObservable<SocketAsyncEventArgs> SendAsync(byte[] data)
         {
             return _socket.SendAsObservable(data);
         }
 
         private IConnectableObservable<SocketAsyncEventArgs> _receiver;
 
-        public IObservable<byte[]> ReceiveAsObservable(bool skip1Byte = false)
+        public IObservable<byte[]> ReceiveAsync(int offset = 0)
         {
             if (_receiver == null)
             {
                 _receiver = _socket.ReceiveAsObservable().Publish();
-                _receiver.Connect();
+                _receiver.Connect(); //TODO: connectのタイミングはここでよいか？
             }
 
             return Observable.Create<byte[]>(observer =>
@@ -60,7 +60,7 @@ namespace RosSharp
                     {
                         var rest = AppendData(abs, bs);
                         byte[] current;
-                        if (CompleteMessage(skip1Byte, out current, ref rest))
+                        if (CompleteMessage(offset, out current, ref rest))
                         {
                             observer.OnNext(current);
                         }
@@ -89,20 +89,14 @@ namespace RosSharp
             bs2.CopyTo(rs, bs1.Length);
             return rs;
         }
-        protected bool CompleteMessage( bool skip1Byte, out byte[] current, ref byte[] rest)
+        protected bool CompleteMessage(int offset, out byte[] current, ref byte[] rest)
         {
             if (rest.IsEmpty())
             {
                 current = new byte[0];
                 return false;
             }
-
-            int offset = 0;
-            if (skip1Byte)
-            {
-                offset = 1;
-            }
-
+            
             if (rest.Length < 4 + offset)
             {
                 current = new byte[0];

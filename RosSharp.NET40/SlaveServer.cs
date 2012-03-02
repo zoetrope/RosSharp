@@ -17,9 +17,9 @@ namespace RosSharp
             
         }
 
-        public IObservable<Socket> Connect()
+        public IObservable<Socket> StartAsObservable()
         {
-            return _listener.Start(8088);
+            return _listener.StartAsObservable(8088);
         }
 
 

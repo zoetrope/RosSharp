@@ -16,7 +16,7 @@ namespace RosSharp
         {
             _tcpClient = new RosTcpClient(socket);
 
-            _tcpClient.ReceiveAsObservable()
+            _tcpClient.ReceiveAsync()
                 .Take(1)
                 .Subscribe(OnReceiveHeader);
         }
@@ -43,7 +43,7 @@ namespace RosSharp
             var ms = new MemoryStream();
             serializer.Serialize(ms, header);
 
-            _tcpClient.SendAsObservable(ms.ToArray()).First();
+            _tcpClient.SendAsync(ms.ToArray()).First();
 
         }
 
@@ -52,7 +52,7 @@ namespace RosSharp
             var ms = new MemoryStream();
             data.Serialize(ms);
 
-            _tcpClient.SendAsObservable(ms.ToArray()).First();
+            _tcpClient.SendAsync(ms.ToArray()).First();
         }
     }
 }

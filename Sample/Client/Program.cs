@@ -14,15 +14,20 @@ namespace Client
     {
         static void Main(string[] args)
         {
-            ROS.Initialize();
+            ROS.Initialize(new Uri("http://192.168.11.5:11311/"));
 
             var node = ROS.CreateNode();
 
-            var proxy = node.CreateProxy<AddTwoInts, AddTwoIntsReq, AddTwoIntsRes>("/add_two_ints");
+            var proxy = node.CreateProxy<AddTwoInts, AddTwoInts.Request, AddTwoInts.Response>("/add_two_ints");
 
             //Thread.Sleep(TimeSpan.FromSeconds(3));
 
-            proxy(new AddTwoIntsReq() { a = 1, b = 2 });
+            proxy(new AddTwoInts.Request() { a = 1, b = 2 }).Subscribe(x => Console.WriteLine(x.c));
+
+            Thread.Sleep(TimeSpan.FromSeconds(3));
+
+            // 間を開けずに連続で呼び出すと同じ値が返ってくる。バグではないけど微妙。
+            proxy(new AddTwoInts.Request() { a = 3, b = 4 }).Subscribe(x => Console.WriteLine(x.c));
 
             Console.WriteLine("Press Any Key.");
             Console.ReadKey();

@@ -21,106 +21,78 @@ namespace RosSharp
 
     internal static class ObservableEx
     {
+        // http://neue.cc/2010/09/28_277.html
         
         public static Func<T1, T2,T3, IObservable<TResult>> FromAsyncPattern<T1, T2,T3, TResult>(Func<T1, T2, T3, AsyncCallback, object, IAsyncResult> begin, Func<IAsyncResult, TResult> end)
         {
-            if (begin == null) throw new ArgumentNullException("begin");
-            if (end == null) throw new ArgumentNullException("end");
-
             return (t1, t2, t3) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                try
+                begin.Invoke(t1, t2, t3, iar =>
                 {
-                    begin.Invoke(t1, t2, t3, iar => 
+                    TResult value;
+                    try
                     {
-                        TResult value;
-                        try
-                        {
-                            value = end.Invoke(iar);
-                        }
-                        catch (Exception error)
-                        {
-                            subject.OnError(error);
-                            return;
-                        }
-                        subject.OnNext(value);
-                        subject.OnCompleted();
+                        value = end.Invoke(iar);
                     }
-                    , null);
+                    catch (Exception error)
+                    {
+                        subject.OnError(error);
+                        return;
+                    }
+                    subject.OnNext(value);
+                    subject.OnCompleted();
                 }
-                catch (Exception exception)
-                {
-                    return Observable.Throw<TResult>(exception, Scheduler.ThreadPool);
-                }
+                , null);
                 return subject.AsObservable();
             };
         }
         public static Func<T1, T2, T3, T4, IObservable<TResult>> FromAsyncPattern<T1, T2, T3, T4, TResult>(Func<T1, T2, T3, T4, AsyncCallback, object, IAsyncResult> begin, Func<IAsyncResult, TResult> end)
         {
-            if (begin == null) throw new ArgumentNullException("begin");
-            if (end == null) throw new ArgumentNullException("end");
-
             return (t1, t2, t3, t4) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                try
+                begin.Invoke(t1, t2, t3, t4, iar =>
                 {
-                    begin.Invoke(t1, t2, t3, t4, iar => 
+                    TResult value;
+                    try
                     {
-                        TResult value;
-                        try
-                        {
-                            value = end.Invoke(iar);
-                        }
-                        catch (Exception error)
-                        {
-                            subject.OnError(error);
-                            return;
-                        }
-                        subject.OnNext(value);
-                        subject.OnCompleted();
+                        value = end.Invoke(iar);
                     }
-                    , null);
+                    catch (Exception error)
+                    {
+                        subject.OnError(error);
+                        return;
+                    }
+                    subject.OnNext(value);
+                    subject.OnCompleted();
                 }
-                catch (Exception exception)
-                {
-                    return Observable.Throw<TResult>(exception, Scheduler.ThreadPool);
-                }
+                , null);
                 return subject.AsObservable();
             };
         }
         public static Func<T1, T2, T3, T4, T5, IObservable<TResult>> FromAsyncPattern<T1, T2, T3, T4, T5, TResult>(Func<T1, T2, T3, T4, T5, AsyncCallback, object, IAsyncResult> begin, Func<IAsyncResult, TResult> end)
         {
-            if (begin == null) throw new ArgumentNullException("begin");
-            if (end == null) throw new ArgumentNullException("end");
-
             return (t1, t2, t3, t4, t5) =>
             {
                 var subject = new AsyncSubject<TResult>();
-                try
+                begin.Invoke(t1, t2, t3, t4, t5, iar =>
                 {
-                    begin.Invoke(t1, t2, t3, t4, t5, iar =>
+                    TResult value;
+                    try
                     {
-                        TResult value;
-                        try
-                        {
-                            value = end.Invoke(iar);
-                        }
-                        catch (Exception error)
-                        {
-                            subject.OnError(error);
-                            return;
-                        }
-                        subject.OnNext(value);
-                        subject.OnCompleted();
+                        value = end.Invoke(iar);
                     }
-                    , null);
+                    catch (Exception error)
+                    {
+                        subject.OnError(error);
+                        return;
+                    }
+                    subject.OnNext(value);
+                    subject.OnCompleted();
                 }
-                catch (Exception exception)
-                {
-                    return Observable.Throw<TResult>(exception, Scheduler.ThreadPool);
-                }
+                , null);
+
                 return subject.AsObservable();
             };
         }

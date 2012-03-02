@@ -11,7 +11,7 @@ namespace RosSharp
         string Md5Sum { get; }
         string ServiceDefinition { get; }
 
-        TResponse CreateResponse();
-        TRequest CreateRequest();
+        //TResponse CreateResponse();
+        //TRequest CreateRequest();
     }
 }
