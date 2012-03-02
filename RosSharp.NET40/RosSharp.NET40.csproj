@@ -56,6 +56,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Service\ProxyFactory.cs" />
     <Compile Include="Transport\AsyncSocketExtensions.cs" />
     <Compile Include="Master\IMaster.cs" />
     <Compile Include="Node\INode.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Transport\TcpRosHeader.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

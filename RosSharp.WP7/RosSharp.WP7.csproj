@@ -86,6 +86,9 @@
     <Compile Include="..\RosSharp.NET40\Service\IService.cs">
       <Link>Service\IService.cs</Link>
     </Compile>
+    <Compile Include="..\RosSharp.NET40\Service\ProxyFactory.cs">
+      <Link>Service\ProxyFactory.cs</Link>
+    </Compile>
     <Compile Include="..\RosSharp.NET40\Slave\ISlave.cs">
       <Link>Slave\ISlave.cs</Link>
     </Compile>
@@ -124,6 +127,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\RosSharp.NET40\ClassDiagram.cd">
+      <Link>ClassDiagram.cd</Link>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
@@ -131,7 +137,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="417b1a0a-5ff8-4423-9f62-fe61aa299239" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="417b1a0a-5ff8-4423-9f62-fe61aa299239" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

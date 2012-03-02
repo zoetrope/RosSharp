@@ -18,14 +18,22 @@ namespace RosSharp.Node
 {
     public class RosNode : INode
     {
-        private MasterClient _masterClient;
+        private MasterClient _masterClient { get; set; }
         //private SlaveServer _slaveServer;
 
         private string _localHostName;
 
+        internal ProxyFactory _proxyFactory
+        {
+            get;
+            set;
+        }
+
         public RosNode(Uri masterUri, string localHostName)
         {
             _masterClient = new MasterClient(masterUri);
+
+            _proxyFactory = new ProxyFactory(_masterClient);
 
             _localHostName = localHostName;
 
@@ -73,66 +81,7 @@ namespace RosSharp.Node
             where TRequest : IMessage, new()
             where TResponse : IMessage, new()
         {
-            var ret1 = _masterClient
-                .LookupServiceAsync("/test", serviceName).First();
-
-            Console.WriteLine(ret1);
-
-
-            var _tcpClient = new RosTcpClient();
-            var ret = _tcpClient.ConnectAsync(ret1.Host, ret1.Port).First();
-
-            var headerSerializer = new TcpRosHeaderSerializer<ServiceResponseHeader>();
-
-            var rec = _tcpClient.ReceiveAsync()
-                .Select(x => headerSerializer.Deserialize(new MemoryStream(x)))
-                .Take(1)
-                .PublishLast();
-
-            rec.Connect();
-
-            var service = new TService();
-
-            var header = new ServiceHeader()
-            {
-                callerid = "test",
-                md5sum = service.Md5Sum,
-                service = serviceName  
-            };
-
-            var serializer = new TcpRosHeaderSerializer<ServiceHeader>();
-
-            var stream = new MemoryStream();
-
-            serializer.Serialize(stream, header);
-            var data = stream.ToArray();
-
-            _tcpClient.SendAsync(data).First();
-
-            var test = rec.First();
-            Console.WriteLine(test.callerid);
-
-            return request => {
-
-                var response = _tcpClient.ReceiveAsync(offset: 1)
-                    .Select(x =>
-                    {
-                        var res = new TResponse();
-                        res.Deserialize(new MemoryStream(x));
-                        return res;
-                    })
-                    .Take(1)
-                    .PublishLast();
-
-                response.Connect();
-
-                var ms = new MemoryStream();
-                request.Serialize(ms);
-                var senddata = ms.ToArray();
-                _tcpClient.SendAsync(senddata).First();
-
-                return response;
-            };
+            return _proxyFactory.Create<TService, TRequest, TResponse>(serviceName);
         }
 
         private Dictionary<string, Func<Stream, Stream>> _services = new Dictionary<string, Func<Stream, Stream>>();
@@ -170,5 +119,8 @@ namespace RosSharp.Node
 
             throw new NotImplementedException();
         }
+
+
+
     }
 }
