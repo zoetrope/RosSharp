@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using RosSharp;
+using RosSharp.Message;
+using RosSharp.Service;
 
 namespace Server
 {

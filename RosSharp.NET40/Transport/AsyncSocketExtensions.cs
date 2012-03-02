@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Reactive;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using System.Text;
 
-namespace RosSharp
+namespace RosSharp.Transport
 {
     public static class AsyncSocketExtensions
     {

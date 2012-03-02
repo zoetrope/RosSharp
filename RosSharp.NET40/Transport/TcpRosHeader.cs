@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace RosSharp
+namespace RosSharp.Transport
 {
     internal class SubscriberHeader
     {

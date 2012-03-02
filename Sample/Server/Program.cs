@@ -12,7 +12,7 @@ namespace Server
     {
         static void Main(string[] args)
         {
-            ROS.Initialize(new Uri("http://192.168.11.5:11311/"));
+            ROS.Initialize(new Uri("http://192.168.11.5:11311/"), "192.168.11.3");
 
             var node = ROS.CreateNode();
 

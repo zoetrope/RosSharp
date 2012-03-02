@@ -2,7 +2,7 @@
 using System.Reflection;
 using CookComputing.XmlRpc;
 
-namespace RosSharp
+namespace RosSharp.Slave
 {
     [XmlRpcUrl("")]
     public class SlaveProxy : XmlRpcClientProtocol

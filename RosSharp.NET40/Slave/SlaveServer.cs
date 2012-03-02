@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
-using System.Text;
+using RosSharp.Transport;
 
-namespace RosSharp
+namespace RosSharp.Slave
 {
     public class SlaveServer : MarshalByRefObject, ISlave
     {
@@ -17,9 +15,9 @@ namespace RosSharp
             
         }
 
-        public IObservable<Socket> StartAsObservable()
+        public IObservable<Socket> AcceptAsync()
         {
-            return _listener.StartAsObservable(8088);
+            return _listener.AcceptAsync(8088);
         }
 
 

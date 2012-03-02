@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using RosSharp.Master;
 
-namespace RosSharp
+namespace RosSharp.Master
 {
     public class MasterServer : MarshalByRefObject, IMaster
     {

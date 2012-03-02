@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Sockets;
 using System.Reactive.Linq;
-using System.Text;
+using RosSharp.Message;
+using RosSharp.Transport;
 
-namespace RosSharp
+namespace RosSharp.Topic
 {
     public class RosTopic<TDataType> where TDataType:IMessage, new()
     {

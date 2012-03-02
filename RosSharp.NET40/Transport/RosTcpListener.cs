@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Reactive.Linq;
-using System.Text;
 
-namespace RosSharp
+namespace RosSharp.Transport
 {
     class RosTcpListener
     {
         private Socket _socket;
 
-        public IObservable<Socket> StartAsObservable(int portNumber)
+        public IObservable<Socket> AcceptAsync(int portNumber)
         {
             var hostEntry = new IPEndPoint(IPAddress.Any, portNumber);
 

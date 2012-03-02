@@ -2,7 +2,7 @@
 using System.Reflection;
 using CookComputing.XmlRpc;
 
-namespace RosSharp
+namespace RosSharp.Parameter
 {
     [XmlRpcUrl("")]
     public class ParameterServerProxy : XmlRpcClientProtocol

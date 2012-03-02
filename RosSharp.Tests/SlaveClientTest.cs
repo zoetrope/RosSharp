@@ -6,6 +6,8 @@ using System.Linq;
 using CookComputing.XmlRpc.Moles;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RosSharp.Moles;
+using RosSharp.Slave;
+using RosSharp.Slave.Moles;
 
 namespace RosSharp.Tests
 {

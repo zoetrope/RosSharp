@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
-using System.Text;
-using CookComputing.XmlRpc;
 using System.Reactive.Linq;
 
-namespace RosSharp
+namespace RosSharp.Master
 {
     public class MasterClient
     {

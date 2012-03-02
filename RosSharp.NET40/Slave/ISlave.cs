@@ -1,6 +1,6 @@
 ﻿using CookComputing.XmlRpc;
 
-namespace RosSharp
+namespace RosSharp.Slave
 {
     [XmlRpcUrl("")]
     public interface ISlave

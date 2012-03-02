@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Reactive.Linq;
 using System.Text;
+using RosSharp.Node;
 
 namespace RosSharp
 {

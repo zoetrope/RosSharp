@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace RosSharp
+﻿namespace RosSharp.Topic
 {
     public class GraphName
     {

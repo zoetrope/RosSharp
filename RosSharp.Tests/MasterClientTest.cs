@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using CookComputing.XmlRpc.Moles;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RosSharp.Master;
+using RosSharp.Master.Moles;
 using RosSharp.Moles;
 
 namespace RosSharp.Tests

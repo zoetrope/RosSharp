@@ -9,6 +9,8 @@ using System.Linq;
 using Microsoft.Reactive.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RosSharp.Moles;
+using RosSharp.Transport;
+using RosSharp.Transport.Moles;
 
 namespace RosSharp.Tests
 {

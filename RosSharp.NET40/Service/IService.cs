@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using RosSharp.Message;
 
-namespace RosSharp
+namespace RosSharp.Service
 {
     public interface IService<TRequest, TResponse> where TRequest : IMessage where TResponse : IMessage
     {

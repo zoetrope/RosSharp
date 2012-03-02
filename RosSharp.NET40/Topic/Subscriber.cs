@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reactive.Linq;
-using System.Text;
+using RosSharp.Message;
+using RosSharp.Slave;
+using RosSharp.Transport;
 
-namespace RosSharp
+namespace RosSharp.Topic
 {
     public class Subscriber<TDataType> : ITopic, IObservable<TDataType> where TDataType : IMessage, new ()
     {

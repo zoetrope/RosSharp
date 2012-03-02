@@ -1,18 +1,20 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.NetworkInformation;
 using System.Reactive.Linq;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Http;
-using System.Text;
 using CookComputing.XmlRpc;
+using RosSharp.Master;
+using RosSharp.Message;
+using RosSharp.Service;
+using RosSharp.Slave;
+using RosSharp.Topic;
+using RosSharp.Transport;
 
-namespace RosSharp
+namespace RosSharp.Node
 {
     public class RosNode : INode
     {
@@ -50,7 +52,7 @@ namespace RosSharp
             var publisher = new Publisher<TDataType>();
 
             var _slaveServer = new SlaveServer();
-            _slaveServer.StartAsObservable().Subscribe(x => publisher.AddTopic(new RosTopic<TDataType>(x)));
+            _slaveServer.AcceptAsync().Subscribe(x => publisher.AddTopic(new RosTopic<TDataType>(x)));
 
             var channel = new HttpServerChannel("slave", 0, new XmlRpcServerFormatterSinkProvider());
             ChannelServices.RegisterChannel(channel, false);
@@ -119,8 +121,10 @@ namespace RosSharp
                         res.Deserialize(new MemoryStream(x));
                         return res;
                     })
-                    .Take(1);
-                    
+                    .Take(1)
+                    .PublishLast();
+
+                response.Connect();
 
                 var ms = new MemoryStream();
                 request.Serialize(ms);
@@ -137,7 +141,7 @@ namespace RosSharp
         {
 
             var _slaveServer = new SlaveServer();
-            _slaveServer.StartAsObservable().Subscribe(x => Console.WriteLine(x.SocketType));
+            _slaveServer.AcceptAsync().Subscribe(x => Console.WriteLine(x.SocketType));
 
             var channel = new HttpServerChannel("slave", 0, new XmlRpcServerFormatterSinkProvider());
             

@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using RosSharp.Message;
+using RosSharp.Service;
+using RosSharp.Topic;
 
-namespace RosSharp
+namespace RosSharp.Node
 {
     public interface INode
     {

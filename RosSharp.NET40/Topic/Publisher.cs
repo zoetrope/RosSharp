@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using RosSharp.Message;
 
-namespace RosSharp
+namespace RosSharp.Topic
 {
     public class Publisher<TDataType> : ITopic, IObserver<TDataType> where TDataType : IMessage, new()
     {

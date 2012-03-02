@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace RosSharp
+namespace RosSharp.Parameter
 {
     public class ParameterServer : MarshalByRefObject, IParameterServer
     {

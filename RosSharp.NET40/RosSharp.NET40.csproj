@@ -56,45 +56,44 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AsyncSocketExtensions.cs" />
-    <Compile Include="IMaster.cs" />
-    <Compile Include="INode.cs" />
-    <Compile Include="IParameterServer.cs" />
-    <Compile Include="IService.cs" />
-    <Compile Include="ISlave.cs" />
-    <Compile Include="ITopic.cs" />
-    <Compile Include="MasterClient.cs" />
-    <Compile Include="MasterProxy.cs">
+    <Compile Include="Transport\AsyncSocketExtensions.cs" />
+    <Compile Include="Master\IMaster.cs" />
+    <Compile Include="Node\INode.cs" />
+    <Compile Include="Parameter\IParameterServer.cs" />
+    <Compile Include="Service\IService.cs" />
+    <Compile Include="Slave\ISlave.cs" />
+    <Compile Include="Topic\ITopic.cs" />
+    <Compile Include="Master\MasterClient.cs" />
+    <Compile Include="Master\MasterProxy.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="MasterServer.cs" />
-    <Compile Include="MessageSerializer.cs" />
-    <Compile Include="ParameterServer.cs" />
-    <Compile Include="ParameterServerClient.cs" />
-    <Compile Include="Publisher.cs" />
-    <Compile Include="Registrar.cs" />
+    <Compile Include="Master\MasterServer.cs" />
+    <Compile Include="Parameter\ParameterServer.cs" />
+    <Compile Include="Parameter\ParameterServerClient.cs" />
+    <Compile Include="Topic\Publisher.cs" />
     <Compile Include="ROS.cs" />
-    <Compile Include="RosNode.cs" />
-    <Compile Include="RosTcpListener.cs" />
-    <Compile Include="RosTopic.cs" />
-    <Compile Include="SlaveClient.cs" />
-    <Compile Include="SlaveServer.cs" />
-    <Compile Include="IMessage.cs" />
+    <Compile Include="Node\RosNode.cs" />
+    <Compile Include="Transport\RosTcpListener.cs" />
+    <Compile Include="Topic\RosTopic.cs" />
+    <Compile Include="Slave\SlaveClient.cs" />
+    <Compile Include="Slave\SlaveServer.cs" />
+    <Compile Include="Message\IMessage.cs" />
     <Compile Include="StdMsgs\String.cs" />
-    <Compile Include="Subscriber.cs" />
-    <Compile Include="ParameterServerProxy.cs">
+    <Compile Include="Topic\Subscriber.cs" />
+    <Compile Include="Parameter\ParameterServerProxy.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="SlaveProxy.cs">
+    <Compile Include="Slave\SlaveProxy.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RosTcpClient.cs" />
-    <Compile Include="TcpRosHeader.cs" />
+    <Compile Include="Transport\RosTcpClient.cs" />
+    <Compile Include="Transport\TcpRosHeader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
