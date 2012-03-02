@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Reactive;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Text;
@@ -85,6 +86,7 @@ namespace RosSharp
             {
                 var disposable = Observable.FromEventPattern<SocketAsyncEventArgs>(
                     ev => arg.Completed += ev, ev => arg.Completed -= ev)
+                    .Do(x=>Console.WriteLine("last = {0}",x.EventArgs.LastOperation))
                     .Select(e => e.EventArgs)
                     .Where(args => args.LastOperation == SocketAsyncOperation.Receive)
                     .Do(x =>

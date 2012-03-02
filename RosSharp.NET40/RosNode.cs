@@ -74,10 +74,12 @@ namespace RosSharp
 
             var headerSerializer = new TcpRosHeaderSerializer<ServiceResponseHeader>();
 
-            _tcpClient.ReceiveAsObservable()
-                .Take(1)
+            var rec = _tcpClient.ReceiveAsObservable()
                 .Select(x => headerSerializer.Deserialize(new MemoryStream(x)))
-                .Subscribe(x => Console.WriteLine(x));
+                .Take(1)
+                .PublishLast();
+
+            rec.Connect();
 
             var service = new TService();
 
@@ -97,7 +99,27 @@ namespace RosSharp
 
             _tcpClient.SendAsObservable(data).First();
 
-            return request => new TResponse();
+            var test = rec.First();
+            Console.WriteLine(test.callerid);
+
+            return request => {
+
+                _tcpClient.ReceiveAsObservable(skip1Byte:true)
+                    .Select(x => {
+                        var res = new TResponse();
+                        res.Deserialize(new MemoryStream(x));
+                        return res;
+                    })
+                    .Take(1)
+                    .Subscribe(x => Console.WriteLine(x));
+
+                var ms = new MemoryStream();
+                request.Serialize(ms);
+                var senddata = ms.ToArray();
+                _tcpClient.SendAsObservable(senddata).First();
+
+                return new TResponse(); 
+            };
         }
         
     }

@@ -42,17 +42,25 @@ namespace RosSharp
             return _socket.SendAsObservable(data);
         }
 
-        public IObservable<byte[]> ReceiveAsObservable()
+        private IConnectableObservable<SocketAsyncEventArgs> _receiver;
+
+        public IObservable<byte[]> ReceiveAsObservable(bool skip1Byte = false)
         {
+            if (_receiver == null)
+            {
+                _receiver = _socket.ReceiveAsObservable().Publish();
+                _receiver.Connect();
+            }
+
             return Observable.Create<byte[]>(observer =>
             {
-                var disposable = _socket.ReceiveAsObservable()
+                var disposable = _receiver
                     .Select(OnReceive)
                     .Scan(new byte[] { }, (abs, bs) =>
                     {
                         var rest = AppendData(abs, bs);
                         byte[] current;
-                        if (CompleteMessage(out current, ref rest))
+                        if (CompleteMessage(skip1Byte, out current, ref rest))
                         {
                             observer.OnNext(current);
                         }
@@ -81,7 +89,7 @@ namespace RosSharp
             bs2.CopyTo(rs, bs1.Length);
             return rs;
         }
-        protected bool CompleteMessage(out byte[] current, ref byte[] rest)
+        protected bool CompleteMessage( bool skip1Byte, out byte[] current, ref byte[] rest)
         {
             if (rest.IsEmpty())
             {
@@ -89,24 +97,31 @@ namespace RosSharp
                 return false;
             }
 
-            if (rest.Length < 4)
+            int offset = 0;
+            if (skip1Byte)
+            {
+                offset = 1;
+            }
+
+            if (rest.Length < 4 + offset)
             {
                 current = new byte[0];
                 return false;
             }
 
-            var length = BitConverter.ToInt32(rest, 0) + 4;
 
-            if (rest.Length < length)
+            var length = BitConverter.ToInt32(rest, offset) + 4;
+
+            if (rest.Length < length + offset)
             {
                 current = new byte[0];
                 return false;
             }
 
             current = new byte[length];
-            Buffer.BlockCopy(rest, 0, current, 0, length);
+            Buffer.BlockCopy(rest, offset, current, 0, length);
 
-            var restLen = rest.Length - length;
+            var restLen = rest.Length - offset - length;
             var temp = new byte[restLen];
             Buffer.BlockCopy(rest, length, rest, 0, restLen);
             rest = temp;

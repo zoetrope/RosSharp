@@ -43,12 +43,12 @@ namespace Server
     {
         public string MessageType
         {
-            get { throw new NotImplementedException(); }
+            get { return "test_ros/AddTwoIntsRequest"; }
         }
 
         public string Md5Sum
         {
-            get { throw new NotImplementedException(); }
+            get { return "36d09b846be0b371c5f190354dd3153e"; }
         }
 
         public string MessageDefinition
@@ -58,25 +58,33 @@ namespace Server
 
         public void Serialize(Stream stream)
         {
-            throw new NotImplementedException();
+            var bw = new BinaryWriter(stream);
+            bw.Write(16);
+            bw.Write(a);
+            bw.Write(b);
         }
 
         public void Deserialize(Stream stream)
         {
-            throw new NotImplementedException();
+            var br = new BinaryReader(stream);
+            a = br.ReadInt64();
+            b = br.ReadInt64();
         }
+
+        public long a { get; set; }
+        public long b { get; set; }
     }
 
     public class AddTwoIntsRes : IMessage
     {
         public string MessageType
         {
-            get { throw new NotImplementedException(); }
+            get { return "test_ros/AddTwoIntsResponse"; }
         }
 
         public string Md5Sum
         {
-            get { throw new NotImplementedException(); }
+            get { return "b88405221c77b1878a3cbbfff53428d7"; }
         }
 
         public string MessageDefinition
@@ -86,12 +94,16 @@ namespace Server
 
         public void Serialize(Stream stream)
         {
-            throw new NotImplementedException();
+            var bw = new BinaryWriter(stream);
+            bw.Write(c);
         }
 
         public void Deserialize(Stream stream)
         {
-            throw new NotImplementedException();
+            var br = new BinaryReader(stream);
+            br.ReadInt32();
+            c = br.ReadInt64();
         }
+        public long c { get; set; }
     }
 }

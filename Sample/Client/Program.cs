@@ -19,7 +19,11 @@ namespace Client
             var node = ROS.CreateNode();
 
             var proxy = node.CreateProxy<AddTwoInts, AddTwoIntsReq, AddTwoIntsRes>("/add_two_ints");
-            
+
+            //Thread.Sleep(TimeSpan.FromSeconds(3));
+
+            proxy(new AddTwoIntsReq() { a = 1, b = 2 });
+
             Console.WriteLine("Press Any Key.");
             Console.ReadKey();
         }
