@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Reactive.Linq;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
 using CookComputing.XmlRpc.Moles;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RosSharp.Moles;
 using RosSharp.Slave;
 using RosSharp.Slave.Moles;
 
-namespace RosSharp.Tests
+namespace RosSharp.Tests.Slave
 {
     [TestClass]
     public class SlaveClientTest

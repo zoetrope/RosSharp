@@ -17,7 +17,7 @@ namespace RosSharp
         {
             if(masterUri == null)
             {
-                _masterUri = new Uri("localhost:11131");
+                _masterUri = new Uri("localhost:11311");
             }
             else
             {

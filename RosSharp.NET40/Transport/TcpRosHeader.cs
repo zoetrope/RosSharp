@@ -14,7 +14,6 @@ namespace RosSharp.Transport
         public string md5sum { get; set; }
         public string type { get; set; }
         public string message_definition { get; set; }
-        public string latching { get; set; } // int?
     }
     internal class SubscriberResponseHeader
     {

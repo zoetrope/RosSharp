@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Reactive.Linq;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
 using CookComputing.XmlRpc.Moles;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RosSharp.Master;
 using RosSharp.Master.Moles;
-using RosSharp.Moles;
 
-namespace RosSharp.Tests
+namespace RosSharp.Tests.Master
 {
     [TestClass]
     public class MasterClientTest
@@ -34,6 +30,7 @@ namespace RosSharp.Tests
 
             client.RegisterServiceAsync("/test", "/myservice", new Uri("http://192.168.11.2:11112"), new Uri("http://192.168.11.2:11111")).First();
         }
+
         [TestMethod]
         [HostType("Moles")]
         public void RegisterService_ParameterError()
@@ -54,6 +51,7 @@ namespace RosSharp.Tests
             var ex = AssertEx.Throws<InvalidOperationException>(() => client.RegisterServiceAsync("/test", "/myservice", new Uri("http://localhost"), new Uri("http://localhost")).First());
             ex.Message.Is("ERROR: parameter [service_api] is not an XMLRPC URI");
         }
+
         [TestMethod]
         [HostType("Moles")]
         public void UnregisterService_Success()
@@ -74,6 +72,7 @@ namespace RosSharp.Tests
             var ret = client.UnregisterServiceAsync("/test", "/myservice", new Uri("http://localhost")).First();
             ret.Is(1);
         }
+
         [TestMethod]
         [HostType("Moles")]
         public void UnregisterService_NotRegistered()
@@ -94,6 +93,7 @@ namespace RosSharp.Tests
             var ret = client.UnregisterServiceAsync("/test", "/myservice", new Uri("http://localhost")).First();
             ret.Is(0);
         }
+
         [TestMethod]
         [HostType("Moles")]
         public void UnregisterService_ParameterError()
@@ -135,6 +135,7 @@ namespace RosSharp.Tests
             var ret =  client.RegisterSubscriberAsync("/test", "topic1", "std_msgs/String", new Uri("http://192.168.11.2:11112")).First();
             
         }
+
         [TestMethod]
         [HostType("Moles")]
         public void RegisterSubscriber_ParameterError()
@@ -155,7 +156,6 @@ namespace RosSharp.Tests
             var ex = AssertEx.Throws<InvalidOperationException>(() => client.RegisterSubscriberAsync("/test", "topic1", "topicType", new Uri("http://192.168.11.2:11112")).First());
             ex.Message.Is("ERROR: parameter [topic_type] is not a valid package resource name");
         }
-
 
         [TestMethod]
         [HostType("Moles")]
@@ -355,6 +355,7 @@ namespace RosSharp.Tests
             client.GetUriAsync("/test").First().Is(new Uri("http://192.168.11.4:11311/"));
 
         }
+
         [TestMethod]
         [HostType("Moles")]
         public void GetUri_ParameterError()

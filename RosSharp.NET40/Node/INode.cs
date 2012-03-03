@@ -9,6 +9,8 @@ namespace RosSharp.Node
     {
         Subscriber<TDataType> CreateSubscriber<TDataType>(string topicName) where TDataType : IMessage, new();
 
+
+        //TODO: 接続する前に送信できてしまうのはまずい。CreatePublisherを非同期にすべき。
         Publisher<TDataType> CreatePublisher<TDataType>(string topicName) where TDataType : IMessage, new();
 
         Func<TRequest, IObservable<TResponse>> CreateProxy<TService, TRequest, TResponse>(string serviceName)

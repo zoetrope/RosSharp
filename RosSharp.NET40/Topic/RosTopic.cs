@@ -24,17 +24,19 @@ namespace RosSharp.Topic
         {
             Console.WriteLine(data.Length);
 
-            var s = new TcpRosHeaderSerializer<SubscriberResponseHeader>();
+            var s = new TcpRosHeaderSerializer<SubscriberHeader>();
             var h = s.Deserialize(new MemoryStream(data));
+
+            var temp = new TDataType();
 
             var header = new SubscriberResponseHeader()
             {
                 callerid = "/test",
                 latching = "0",
-                md5sum = "992ce8a1687cec8c8bd883ec73ca41d1",
-                message_definition = "string data",
+                md5sum = temp.Md5Sum,
+                message_definition = temp.MessageDefinition,
                 topic = "/chatter",
-                type = "std_msgs/String"
+                type = temp.MessageType
             };
 
             var serializer = new TcpRosHeaderSerializer<SubscriberResponseHeader>();
@@ -50,7 +52,7 @@ namespace RosSharp.Topic
         {
             var ms = new MemoryStream();
             data.Serialize(ms);
-
+            var array = ms.ToArray();
             _tcpClient.SendAsync(ms.ToArray()).First();
         }
     }

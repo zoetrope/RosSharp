@@ -1,18 +1,14 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Net.Sockets;
 using System.Net.Sockets.Moles;
 using System.Reactive.Linq;
-using System.Text;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Reactive.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RosSharp.Moles;
 using RosSharp.Transport;
 using RosSharp.Transport.Moles;
 
-namespace RosSharp.Tests
+namespace RosSharp.Tests.Transport
 {
     [TestClass]
     public class RosTcpClientTest : ReactiveTest

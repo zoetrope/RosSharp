@@ -28,6 +28,7 @@ namespace RosSharp.StdMsgs
         {
             var buf = Encoding.UTF8.GetBytes(data);
 
+            stream.Write(BitConverter.GetBytes(buf.Length + 4), 0, 4);//TODO: これは外で付けたい。
             stream.Write(BitConverter.GetBytes(buf.Length), 0, 4);
             stream.Write(buf, 0, buf.Length);
         }

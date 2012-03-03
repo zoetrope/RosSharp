@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Net.Sockets;
+using System.Runtime.Remoting;
+using System.Runtime.Remoting.Channels;
+using System.Runtime.Remoting.Channels.Http;
+using CookComputing.XmlRpc;
 using RosSharp.Transport;
 
 namespace RosSharp.Slave
@@ -7,17 +11,17 @@ namespace RosSharp.Slave
     public class SlaveServer : MarshalByRefObject, ISlave
     {
         private RosTcpListener _listener;
-        
-        public SlaveServer()
+        public Uri SlaveUri { get; set; }
+
+        public SlaveServer(Uri uri)
         {
             _listener = new RosTcpListener();
-            
-            
+            SlaveUri = uri;
         }
 
         public IObservable<Socket> AcceptAsync()
         {
-            return _listener.AcceptAsync(8088);
+            return _listener.AcceptAsync(0);
         }
 
 
@@ -73,15 +77,15 @@ namespace RosSharp.Slave
 
         public object[] RequestTopic(string callerId, string topic, object[] protocols)
         {
-
+            //TODO: 固定値ではなくtopic名で判断
             var result = new object[3]
             {
                 1,
-                "Protocol<TCPROS, AdvertiseAddress<192.168.11.4, 8088>>",
+                "Protocol<TCPROS, AdvertiseAddress<192.168.11.3, 8088>>",
                 new object[3]{
                     "TCPROS",
-                    "192.168.11.4",
-                    8088
+                    "192.168.11.3",
+                    _listener.Port
                 }
             };
 

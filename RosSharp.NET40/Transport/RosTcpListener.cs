@@ -25,5 +25,10 @@ namespace RosSharp.Transport
                     .Subscribe(observer));
 
         }
+
+        public int Port
+        {
+            get { return ((IPEndPoint)_socket.LocalEndPoint).Port; }
+        }
     }
 }

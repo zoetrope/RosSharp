@@ -18,16 +18,12 @@ namespace RosSharp.Node
 {
     public class RosNode : INode
     {
-        private MasterClient _masterClient { get; set; }
-        //private SlaveServer _slaveServer;
+        private MasterClient _masterClient;
+        private SlaveServer _slaveServer;
 
         private string _localHostName;
 
-        internal ProxyFactory _proxyFactory
-        {
-            get;
-            set;
-        }
+        private ProxyFactory _proxyFactory;
 
         public RosNode(Uri masterUri, string localHostName)
         {
@@ -37,12 +33,25 @@ namespace RosSharp.Node
 
             _localHostName = localHostName;
 
+
+
+
+            var channel = new HttpServerChannel("slave", 0, new XmlRpcServerFormatterSinkProvider());
+            var tmp = new Uri(channel.GetChannelUri());
+            var slaveUri = new Uri("http://" + localHostName + ":" + tmp.Port + "/slave");
+
+
+            _slaveServer = new SlaveServer(slaveUri);
+
+            ChannelServices.RegisterChannel(channel, false);
+            RemotingServices.Marshal(_slaveServer, "slave");
+
         }
 
         public Subscriber<TDataType> CreateSubscriber<TDataType>(string topicName) where TDataType : IMessage, new()
         {
             var ret1 = _masterClient
-                .RegisterSubscriberAsync("/test", "chatter", "std_msgs/String", new Uri("http://192.168.11.2:11112"))
+                .RegisterSubscriberAsync("/test", "chatter", "std_msgs/String", _slaveServer.SlaveUri)
                 .First();//TODO: エラーが起きたとき
 
             var slave = new SlaveClient(ret1.First());
@@ -59,17 +68,10 @@ namespace RosSharp.Node
 
             var publisher = new Publisher<TDataType>();
 
-            var _slaveServer = new SlaveServer();
             _slaveServer.AcceptAsync().Subscribe(x => publisher.AddTopic(new RosTopic<TDataType>(x)));
 
-            var channel = new HttpServerChannel("slave", 0, new XmlRpcServerFormatterSinkProvider());
-            ChannelServices.RegisterChannel(channel, false);
-            RemotingServices.Marshal(_slaveServer, "slave");
 
-            var tmp = new Uri(channel.GetChannelUri());
-            var slaveUri = new Uri("http://" + _localHostName + ":" + tmp.Port + "/slave");
-
-            var ret1 = _masterClient.RegisterPublisherAsync("/test", "/chatter", "std_msgs/String", slaveUri).First();
+            var ret1 = _masterClient.RegisterPublisherAsync("/test", "/chatter", "std_msgs/String", _slaveServer.SlaveUri).First();
 
             
 
@@ -89,16 +91,8 @@ namespace RosSharp.Node
         public IDisposable RegisterService<TService, TRequest, TResponse>(string serviceName, Func<TRequest, TResponse> service) where TService : IService<TRequest, TResponse>, new() where TRequest : IMessage, new() where TResponse : IMessage, new()
         {
 
-            var _slaveServer = new SlaveServer();
-            _slaveServer.AcceptAsync().Subscribe(x => Console.WriteLine(x.SocketType));
-
-            var channel = new HttpServerChannel("slave", 0, new XmlRpcServerFormatterSinkProvider());
-            
-            
-            ChannelServices.RegisterChannel(channel, false);
-            RemotingServices.Marshal(_slaveServer, "slave");
-
-            var func = new Func<Stream, Stream>(stream =>
+     
+            var func = new Func<Stream, MemoryStream>(stream =>
             {
                 var req = new TRequest();
                 req.Deserialize(stream);
@@ -108,16 +102,29 @@ namespace RosSharp.Node
                 return ms;
             });
 
+            var listener = new RosTcpListener();
+            var disp = listener.AcceptAsync(0)
+                .Select(s => new RosTcpClient(s))
+                //.SelectMany(c => c.ReceiveAsync())
+                //.Subscribe(b =>
+                .Subscribe(client=> client.ReceiveAsync().Subscribe(b =>
+                {
+                    var ms = new MemoryStream(b);
+                    var res = func.Invoke(ms);
 
+                    client.SendAsync(res.ToArray()).First();
+                }));
+            
+            //TODO: Accept用のポート番号が割当たる前にRegisterServiceしてしまう？？ListenしてるからOKか。
 
             var ret1 = _masterClient
                 .RegisterServiceAsync("/test", "chatter", 
-                new Uri("rostcp://192.168.11.2:11112"),
-                new Uri("http://192.168.11.2:11112"))
-                .First();//TODO: エラーが起きたとき
+                    new Uri("rosrpc://"+ _localHostName +":" + listener.Port),
+                    _slaveServer.SlaveUri)
+                .First();
 
 
-            throw new NotImplementedException();
+            return disp;//TODO: サービス登録を解除するためのDisposableを返す。
         }
 
 
