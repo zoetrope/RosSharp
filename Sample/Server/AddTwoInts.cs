@@ -54,6 +54,7 @@ namespace Server
             public void Deserialize(Stream stream)
             {
                 var br = new BinaryReader(stream);
+                br.ReadInt32();//TODO:あとでけす
                 a = br.ReadInt64();
                 b = br.ReadInt64();
             }
@@ -82,6 +83,9 @@ namespace Server
             public void Serialize(Stream stream)
             {
                 var bw = new BinaryWriter(stream);
+
+                bw.Write((byte)1);//TODO:あとで消す
+                bw.Write(8);//TODO:あとで消す
                 bw.Write(c);
             }
 
