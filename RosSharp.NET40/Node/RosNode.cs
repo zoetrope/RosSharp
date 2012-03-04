@@ -21,25 +21,22 @@ namespace RosSharp.Node
     {
         private MasterClient _masterClient;
         private SlaveServer _slaveServer;
-
-        private string _localHostName;
-
         private ProxyFactory _proxyFactory;
 
-        public RosNode(Uri masterUri, string localHostName)
+        public string NodeId { get; set; }
+
+        public RosNode(string nodeId)
         {
-            _masterClient = new MasterClient(masterUri);
+            NodeId = nodeId;
+
+            _masterClient = new MasterClient(ROS.MasterUri);
 
             _proxyFactory = new ProxyFactory(_masterClient);
-
-            _localHostName = localHostName;
-
-
 
 
             var channel = new HttpServerChannel("slave", 0, new XmlRpcServerFormatterSinkProvider());
             var tmp = new Uri(channel.GetChannelUri());
-            var slaveUri = new Uri("http://" + localHostName + ":" + tmp.Port + "/slave");
+            var slaveUri = new Uri("http://" + ROS.LocalHostName + ":" + tmp.Port + "/slave");
 
 
             _slaveServer = new SlaveServer(slaveUri);
@@ -52,12 +49,12 @@ namespace RosSharp.Node
         public Subscriber<TDataType> CreateSubscriber<TDataType>(string topicName) where TDataType : IMessage, new()
         {
             var ret1 = _masterClient
-                .RegisterSubscriberAsync("/test", "chatter", "std_msgs/String", _slaveServer.SlaveUri)
+                .RegisterSubscriberAsync(NodeId, topicName, "std_msgs/String", _slaveServer.SlaveUri)
                 .First();//TODO: エラーが起きたとき
 
             var slave = new SlaveClient(ret1.First());
 
-            var topicParam = slave.RequestTopicAsync("/test", "/chatter", new object[1] { new string[1] { "TCPROS" } }).First();
+            var topicParam = slave.RequestTopicAsync(NodeId, topicName, new object[1] { new string[1] { "TCPROS" } }).First();
 
             var subscriber = new Subscriber<TDataType>(topicParam);
 
@@ -69,10 +66,10 @@ namespace RosSharp.Node
 
             var publisher = new Publisher<TDataType>();
 
-            _slaveServer.AcceptAsync().Subscribe(x => publisher.AddTopic(new RosTopic<TDataType>(x)));
+            _slaveServer.AcceptAsync().Subscribe(socket => publisher.AddTopic(new RosTopic<TDataType>(socket, NodeId, topicName)));
 
 
-            var ret1 = _masterClient.RegisterPublisherAsync("/test", "/chatter", "std_msgs/String", _slaveServer.SlaveUri).First();
+            var ret1 = _masterClient.RegisterPublisherAsync(NodeId, topicName, "std_msgs/String", _slaveServer.SlaveUri).First();
 
             
 
@@ -121,7 +118,7 @@ namespace RosSharp.Node
                         var dummy = new TService();
                         var header = new ServiceResponseHeader()
                         {
-                            callerid = "test",
+                            callerid = NodeId,
                             md5sum = dummy.Md5Sum,
                             service = serviceName,
                             type = dummy.ServiceType
@@ -138,8 +135,8 @@ namespace RosSharp.Node
             //TODO: Accept用のポート番号が割当たる前にRegisterServiceしてしまう？？ListenしてるからOKか。
 
             var ret1 = _masterClient
-                .RegisterServiceAsync("/test", serviceName, 
-                    new Uri("rosrpc://"+ _localHostName +":" + listener.Port),
+                .RegisterServiceAsync(NodeId, serviceName, 
+                    new Uri("rosrpc://"+ ROS.LocalHostName +":" + listener.Port),
                     _slaveServer.SlaveUri)
                 .First(); //TODO: Firstはだめ。
 

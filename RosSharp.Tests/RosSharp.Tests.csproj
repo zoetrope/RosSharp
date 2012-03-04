@@ -65,6 +65,9 @@
     <Compile Include="ChainingAssertion.MSTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Master\MasterClientTest.cs" />
+    <Compile Include="Topic\PublisherTest.cs" />
+    <Compile Include="Topic\RosTopicTest.cs" />
+    <Compile Include="Topic\SubscriberTest.cs" />
     <Compile Include="Transport\RosTcpClientTest.cs" />
     <Compile Include="Slave\SlaveClientTest.cs" />
     <Compile Include="Transport\TcpRosHeaderTest.cs" />
@@ -85,7 +88,6 @@
     <Folder Include="Node\" />
     <Folder Include="Parameter\" />
     <Folder Include="Service\" />
-    <Folder Include="Topic\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

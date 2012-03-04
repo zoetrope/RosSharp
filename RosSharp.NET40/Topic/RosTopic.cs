@@ -9,10 +9,16 @@ namespace RosSharp.Topic
 {
     public class RosTopic<TDataType> where TDataType:IMessage, new()
     {
-        private RosTcpClient _tcpClient;
+        private readonly RosTcpClient _tcpClient;
 
-        public RosTopic(Socket socket)
+        public string NodeId { get; set; }
+        public string TopicName { get; set; }
+
+        public RosTopic(Socket socket, string nodeId, string topicName)
         {
+            NodeId = nodeId;
+            TopicName = topicName;
+
             _tcpClient = new RosTcpClient(socket);
 
             _tcpClient.ReceiveAsync()
@@ -22,8 +28,6 @@ namespace RosSharp.Topic
 
         protected void OnReceiveHeader(byte[] data)
         {
-            Console.WriteLine(data.Length);
-
             var s = new TcpRosHeaderSerializer<SubscriberHeader>();
             var h = s.Deserialize(new MemoryStream(data));
 
@@ -31,11 +35,11 @@ namespace RosSharp.Topic
 
             var header = new SubscriberResponseHeader()
             {
-                callerid = "/test",
+                callerid = NodeId,
                 latching = "0",
                 md5sum = temp.Md5Sum,
                 message_definition = temp.MessageDefinition,
-                topic = "/chatter",
+                topic = TopicName,
                 type = temp.MessageType
             };
 
@@ -48,12 +52,11 @@ namespace RosSharp.Topic
 
         }
 
-        public void Send(TDataType data)
+        public IObservable<SocketAsyncEventArgs> SendAsync(TDataType data)
         {
             var ms = new MemoryStream();
             data.Serialize(ms);
-            var array = ms.ToArray();
-            _tcpClient.SendAsync(ms.ToArray()).First();
+            return _tcpClient.SendAsync(ms.ToArray());
         }
     }
 }

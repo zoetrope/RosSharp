@@ -10,30 +10,30 @@ namespace RosSharp
 {
     public class ROS
     {
-        private static Uri _masterUri;
-        private static string _localHostName;
+        public static Uri MasterUri { get; private set; }
+        public static string LocalHostName { get; private set; }
 
         public static void Initialize(Uri masterUri = null, string localHostName = null)
         {
             if(masterUri == null)
             {
-                _masterUri = new Uri("localhost:11311");
+                MasterUri = new Uri("localhost:11311");
             }
             else
             {
-                _masterUri = masterUri;
+                MasterUri = masterUri;
             }
 
             if (string.IsNullOrEmpty(localHostName))
             {
-                _localHostName = Dns.GetHostName();
+                LocalHostName = Dns.GetHostName();
                 //var ipaddresses = Observable.FromAsyncPattern<string, IPAddress[]>(
                 //Dns.BeginGetHostAddresses, Dns.EndGetHostAddresses).Invoke(Dns.GetHostName()).First();
-                //_localHostName = ipaddresses.First();
+                //LocalHostName = ipaddresses.First();
             }
             else
             {
-                _localHostName = localHostName;
+                LocalHostName = localHostName;
             }
 
 
@@ -41,9 +41,9 @@ namespace RosSharp
             
         }
 
-        public static INode CreateNode()
+        public static INode CreateNode(string nodeName)
         {
-            return new RosNode(_masterUri, _localHostName);
+            return new RosNode(nodeName);
         }
 
     }
