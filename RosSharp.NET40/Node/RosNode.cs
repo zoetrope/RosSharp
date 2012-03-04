@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
@@ -88,60 +89,17 @@ namespace RosSharp.Node
 
         public IDisposable RegisterService<TService, TRequest, TResponse>(string serviceName, Func<TRequest, TResponse> service) where TService : IService<TRequest, TResponse>, new() where TRequest : IMessage, new() where TResponse : IMessage, new()
         {
-            var func = new Func<Stream, MemoryStream>(stream =>
-            {
-                var req = new TRequest();
-                req.Deserialize(stream);
-                var res = service(req);
-                var ms = new MemoryStream();
-                res.Serialize(ms);
-                return ms;
-            });
-
-            var listener = new RosTcpListener();
-            var disp = listener.AcceptAsync(0)
-                .Select(s => new RosTcpClient(s))
-                //.SelectMany(c => c.ReceiveAsync())
-                //.Subscribe(b =>
-                .Subscribe(client=> client.ReceiveAsync().Subscribe(b =>
-                {
-                    if (b.Length == 20)//TODO:これはひどい
-                    {
-                        //TODO: 先にヘッダを処理しないと。
-                        var ms = new MemoryStream(b);
-                        var res = func.Invoke(ms);
-                        var array = res.ToArray();
-                        client.SendAsync(array).First();
-                    }
-                    else
-                    {
-                        var dummy = new TService();
-                        var header = new ServiceResponseHeader()
-                        {
-                            callerid = NodeId,
-                            md5sum = dummy.Md5Sum,
-                            service = serviceName,
-                            type = dummy.ServiceType
-                        };
-
-                        var headerSerializer = new TcpRosHeaderSerializer<ServiceResponseHeader>();
-                        var ms = new MemoryStream();
-                        headerSerializer.Serialize(ms, header);
-                        client.SendAsync(ms.ToArray()).First();
-
-                    }
-                }));
-            
-            //TODO: Accept用のポート番号が割当たる前にRegisterServiceしてしまう？？ListenしてるからOKか。
+            var serviceServer = new ServiceServer<TService, TRequest, TResponse>(NodeId);
+            serviceServer.RegisterService(serviceName, service);
 
             var ret1 = _masterClient
                 .RegisterServiceAsync(NodeId, serviceName, 
-                    new Uri("rosrpc://"+ ROS.LocalHostName +":" + listener.Port),
+                    new Uri("rosrpc://"+ ROS.LocalHostName +":" + serviceServer.Port),
                     _slaveServer.SlaveUri)
                 .First(); //TODO: Firstはだめ。
 
 
-            return disp;//TODO: サービス登録を解除するためのDisposableを返す。
+            return Disposable.Empty;//TODO: サービス登録を解除するためのDisposableを返す。
         }
 
 

@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Service\ProxyFactory.cs" />
+    <Compile Include="Service\ServiceServer.cs" />
     <Compile Include="Transport\AsyncSocketExtensions.cs" />
     <Compile Include="Master\IMaster.cs" />
     <Compile Include="Node\INode.cs" />

@@ -52,6 +52,8 @@ namespace RosSharp.Topic
 
         }
 
+        //TODO: 受信処理も作って、Subscriberから参照させる
+
         public IObservable<SocketAsyncEventArgs> SendAsync(TDataType data)
         {
             var ms = new MemoryStream();
