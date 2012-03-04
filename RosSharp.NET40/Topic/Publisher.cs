@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reactive.Linq;
 using RosSharp.Message;
 
 namespace RosSharp.Topic
@@ -24,7 +25,8 @@ namespace RosSharp.Topic
 
         public void OnNext(TDataType value)
         {
-            _rosTopics.ForEach(x => x.Send(value));
+            //TODO: SendAsyncは別スレッドで動かすほうが良い
+            _rosTopics.ForEach(x => x.SendAsync(value).First());
         }
 
         public void OnError(Exception error)

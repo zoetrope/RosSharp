@@ -15,7 +15,7 @@ namespace Talker
         {
             ROS.Initialize(new Uri("http://192.168.11.4:11311/"), "192.168.11.3");
 
-            var node = ROS.CreateNode();
+            var node = ROS.CreateNode("Talker");
 
             var publisher = node.CreatePublisher<RosSharp.StdMsgs.String>("chatter");
 
