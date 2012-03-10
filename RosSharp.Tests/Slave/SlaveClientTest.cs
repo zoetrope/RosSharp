@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Reactive.Linq;
 using CookComputing.XmlRpc.Moles;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -10,12 +11,19 @@ namespace RosSharp.Tests.Slave
     [TestClass]
     public class SlaveClientTest
     {
+        [TestMethod]
+        public  void TestTest()
+        {
+            Console.WriteLine(1);
+            Debugger.Launch();
+        }
 
 
         [TestMethod]
         [HostType("Moles")]
         public void GetBusInfo_Success()
         {
+            
             var result = new object[3]
             {
                 1,
@@ -66,11 +74,12 @@ namespace RosSharp.Tests.Slave
 
             MXmlRpcClientProtocol.AllInstances.UrlSetString = (t1, t2) => { };
             MSlaveProxy.AllInstances.BeginGetMasterUriStringAsyncCallbackObject = (t1, t2, t3, t4) => { t3(null); return null; };
-            MSlaveProxy.AllInstances.EndGetBusInfoIAsyncResult = (t1, t2) => result;
+            MSlaveProxy.AllInstances.EndGetMasterUriIAsyncResult= (t1, t2) => result;
 
             var client = new SlaveClient(new Uri("http://localhost"));
 
-            client.GetMasterUriAsync("/test").First().Is(new Uri("http://localhost:11311"));
+            var uri = client.GetMasterUriAsync("/test").First();
+            uri.Is(new Uri("http://localhost:11311"));
         }
 
 
@@ -141,6 +150,67 @@ namespace RosSharp.Tests.Slave
 
             var topics = client.RequestTopicAsync("/test", "/chatter", new object[1] { new string[1] { "TCPROS" } }).First();
 
+        }
+
+
+        [TestMethod]
+        [HostType("Moles")]
+        public void GetPublications_Success()
+        {
+            var result = new object[3]
+            {
+                1,
+                "success",
+                new string[2][]{
+                    new string[2]
+                    {
+                        "/rosout",
+                        "rosgraph_msgs/Log"
+                    },
+                    new string[2]
+                    {
+                        "/chatter",
+                        "std_msgs/String"
+                    }
+                }
+            };
+
+            MXmlRpcClientProtocol.AllInstances.UrlSetString = (t1, t2) => { };
+            MSlaveProxy.AllInstances.BeginGetPublicationsStringAsyncCallbackObject = (t1, t2, t3, t4) => { t3(null); return null; };
+            MSlaveProxy.AllInstances.EndGetPublicationsIAsyncResult = (t1, t2) => result;
+
+            var client = new SlaveClient(new Uri("http://localhost"));
+
+            var subs = client.GetPublicationsAsync("/test").First();
+
+            subs.Count.Is(2);
+            subs[0].Name.Is("/rosout");
+            subs[0].Type.Is("rosgraph_msgs/Log");
+
+            subs[1].Name.Is("/chatter");
+            subs[1].Type.Is("std_msgs/String");
+        }
+
+        [TestMethod]
+        [HostType("Moles")]
+        public void GetPublications_Empty()
+        {
+            var result = new object[3]
+            {
+                1,
+                "success",
+                new object[0]
+            };
+
+            MXmlRpcClientProtocol.AllInstances.UrlSetString = (t1, t2) => { };
+            MSlaveProxy.AllInstances.BeginGetPublicationsStringAsyncCallbackObject = (t1, t2, t3, t4) =>{t3(null);return null;};
+            MSlaveProxy.AllInstances.EndGetPublicationsIAsyncResult = (t1, t2) => result;
+
+            var client = new SlaveClient(new Uri("http://localhost"));
+
+            var subs = client.GetPublicationsAsync("/test").First();
+
+            subs.Count.Is(0);
         }
     }
 }

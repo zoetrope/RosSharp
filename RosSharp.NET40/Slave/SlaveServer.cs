@@ -1,24 +1,32 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Sockets;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Http;
 using CookComputing.XmlRpc;
+using RosSharp.Topic;
 using RosSharp.Transport;
 
 namespace RosSharp.Slave
 {
     public class SlaveServer : MarshalByRefObject, ISlave
     {
-        private RosTcpListener _listener;
+        private TopicContainer _topicContainer;
+
+
         public Uri SlaveUri { get; set; }
 
-        public SlaveServer(Uri uri)
+        public SlaveServer(Uri uri, TopicContainer topicContainer)
         {
+            _topicContainer = topicContainer;
+
             _listener = new RosTcpListener();
             SlaveUri = uri;
         }
 
+        //TODO: ここにあるべきではないコード
+        private RosTcpListener _listener;
         public IObservable<Socket> AcceptAsync()
         {
             return _listener.AcceptAsync(0);
@@ -57,12 +65,22 @@ namespace RosSharp.Slave
 
         public object[] GetSubscriptions(string callerId)
         {
-            throw new NotImplementedException();
+            return new object[]
+            {
+                1,
+                "Success",
+                _topicContainer.GetSubscribers().Select(x => new object[] {x.Name, x.Type}).ToArray()
+            };
         }
 
         public object[] GetPublications(string callerId)
         {
-            throw new NotImplementedException();
+            return new object[]
+            {
+                1,
+                "Success",
+                _topicContainer.GetPublishers().Select(x => new object[] {x.Name, x.Type}).ToArray()
+            };
         }
 
         public object[] ParamUpdate(string callerId, string parameterKey, object parameterValue)

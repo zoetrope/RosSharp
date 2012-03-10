@@ -13,12 +13,12 @@ namespace RosSharp.Topic
         {
         }
 
-        public GraphName TopicName
+        public string Name
         {
             get { throw new NotImplementedException(); }
         }
 
-        public string TopicMessageType
+        public string Type
         {
             get { throw new NotImplementedException(); }
         }

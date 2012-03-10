@@ -10,6 +10,7 @@ namespace RosSharp
 {
     public class ROS
     {
+        //TODO: staticではなく、インスタンスを作るべきか？
         public static Uri MasterUri { get; private set; }
         public static string LocalHostName { get; private set; }
 

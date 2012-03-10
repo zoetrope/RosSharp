@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Linq;
+using RosSharp.Topic;
 
 namespace RosSharp.Slave
 {
@@ -51,18 +54,22 @@ namespace RosSharp.Slave
                 .Select(ret => (int)ret[2]);
         }
 
-        public IObservable<object[]> GetSubscriptionsAsync(string callerId)
+        public IObservable<List<TopicInfo>> GetSubscriptionsAsync(string callerId)
         {
-            return Observable.FromAsyncPattern<string, object[]>(_proxy.BeginGetSubscriptions, _proxy.EndGetSubscriptions)
+            return Observable.FromAsyncPattern<string, object[]>(_proxy.BeginGetSubscriptions,_proxy.EndGetSubscriptions)
                 .Invoke(callerId)
-                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); });
+                .Do(ret => { if ((int) ret[0] != 1) throw new InvalidOperationException((string) ret[1]); })
+                .Select(ret => ((string[][]) ret[2])
+                    .Select(x => new TopicInfo() { Name = (string)x[0], Type = (string)x[1] }).ToList());
         }
 
-        public IObservable<object[]> GetPublicationsAsync(string callerId)
+        public IObservable<List<TopicInfo>> GetPublicationsAsync(string callerId)
         {
-            return Observable.FromAsyncPattern<string, object[]>(_proxy.BeginGetPublications, _proxy.EndGetPublications)
+            return Observable.FromAsyncPattern<string, object[]>(_proxy.BeginGetPublications,_proxy.EndGetPublications)
                 .Invoke(callerId)
-                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); });
+                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
+                .Select(ret => ((object[])ret[2])
+                    .Select(x => new TopicInfo() { Name = ((string[])x)[0], Type = ((string[])x)[1] }).ToList());
         }
 
         public IObservable<int> ParamUpdateAsync(string callerId, string parameterKey, object parameterValue)
@@ -115,5 +122,11 @@ namespace RosSharp.Slave
         public string ProtocolName { get; set; }
         public string HostName { get; set; }
         public int PortNumber { get; set; }
+    }
+
+    public class TopicInfo : ITopic
+    {
+        public string Name { get; set; }
+        public string Type { get; set; }
     }
 }

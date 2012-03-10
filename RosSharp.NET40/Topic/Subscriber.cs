@@ -7,8 +7,11 @@ using RosSharp.Transport;
 
 namespace RosSharp.Topic
 {
-    public class Subscriber<TDataType> : ITopic, IObservable<TDataType> where TDataType : IMessage, new ()
+    public class Subscriber<TDataType> : ITopic, IObservable<TDataType> 
+        where TDataType : IMessage, new ()
     {
+        
+
         private RosTcpClient _tcpClient;
         public Subscriber(TopicParam param)
         {
@@ -16,6 +19,8 @@ namespace RosSharp.Topic
             var ret = _tcpClient.ConnectAsync(param.HostName, param.PortNumber).First();
 
             var headerSerializer = new TcpRosHeaderSerializer<SubscriberResponseHeader>();
+
+            //TODO: RosTopicに委譲
 
             _tcpClient.ReceiveAsync()
                 .Take(1)
@@ -42,12 +47,12 @@ namespace RosSharp.Topic
             _tcpClient.SendAsync(data).First();
         }
         
-        public GraphName TopicName
+        public string Name
         {
             get { throw new NotImplementedException(); }
         }
 
-        public string TopicMessageType
+        public string Type
         {
             get { throw new NotImplementedException(); }
         }

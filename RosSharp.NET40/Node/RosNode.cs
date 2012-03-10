@@ -39,8 +39,8 @@ namespace RosSharp.Node
             var tmp = new Uri(channel.GetChannelUri());
             var slaveUri = new Uri("http://" + ROS.LocalHostName + ":" + tmp.Port + "/slave");
 
-
-            _slaveServer = new SlaveServer(slaveUri);
+            var topicContainer = new TopicContainer();
+            _slaveServer = new SlaveServer(slaveUri,topicContainer);
 
             ChannelServices.RegisterChannel(channel, false);
             RemotingServices.Marshal(_slaveServer, "slave");
@@ -49,11 +49,13 @@ namespace RosSharp.Node
 
         public Subscriber<TDataType> CreateSubscriber<TDataType>(string topicName) where TDataType : IMessage, new()
         {
-            var ret1 = _masterClient
-                .RegisterSubscriberAsync(NodeId, topicName, "std_msgs/String", _slaveServer.SlaveUri)
+            var dummy = new TDataType();
+
+            var uri = _masterClient
+                .RegisterSubscriberAsync(NodeId, topicName, dummy.MessageType, _slaveServer.SlaveUri)
                 .First();//TODO: エラーが起きたとき
 
-            var slave = new SlaveClient(ret1.First());
+            var slave = new SlaveClient(uri.First());
 
             var topicParam = slave.RequestTopicAsync(NodeId, topicName, new object[1] { new string[1] { "TCPROS" } }).First();
 

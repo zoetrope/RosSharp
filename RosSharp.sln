@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RosSharp.SL5", "RosSharp.SL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RosSharp.WP7", "RosSharp.WP7\RosSharp.WP7.csproj", "{02FFC217-A5A3-4898-AC2C-7CDA42A1FD2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RosSharp.Tests", "RosSharp.Tests\RosSharp.Tests.csproj", "{E9C21C7C-D36E-416A-81EB-5EE719ACFDA1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RosSharp.NET40.Tests", "RosSharp.Tests\RosSharp.NET40.Tests.csproj", "{E9C21C7C-D36E-416A-81EB-5EE719ACFDA1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E79A87AA-9AFE-4941-A389-E300CFDBC41D}"
 	ProjectSection(SolutionItems) = preProject
