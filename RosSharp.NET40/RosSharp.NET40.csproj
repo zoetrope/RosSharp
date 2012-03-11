@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Service\ProxyFactory.cs" />
     <Compile Include="Service\ServiceServer.cs" />
+    <Compile Include="Topic\RosTopicServer.cs" />
     <Compile Include="Topic\TopicContainer.cs" />
     <Compile Include="Transport\AsyncSocketExtensions.cs" />
     <Compile Include="Master\IMaster.cs" />

@@ -20,9 +20,11 @@ namespace RosSharp.Node
 {
     public class RosNode : INode
     {
-        private MasterClient _masterClient;
-        private SlaveServer _slaveServer;
-        private ProxyFactory _proxyFactory;
+        private readonly MasterClient _masterClient;
+        private readonly SlaveServer _slaveServer;
+        private readonly ProxyFactory _proxyFactory;
+        private readonly RosTopicServer _rosTopicServer;
+        private readonly TopicContainer _topicContainer;
 
         public string NodeId { get; set; }
 
@@ -31,23 +33,16 @@ namespace RosSharp.Node
             NodeId = nodeId;
 
             _masterClient = new MasterClient(ROS.MasterUri);
-
+            
             _proxyFactory = new ProxyFactory(_masterClient);
 
-
-            var channel = new HttpServerChannel("slave", 0, new XmlRpcServerFormatterSinkProvider());
-            var tmp = new Uri(channel.GetChannelUri());
-            var slaveUri = new Uri("http://" + ROS.LocalHostName + ":" + tmp.Port + "/slave");
-
-            var topicContainer = new TopicContainer();
-            _slaveServer = new SlaveServer(slaveUri,topicContainer);
-
-            ChannelServices.RegisterChannel(channel, false);
-            RemotingServices.Marshal(_slaveServer, "slave");
-
+            _topicContainer = new TopicContainer();
+            _rosTopicServer = new RosTopicServer();
+            _slaveServer = new SlaveServer(_topicContainer, _rosTopicServer);
         }
 
-        public Subscriber<TDataType> CreateSubscriber<TDataType>(string topicName) where TDataType : IMessage, new()
+        public Subscriber<TDataType> CreateSubscriber<TDataType>(string topicName) 
+            where TDataType : IMessage, new()
         {
             var dummy = new TDataType();
 
@@ -59,22 +54,25 @@ namespace RosSharp.Node
 
             var topicParam = slave.RequestTopicAsync(NodeId, topicName, new object[1] { new string[1] { "TCPROS" } }).First();
 
-            var subscriber = new Subscriber<TDataType>(topicParam);
+            var subscriber = new Subscriber<TDataType>(topicName, topicParam);
+
+            _topicContainer.AddSubscriber(subscriber);
 
             return subscriber;
         }
         
-        public Publisher<TDataType> CreatePublisher<TDataType>(string topicName) where TDataType : IMessage, new()
+        public Publisher<TDataType> CreatePublisher<TDataType>(string topicName) 
+            where TDataType : IMessage, new()
         {
 
-            var publisher = new Publisher<TDataType>();
+            var publisher = new Publisher<TDataType>(topicName);
 
-            _slaveServer.AcceptAsync().Subscribe(socket => publisher.AddTopic(new RosTopic<TDataType>(socket, NodeId, topicName)));
+            _rosTopicServer.AcceptAsync().Subscribe(socket => publisher.AddTopic(new RosTopic<TDataType>(socket, NodeId, topicName)));
 
 
-            var ret1 = _masterClient.RegisterPublisherAsync(NodeId, topicName, "std_msgs/String", _slaveServer.SlaveUri).First();
+            var ret1 = _masterClient.RegisterPublisherAsync(NodeId, topicName, publisher.Type, _slaveServer.SlaveUri).First();
 
-            
+            _topicContainer.AddPublisher(publisher);
 
             return publisher;
         }
@@ -89,7 +87,10 @@ namespace RosSharp.Node
 
         private Dictionary<string, Func<Stream, Stream>> _services = new Dictionary<string, Func<Stream, Stream>>();
 
-        public IDisposable RegisterService<TService, TRequest, TResponse>(string serviceName, Func<TRequest, TResponse> service) where TService : IService<TRequest, TResponse>, new() where TRequest : IMessage, new() where TResponse : IMessage, new()
+        public IDisposable RegisterService<TService, TRequest, TResponse>(string serviceName, Func<TRequest, TResponse> service) 
+            where TService : IService<TRequest, TResponse>, new() 
+            where TRequest : IMessage, new() 
+            where TResponse : IMessage, new()
         {
             var serviceServer = new ServiceServer<TService, TRequest, TResponse>(NodeId);
             serviceServer.RegisterService(serviceName, service);

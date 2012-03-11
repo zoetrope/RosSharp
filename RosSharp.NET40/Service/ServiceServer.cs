@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reactive.Linq;
 using System.Text;
 using RosSharp.Message;
@@ -22,9 +23,9 @@ namespace RosSharp.Service
 
         private RosTcpListener _listener;
 
-        public int Port
+        public IPEndPoint Port
         {
-            get { return _listener.Port; }
+            get { return _listener.EndPoint; }
         }
 
         public ServiceServer(string nodeId)
@@ -36,8 +37,8 @@ namespace RosSharp.Service
         {
             _service = service;
 
-            _listener = new RosTcpListener();
-            var disp = _listener.AcceptAsync(0)
+            _listener = new RosTcpListener(0);
+            var disp = _listener.AcceptAsync()
                 .Select(s => new RosTcpClient(s))
                 //.SelectMany(c => c.ReceiveAsync())
                 //.Subscribe(b =>

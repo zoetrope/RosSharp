@@ -5,23 +5,21 @@ using RosSharp.Message;
 
 namespace RosSharp.Topic
 {
-    public class Publisher<TDataType> : ITopic, IObserver<TDataType> where TDataType : IMessage, new()
+    public class Publisher<TDataType> : IPublisher, IObserver<TDataType> where TDataType : IMessage, new()
     {
         private List<RosTopic<TDataType>> _rosTopics = new List<RosTopic<TDataType>>();
 
-        public Publisher()
+        public Publisher(string name)
         {
+            var dummy = new TDataType();
+
+            Name = name;
+            Type = dummy.MessageType;
         }
 
-        public string Name
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public string Name { get; private set; }
 
-        public string Type
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public string Type { get; private set; }
 
         public void OnNext(TDataType value)
         {

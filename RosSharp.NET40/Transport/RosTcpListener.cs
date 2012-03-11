@@ -5,11 +5,11 @@ using System.Reactive.Linq;
 
 namespace RosSharp.Transport
 {
-    class RosTcpListener
+    public class RosTcpListener
     {
         private Socket _socket;
 
-        public IObservable<Socket> AcceptAsync(int portNumber)
+        public RosTcpListener(int portNumber)
         {
             var hostEntry = new IPEndPoint(IPAddress.Any, portNumber);
 
@@ -17,18 +17,20 @@ namespace RosSharp.Transport
 
             _socket.Bind(hostEntry);
             _socket.Listen(50);
-
-            return Observable.Create<Socket>(
-                observer => _socket
-                    .AcceptAsObservable(hostEntry)
-                    .Select(x => x.AcceptSocket)
-                    .Subscribe(observer));
-
         }
 
-        public int Port
+        public IObservable<Socket> AcceptAsync()
         {
-            get { return ((IPEndPoint)_socket.LocalEndPoint).Port; }
+            return Observable.Create<Socket>(
+                observer => _socket
+                    .AcceptAsObservable(_socket.LocalEndPoint)
+                    .Select(x => x.AcceptSocket)
+                    .Subscribe(observer));
+        }
+
+        public IPEndPoint EndPoint
+        {
+            get { return (IPEndPoint)_socket.LocalEndPoint; }
         }
     }
 }

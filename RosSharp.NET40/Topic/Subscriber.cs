@@ -7,14 +7,18 @@ using RosSharp.Transport;
 
 namespace RosSharp.Topic
 {
-    public class Subscriber<TDataType> : ITopic, IObservable<TDataType> 
+    public class Subscriber<TDataType> : ISubscriber, IObservable<TDataType> 
         where TDataType : IMessage, new ()
     {
         
 
         private RosTcpClient _tcpClient;
-        public Subscriber(TopicParam param)
+        public Subscriber(string name, TopicParam param)
         {
+            Name = name;
+            var dummy = new TDataType();
+            Type = dummy.MessageType;
+
             _tcpClient = new RosTcpClient();
             var ret = _tcpClient.ConnectAsync(param.HostName, param.PortNumber).First();
 
@@ -27,14 +31,14 @@ namespace RosSharp.Topic
                 .Select(x => headerSerializer.Deserialize(new MemoryStream(x)))
                 .Subscribe(x => Console.WriteLine(x.topic + "/" + x.type));
 
-            var msg = new TDataType();
+            
 
             var header = new SubscriberHeader()
             {
                 callerid = "test",
                 topic = "/chatter",
-                md5sum = msg.Md5Sum,
-                type = msg.MessageType
+                md5sum = dummy.Md5Sum,
+                type = dummy.MessageType
             };
 
             var serializer = new TcpRosHeaderSerializer<SubscriberHeader>();
@@ -46,15 +50,13 @@ namespace RosSharp.Topic
 
             _tcpClient.SendAsync(data).First();
         }
-        
-        public string Name
-        {
-            get { throw new NotImplementedException(); }
-        }
 
-        public string Type
+        public string Name { get; private set; }
+
+        public string Type { get; private set; }
+        public void UpdatePublishers()
         {
-            get { throw new NotImplementedException(); }
+            throw new NotImplementedException();
         }
 
         public IDisposable Subscribe(IObserver<TDataType> observer)
