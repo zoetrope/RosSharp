@@ -63,14 +63,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChainingAssertion.MSTest.cs" />
+    <Compile Include="Master\MasterServerTest.cs" />
+    <Compile Include="Node\RosNodeTest.cs" />
+    <Compile Include="Parameter\ParameterClientTest.cs" />
+    <Compile Include="Parameter\ParameterServerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Master\MasterClientTest.cs" />
+    <Compile Include="Service\ProxyFactoryTest.cs" />
+    <Compile Include="Service\ServiceServerTest.cs" />
     <Compile Include="Slave\SlaveServerTest.cs" />
     <Compile Include="Topic\PublisherTest.cs" />
-    <Compile Include="Topic\RosTopicTest.cs" />
+    <Compile Include="Topic\RosTopicClientTest.cs" />
+    <Compile Include="Topic\RosTopicServerTest.cs" />
     <Compile Include="Topic\SubscriberTest.cs" />
+    <Compile Include="Topic\TopicContainerTest.cs" />
     <Compile Include="Transport\RosTcpClientTest.cs" />
     <Compile Include="Slave\SlaveClientTest.cs" />
+    <Compile Include="Transport\RosTcpListenerTest.cs" />
     <Compile Include="Transport\TcpRosHeaderTest.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -85,11 +94,7 @@
       <Name>RosSharp.NET40</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Node\" />
-    <Folder Include="Parameter\" />
-    <Folder Include="Service\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -10,15 +10,18 @@ namespace RosSharp.Topic
     public class Subscriber<TDataType> : ISubscriber, IObservable<TDataType> 
         where TDataType : IMessage, new ()
     {
-        
-
         private RosTcpClient _tcpClient;
-        public Subscriber(string name, TopicParam param)
+        public Subscriber(string name, string nodeId)
         {
             Name = name;
             var dummy = new TDataType();
             Type = dummy.MessageType;
 
+            NodeId = nodeId;
+        }
+
+        public void Connect(TopicParam param)
+        {
             _tcpClient = new RosTcpClient();
             var ret = _tcpClient.ConnectAsync(param.HostName, param.PortNumber).First();
 
@@ -31,12 +34,11 @@ namespace RosSharp.Topic
                 .Select(x => headerSerializer.Deserialize(new MemoryStream(x)))
                 .Subscribe(x => Console.WriteLine(x.topic + "/" + x.type));
 
-            
-
+            var dummy = new TDataType();
             var header = new SubscriberHeader()
             {
-                callerid = "test",
-                topic = "/chatter",
+                callerid = NodeId,
+                topic = Name,
                 md5sum = dummy.Md5Sum,
                 type = dummy.MessageType
             };
@@ -51,6 +53,7 @@ namespace RosSharp.Topic
             _tcpClient.SendAsync(data).First();
         }
 
+        public string NodeId { get; private set; }
         public string Name { get; private set; }
 
         public string Type { get; private set; }

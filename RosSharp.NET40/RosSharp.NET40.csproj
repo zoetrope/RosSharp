@@ -56,8 +56,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Master\RegistrationContainer.cs" />
     <Compile Include="Service\ProxyFactory.cs" />
     <Compile Include="Service\ServiceServer.cs" />
+    <Compile Include="Topic\IPublisher.cs" />
+    <Compile Include="Topic\ISubscriber.cs" />
     <Compile Include="Topic\RosTopicServer.cs" />
     <Compile Include="Topic\TopicContainer.cs" />
     <Compile Include="Transport\AsyncSocketExtensions.cs" />
@@ -78,7 +81,7 @@
     <Compile Include="ROS.cs" />
     <Compile Include="Node\RosNode.cs" />
     <Compile Include="Transport\RosTcpListener.cs" />
-    <Compile Include="Topic\RosTopic.cs" />
+    <Compile Include="Topic\RosTopicClient.cs" />
     <Compile Include="Slave\SlaveClient.cs" />
     <Compile Include="Slave\SlaveServer.cs" />
     <Compile Include="Message\IMessage.cs" />

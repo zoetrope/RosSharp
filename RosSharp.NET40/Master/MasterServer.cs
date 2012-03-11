@@ -1,13 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting;
+using System.Runtime.Remoting.Channels;
+using System.Runtime.Remoting.Channels.Http;
 using System.Text;
+using CookComputing.XmlRpc;
 using RosSharp.Master;
 
 namespace RosSharp.Master
 {
     public class MasterServer : MarshalByRefObject, IMaster
     {
+        private RegistrationContainer _registrationContainer;
+
+
+        public Uri MasterUri { get; private set; }
+
+        public MasterServer(int portNumber)
+        {
+            _registrationContainer = new RegistrationContainer();
+
+            //var channel = new HttpServerChannel("master", portNumber, new XmlRpcServerFormatterSinkProvider());
+            var channel = new HttpServerChannel("master", portNumber, new XmlRpcServerFormatterSinkProvider());
+            
+            var tmp = new Uri(channel.GetChannelUri());
+
+            MasterUri = new Uri("http://" + ROS.LocalHostName + ":" + tmp.Port);
+
+            ChannelServices.RegisterChannel(channel, false);
+            RemotingServices.Marshal(this, "/");
+
+
+        }
+
         public override object InitializeLifetimeService()
         {
             return null;
@@ -25,7 +51,14 @@ namespace RosSharp.Master
 
         public object[] RegisterSubscriber(string callerId, string topic, string topicType, string callerApi)
         {
-            throw new NotImplementedException();
+            var uris = _registrationContainer.RegsiterSubscriber(topic, topicType, callerApi);
+
+            return new object[3]
+            {
+                1,
+                "Subscribed to [" + topic + "]",
+                uris.Select(x => x.ToString()).ToArray()
+            };
         }
 
         public object[] UnregisterSubscriber(string callerId, string topic, string callerApi)
@@ -35,7 +68,14 @@ namespace RosSharp.Master
 
         public object[] RegisterPublisher(string callerId, string topic, string topicType, string callerApi)
         {
-            throw new NotImplementedException();
+            var uris = _registrationContainer.RegisterPublisher(topic, topicType, callerApi);
+
+            return new object[3]
+            {
+                1,
+                "Registered [" + callerId + "] as publisher of [" + topic + "]",
+                uris.Select(x => x.ToString()).ToArray()
+            };
         }
 
         public object[] UnregisterPublisher(string callerId, string topic, string callerApi)
@@ -67,5 +107,10 @@ namespace RosSharp.Master
         {
             throw new NotImplementedException();
         }
+    }
+
+    public class PublisherInfo
+    {
+        
     }
 }

@@ -7,7 +7,7 @@ using System.Reactive.Subjects;
 
 namespace RosSharp.Transport
 {
-    public class RosTcpClient
+    public class RosTcpClient : IDisposable
     {
         private Socket _socket;
 
@@ -20,7 +20,10 @@ namespace RosSharp.Transport
             _socket = socket;
         }
 
-
+        public void Dispose()
+        {
+            _socket.Close(1000);
+        }
 
         public IObservable<SocketAsyncEventArgs> ConnectAsync(string hostName, int portNumber)
         {
@@ -117,5 +120,7 @@ namespace RosSharp.Transport
 
             return true;
         }
+
+        
     }
 }

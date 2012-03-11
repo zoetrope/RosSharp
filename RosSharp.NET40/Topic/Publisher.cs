@@ -7,15 +7,19 @@ namespace RosSharp.Topic
 {
     public class Publisher<TDataType> : IPublisher, IObserver<TDataType> where TDataType : IMessage, new()
     {
-        private List<RosTopic<TDataType>> _rosTopics = new List<RosTopic<TDataType>>();
+        private List<RosTopicClient<TDataType>> _rosTopics = new List<RosTopicClient<TDataType>>();
 
-        public Publisher(string name)
+        public Publisher(string name, string nodeId)
         {
             var dummy = new TDataType();
 
             Name = name;
             Type = dummy.MessageType;
+
+            NodeId = nodeId;
         }
+
+        public string NodeId { get; private set; }
 
         public string Name { get; private set; }
 
@@ -37,9 +41,9 @@ namespace RosSharp.Topic
             
         }
 
-        internal void AddTopic(RosTopic<TDataType> rosTopic)
+        internal void AddTopic(RosTopicClient<TDataType> rosTopicClient)
         {
-            _rosTopics.Add(rosTopic);
+            _rosTopics.Add(rosTopicClient);
         }
     }
 }

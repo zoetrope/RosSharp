@@ -38,7 +38,7 @@ namespace RosSharp.Node
 
             _topicContainer = new TopicContainer();
             _rosTopicServer = new RosTopicServer();
-            _slaveServer = new SlaveServer(_topicContainer, _rosTopicServer);
+            _slaveServer = new SlaveServer(0, _topicContainer, _rosTopicServer);
         }
 
         public Subscriber<TDataType> CreateSubscriber<TDataType>(string topicName) 
@@ -54,7 +54,8 @@ namespace RosSharp.Node
 
             var topicParam = slave.RequestTopicAsync(NodeId, topicName, new object[1] { new string[1] { "TCPROS" } }).First();
 
-            var subscriber = new Subscriber<TDataType>(topicName, topicParam);
+            var subscriber = new Subscriber<TDataType>(topicName, NodeId);
+            subscriber.Connect(topicParam);
 
             _topicContainer.AddSubscriber(subscriber);
 
@@ -65,9 +66,9 @@ namespace RosSharp.Node
             where TDataType : IMessage, new()
         {
 
-            var publisher = new Publisher<TDataType>(topicName);
+            var publisher = new Publisher<TDataType>(topicName,NodeId);
 
-            _rosTopicServer.AcceptAsync().Subscribe(socket => publisher.AddTopic(new RosTopic<TDataType>(socket, NodeId, topicName)));
+            _rosTopicServer.AcceptAsync().Subscribe(socket => publisher.AddTopic(new RosTopicClient<TDataType>(socket, NodeId, topicName)));
 
 
             var ret1 = _masterClient.RegisterPublisherAsync(NodeId, topicName, publisher.Type, _slaveServer.SlaveUri).First();

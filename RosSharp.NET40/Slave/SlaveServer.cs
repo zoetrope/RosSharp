@@ -18,12 +18,12 @@ namespace RosSharp.Slave
 
         public Uri SlaveUri { get; set; }
 
-        public SlaveServer(TopicContainer topicContainer, RosTopicServer topicServer)
+        public SlaveServer(int portNumber, TopicContainer topicContainer, RosTopicServer topicServer)
         {
             _topicContainer = topicContainer;
             _rosTopicServer = topicServer;
 
-            var channel = new HttpServerChannel("slave", 0, new XmlRpcServerFormatterSinkProvider());
+            var channel = new HttpServerChannel("slave", portNumber, new XmlRpcServerFormatterSinkProvider());
             var tmp = new Uri(channel.GetChannelUri());
 
             SlaveUri = new Uri("http://" + ROS.LocalHostName + ":" + tmp.Port + "/slave");
