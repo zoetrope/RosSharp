@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RosSharp.Master;
+using RosSharp.StdMsgs;
 using RosSharp.Topic;
 
 namespace RosSharp.IntegrationTests
@@ -30,6 +31,10 @@ namespace RosSharp.IntegrationTests
         [TestMethod]
         public void TestMethod1()
         {
+            _subscriber.Subscribe(x => Console.WriteLine(x.data));
+
+            _publisher.OnNext(new StdMsgs.String(){data = "test"});
+
 
         }
     }

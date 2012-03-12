@@ -21,7 +21,6 @@ namespace RosSharp.Master
         {
             _registrationContainer = new RegistrationContainer();
 
-            //var channel = new HttpServerChannel("master", portNumber, new XmlRpcServerFormatterSinkProvider());
             var channel = new HttpServerChannel("master", portNumber, new XmlRpcServerFormatterSinkProvider());
             
             var tmp = new Uri(channel.GetChannelUri());
@@ -51,7 +50,7 @@ namespace RosSharp.Master
 
         public object[] RegisterSubscriber(string callerId, string topic, string topicType, string callerApi)
         {
-            var uris = _registrationContainer.RegsiterSubscriber(topic, topicType, callerApi);
+            var uris = _registrationContainer.RegsiterSubscriber(topic, topicType, new Uri(callerApi));
 
             return new object[3]
             {
@@ -68,7 +67,7 @@ namespace RosSharp.Master
 
         public object[] RegisterPublisher(string callerId, string topic, string topicType, string callerApi)
         {
-            var uris = _registrationContainer.RegisterPublisher(topic, topicType, callerApi);
+            var uris = _registrationContainer.RegisterPublisher(topic, topicType, new Uri(callerApi));
 
             return new object[3]
             {
@@ -109,8 +108,4 @@ namespace RosSharp.Master
         }
     }
 
-    public class PublisherInfo
-    {
-        
-    }
 }
