@@ -89,7 +89,7 @@ namespace RosSharp.Transport
         }
         protected bool CompleteMessage(int offset, out byte[] current, ref byte[] rest)
         {
-            if (rest.IsEmpty())
+            if (rest.Length == 0)
             {
                 current = new byte[0];
                 return false;
