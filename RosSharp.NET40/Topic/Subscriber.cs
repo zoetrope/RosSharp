@@ -29,10 +29,13 @@ namespace RosSharp.Topic
 
             //TODO: RosTopicに委譲
 
-            _tcpClient.ReceiveAsync()
+            var last = _tcpClient.ReceiveAsync()
                 .Take(1)
                 .Select(x => headerSerializer.Deserialize(new MemoryStream(x)))
-                .Subscribe(x => Console.WriteLine(x.topic + "/" + x.type));
+                .PublishLast();
+                //.Subscribe(x => Console.WriteLine(x.topic + "/" + x.type));
+
+            last.Connect();
 
             var dummy = new TDataType();
             var header = new SubscriberHeader()
@@ -51,6 +54,8 @@ namespace RosSharp.Topic
             var data = stream.ToArray();
 
             _tcpClient.SendAsync(data).First();
+
+            var test = last.First();
         }
 
         public string NodeId { get; private set; }

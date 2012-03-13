@@ -35,6 +35,9 @@ namespace RosSharp.StdMsgs
 
         public void Deserialize(Stream stream)
         {
+            var dummy = new byte[4];
+            stream.Read(dummy, 0, 4); //TODO: あとでなくす。
+
             var lenBuf = new byte[4];
             stream.Read(lenBuf, 0, 4);
 
