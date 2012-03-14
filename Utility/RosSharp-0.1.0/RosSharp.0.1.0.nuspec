@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <version>0.1.0</version>
+    <authors>zoetrope</authors>
+    <owners />
+    <dependencies>
+      <dependency id="Rx-Main" version="1.0.11226" />
+      <dependency id="xmlrpcnet" version="3.0.0.266" />
+      <dependency id="xmlrpcnet-server" version="3.0.0.266" />
+    </dependencies>
+    <id>RosSharp</id>
+    <title />
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>My package description.</description>
+  </metadata>
+  <files>
+    <file src="lib\net40\RosSharp.NET40.dll" target="lib\net40\RosSharp.NET40.dll" />
+    <file src="lib\sl4-wp71\RosSharp.WP7.dll" target="lib\sl4-wp71\RosSharp.WP7.dll" />
+    <file src="lib\sl50\RosSharp.SL5.dll" target="lib\sl50\RosSharp.SL5.dll" />
+  </files>
+</package>

@@ -49,6 +49,7 @@ namespace RosSharp.IntegrationTests
 
             scheduler.AdvanceTo(50);
 
+            //TODO: 裏で通信を行っているので、データがそろうまで待つ必要がある。
             mock.Messages.Count.Is(3);
             mock.Messages[0].Value.Value.data.Is("abc");
             mock.Messages[1].Value.Value.data.Is("defg");
