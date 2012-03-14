@@ -53,7 +53,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Master\RegistrationContainer.cs" />
+    <Compile Include="Master\RegistrationServiceContainer.cs" />
+    <Compile Include="Master\RegistrationTopicContainer.cs" />
     <Compile Include="Service\ProxyFactory.cs" />
     <Compile Include="Service\ServiceServer.cs" />
     <Compile Include="Topic\IPublisher.cs" />

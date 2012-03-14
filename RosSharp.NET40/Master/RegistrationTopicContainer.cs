@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RosSharp.Master
 {
-    internal class RegistrationContainer
+    internal class RegistrationTopicContainer
     {
         private Dictionary<string, TopicRegistrationInfo> _topics = new Dictionary<string, TopicRegistrationInfo>();
         
@@ -34,9 +34,10 @@ namespace RosSharp.Master
             return info.PublisherUris;
         }
 
-        public void UnregisterSubscriber()
+
+        public void UnregisterSubscriber(string topic, Uri uri)
         {
-            
+            throw new NotImplementedException();
         }
 
         public List<Uri> RegisterPublisher(string topic, string topicType, Uri slaveUri)
@@ -64,11 +65,10 @@ namespace RosSharp.Master
             return info.SubscriberUris;
         }
 
-        public void UnregisterPublisher()
+        public void UnregisterPublisher(string topic, Uri uri)
         {
-            
+            throw new NotImplementedException();
         }
-
     }
 
 

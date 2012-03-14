@@ -12,14 +12,16 @@ namespace RosSharp.Master
 {
     public class MasterServer : MarshalByRefObject, IMaster
     {
-        private RegistrationContainer _registrationContainer;
-
+        private readonly RegistrationTopicContainer _registrationTopicContainer;
+        private readonly RegistrationServiceContainer _registrationServiceContainer;
 
         public Uri MasterUri { get; private set; }
 
         public MasterServer(int portNumber)
         {
-            _registrationContainer = new RegistrationContainer();
+            _registrationTopicContainer = new RegistrationTopicContainer();
+            _registrationServiceContainer = new RegistrationServiceContainer();
+
 
             var channel = new HttpServerChannel("master", portNumber, new XmlRpcServerFormatterSinkProvider());
             
@@ -29,8 +31,6 @@ namespace RosSharp.Master
 
             ChannelServices.RegisterChannel(channel, false);
             RemotingServices.Marshal(this, "/");
-
-
         }
 
         public override object InitializeLifetimeService()
@@ -40,17 +40,21 @@ namespace RosSharp.Master
 
         public object[] RegisterService(string callerId, string service, string serviceApi, string callerApi)
         {
+            _registrationServiceContainer.RegisterService(service, new Uri(serviceApi), new Uri(callerApi));
+
             throw new NotImplementedException();
         }
 
         public object[] UnregisterService(string callerId, string service, string serviceApi)
         {
+            _registrationServiceContainer.UnregisterService(service, new Uri(serviceApi));
+
             throw new NotImplementedException();
         }
 
         public object[] RegisterSubscriber(string callerId, string topic, string topicType, string callerApi)
         {
-            var uris = _registrationContainer.RegsiterSubscriber(topic, topicType, new Uri(callerApi));
+            var uris = _registrationTopicContainer.RegsiterSubscriber(topic, topicType, new Uri(callerApi));
 
             return new object[3]
             {
@@ -62,12 +66,13 @@ namespace RosSharp.Master
 
         public object[] UnregisterSubscriber(string callerId, string topic, string callerApi)
         {
+            _registrationTopicContainer.UnregisterSubscriber(topic, new Uri(callerApi));
             throw new NotImplementedException();
         }
 
         public object[] RegisterPublisher(string callerId, string topic, string topicType, string callerApi)
         {
-            var uris = _registrationContainer.RegisterPublisher(topic, topicType, new Uri(callerApi));
+            var uris = _registrationTopicContainer.RegisterPublisher(topic, topicType, new Uri(callerApi));
 
             return new object[3]
             {
@@ -79,11 +84,13 @@ namespace RosSharp.Master
 
         public object[] UnregisterPublisher(string callerId, string topic, string callerApi)
         {
+            _registrationTopicContainer.UnregisterPublisher(topic, new Uri(callerApi));
             throw new NotImplementedException();
         }
 
         public object[] LookupNode(string callerId, string nodeName)
         {
+
             throw new NotImplementedException();
         }
 

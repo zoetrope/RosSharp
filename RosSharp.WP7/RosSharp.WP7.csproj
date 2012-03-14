@@ -65,8 +65,11 @@
     <Compile Include="..\RosSharp.NET40\Master\MasterProxy.cs">
       <Link>Master\MasterProxy.cs</Link>
     </Compile>
-    <Compile Include="..\RosSharp.NET40\Master\RegistrationContainer.cs">
-      <Link>Master\RegistrationContainer.cs</Link>
+    <Compile Include="..\RosSharp.NET40\Master\RegistrationServiceContainer.cs">
+      <Link>Master\RegistrationServiceContainer.cs</Link>
+    </Compile>
+    <Compile Include="..\RosSharp.NET40\Master\RegistrationTopicContainer.cs">
+      <Link>Master\RegistrationTopicContainer.cs</Link>
     </Compile>
     <Compile Include="..\RosSharp.NET40\Message\IMessage.cs">
       <Link>Message\IMessage.cs</Link>
@@ -143,7 +146,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="417b1a0a-5ff8-4423-9f62-fe61aa299239" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="417b1a0a-5ff8-4423-9f62-fe61aa299239" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

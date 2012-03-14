@@ -55,8 +55,10 @@
       <Link>AddTwoInts.cs</Link>
     </Compile>
     <Compile Include="ChainingAssertion.MSTest.cs" />
+    <Compile Include="ParameterServerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PublisherAndSubscriberTest.cs" />
+    <Compile Include="RosCoreTest.cs" />
     <Compile Include="ServerAndClientTest.cs" />
   </ItemGroup>
   <ItemGroup>
