@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
     <DocumentationFile>bin\Debug\GenMsg.Tests.XML</DocumentationFile>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,6 +31,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
     <DocumentationFile>bin\Release\GenMsg.Tests.XML</DocumentationFile>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FParsec">
@@ -40,8 +42,10 @@
       <HintPath>..\..\packages\FParsec.0.9.1.1\lib\net40\FParsecCS.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="FSharp.Core">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\FSharp\2.0\Runtime\v4.0\FSharp.Core.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib" />
-    <Reference Include="FSharp.Core" />
     <Reference Include="NaturalSpec">
       <HintPath>..\..\packages\NaturalSpec.1.4.2.1\lib\NaturalSpec.dll</HintPath>
       <Private>True</Private>
@@ -56,9 +60,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Script.fsx" />
-    <Compile Include="ParserTest.fs" />
     <None Include="packages.config" />
     <Compile Include="Sample.fs" />
+    <Compile Include="TestUtility.fs" />
+    <Compile Include="ParserTest.fs" />
+    <Compile Include="Md5GeneratorTest.fs" />
+    <Compile Include="RosMessageParserTest.fs" />
+    <Compile Include="RosServiceParserTest.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GenMsg\GenMsg.fsproj">
