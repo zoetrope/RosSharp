@@ -11,7 +11,7 @@ open FParsec.CharParsers
 open FParsec.Error
 
 [<Scenario>]
-let ``RosType PrimitiveType`` ()=
+let ``RosService AddTwoInts`` ()=
     let context = { Levels = []; CurrentLevel = 0; NewLevel = 0 }
     Given "int64 a\nint64 b\n---\nint64 sum"
         |> When runParserOnString (pRosService .>> eof) context ""
