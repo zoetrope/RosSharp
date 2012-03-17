@@ -4,17 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Runtime.Remoting;
-using System.Runtime.Remoting.Channels;
-using System.Runtime.Remoting.Channels.Http;
-using System.Threading;
-using CookComputing.XmlRpc;
 using RosSharp.Master;
 using RosSharp.Message;
 using RosSharp.Service;
 using RosSharp.Slave;
 using RosSharp.Topic;
-using RosSharp.Transport;
 
 namespace RosSharp.Node
 {
@@ -22,7 +16,7 @@ namespace RosSharp.Node
     {
         private readonly MasterClient _masterClient;
         private readonly SlaveServer _slaveServer;
-        private readonly ProxyFactory _proxyFactory;
+        private readonly ServiceProxyFactory _serviceProxyFactory;
         private readonly RosTopicServer _rosTopicServer;
         private readonly TopicContainer _topicContainer;
 
@@ -34,7 +28,7 @@ namespace RosSharp.Node
 
             _masterClient = new MasterClient(ROS.MasterUri);
             
-            _proxyFactory = new ProxyFactory(_masterClient);
+            _serviceProxyFactory = new ServiceProxyFactory(NodeId);
 
             _topicContainer = new TopicContainer();
             _rosTopicServer = new RosTopicServer();
@@ -83,7 +77,9 @@ namespace RosSharp.Node
             where TRequest : IMessage, new()
             where TResponse : IMessage, new()
         {
-            return _proxyFactory.Create<TService, TRequest, TResponse>(serviceName);
+            var uri = _masterClient.LookupServiceAsync(NodeId, serviceName).First();
+
+            return _serviceProxyFactory.Create<TService, TRequest, TResponse>(serviceName, uri);
         }
 
         private Dictionary<string, Func<Stream, Stream>> _services = new Dictionary<string, Func<Stream, Stream>>();
@@ -97,8 +93,8 @@ namespace RosSharp.Node
             serviceServer.RegisterService(serviceName, service);
 
             var ret1 = _masterClient
-                .RegisterServiceAsync(NodeId, serviceName, 
-                    new Uri("rosrpc://"+ ROS.LocalHostName +":" + serviceServer.Port),
+                .RegisterServiceAsync(NodeId, serviceName,
+                    new Uri("rosrpc://" + ROS.LocalHostName + ":" + serviceServer.EndPoint.Port),
                     _slaveServer.SlaveUri)
                 .First(); //TODO: Firstはだめ。
 

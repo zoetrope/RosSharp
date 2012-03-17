@@ -23,7 +23,7 @@ namespace RosSharp.Service
 
         private RosTcpListener _listener;
 
-        public IPEndPoint Port
+        public IPEndPoint EndPoint
         {
             get { return _listener.EndPoint; }
         }
@@ -40,41 +40,44 @@ namespace RosSharp.Service
             _listener = new RosTcpListener(0);
             var disp = _listener.AcceptAsync()
                 .Select(s => new RosTcpClient(s))
-                //.SelectMany(c => c.ReceiveAsync())
-                //.Subscribe(b =>
-                .Subscribe(client => client.ReceiveAsync().Subscribe(b =>
-                {
-                    if (b.Length == 20)//TODO:これはひどい
-                    {
-                        //TODO: 先にヘッダを処理しないと。
-                        var ms = new MemoryStream(b);
-                        var res = Invoke(ms);
-                        var array = res.ToArray();
-                        client.SendAsync(array).First();
-                    }
-                    else
-                    {
-                        var dummy = new TService();
-                        var header = new ServiceResponseHeader()
-                        {
-                            callerid = _nodeId,
-                            md5sum = dummy.Md5Sum,
-                            service = serviceName,
-                            type = dummy.ServiceType
-                        };
-
-                        var headerSerializer = new TcpRosHeaderSerializer<ServiceResponseHeader>();
-                        var ms = new MemoryStream();
-                        headerSerializer.Serialize(ms, header);
-                        client.SendAsync(ms.ToArray()).First();
-
-                    }
-                }));
-
+                .Subscribe(client => Initialize(serviceName, client));
+                
             //TODO: Accept用のポート番号が割当たる前にRegisterServiceしてしまう？？ListenしてるからOKか。
 
             return disp;//TODO: サービス登録を解除するためのDisposableを返す。
 
+        }
+
+        private void Initialize(string serviceName, RosTcpClient client)
+        {
+            var headerSerializer =
+                new TcpRosHeaderSerializer<ServiceResponseHeader>();
+            client.ReceiveAsync()
+                .Take(1)
+                .Select(b => headerSerializer.Deserialize(new MemoryStream(b)))
+                .SelectMany(client.ReceiveAsync())
+                .Subscribe(b =>
+                           {
+                               var stream = new MemoryStream(b);
+                               var res = Invoke(stream);
+                               var array = res.ToArray();
+                               client.SendAsync(array).First();
+                           });
+                
+
+
+            var dummy = new TService();
+            var header = new ServiceResponseHeader()
+            {
+                callerid = _nodeId,
+                md5sum = dummy.Md5Sum,
+                service = serviceName,
+                type = dummy.ServiceType
+            };
+
+            var ms = new MemoryStream();
+            headerSerializer.Serialize(ms, header);
+            client.SendAsync(ms.ToArray()).First();
         }
 
         private MemoryStream Invoke(Stream stream)

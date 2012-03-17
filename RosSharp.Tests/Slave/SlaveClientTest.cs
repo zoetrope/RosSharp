@@ -12,14 +12,6 @@ namespace RosSharp.Tests.Slave
     public class SlaveClientTest
     {
         [TestMethod]
-        public  void TestTest()
-        {
-            Console.WriteLine(1);
-            Debugger.Launch();
-        }
-
-
-        [TestMethod]
         [HostType("Moles")]
         public void GetBusInfo_Success()
         {

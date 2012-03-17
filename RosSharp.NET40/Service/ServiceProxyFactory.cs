@@ -10,32 +10,27 @@ using RosSharp.Transport;
 
 namespace RosSharp.Service
 {
-    internal class ProxyFactory
+    internal class ServiceProxyFactory
     {
-        private readonly MasterClient _masterClient;
+        public string NodeId { get; private set; }
 
-        public ProxyFactory(MasterClient client)
+        public ServiceProxyFactory(string nodeId)
         {
-            _masterClient = client;
+            NodeId = nodeId;
         }
 
-        public Func<TRequest, IObservable<TResponse>> Create<TService, TRequest, TResponse>(string serviceName)
+        public Func<TRequest, IObservable<TResponse>> Create<TService, TRequest, TResponse>(string serviceName, Uri uri)
             where TService : IService<TRequest, TResponse>, new()
             where TRequest : IMessage, new()
             where TResponse : IMessage, new()
         {
-            var ret1 = _masterClient
-                .LookupServiceAsync("/test", serviceName).First();
 
-            Console.WriteLine(ret1);
-
-
-            var _tcpClient = new RosTcpClient();
-            var ret = _tcpClient.ConnectAsync(ret1.Host, ret1.Port).First();
+            var tcpClient = new RosTcpClient();
+            var ret = tcpClient.ConnectAsync(uri.Host, uri.Port).First();
 
             var headerSerializer = new TcpRosHeaderSerializer<ServiceResponseHeader>();
 
-            var rec = _tcpClient.ReceiveAsync()
+            var rec = tcpClient.ReceiveAsync()
                 .Select(x => headerSerializer.Deserialize(new MemoryStream(x)))
                 .Take(1)
                 .PublishLast();
@@ -46,7 +41,7 @@ namespace RosSharp.Service
 
             var header = new ServiceHeader()
             {
-                callerid = "test",
+                callerid = NodeId,
                 md5sum = service.Md5Sum,
                 service = serviceName  
             };
@@ -58,14 +53,14 @@ namespace RosSharp.Service
             serializer.Serialize(stream, header);
             var data = stream.ToArray();
 
-            _tcpClient.SendAsync(data).First();
+            tcpClient.SendAsync(data).First();
 
             var test = rec.First();
             Console.WriteLine(test.callerid);
 
             return request => {
 
-                var response = _tcpClient.ReceiveAsync(offset: 1)
+                var response = tcpClient.ReceiveAsync(offset: 1)
                     .Select(x =>
                     {
                         var res = new TResponse();
@@ -80,7 +75,7 @@ namespace RosSharp.Service
                 var ms = new MemoryStream();
                 request.Serialize(ms);
                 var senddata = ms.ToArray();
-                _tcpClient.SendAsync(senddata).First();
+                tcpClient.SendAsync(senddata).First();
 
                 return response;
             };

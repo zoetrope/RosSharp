@@ -37,6 +37,7 @@ namespace RosSharp.Transport
         public string service { get; set; }
         public string md5sum { get; set; }
         public string type { get; set; }
+        public string persistent { get; set; } //新しいROSで増えた？
     }
 
     public class TcpRosHeaderSerializer<TDataType> where TDataType : new()
@@ -91,7 +92,7 @@ namespace RosSharp.Transport
             foreach (var v in map)
             {
                 var p = typeof(TDataType).GetProperty(v.Key);
-                p.SetValue(ret, v.Value, null);
+                p.SetValue(ret, v.Value, null);//TODO: Dynamicで受けたほうがいいのか？
             }
 
             return ret;

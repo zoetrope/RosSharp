@@ -14,7 +14,7 @@ namespace Client
     {
         static void Main(string[] args)
         {
-            ROS.Initialize(new Uri("http://192.168.11.4:11311/"), "192.168.11.3");
+            ROS.Initialize(new Uri("http://192.168.11.5:11311/"), "192.168.11.3");
 
             var node = ROS.CreateNode("Client");
 

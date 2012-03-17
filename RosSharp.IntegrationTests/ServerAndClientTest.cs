@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Linq;
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,13 +35,13 @@ namespace RosSharp.IntegrationTests
             var node = ROS.CreateNode("test");
             node.RegisterService<AddTwoInts, AddTwoInts.Request, AddTwoInts.Response>("/add_two_ints", add_two_ints);
             var proxy = node.CreateProxy<AddTwoInts, AddTwoInts.Request, AddTwoInts.Response>("/add_two_ints");
-            proxy(new AddTwoInts.Request() { a = 1, b = 2 }).Subscribe(x => Console.WriteLine(x.c));
+            var ret = proxy(new AddTwoInts.Request() {a = 1, b = 2}).First();
+            ret.c.Is(3);
         }
 
 
         static AddTwoInts.Response add_two_ints(AddTwoInts.Request req)
         {
-            Console.WriteLine("add_two_ints: a = {0}, b = {1}", req.a, req.b);
             return new AddTwoInts.Response() { c = req.a + req.b };
         }
     }

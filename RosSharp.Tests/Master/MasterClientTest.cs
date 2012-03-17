@@ -377,5 +377,48 @@ namespace RosSharp.Tests.Master
             ex.Message.Is("caller_id must be a string");
 
         }
+
+
+        [TestMethod]
+        [HostType("Moles")]
+        public void LookupService_Success()
+        {
+            var result = new object[3]
+            {
+                1,
+                "rosrpc URI: [rosrpc://192.168.11.5:37171]",
+                "rosrpc://192.168.11.5:37171"
+            };
+
+            MXmlRpcClientProtocol.AllInstances.UrlSetString = (t1, t2) => { };
+            MMasterProxy.AllInstances.BeginLookupServiceStringStringAsyncCallbackObject = (t1, t2, t3, t4, t5) => { t4(null); return null; };
+            MMasterProxy.AllInstances.EndLookupServiceIAsyncResult = (t1, t2) => result;
+
+            var client = new MasterClient(new Uri("http://localhost"));
+
+            client.LookupServiceAsync("/test", "/service_test").First().Is(new Uri("rosrpc://192.168.11.5:37171"));
+
+        }
+
+        [TestMethod]
+        [HostType("Moles")]
+        public void LookupService_NoProvider()
+        {
+            var result = new object[3]
+            {
+                -1,
+                "no provider",
+                ""
+            };
+
+            MXmlRpcClientProtocol.AllInstances.UrlSetString = (t1, t2) => { };
+            MMasterProxy.AllInstances.BeginLookupServiceStringStringAsyncCallbackObject = (t1, t2, t3, t4, t5) => { t4(null); return null; };
+            MMasterProxy.AllInstances.EndLookupServiceIAsyncResult = (t1, t2) => result;
+
+            var client = new MasterClient(new Uri("http://localhost"));
+
+            var ex = AssertEx.Throws<InvalidOperationException>(() => client.LookupServiceAsync("/test", "/service_test").First());
+            ex.Message.Is("no provider");
+        }
     }
 }

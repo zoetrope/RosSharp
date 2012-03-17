@@ -42,7 +42,13 @@ namespace RosSharp.Master
         {
             _registrationServiceContainer.RegisterService(service, new Uri(serviceApi), new Uri(callerApi));
 
-            throw new NotImplementedException();
+            //TODO: エラー処理
+            return new object[3]
+            {
+                1,
+                "Regisered [" + callerId + "] as provider of [" + service + "]",
+                1
+            };
         }
 
         public object[] UnregisterService(string callerId, string service, string serviceApi)
@@ -111,7 +117,26 @@ namespace RosSharp.Master
 
         public object[] LookupService(string callerId, string service)
         {
-            throw new NotImplementedException();
+            var uri = _registrationServiceContainer.LookUp(service);
+
+            if (uri != null)
+            {
+                return new object[3]
+                {
+                    1,
+                    "rosrpc URI: [" + uri + "]",
+                    uri.ToString()
+                };
+            }
+            else
+            {
+                return new object[3]
+                {
+                    -1,
+                    "no provider",
+                    ""
+                };
+            }
         }
     }
 
