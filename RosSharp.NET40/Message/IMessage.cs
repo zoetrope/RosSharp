@@ -8,7 +8,9 @@ namespace RosSharp.Message
         string Md5Sum { get; }
         string MessageDefinition { get; }
 
-        void Serialize(Stream stream);
-        void Deserialize(Stream stream);
+        int SerializeLength { get; }
+
+        void Serialize(BinaryWriter stream);
+        void Deserialize(BinaryReader stream);
     }
 }

@@ -62,6 +62,7 @@ namespace RosSharp.Master
         {
             var uris = _registrationTopicContainer.RegsiterSubscriber(topic, topicType, new Uri(callerApi));
 
+            //TODO: エラー処理
             return new object[3]
             {
                 1,
@@ -80,6 +81,7 @@ namespace RosSharp.Master
         {
             var uris = _registrationTopicContainer.RegisterPublisher(topic, topicType, new Uri(callerApi));
 
+            //TODO: エラー処理
             return new object[3]
             {
                 1,

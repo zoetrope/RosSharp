@@ -70,11 +70,14 @@ namespace RosSharp.Topic
         public IDisposable Subscribe(IObserver<TDataType> observer)
         {
             return _tcpClient.ReceiveAsync()
-                .Select(x => {
-                    var data = new TDataType();
-                    data.Deserialize(new MemoryStream(x));
-                    return data;
-                })
+                .Select(x =>
+                        {
+                            var data = new TDataType();
+                            var br = new BinaryReader(new MemoryStream(x));
+                            br.ReadInt32();
+                            data.Deserialize(br);
+                            return data;
+                        })
                 .Subscribe(observer);
         }
     }

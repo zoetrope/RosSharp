@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Subjects;
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RosSharp.Master;
 using RosSharp.StdMsgs;
 using RosSharp.Topic;
+using System.Reactive.Linq;
+using System.Reactive;
 
 namespace RosSharp.IntegrationTests
 {
@@ -32,7 +35,9 @@ namespace RosSharp.IntegrationTests
         public void PublishAndSubscribe()
         {
             var scheduler = new TestScheduler();
-            var mock = scheduler.CreateObserver<StdMsgs.String>();
+            
+            var observer = new ReplaySubject<StdMsgs.String>();
+
             var obs = scheduler.CreateHotObservable(
                 OnNext(10, new StdMsgs.String() {data = "abc"}),
                 OnNext(20, new StdMsgs.String() {data = "defg"}),
@@ -44,23 +49,27 @@ namespace RosSharp.IntegrationTests
             var publisher = node.CreatePublisher<StdMsgs.String>("test_topic");
             var subscriber = node.CreateSubscriber<StdMsgs.String>("test_topic");
 
-            subscriber.Subscribe(mock);
+            subscriber.Subscribe(observer);
             obs.Subscribe(publisher);
 
-            scheduler.AdvanceTo(50);
+            scheduler.AdvanceBy(10);
+            observer.Timeout(TimeSpan.FromSeconds(1)).First().Is(new StdMsgs.String() {data = "abc"});
 
-            //TODO: 裏で通信を行っているので、データがそろうまで待つ必要がある。
-            mock.Messages.Count.Is(3);
-            mock.Messages[0].Value.Value.data.Is("abc");
-            mock.Messages[1].Value.Value.data.Is("defg");
-            mock.Messages[2].Value.Value.data.Is("hijklmn");
+            scheduler.AdvanceBy(10);
+            observer.Skip(1).Timeout(TimeSpan.FromSeconds(1)).First().Is(new StdMsgs.String() { data = "defg" });
+            
+            scheduler.AdvanceBy(10);
+            observer.Skip(2).Timeout(TimeSpan.FromSeconds(1)).First().Is(new StdMsgs.String() { data = "hijklmn" });
+            
         }
 
         [TestMethod]
         public void SubscribeAndPublish()
         {
             var scheduler = new TestScheduler();
-            var mock = scheduler.CreateObserver<StdMsgs.String>();
+
+            var observer = new ReplaySubject<StdMsgs.String>();
+
             var obs = scheduler.CreateHotObservable(
                 OnNext(10, new StdMsgs.String() { data = "abc" }),
                 OnNext(20, new StdMsgs.String() { data = "defg" }),
@@ -72,15 +81,18 @@ namespace RosSharp.IntegrationTests
             var subscriber = node.CreateSubscriber<StdMsgs.String>("test_topic");
             var publisher = node.CreatePublisher<StdMsgs.String>("test_topic");
 
-            subscriber.Subscribe(mock);
+            subscriber.Subscribe(observer);
             obs.Subscribe(publisher);
 
-            scheduler.AdvanceTo(50);
+            scheduler.AdvanceBy(10);
+            observer.Timeout(TimeSpan.FromSeconds(1)).First().Is(new StdMsgs.String() { data = "abc" });
 
-            mock.Messages.Count.Is(3);
-            mock.Messages[0].Value.Value.data.Is("abc");
-            mock.Messages[1].Value.Value.data.Is("defg");
-            mock.Messages[2].Value.Value.data.Is("hijklmn");
+            scheduler.AdvanceBy(10);
+            observer.Skip(1).Timeout(TimeSpan.FromSeconds(1)).First().Is(new StdMsgs.String() { data = "defg" });
+
+            scheduler.AdvanceBy(10);
+            observer.Skip(2).Timeout(TimeSpan.FromSeconds(1)).First().Is(new StdMsgs.String() { data = "hijklmn" });
+            
         }
 
         [TestMethod]

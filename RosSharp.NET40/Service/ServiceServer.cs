@@ -58,8 +58,7 @@ namespace RosSharp.Service
                 .SelectMany(client.ReceiveAsync())
                 .Subscribe(b =>
                            {
-                               var stream = new MemoryStream(b);
-                               var res = Invoke(stream);
+                               var res = Invoke(new MemoryStream(b));
                                var array = res.ToArray();
                                client.SendAsync(array).First();
                            });
@@ -83,10 +82,19 @@ namespace RosSharp.Service
         private MemoryStream Invoke(Stream stream)
         {
             var req = new TRequest();
-            req.Deserialize(stream);
+
+            var br = new BinaryReader(stream);
+            var len = br.ReadInt32();
+            req.Deserialize(br);
+            
             var res = _service(req);
+
             var ms = new MemoryStream();
-            res.Serialize(ms);
+            var bw = new BinaryWriter(ms);
+            bw.Write((byte) 1);
+            bw.Write(res.SerializeLength);
+            res.Serialize(bw);
+
             return ms;
         }
     }

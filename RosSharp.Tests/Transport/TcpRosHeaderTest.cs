@@ -26,7 +26,8 @@ namespace RosSharp.Tests.Transport
 
             serializer.Serialize(ms, header);
 
-            ms.ToArray().Is(new byte[] { 
+            var array = ms.ToArray();
+            array.Is(new byte[] { 
                 // length
                 102,0,0,0,
                     // caller_id length

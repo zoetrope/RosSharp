@@ -71,9 +71,11 @@ namespace RosSharp.Topic
             {
                 throw new InvalidOperationException("Is not Connected.");
             }
-
+            
             var ms = new MemoryStream();
-            data.Serialize(ms);
+            var bw = new BinaryWriter(ms);
+            bw.Write(data.SerializeLength);
+            data.Serialize(bw);
             return _tcpClient.SendAsync(ms.ToArray());
         }
 

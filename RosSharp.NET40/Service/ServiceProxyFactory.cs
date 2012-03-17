@@ -58,27 +58,34 @@ namespace RosSharp.Service
             var test = rec.First();
             Console.WriteLine(test.callerid);
 
-            return request => {
+            return request =>
+                   {
 
-                var response = tcpClient.ReceiveAsync(offset: 1)
-                    .Select(x =>
-                    {
-                        var res = new TResponse();
-                        res.Deserialize(new MemoryStream(x));
-                        return res;
-                    })
-                    .Take(1)
-                    .PublishLast();
+                       var response = tcpClient.ReceiveAsync(offset: 1)
+                           .Select(x =>
+                                   {
+                                       //TODO: エラー処理
+                                       var res = new TResponse();
+                                       var br = new BinaryReader(new MemoryStream(x));
+                                       br.ReadInt32();
+                                       res.Deserialize(br);
+                                       return res;
+                                   })
+                           .Take(1)
+                           .PublishLast();
 
-                response.Connect();
+                       response.Connect();
 
-                var ms = new MemoryStream();
-                request.Serialize(ms);
-                var senddata = ms.ToArray();
-                tcpClient.SendAsync(senddata).First();
+                       var ms = new MemoryStream();
+                       var bw = new BinaryWriter(ms);
+                       bw.Write(request.SerializeLength);
+                       request.Serialize(bw);
+                       var senddata = ms.ToArray();
+                       tcpClient.SendAsync(senddata).First();
 
-                return response;
-            };
+                       return response;
+                   };
+
         }
     }
 }

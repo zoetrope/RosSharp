@@ -43,28 +43,54 @@ namespace Server
                 get { throw new NotImplementedException(); }
             }
 
-            public void Serialize(Stream stream)
+            public int SerializeLength
             {
-                var bw = new BinaryWriter(stream);
-                bw.Write(16);//TODO:あとでけす
-                bw.Write(a);
-                bw.Write(b);
+                get { return 8 + 8; }
             }
 
-            public void Deserialize(Stream stream)
+            public void Serialize(BinaryWriter stream)
             {
-                var br = new BinaryReader(stream);
-                br.ReadInt32();//TODO:あとでけす
-                a = br.ReadInt64();
-                b = br.ReadInt64();
+                stream.Write(a);
+                stream.Write(b);
+            }
+
+            public void Deserialize(BinaryReader stream)
+            {
+                a = stream.ReadInt64();
+                b = stream.ReadInt64();
             }
 
             public long a { get; set; }
             public long b { get; set; }
+
+
+            public bool Equals(Request other)
+            {
+                if (ReferenceEquals(null, other)) return false;
+                if (ReferenceEquals(this, other)) return true;
+                return other.a == a && other.b == b;
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (ReferenceEquals(null, obj)) return false;
+                if (ReferenceEquals(this, obj)) return true;
+                if (obj.GetType() != typeof(Request)) return false;
+                return Equals((Request)obj);
+            }
+
+            public override int GetHashCode()
+            {
+                unchecked
+                {
+                    return (a.GetHashCode() * 397) ^ b.GetHashCode();
+                }
+            }
         }
 
         public class Response : IMessage
         {
+
             public string MessageType
             {
                 get { return "test_ros/AddTwoIntsResponse"; }
@@ -80,22 +106,42 @@ namespace Server
                 get { throw new NotImplementedException(); }
             }
 
-            public void Serialize(Stream stream)
+            public int SerializeLength
             {
-                var bw = new BinaryWriter(stream);
-
-                bw.Write((byte)1);//TODO:あとで消す
-                bw.Write(8);//TODO:あとで消す
-                bw.Write(c);
+                get { return 8; }
             }
 
-            public void Deserialize(Stream stream)
+            public void Serialize(BinaryWriter stream)
             {
-                var br = new BinaryReader(stream);
-                br.ReadInt32();//TODO:あとで消す
-                c = br.ReadInt64();
+                stream.Write(c);
+            }
+
+            public void Deserialize(BinaryReader stream)
+            {
+                c = stream.ReadInt64();
             }
             public long c { get; set; }
+
+
+            public bool Equals(Response other)
+            {
+                if (ReferenceEquals(null, other)) return false;
+                if (ReferenceEquals(this, other)) return true;
+                return other.c == c;
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (ReferenceEquals(null, obj)) return false;
+                if (ReferenceEquals(this, obj)) return true;
+                if (obj.GetType() != typeof(Response)) return false;
+                return Equals((Response)obj);
+            }
+
+            public override int GetHashCode()
+            {
+                return c.GetHashCode();
+            }
         }
     }
 
