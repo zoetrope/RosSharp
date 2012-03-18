@@ -88,8 +88,16 @@ let pVariable = parse {
     return Variable(name)
 }
 
+// 空白のパーサ（spacesでは改行まで取ってしまうので。）
+let pWhitespaces : Parser<_> = many (pchar '\t' <|> pchar ' ')
+
 // メンバのパーサ (型名 変数 or 定数)
-let pMember : Parser<_> = tuple2 pRosType (pVariable <|> pConst)
+let pMember : Parser<_> = parse {
+        let! t = pRosType 
+        let! f = (pVariable <|> pConst)
+        let! _ = pWhitespaces
+        return t,f
+    }
 
 //*****************************************************************
 // オフサイドルールによるパーサ
@@ -173,14 +181,17 @@ do pRosMessageRef := parse {
     let! children = opt pChildren
     return match children with
            | Some c -> Node(t, f, c)
-           | None -> Leef(t, f)
+           | None -> Leaf(t, f)
 }
+
+let pRosMessages = many (pRosMessage .>> spaces)
 
 // サービスのパーサ(リクエストとレスポンスが---で区切られている)
 let pRosService = parse {
-    let! req = many pRosMessage
+    let! req = pRosMessages
     let! _ = pstring "---"
     do! pEndOfLine
-    let! res = many pRosMessage
+    do! spaces
+    let! res = pRosMessages
     return req, res
 }

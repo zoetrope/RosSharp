@@ -32,3 +32,20 @@ let ``Md5Generator AddTwoInts Response``()=
         |> It should equal "b88405221c77b1878a3cbbfff53428d7"
         |> Verify
 
+
+//TODO: HeaderだけでMD5を算出。それを展開した文字列でもう一度MD5を算出。
+[<Scenario>]
+let ``Md5Generator Time``()=
+    Given "Header header\n" + 
+          "time rostime"
+        |> When generateMd5
+        |> It should equal "09c1c9ce296734b4da898e62d1d0ae17"
+        |> Verify
+        
+[<Scenario>]
+let ``Md5Generator Time2``()=
+    Given "2176decaecbce78abc3b96ef049fabed header\n" + 
+          "time rostime"
+        |> When generateMd5
+        |> It should equal "09c1c9ce296734b4da898e62d1d0ae17"
+        |> Verify

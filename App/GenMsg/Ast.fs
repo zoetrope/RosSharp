@@ -23,7 +23,7 @@ type RosField = Variable of string
 
 type RosMessage =
     | Node of RosType * RosField * RosMessage list
-    | Leef of RosType * RosField
+    | Leaf of RosType * RosField
 
 type RosService =
-    | Service of RosMessage * RosMessage
+    | Service of RosMessage list * RosMessage list

@@ -90,7 +90,6 @@ namespace Server
 
         public class Response : IMessage
         {
-
             public string MessageType
             {
                 get { return "test_ros/AddTwoIntsResponse"; }
@@ -144,7 +143,4 @@ namespace Server
             }
         }
     }
-
-
-
 }

@@ -31,17 +31,12 @@ namespace RosSharp.StdMsgs
 
         public void Serialize(BinaryWriter stream)
         {
-            var buf = Encoding.UTF8.GetBytes(data);
-            stream.Write(buf.Length);
-            stream.Write(buf, 0, buf.Length);
+            stream.WriteUtf8String(data);
         }
 
         public void Deserialize(BinaryReader stream)
         {
-            var len = stream.ReadInt32();
-            var dataBuf = new byte[len];
-            stream.Read(dataBuf, 0, len);
-            data = Encoding.UTF8.GetString(dataBuf, 0, dataBuf.Length);
+            data = stream.ReadUtf8String();
         }
 
         public string data { get; set; }

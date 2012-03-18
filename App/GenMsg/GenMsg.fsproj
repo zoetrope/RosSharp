@@ -47,6 +47,8 @@
     <Compile Include="Md5Generator.fs" />
     <Compile Include="Preprocessor.fs" />
     <Compile Include="Parser.fs" />
+    <Compile Include="MessageGenerator.fs" />
+    <Compile Include="ServiceGenerator.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
   <ItemGroup>

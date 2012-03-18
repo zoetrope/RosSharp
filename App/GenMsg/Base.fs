@@ -15,3 +15,8 @@ let test p str =
    | Success(result, _, _)   -> printfn "Success: %A" result
    | Failure(errorMsg, _, _) -> printfn "Failure: %s" errorMsg
 
+   
+let extractExprs x =
+    match x with
+        | Success (x, _, _) -> x
+        | Failure (x,y,_) -> failwith x
