@@ -5,7 +5,7 @@ open System.Text
 open System.Security.Cryptography
 open RosSharp.GenMsg.Ast
 
-let getOriginalName t =
+let rec getOriginalName t =
     match t with
     | Bool -> "bool"
     | Int8 -> "int8"
@@ -21,6 +21,9 @@ let getOriginalName t =
     | String -> "string"
     | Time -> "time"
     | Duration -> "duration"
+    | FixedArray (x, size) -> getOriginalName x + "[" + size.ToString() + "]"
+    | VariableArray (x) -> getOriginalName x + "[]"
+    | UserDefinition (names) -> String.Join("/", names)
 
 let generateMd5 (input : string) =
     let md5 = new MD5CryptoServiceProvider()
@@ -28,17 +31,10 @@ let generateMd5 (input : string) =
     let hash = md5.ComputeHash(data)
     let str = BitConverter.ToString(hash)
     str.Replace("-","").ToLower()
-
-let getTypeName (t : RosType) = 
-    match t with
-    | UserDefinition (names) -> String.Join("/", names)
-    | FixedArray (x, size) -> getOriginalName x + "[" + size.ToString() + "]"
-    | VariableArray (x) -> getOriginalName x + "[]"
-    | x -> getOriginalName x
-
+    
 let getDefinition (msg : RosMessage) = 
     match msg with
-    | Leaf (t, Variable(name)) -> getTypeName t + " " + name
+    | Leaf (t, Variable(name)) -> getOriginalName t + " " + name
 
 let getMessageDefinition (msgs : RosMessage list) =
     msgs |> Seq.map(fun msg -> getDefinition msg) |> fun x -> String.Join("\n", x)

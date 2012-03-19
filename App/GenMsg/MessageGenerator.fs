@@ -6,61 +6,7 @@ open RosSharp.GenMsg.Md5Generator
 open System
 open System.Text
 
-let getSerialize t v =
-    match t with
-    | Bool -> "bw.Write(" + v + ");"
-    | Int8 -> "bw.Write(" + v + ");"
-    | UInt8 -> "bw.Write(" + v + ");"
-    | Int16 -> "bw.Write(" + v + ");"
-    | UInt16 -> "bw.Write(" + v + ");"
-    | Int32 -> "bw.Write(" + v + ");"
-    | UInt32 -> "bw.Write(" + v + ");"
-    | Int64 -> "bw.Write(" + v + ");"
-    | UInt64 -> "bw.Write(" + v + ");"
-    | Float32 -> "bw.Write(" + v + ");"
-    | Float64 -> "bw.Write(" + v + ");"
-    | String -> "bw.WriteUtf8String(" + v + ");"
-    | Time -> "bw.WriteDateTime(" + v + ");"
-    | Duration -> "bw.WriteTimeSpan(" + v + ");"
-    | UserDefinition (names) -> v + ".Serialize(bw);"
-    
-let getDeserialize t v =
-    match t with
-    | Bool -> v + " = br.ReadBoolean();"
-    | Int8 -> v + " = br.ReadSByte();"
-    | UInt8 -> v + " = br.ReadByte();"
-    | Int16 -> v + " = br.ReadInt16();"
-    | UInt16 -> v + " = br.ReadUInt16();"
-    | Int32 -> v + " = br.ReadInt32();"
-    | UInt32 -> v + " = br.ReadUInt32();"
-    | Int64 -> v + " = br.ReadInt64();"
-    | UInt64 -> v + " = br.ReadUInt64();"
-    | Float32 -> v + " = br.ReadSingle();"
-    | Float64 -> v + " = br.ReadDouble();"
-    | String -> v + " = br.ReadUtf8String();"
-    | Time -> v + " = br.ReadDateTime();"
-    | Duration -> v + " = br.ReadTimeSpan();"
-    | UserDefinition (names) -> v + ".Deserialize(bw);"
-
-let getSerializeLength t v =
-    match t with
-    | Bool -> "1"
-    | Int8 -> "1"
-    | UInt8 -> "1"
-    | Int16 -> "2"
-    | UInt16 -> "2"
-    | Int32 -> "4"
-    | UInt32 -> "4"
-    | Int64 -> "8"
-    | UInt64 -> "8"
-    | Float32 -> "4"
-    | Float64 -> "8"
-    | String -> "4 + " + v + ".Length"
-    | Time -> "8"
-    | Duration -> "8"
-    | UserDefinition (names) -> v + ".SerializeLength()"
-
-let getTypeName t =
+let rec getTypeName t =
     match t with
     | Bool -> "bool"
     | Int8 -> "sbyte"
@@ -79,6 +25,66 @@ let getTypeName t =
     | FixedArray (x, size) -> getTypeName x + "[]"
     | VariableArray (x) -> "List<" + getTypeName x + ">"
     | UserDefinition (names) -> String.Join(".", names)
+
+let rec getSerialize t v =
+    match t with
+    | Bool -> "bw.Write(" + v + ");"
+    | Int8 -> "bw.Write(" + v + ");"
+    | UInt8 -> "bw.Write(" + v + ");"
+    | Int16 -> "bw.Write(" + v + ");"
+    | UInt16 -> "bw.Write(" + v + ");"
+    | Int32 -> "bw.Write(" + v + ");"
+    | UInt32 -> "bw.Write(" + v + ");"
+    | Int64 -> "bw.Write(" + v + ");"
+    | UInt64 -> "bw.Write(" + v + ");"
+    | Float32 -> "bw.Write(" + v + ");"
+    | Float64 -> "bw.Write(" + v + ");"
+    | String -> "bw.WriteUtf8String(" + v + ");"
+    | Time -> "bw.WriteDateTime(" + v + ");"
+    | Duration -> "bw.WriteTimeSpan(" + v + ");"
+    | FixedArray (x, size) -> "for(int i=0; i<" + size.ToString() + "; i++) { " + getSerialize x (v + "[i]") + "}"
+    | VariableArray (x) -> "bw.Write(" + v + ".Count); " + "for(int i=0; i<" + v + ".Count; i++) { " + getSerialize x (v + "[i]") + "}"
+    | UserDefinition (names) -> v + ".Serialize(bw);"
+    
+let rec getDeserialize t v =
+    match t with
+    | Bool -> v + " = br.ReadBoolean();"
+    | Int8 -> v + " = br.ReadSByte();"
+    | UInt8 -> v + " = br.ReadByte();"
+    | Int16 -> v + " = br.ReadInt16();"
+    | UInt16 -> v + " = br.ReadUInt16();"
+    | Int32 -> v + " = br.ReadInt32();"
+    | UInt32 -> v + " = br.ReadUInt32();"
+    | Int64 -> v + " = br.ReadInt64();"
+    | UInt64 -> v + " = br.ReadUInt64();"
+    | Float32 -> v + " = br.ReadSingle();"
+    | Float64 -> v + " = br.ReadDouble();"
+    | String -> v + " = br.ReadUtf8String();"
+    | Time -> v + " = br.ReadDateTime();"
+    | Duration -> v + " = br.ReadTimeSpan();"
+    | FixedArray (x, size) -> "for(int i=0; i<" + size.ToString() + "; i++) { " + v + "[i] = " + getDeserialize x (v + "[i]") + "}"
+    | VariableArray (x) -> v + " = new List<" + getTypeName x + ">(br.ReadInt32()); " + "for(int i=0; i<" + v + ".Count; i++) { " + getDeserialize x (v + "[i]") + "}"
+    | UserDefinition (names) -> v + " = new " + String.Join(".", names) + "();"
+
+let rec getSerializeLength t v =
+    match t with
+    | Bool -> "1"
+    | Int8 -> "1"
+    | UInt8 -> "1"
+    | Int16 -> "2"
+    | UInt16 -> "2"
+    | Int32 -> "4"
+    | UInt32 -> "4"
+    | Int64 -> "8"
+    | UInt64 -> "8"
+    | Float32 -> "4"
+    | Float64 -> "8"
+    | String -> "4 + " + v + ".Length"
+    | Time -> "8"
+    | Duration -> "8"
+    | FixedArray (x, size) -> v + ".Sum(x => " + getSerializeLength x "x" + ")"
+    | VariableArray (x) -> v + ".Sum(x => " + getSerializeLength x "x" + ")"
+    | UserDefinition (names) -> v + ".SerializeLength()"
 
     
 let getInit (t : RosType) (name : string) =
@@ -148,8 +154,8 @@ let createDeserialize (msg : RosMessage) =
     | Leaf (t, Variable(name)) -> getDeserialize t name
     //| Leaf (t, Constant(name, value)) -> 
    
-let createDeserializeMethod (msgs : RosMessage list) =
-    "        public void Deserialize(BinaryReader br)\n" +
+let createDeserializeMethod (name : string) (msgs : RosMessage list) =
+    "        public " + name + "(BinaryReader br)\n" +
     "        {\n" + 
     (msgs |> Seq.map (fun msg -> "            " + (createDeserialize msg) + "\n" ) |> Seq.reduce (+) )+
     "        }\n"
@@ -197,7 +203,9 @@ let createEqualityMethods (name : string) (msgs : RosMessage list) =
 let createHeader (ns : string) (name : string) =
     "using System;\n" +
     "using System.IO;\n" +
+    "using System.Linq;\n" +
     "using RosSharp.Message;\n" +
+    "using System.Collections.Generic;\n" +
     "namespace RosSharp." + ns + "\n" +
     "{\n" + 
     "    public class " + name + " : IMessage\n" +
@@ -218,7 +226,7 @@ let generateMessageClass (ns : string) (name : string) (msgs : RosMessage list) 
     sb.Append(createMessageMember ns name msgs) |> ignore
     
     sb.Append(createSerializeMethod msgs) |> ignore
-    sb.Append(createDeserializeMethod msgs) |> ignore
+    sb.Append(createDeserializeMethod name msgs) |> ignore
     sb.Append(createSerializeLengthProperty msgs) |> ignore
 
     sb.Append(createEqualityMethods name msgs) |> ignore
