@@ -84,7 +84,7 @@
     <Compile Include="Slave\SlaveClient.cs" />
     <Compile Include="Slave\SlaveServer.cs" />
     <Compile Include="Message\IMessage.cs" />
-    <Compile Include="StdMsgs\String.cs" />
+    <Compile Include="std_msgs\String.cs" />
     <Compile Include="Topic\Subscriber.cs" />
     <Compile Include="Parameter\ParameterServerProxy.cs">
       <SubType>Component</SubType>

@@ -20,7 +20,7 @@ namespace RosSharp.Tests.Slave
         {
             ROS.Initialize();
             var topicContainer = new TopicContainer();
-            topicContainer.AddPublisher(new Publisher<StdMsgs.String>("/test_topic", "test"));
+            topicContainer.AddPublisher(new Publisher<std_msgs.String>("/test_topic", "test"));
 
             var rosTopicServer = new RosTopicServer();
             _slaveServer = new SlaveServer(0, topicContainer, rosTopicServer);

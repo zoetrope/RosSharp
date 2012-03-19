@@ -23,7 +23,7 @@ let rec getOriginalName t =
     | Duration -> "duration"
     | FixedArray (x, size) -> getOriginalName x + "[" + size.ToString() + "]"
     | VariableArray (x) -> getOriginalName x + "[]"
-    | UserDefinition (names) -> String.Join("/", names)
+    | UserDefinition (names) -> String.Join("/", names) //TODO: ここでMD5取得しないといけない？
 
 let generateMd5 (input : string) =
     let md5 = new MD5CryptoServiceProvider()

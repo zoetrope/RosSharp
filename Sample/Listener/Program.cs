@@ -14,7 +14,7 @@ namespace Listener
 
             var node = ROS.CreateNode("Listener");
 
-            var subscriber = node.CreateSubscriber<RosSharp.StdMsgs.String>("chatter");
+            var subscriber = node.CreateSubscriber<RosSharp.std_msgs.String>("chatter");
 
             subscriber.Subscribe(x => Console.WriteLine(x.data));
 

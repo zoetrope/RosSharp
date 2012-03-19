@@ -22,12 +22,12 @@ namespace RosSharp.Tests.Topic
             container.GetPublishers().Count.Is(0);
             container.GetPublisher("pub1", out pub).Is(false);
 
-            container.AddPublisher(new Publisher<StdMsgs.String>("pub1", "test")).Is(true);
+            container.AddPublisher(new Publisher<std_msgs.String>("pub1", "test")).Is(true);
             container.HasPublisher("pub1").Is(true);
             container.GetPublishers().Count.Is(1);
             container.GetPublisher("pub1", out pub).Is(true);
 
-            container.AddPublisher(new Publisher<StdMsgs.String>("pub2", "test")).Is(true);
+            container.AddPublisher(new Publisher<std_msgs.String>("pub2", "test")).Is(true);
             container.HasPublisher("pub1").Is(true);
             container.HasPublisher("pub2").Is(true);
             container.GetPublishers().Count.Is(2);
@@ -44,7 +44,7 @@ namespace RosSharp.Tests.Topic
             container.HasPublisher("pub1").Is(false);
             container.GetPublishers().Count.Is(0);
 
-            container.AddPublisher(new Publisher<StdMsgs.String>("pub1", "test")).Is(true);
+            container.AddPublisher(new Publisher<std_msgs.String>("pub1", "test")).Is(true);
             container.HasPublisher("pub1").Is(true);
             container.GetPublishers().Count.Is(1);
             container.GetPublisher("pub1", out pub).Is(true);
@@ -65,12 +65,12 @@ namespace RosSharp.Tests.Topic
             container.HasPublisher("pub1").Is(false);
             container.GetPublishers().Count.Is(0);
 
-            container.AddPublisher(new Publisher<StdMsgs.String>("pub1", "test")).Is(true);
+            container.AddPublisher(new Publisher<std_msgs.String>("pub1", "test")).Is(true);
             container.HasPublisher("pub1").Is(true);
             container.GetPublishers().Count.Is(1);
             container.GetPublisher("pub1", out pub).Is(true);
 
-            container.AddPublisher(new Publisher<StdMsgs.String>("pub1", "test")).Is(false);
+            container.AddPublisher(new Publisher<std_msgs.String>("pub1", "test")).Is(false);
             container.HasPublisher("pub1").Is(true);
             container.GetPublishers().Count.Is(1);
             container.GetPublisher("pub1", out pub).Is(true);
@@ -88,12 +88,12 @@ namespace RosSharp.Tests.Topic
             container.GetSubscribers().Count.Is(0);
             container.GetSubscriber("sub1", out sub).Is(false);
 
-            container.AddSubscriber(new Subscriber<StdMsgs.String>("sub1", "test")).Is(true);
+            container.AddSubscriber(new Subscriber<std_msgs.String>("sub1", "test")).Is(true);
             container.HasSubscriber("sub1").Is(true);
             container.GetSubscribers().Count.Is(1);
             container.GetSubscriber("sub1", out sub).Is(true);
 
-            container.AddSubscriber(new Subscriber<StdMsgs.String>("sub2", "test")).Is(true);
+            container.AddSubscriber(new Subscriber<std_msgs.String>("sub2", "test")).Is(true);
             container.HasSubscriber("sub1").Is(true);
             container.HasSubscriber("sub2").Is(true);
             container.GetSubscribers().Count.Is(2);
@@ -110,7 +110,7 @@ namespace RosSharp.Tests.Topic
             container.HasSubscriber("sub1").Is(false);
             container.GetSubscribers().Count.Is(0);
 
-            container.AddSubscriber(new Subscriber<StdMsgs.String>("sub1", "test")).Is(true);
+            container.AddSubscriber(new Subscriber<std_msgs.String>("sub1", "test")).Is(true);
             container.HasSubscriber("sub1").Is(true);
             container.GetSubscribers().Count.Is(1);
             container.GetSubscriber("sub1", out sub).Is(true);
@@ -131,12 +131,12 @@ namespace RosSharp.Tests.Topic
             container.HasSubscriber("sub1").Is(false);
             container.GetSubscribers().Count.Is(0);
 
-            container.AddSubscriber(new Subscriber<StdMsgs.String>("sub1", "test")).Is(true);
+            container.AddSubscriber(new Subscriber<std_msgs.String>("sub1", "test")).Is(true);
             container.HasSubscriber("sub1").Is(true);
             container.GetSubscribers().Count.Is(1);
             container.GetSubscriber("sub1", out sub).Is(true);
 
-            container.AddSubscriber(new Subscriber<StdMsgs.String>("sub1", "test")).Is(false);
+            container.AddSubscriber(new Subscriber<std_msgs.String>("sub1", "test")).Is(false);
             container.HasSubscriber("sub1").Is(true);
             container.GetSubscribers().Count.Is(1);
             container.GetSubscriber("sub1", out sub).Is(true);

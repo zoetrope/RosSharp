@@ -6,7 +6,7 @@ using System.Linq;
 using Microsoft.Reactive.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RosSharp.Master;
-using RosSharp.StdMsgs;
+using RosSharp.std_msgs;
 using RosSharp.Topic;
 using System.Reactive.Linq;
 using System.Reactive;
@@ -36,30 +36,30 @@ namespace RosSharp.IntegrationTests
         {
             var scheduler = new TestScheduler();
             
-            var observer = new ReplaySubject<StdMsgs.String>();
+            var observer = new ReplaySubject<std_msgs.String>();
 
             var obs = scheduler.CreateHotObservable(
-                OnNext(10, new StdMsgs.String() {data = "abc"}),
-                OnNext(20, new StdMsgs.String() {data = "defg"}),
-                OnNext(30, new StdMsgs.String() {data = "hijklmn"})
+                OnNext(10, new std_msgs.String() {data = "abc"}),
+                OnNext(20, new std_msgs.String() {data = "defg"}),
+                OnNext(30, new std_msgs.String() {data = "hijklmn"})
                 );
 
             var node = ROS.CreateNode("test");
 
-            var publisher = node.CreatePublisher<StdMsgs.String>("test_topic");
-            var subscriber = node.CreateSubscriber<StdMsgs.String>("test_topic");
+            var publisher = node.CreatePublisher<std_msgs.String>("test_topic");
+            var subscriber = node.CreateSubscriber<std_msgs.String>("test_topic");
 
             subscriber.Subscribe(observer);
             obs.Subscribe(publisher);
 
             scheduler.AdvanceBy(10);
-            observer.Timeout(TimeSpan.FromSeconds(1)).First().Is(new StdMsgs.String() {data = "abc"});
+            observer.Timeout(TimeSpan.FromSeconds(1)).First().Is(new std_msgs.String() {data = "abc"});
 
             scheduler.AdvanceBy(10);
-            observer.Skip(1).Timeout(TimeSpan.FromSeconds(1)).First().Is(new StdMsgs.String() { data = "defg" });
+            observer.Skip(1).Timeout(TimeSpan.FromSeconds(1)).First().Is(new std_msgs.String() { data = "defg" });
             
             scheduler.AdvanceBy(10);
-            observer.Skip(2).Timeout(TimeSpan.FromSeconds(1)).First().Is(new StdMsgs.String() { data = "hijklmn" });
+            observer.Skip(2).Timeout(TimeSpan.FromSeconds(1)).First().Is(new std_msgs.String() { data = "hijklmn" });
             
         }
 
@@ -68,30 +68,30 @@ namespace RosSharp.IntegrationTests
         {
             var scheduler = new TestScheduler();
 
-            var observer = new ReplaySubject<StdMsgs.String>();
+            var observer = new ReplaySubject<std_msgs.String>();
 
             var obs = scheduler.CreateHotObservable(
-                OnNext(10, new StdMsgs.String() { data = "abc" }),
-                OnNext(20, new StdMsgs.String() { data = "defg" }),
-                OnNext(30, new StdMsgs.String() { data = "hijklmn" })
+                OnNext(10, new std_msgs.String() { data = "abc" }),
+                OnNext(20, new std_msgs.String() { data = "defg" }),
+                OnNext(30, new std_msgs.String() { data = "hijklmn" })
                 );
 
             var node = ROS.CreateNode("test");
 
-            var subscriber = node.CreateSubscriber<StdMsgs.String>("test_topic");
-            var publisher = node.CreatePublisher<StdMsgs.String>("test_topic");
+            var subscriber = node.CreateSubscriber<std_msgs.String>("test_topic");
+            var publisher = node.CreatePublisher<std_msgs.String>("test_topic");
 
             subscriber.Subscribe(observer);
             obs.Subscribe(publisher);
 
             scheduler.AdvanceBy(10);
-            observer.Timeout(TimeSpan.FromSeconds(1)).First().Is(new StdMsgs.String() { data = "abc" });
+            observer.Timeout(TimeSpan.FromSeconds(1)).First().Is(new std_msgs.String() { data = "abc" });
 
             scheduler.AdvanceBy(10);
-            observer.Skip(1).Timeout(TimeSpan.FromSeconds(1)).First().Is(new StdMsgs.String() { data = "defg" });
+            observer.Skip(1).Timeout(TimeSpan.FromSeconds(1)).First().Is(new std_msgs.String() { data = "defg" });
 
             scheduler.AdvanceBy(10);
-            observer.Skip(2).Timeout(TimeSpan.FromSeconds(1)).First().Is(new StdMsgs.String() { data = "hijklmn" });
+            observer.Skip(2).Timeout(TimeSpan.FromSeconds(1)).First().Is(new std_msgs.String() { data = "hijklmn" });
             
         }
 

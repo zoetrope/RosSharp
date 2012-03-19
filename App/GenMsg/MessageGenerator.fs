@@ -101,7 +101,7 @@ let getInitialize (msg : RosMessage) =
     | Leaf (t, Variable(name)) -> getInit t name
 
 
-let createConstructor (name : string) (msgs : RosMessage list) =
+let createDefaultConstructor (name : string) (msgs : RosMessage list) =
     "        public " + name + "()\n" +
     "        {\n" + 
     (msgs |> Seq.map(fun msg -> getInitialize msg) |> fun x -> String.Join("",x) ) + 
@@ -149,13 +149,19 @@ let createSerializeLengthProperty (msgs : RosMessage list) =
     "            get { return " + String.Join(" + ",(msgs |> Seq.map (fun msg -> createSerializeLength msg))) + "; }\n" +
     "        }\n"
     
+let createConstructor (name : string) (msgs : RosMessage list) =
+    "        public " + name + "(BinaryReader br)\n" +
+    "        {\n" + 
+    "            Deserialize(br);\n" + 
+    "        }\n"
+
 let createDeserialize (msg : RosMessage) = 
     match msg with
     | Leaf (t, Variable(name)) -> getDeserialize t name
     //| Leaf (t, Constant(name, value)) -> 
    
-let createDeserializeMethod (name : string) (msgs : RosMessage list) =
-    "        public " + name + "(BinaryReader br)\n" +
+let createDeserializeMethod (msgs : RosMessage list) =
+    "        public void Deserialize(BinaryReader br)\n" +
     "        {\n" + 
     (msgs |> Seq.map (fun msg -> "            " + (createDeserialize msg) + "\n" ) |> Seq.reduce (+) )+
     "        }\n"
@@ -220,13 +226,14 @@ let generateMessageClass (ns : string) (name : string) (msgs : RosMessage list) 
     
     sb.Append(createHeader ns name) |> ignore
     
+    sb.Append(createDefaultConstructor name msgs) |> ignore
     sb.Append(createConstructor name msgs) |> ignore
     msgs |> List.iter (fun msg -> createProperty msg |> sb.Append |> ignore)
     
     sb.Append(createMessageMember ns name msgs) |> ignore
     
     sb.Append(createSerializeMethod msgs) |> ignore
-    sb.Append(createDeserializeMethod name msgs) |> ignore
+    sb.Append(createDeserializeMethod msgs) |> ignore
     sb.Append(createSerializeLengthProperty msgs) |> ignore
 
     sb.Append(createEqualityMethods name msgs) |> ignore

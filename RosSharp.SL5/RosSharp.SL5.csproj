@@ -110,8 +110,8 @@
     <Compile Include="..\RosSharp.NET40\Slave\SlaveProxy.cs">
       <Link>Slave\SlaveProxy.cs</Link>
     </Compile>
-    <Compile Include="..\RosSharp.NET40\StdMsgs\String.cs">
-      <Link>StdMsgs\String.cs</Link>
+    <Compile Include="..\RosSharp.NET40\std_msgs\String.cs">
+      <Link>std_msgs\String.cs</Link>
     </Compile>
     <Compile Include="..\RosSharp.NET40\Topic\IPublisher.cs">
       <Link>Topic\IPublisher.cs</Link>
@@ -155,7 +155,7 @@
       <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">
         <SilverlightProjectProperties />
       </FlavorProperties>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="417b1a0a-5ff8-4423-9f62-fe61aa299239" />
+      <UserProperties ProjectLinkReference="417b1a0a-5ff8-4423-9f62-fe61aa299239" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

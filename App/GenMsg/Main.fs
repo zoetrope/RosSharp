@@ -14,8 +14,8 @@ let main(argv: string[]) =
     
     //let text = File.ReadAllText("../../msg/roslib/Header.msg")
     //let text = File.ReadAllText("../../msg/roslib/Time.msg")
-    
-    let text = File.ReadAllText("../../msg/std_msgs/Int8MultiArray.msg")
+    //let text = File.ReadAllText("../../msg/std_msgs/Int8MultiArray.msg")
+    let text = File.ReadAllText("../../msg/std_msgs/String.msg")
                 |> fun t -> t.Replace("\r\n", "\n")
                 |> deleteLineComment
     
@@ -31,7 +31,8 @@ let main(argv: string[]) =
     
     //let result = ast |> generateMessageClass "roslib" "Header"
     //let result = ast |> generateMessageClass "roslib" "Time"
-    let result = ast |> generateMessageClass "std_msgs" "Int8MultiArray"
+    //let result = ast |> generateMessageClass "std_msgs" "Int8MultiArray"
+    let result = ast |> generateMessageClass "std_msgs" "String"
 
     printfn "%s" result
 
