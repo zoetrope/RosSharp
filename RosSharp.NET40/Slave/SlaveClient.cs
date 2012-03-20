@@ -6,7 +6,10 @@ using RosSharp.Topic;
 
 namespace RosSharp.Slave
 {
-    public class SlaveClient
+    /// <summary>
+    /// XML-RPC Client for Slave API
+    /// </summary>
+    public sealed class SlaveClient
     {
         private SlaveProxy _proxy;
         public SlaveClient(Uri uri)
@@ -15,6 +18,11 @@ namespace RosSharp.Slave
             _proxy.Url = uri.ToString();
         }
 
+        /// <summary>
+        /// Retrieve transport/topic statistics.
+        /// </summary>
+        /// <param name="callerId">ROS caller ID.</param>
+        /// <returns>stats</returns>
         public IObservable<object[]> GetBusStatsAsync(string callerId)
         {
             return Observable.FromAsyncPattern<string, object[]>(_proxy.BeginGetBusStats, _proxy.EndGetBusStats)
@@ -23,6 +31,11 @@ namespace RosSharp.Slave
                 
         }
 
+        /// <summary>
+        /// Retrieve transport/topic connection information.
+        /// </summary>
+        /// <param name="callerId">ROS caller ID.</param>
+        /// <returns>businfo</returns>
         public IObservable<object[]> GetBusInfoAsync(string callerId)
         {
             return Observable.FromAsyncPattern<string, object[]>(_proxy.BeginGetBusInfo, _proxy.EndGetBusInfo)
@@ -30,6 +43,11 @@ namespace RosSharp.Slave
                 .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); });
         }
 
+        /// <summary>
+        /// Get the URI of the master node.
+        /// </summary>
+        /// <param name="callerId">ROS caller ID.</param>
+        /// <returns>URI of the master</returns>
         public IObservable<Uri> GetMasterUriAsync(string callerId)
         {
             return Observable.FromAsyncPattern<string, object[]>(_proxy.BeginGetMasterUri, _proxy.EndGetMasterUri)
@@ -38,6 +56,12 @@ namespace RosSharp.Slave
                 .Select(ret => new Uri((string)ret[2]));
         }
 
+        /// <summary>
+        /// Stop this server.
+        /// </summary>
+        /// <param name="callerId">ROS caller ID.</param>
+        /// <param name="msg">A message describing why the node is being shutdown.</param>
+        /// <returns>ignore</returns>
         public IObservable<int> ShutdownAsync(string callerId, string msg)
         {
             return Observable.FromAsyncPattern<string, string, object[]>(_proxy.BeginShutdown, _proxy.EndShutdown)
@@ -46,6 +70,11 @@ namespace RosSharp.Slave
                 .Select(ret => (int)ret[2]);
         }
 
+        /// <summary>
+        /// Get the PID of this server.
+        /// </summary>
+        /// <param name="callerId">ROS caller ID.</param>
+        /// <returns>server process pid</returns>
         public IObservable<int> GetPidAsync(string callerId)
         {
             return Observable.FromAsyncPattern<string, object[]>(_proxy.BeginGetPid, _proxy.EndGetPid)
@@ -54,6 +83,13 @@ namespace RosSharp.Slave
                 .Select(ret => (int)ret[2]);
         }
 
+        /// <summary>
+        /// Retrieve a list of topics that this node subscribes to
+        /// </summary>
+        /// <param name="callerId">ROS caller ID.</param>
+        /// <returns>
+        /// topicList is a list of topics this node subscribes to and is of the form
+        /// </returns>
         public IObservable<List<TopicInfo>> GetSubscriptionsAsync(string callerId)
         {
             return Observable.FromAsyncPattern<string, object[]>(_proxy.BeginGetSubscriptions,_proxy.EndGetSubscriptions)
@@ -63,6 +99,13 @@ namespace RosSharp.Slave
                     .Select(x => new TopicInfo() { Name = (string)x[0], Type = (string)x[1] }).ToList());
         }
 
+        /// <summary>
+        /// Retrieve a list of topics that this node publishes.
+        /// </summary>
+        /// <param name="callerId">ROS caller ID.</param>
+        /// <returns>
+        /// topicList is a list of topics published by this node and is of the form
+        /// </returns>
         public IObservable<List<TopicInfo>> GetPublicationsAsync(string callerId)
         {
             return Observable.FromAsyncPattern<string, object[]>(_proxy.BeginGetPublications,_proxy.EndGetPublications)
@@ -72,6 +115,13 @@ namespace RosSharp.Slave
                     .Select(x => new TopicInfo() { Name = ((string[])x)[0], Type = ((string[])x)[1] }).ToList());
         }
 
+        /// <summary>
+        /// Callback from master with updated value of subscribed parameter.
+        /// </summary>
+        /// <param name="callerId">ROS caller ID.</param>
+        /// <param name="parameterKey">Parameter name, globally resolved.</param>
+        /// <param name="parameterValue">New parameter value.</param>
+        /// <returns>ignore</returns>
         public IObservable<int> ParamUpdateAsync(string callerId, string parameterKey, object parameterValue)
         {
 #if WINDOWS_PHONE
@@ -85,6 +135,13 @@ namespace RosSharp.Slave
                 .Select(ret => (int)ret[2]);
         }
 
+        /// <summary>
+        /// Callback from master of current publisher list for specified topic.
+        /// </summary>
+        /// <param name="callerId">ROS caller ID.</param>
+        /// <param name="topic">Topic name.</param>
+        /// <param name="publishers">List of current publishers for topic in the form of XMLRPC URIs</param>
+        /// <returns>ignore</returns>
         public IObservable<int> PublisherUpdateAsync(string callerId, string topic, string[] publishers)
         {
 #if WINDOWS_PHONE
@@ -98,8 +155,25 @@ namespace RosSharp.Slave
                 .Select(ret => (int)ret[2]);
         }
 
+        /// <summary>
+        /// Publisher node API method called by a subscriber node.
+        /// This requests that source allocate a channel for communication.
+        /// Subscriber provides a list of desired protocols for communication.
+        /// Publisher returns the selected protocol along with any additional params required for establishing connection.
+        /// For example, for a TCP/IP-based connection, the source node may return a port number of TCP/IP server.
+        /// </summary>
+        /// <param name="callerId">ROS caller ID.</param>
+        /// <param name="topic">Topic name.</param>
+        /// <param name="protocols">
+        /// List of desired protocols for communication in order of preference. Each protocol is a list of the form
+        ///   [ProtocolName, ProtocolParam1, ProtocolParam2...N]
+        /// </param>
+        /// <returns>
+        /// protocolParams may be an empty list if there are no compatible protocols.
+        /// </returns>
         public IObservable<TopicParam> RequestTopicAsync(string callerId, string topic, object[] protocols)
         {
+            //TODO: protocolsの型を明確に。
 #if WINDOWS_PHONE
             return ObservableEx
 #else

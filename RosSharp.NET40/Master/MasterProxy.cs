@@ -4,10 +4,12 @@ using CookComputing.XmlRpc;
 
 namespace RosSharp.Master
 {
+    /// <summary>
+    /// Asynchronous call Proxy for Master API
+    /// </summary>
     [XmlRpcUrl("")]
-    public class MasterProxy : XmlRpcClientProtocol
+    internal sealed class MasterProxy : XmlRpcClientProtocol
     {
-
         [XmlRpcBegin("registerService")]
         public IAsyncResult BeginRegisterService(string callerId, string service, string serviceApi, string callerApi, AsyncCallback callback, object state)
         {

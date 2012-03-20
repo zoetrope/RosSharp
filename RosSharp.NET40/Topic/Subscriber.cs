@@ -20,7 +20,7 @@ namespace RosSharp.Topic
             NodeId = nodeId;
         }
 
-        public void Connect(TopicParam param)
+        public void Connect(TopicParam param) //TODO:非同期待ちにすべき
         {
             _tcpClient = new RosTcpClient();
             var ret = _tcpClient.ConnectAsync(param.HostName, param.PortNumber).First();

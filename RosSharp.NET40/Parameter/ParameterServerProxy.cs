@@ -4,8 +4,11 @@ using CookComputing.XmlRpc;
 
 namespace RosSharp.Parameter
 {
+    /// <summary>
+    /// Asynchronous call Proxy for ParameterServer API
+    /// </summary>
     [XmlRpcUrl("")]
-    public class ParameterServerProxy : XmlRpcClientProtocol
+    internal sealed class ParameterServerProxy : XmlRpcClientProtocol
     {
         [XmlRpcBegin("deleteParam")]
         public IAsyncResult BeginDeleteParam(string callerId, string key, AsyncCallback callback, object state)

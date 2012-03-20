@@ -6,7 +6,10 @@ using System.Reactive.Linq;
 
 namespace RosSharp.Master
 {
-    public class MasterClient
+    /// <summary>
+    /// XML-RPC Client for Master API
+    /// </summary>
+    public sealed class MasterClient
     {
         private readonly MasterProxy _proxy;
         public MasterClient(Uri uri)
@@ -16,13 +19,13 @@ namespace RosSharp.Master
         }
 
         /// <summary>
-        /// Register the Service
+        /// Register the caller as a provider of the specified service.
         /// </summary>
         /// <param name="callerId">ROS Caller ID</param>
-        /// <param name="service">Name of Service</param>
-        /// <param name="serviceApi">URI of Service</param>
-        /// <param name="callerApi">URI of caller node</param>
-        /// <returns>None</returns>
+        /// <param name="service">Fully-qualified name of service</param>
+        /// <param name="serviceApi">ROSRPC Service URI</param>
+        /// <param name="callerApi">XML-RPC URI of caller node</param>
+        /// <returns>ignore</returns>
         public IObservable<Unit> RegisterServiceAsync(string callerId, string service, Uri serviceApi, Uri callerApi)
         {
 #if WINDOWS_PHONE
@@ -37,11 +40,12 @@ namespace RosSharp.Master
         }
 
         /// <summary>
-        /// Unregister the Service
+        /// Unregister the caller as a provider of the specified service.
         /// </summary>
         /// <param name="callerId">ROS Caller ID</param>
-        /// <param name="service">Name of Service</param>
-        /// <param name="serviceApi">URI of Service</param>
+        /// <param name="service">Fully-qualified name of service</param>
+        /// <param name="serviceApi">API URI of service to unregister.
+        /// Unregistration will only occur if current registration matches.</param>
         /// <returns>Number of Unregistrations</returns>
         public IObservable<int> UnregisterServiceAsync(string callerId, string service, Uri serviceApi)
         {
@@ -56,6 +60,16 @@ namespace RosSharp.Master
                 .Select(ret => (int)ret[2]);
         }
 
+        /// <summary>
+        /// Subscribe the caller to the specified topic.
+        /// In addition to receiving a list of current publishers, 
+        /// the subscriber will also receive notifications of new publishers via the publisherUpdate API.
+        /// </summary>
+        /// <param name="callerId">ROS caller ID</param>
+        /// <param name="topic">Fully-qualified name of topic.</param>
+        /// <param name="topicType">Datatype for topic. Must be a package-resource name, i.e. the .msg name.</param>
+        /// <param name="callerApi">API URI of subscriber to register. Will be used for new publisher notifications.</param>
+        /// <returns>list of XMLRPC API URIs for nodes currently publishing the specified topic.</returns>
         public IObservable<List<Uri>> RegisterSubscriberAsync(string callerId, string topic, string topicType, Uri callerApi)
         {
 #if WINDOWS_PHONE
@@ -69,6 +83,14 @@ namespace RosSharp.Master
                 .Select(ret => ((object[])ret[2]).Select(x => new Uri((string)x)).ToList());
         }
 
+        /// <summary>
+        /// Unregister the caller as a publisher of the topic.
+        /// </summary>
+        /// <param name="callerId">ROS caller ID</param>
+        /// <param name="topic">Fully-qualified name of topic.</param>
+        /// <param name="callerApi">API URI of service to unregister.
+        /// Unregistration will only occur if current registration matches.</param>
+        /// <returns>Number of Unsubscribed</returns>
         public IObservable<int> UnregisterSubscriberAsync(string callerId, string topic, Uri callerApi)
         {
 #if WINDOWS_PHONE
@@ -82,6 +104,14 @@ namespace RosSharp.Master
                 .Select(ret => (int)ret[2]);
         }
 
+        /// <summary>
+        /// Register the caller as a publisher the topic.
+        /// </summary>
+        /// <param name="callerId">ROS caller ID</param>
+        /// <param name="topic">Fully-qualified name of topic to register.</param>
+        /// <param name="topicType">Datatype for topic. Must be a package-resource name, i.e. the .msg name.</param>
+        /// <param name="callerApi">API URI of publisher to register.</param>
+        /// <returns>List of current subscribers of topic in the form of XMLRPC URIs.</returns>
         public IObservable<List<Uri>> RegisterPublisherAsync(string callerId, string topic, string topicType, Uri callerApi)
         {
 #if WINDOWS_PHONE
@@ -95,6 +125,14 @@ namespace RosSharp.Master
                 .Select(ret => ((object[])ret[2]).Select(x => new Uri((string)x)).ToList());
         }
 
+        /// <summary>
+        /// Unregister the caller as a publisher of the topic.
+        /// </summary>
+        /// <param name="callerId">ROS caller ID</param>
+        /// <param name="topic">Fully-qualified name of topic to unregister.</param>
+        /// <param name="callerApi">API URI of publisher to unregister.
+        /// Unregistration will only occur if current registration matches.</param>
+        /// <returns>Number of Unregistered</returns>
         public IObservable<int> UnregisterPublisherAsync(string callerId, string topic, Uri callerApi)
         {
 #if WINDOWS_PHONE
@@ -109,11 +147,13 @@ namespace RosSharp.Master
         }
 
         /// <summary>
-        /// Looking Uri about publishers and subscribers
+        /// Get the XML-RPC URI of the node with the associated name/caller_id.
+        /// This API is for looking information about publishers and subscribers.
+        /// Use lookupService instead to lookup ROS-RPC URIs.
         /// </summary>
         /// <param name="callerId">ROS Caller ID</param>
         /// <param name="nodeName">Name of node to lookup</param>
-        /// <returns>Uri of the node with associated nodeName/callerId</returns>
+        /// <returns>URI of the Node</returns>
         public IObservable<Uri> LookupNodeAsync(string callerId, string nodeName)
         {
             return Observable.FromAsyncPattern<string, string, object[]>(_proxy.BeginLookupNode, _proxy.EndLookupNode)
@@ -123,6 +163,16 @@ namespace RosSharp.Master
 
         }
 
+        /// <summary>
+        /// Get list of topics that can be subscribed to.
+        /// This does not return topics that have no publishers.
+        /// See getSystemState() to get more comprehensive list.
+        /// </summary>
+        /// <param name="callerId">ROS caller ID</param>
+        /// <param name="subgraph">Restrict topic names to match within the specified subgraph.
+        /// Subgraph namespace is resolved relative to the caller's namespace.
+        /// Use emptry string to specify all names.</param>
+        /// <returns>TopicInfo list</returns>
         public IObservable<List<TopicInfo>> GetPublisherTopicsAsync(string callerId, string subgraph)
         {
             return Observable.FromAsyncPattern<string, string, object[]>(_proxy.BeginGetPublisherTopics, _proxy.EndGetPublisherTopics)
@@ -137,10 +187,10 @@ namespace RosSharp.Master
         }
 
         /// <summary>
-        /// Get system state
+        /// Retrieve list representation of system state (i.e. publishers, subscribers, and services).
         /// </summary>
         /// <param name="callerId">ROS Caller ID</param>
-        /// <returns>system state (publishers, subscribers, services)</returns>
+        /// <returns>System state</returns>
         public IObservable<SystemState> GetSystemStateAsync(string callerId)
         {
             return Observable.FromAsyncPattern<string, object[]>(_proxy.BeginGetSystemState, _proxy.EndGetSystemState)
@@ -171,7 +221,7 @@ namespace RosSharp.Master
         }
 
         /// <summary>
-        /// Get URI of the master
+        /// Get the URI of the the master.
         /// </summary>
         /// <param name="callerId">ROS Caller ID</param>
         /// <returns>URI of the master</returns>
@@ -183,6 +233,12 @@ namespace RosSharp.Master
                 .Select(ret => new Uri((string)ret[2]));
         }
 
+        /// <summary>
+        /// Lookup all provider of a particular service.
+        /// </summary>
+        /// <param name="callerId">ROS caller ID</param>
+        /// <param name="service">Fully-qualified name of service</param>
+        /// <returns>URI of the service</returns>
         public IObservable<Uri> LookupServiceAsync(string callerId, string service)
         {
             return Observable.FromAsyncPattern<string, string, object[]>(_proxy.BeginLookupService, _proxy.EndLookupService)

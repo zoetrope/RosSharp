@@ -4,8 +4,11 @@ using CookComputing.XmlRpc;
 
 namespace RosSharp.Slave
 {
+    /// <summary>
+    /// Asynchronous call Proxy for Slave API
+    /// </summary>
     [XmlRpcUrl("")]
-    public class SlaveProxy : XmlRpcClientProtocol
+    internal sealed class SlaveProxy : XmlRpcClientProtocol
     {
         [XmlRpcBegin("getBusStats")]
         public IAsyncResult BeginGetBusStats(string callerId, AsyncCallback callback, object state)

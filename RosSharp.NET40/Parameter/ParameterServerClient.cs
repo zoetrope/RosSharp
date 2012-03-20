@@ -5,7 +5,10 @@ using System.Reactive.Linq;
 
 namespace RosSharp.Parameter
 {
-    public class ParameterServerClient
+    /// <summary>
+    /// XML-RPC Client for ParameterServer API
+    /// </summary>
+    public sealed class ParameterServerClient
     {
         private ParameterServerProxy _proxy;
         public ParameterServerClient(Uri uri)
@@ -14,6 +17,12 @@ namespace RosSharp.Parameter
             _proxy.Url = uri.ToString();
         }
 
+        /// <summary>
+        /// Delete parameter
+        /// </summary>
+        /// <param name="callerId">ROS caller ID</param>
+        /// <param name="key">Parameter name.</param>
+        /// <returns>ignore</returns>
         public IObservable<int> DeleteParamAsync(string callerId, string key)
         {
             return Observable.FromAsyncPattern<string, string, object[]>(_proxy.BeginDeleteParam, _proxy.EndDeleteParam)
@@ -22,6 +31,13 @@ namespace RosSharp.Parameter
                 .Select(ret => (int)ret[2]);
         }
 
+        /// <summary>
+        /// Set parameter.
+        /// </summary>
+        /// <param name="callerId">ROS caller ID</param>
+        /// <param name="key">Parameter name.</param>
+        /// <param name="value">Parameter value.</param>
+        /// <returns>ignore</returns>
         public IObservable<int> SetParamAsync(string callerId, string key, object value)
         {
 #if WINDOWS_PHONE
@@ -35,6 +51,12 @@ namespace RosSharp.Parameter
                 .Select(ret => (int)ret[2]);
         }
 
+        /// <summary>
+        /// Retrieve parameter value from server.
+        /// </summary>
+        /// <param name="callerId">ROS caller ID</param>
+        /// <param name="key">Parameter name. If key is a namespace, getParam() will return a parameter tree.</param>
+        /// <returns>parameterValue</returns>
         public IObservable<object[]> GetParamAsync(string callerId, string key)
         {
             return Observable.FromAsyncPattern<string, string, object[]>(_proxy.BeginGetParam, _proxy.EndGetParam)
@@ -42,6 +64,12 @@ namespace RosSharp.Parameter
                 .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); });
         }
 
+        /// <summary>
+        /// Search for parameter key on the Parameter Server.
+        /// </summary>
+        /// <param name="callerId">ROS caller ID</param>
+        /// <param name="key">Parameter name to search for.</param>
+        /// <returns>foundKey</returns>
         public IObservable<string> SearchParamAsync(string callerId, string key)
         {
             return Observable.FromAsyncPattern<string, string, object[]>(_proxy.BeginSearchParam, _proxy.EndSearchParam)
@@ -50,6 +78,14 @@ namespace RosSharp.Parameter
                 .Select(ret => (string)ret[2]);
         }
 
+        /// <summary>
+        /// Retrieve parameter value from server and subscribe to updates to that param.
+        /// See paramUpdate() in the Node API.
+        /// </summary>
+        /// <param name="callerId">ROS caller ID.</param>
+        /// <param name="key">Parameter name</param>
+        /// <param name="callerApi">Node API URI of subscriber for paramUpdate callbacks.</param>
+        /// <returns>parameterValue</returns>
         public IObservable<object[]> SubscribeParamAsync(string callerId, string key, string callerApi)
         {
 #if WINDOWS_PHONE
@@ -62,6 +98,14 @@ namespace RosSharp.Parameter
                 .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); });
         }
 
+        /// <summary>
+        /// Retrieve parameter value from server and subscribe to updates to that param. 
+        /// See paramUpdate() in the Node API.
+        /// </summary>
+        /// <param name="callerId">ROS caller ID.</param>
+        /// <param name="key">Parameter name.</param>
+        /// <param name="callerApi">Node API URI of subscriber.</param>
+        /// <returns>number of unsubscribed</returns>
         public IObservable<int> UnsubscribeParamAsync(string callerId, string key, string callerApi)
         {
 #if WINDOWS_PHONE
@@ -75,6 +119,12 @@ namespace RosSharp.Parameter
                 .Select(ret => (int)ret[2]);
         }
 
+        /// <summary>
+        /// Check if parameter is stored on server.
+        /// </summary>
+        /// <param name="callerId">ROS caller ID.</param>
+        /// <param name="key">Parameter name.</param>
+        /// <returns>hasParam</returns>
         public IObservable<bool> HasParamAsync(string callerId, string key)
         {
             return Observable.FromAsyncPattern<string, string, object[]>(_proxy.BeginHasParam, _proxy.EndHasParam)
@@ -83,6 +133,11 @@ namespace RosSharp.Parameter
                 .Select(ret => (bool)ret[2]);
         }
 
+        /// <summary>
+        /// Get list of all parameter names stored on this server.
+        /// </summary>
+        /// <param name="callerId">ROS caller ID.</param>
+        /// <returns>parameter name list</returns>
         public IObservable<List<string>> GetParamNamesAsync(string callerId)
         {
             return Observable.FromAsyncPattern<string, object[]>(_proxy.BeginGetParamNames, _proxy.EndGetParamNames)

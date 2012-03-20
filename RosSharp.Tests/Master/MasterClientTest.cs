@@ -25,7 +25,7 @@ namespace RosSharp.Tests.Master
             MXmlRpcClientProtocol.AllInstances.UrlSetString = (t1, t2) => { };
             MMasterProxy.AllInstances.BeginRegisterServiceStringStringStringStringAsyncCallbackObject = (t1, t2, t3, t4, t5, t6, t7) => { t6(null); return null; };
             MMasterProxy.AllInstances.EndRegisterServiceIAsyncResult= (t1, t2) => result;
-
+            
             var client = new MasterClient(new Uri("http://localhost"));
 
             client.RegisterServiceAsync("/test", "/myservice", new Uri("http://192.168.11.2:11112"), new Uri("http://192.168.11.2:11111")).First();
