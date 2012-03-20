@@ -5,7 +5,8 @@ using RosSharp.Message;
 
 namespace RosSharp.Topic
 {
-    public class Publisher<TDataType> : IPublisher, IObserver<TDataType> where TDataType : IMessage, new()
+    public sealed class Publisher<TDataType> : IPublisher, IObserver<TDataType> 
+        where TDataType : IMessage, new()
     {
         private List<RosTopicClient<TDataType>> _rosTopics = new List<RosTopicClient<TDataType>>();
 

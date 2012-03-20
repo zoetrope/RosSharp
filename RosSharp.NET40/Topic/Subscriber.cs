@@ -7,7 +7,7 @@ using RosSharp.Transport;
 
 namespace RosSharp.Topic
 {
-    public class Subscriber<TDataType> : ISubscriber, IObservable<TDataType> 
+    public sealed class Subscriber<TDataType> : ISubscriber, IObservable<TDataType> 
         where TDataType : IMessage, new ()
     {
         private RosTcpClient _tcpClient;
@@ -20,25 +20,23 @@ namespace RosSharp.Topic
             NodeId = nodeId;
         }
 
-        public void Connect(TopicParam param) //TODO:非同期待ちにすべき
+        internal void Connect(TopicParam param) //TODO:非同期待ちにすべき
         {
             _tcpClient = new RosTcpClient();
             var ret = _tcpClient.ConnectAsync(param.HostName, param.PortNumber).First();
-
-            var headerSerializer = new TcpRosHeaderSerializer<SubscriberResponseHeader>();
 
             //TODO: RosTopicに委譲
 
             var last = _tcpClient.ReceiveAsync()
                 .Take(1)
-                .Select(x => headerSerializer.Deserialize(new MemoryStream(x)))
+                .Select(x => TcpRosHeaderSerializer.Deserialize(new MemoryStream(x)))
                 .PublishLast();
                 //.Subscribe(x => Console.WriteLine(x.topic + "/" + x.type));
 
             last.Connect();
 
             var dummy = new TDataType();
-            var header = new SubscriberHeader()
+            var header = new 
             {
                 callerid = NodeId,
                 topic = Name,
@@ -46,11 +44,9 @@ namespace RosSharp.Topic
                 type = dummy.MessageType
             };
 
-            var serializer = new TcpRosHeaderSerializer<SubscriberHeader>();
-
             var stream = new MemoryStream();
 
-            serializer.Serialize(stream, header);
+            TcpRosHeaderSerializer.Serialize(stream, header);
             var data = stream.ToArray();
 
             _tcpClient.SendAsync(data).First();
@@ -62,6 +58,7 @@ namespace RosSharp.Topic
         public string Name { get; private set; }
 
         public string Type { get; private set; }
+        
         public void UpdatePublishers()
         {
             throw new NotImplementedException();

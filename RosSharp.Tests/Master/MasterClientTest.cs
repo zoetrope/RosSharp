@@ -17,7 +17,7 @@ namespace RosSharp.Tests.Master
         {
             var result = new object[3]
             {
-                1,
+                StatusCode.Success,
                 "Registered [/test] as provider of [/myservice]",
                 1
             };

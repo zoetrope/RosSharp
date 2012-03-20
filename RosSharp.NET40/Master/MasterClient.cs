@@ -35,7 +35,7 @@ namespace RosSharp.Master
 #endif
                 .FromAsyncPattern<string, string, string, string, object[]>(_proxy.BeginRegisterService, _proxy.EndRegisterService)
                 .Invoke(callerId, service, serviceApi.ToString(), callerApi.ToString())
-                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
+                .Do(ret => { if ((StatusCode)ret[0] != StatusCode.Success) throw new InvalidOperationException((string)ret[1]); })
                 .Select(_ => Unit.Default);
         }
 

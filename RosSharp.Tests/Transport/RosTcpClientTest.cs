@@ -62,21 +62,18 @@ namespace RosSharp.Tests.Transport
                 t1 => scheduler.CreateHotObservable(OnNext(10, (SocketAsyncEventArgs)arg));
 
 
-            var observer = scheduler.CreateObserver<SubscriberResponseHeader>();
+            var observer = scheduler.CreateObserver<TcpRosHeader>();
 
             var client = new RosTcpClient();
 
 
-
-            var serializer = new TcpRosHeaderSerializer<SubscriberResponseHeader>();
-
             var result = client.ReceiveAsync()
-                .Select(x=>serializer.Deserialize(new MemoryStream(x)))
+                .Select(x => TcpRosHeaderSerializer.Deserialize(new MemoryStream(x)))
                 .Subscribe(observer);
 
             scheduler.AdvanceTo(10);
 
-            var header = new SubscriberResponseHeader()
+            var header = new 
             {
                 callerid = "/rosjava_tutorial_pubsub/talker",
                 latching = "0",
@@ -88,7 +85,7 @@ namespace RosSharp.Tests.Transport
 
             observer.Messages.Count.Is(1);
 
-            var actual = observer.Messages.First().Value.Value;
+            dynamic actual = observer.Messages.First().Value.Value;
             actual.callerid.Is(header.callerid);
             actual.latching.Is(header.latching);
             actual.md5sum.Is(header.md5sum);

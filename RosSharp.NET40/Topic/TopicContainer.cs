@@ -7,7 +7,7 @@ using RosSharp.Message;
 
 namespace RosSharp.Topic
 {
-    public class TopicContainer
+    internal sealed class TopicContainer
     {
         private readonly ConcurrentDictionary<string, IPublisher> _publishers = new ConcurrentDictionary<string, IPublisher>();
         private readonly ConcurrentDictionary<string, ISubscriber> _subscribers = new ConcurrentDictionary<string, ISubscriber>();

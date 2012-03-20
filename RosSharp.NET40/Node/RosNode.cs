@@ -40,13 +40,15 @@ namespace RosSharp.Node
         {
             var dummy = new TDataType();
 
-            var uri = _masterClient
+            var uris = _masterClient
                 .RegisterSubscriberAsync(NodeId, topicName, dummy.MessageType, _slaveServer.SlaveUri)
                 .First();//TODO: エラーが起きたとき
 
-            var slave = new SlaveClient(uri.First());
+            //TODO: 複数のSlave対応？
+            var slave = new SlaveClient(uris.First()); //TODO: Subscriberに持たせる
 
-            var topicParam = slave.RequestTopicAsync(NodeId, topicName, new object[1] { new string[1] { "TCPROS" } }).First();
+            var topicParam = slave.RequestTopicAsync(
+                NodeId, topicName, new object[1] {new string[1] {"TCPROS"}}).First();
 
             var subscriber = new Subscriber<TDataType>(topicName, NodeId);
             subscriber.Connect(topicParam);
@@ -65,7 +67,9 @@ namespace RosSharp.Node
             _rosTopicServer.AcceptAsync().Subscribe(socket => publisher.AddTopic(new RosTopicClient<TDataType>(socket, NodeId, topicName)));
 
 
-            var ret1 = _masterClient.RegisterPublisherAsync(NodeId, topicName, publisher.Type, _slaveServer.SlaveUri).First();
+            var uris = _masterClient.RegisterPublisherAsync(NodeId, topicName, publisher.Type, _slaveServer.SlaveUri).First();
+
+            var slave = new SlaveClient(uris.First());//TODO: publisherに持たせる
 
             _topicContainer.AddPublisher(publisher);
 

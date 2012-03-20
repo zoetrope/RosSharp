@@ -13,7 +13,7 @@ namespace RosSharp.Parameter
     {
         //TODO: サーバ実装を委譲してinternalクラスにしたほうがよいか。
 
-        public Uri ParameterServerUri { get; set; }
+        public Uri ParameterServerUri { get; private set; }
         public ParameterServer(int portNumber)
         {
             var channel = new HttpServerChannel("param", portNumber, new XmlRpcServerFormatterSinkProvider());

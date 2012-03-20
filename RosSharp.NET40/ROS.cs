@@ -8,7 +8,7 @@ using RosSharp.Node;
 
 namespace RosSharp
 {
-    public class ROS
+    public static class ROS
     {
         //TODO: staticではなく、インスタンスを作るべきか？
         public static Uri MasterUri { get; private set; }

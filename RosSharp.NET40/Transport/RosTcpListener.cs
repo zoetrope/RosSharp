@@ -5,7 +5,7 @@ using System.Reactive.Linq;
 
 namespace RosSharp.Transport
 {
-    public class RosTcpListener
+    internal sealed class RosTcpListener
     {
         private Socket _socket;
 

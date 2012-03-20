@@ -7,7 +7,7 @@ using RosSharp.Transport;
 
 namespace RosSharp.Topic
 {
-    public class RosTopicClient<TDataType> : IDisposable
+    internal sealed class RosTopicClient<TDataType> : IDisposable
         where TDataType : IMessage, new()
     {
         private readonly RosTcpClient _tcpClient;
@@ -37,15 +37,15 @@ namespace RosSharp.Topic
             IsConnected = false;
         }
 
-        protected void OnReceiveHeader(byte[] data)
+        //TODO: voidじゃだめでは？
+        private void OnReceiveHeader(byte[] data)
         {
-            var reqSerializer = new TcpRosHeaderSerializer<SubscriberHeader>();
-            var reqHeader = reqSerializer.Deserialize(new MemoryStream(data));
+            var reqHeader = TcpRosHeaderSerializer.Deserialize(new MemoryStream(data));
             //TODO: 受信したデータのチェック
 
             var temp = new TDataType();
 
-            var resHeader = new SubscriberResponseHeader()
+            var resHeader = new 
             {
                 callerid = NodeId,
                 latching = "0",
@@ -54,11 +54,9 @@ namespace RosSharp.Topic
                 topic = TopicName,
                 type = temp.MessageType
             };
-
-            var resSerializer = new TcpRosHeaderSerializer<SubscriberResponseHeader>();
-
+            
             var ms = new MemoryStream();
-            resSerializer.Serialize(ms, resHeader);
+            TcpRosHeaderSerializer.Serialize(ms, resHeader);
 
             _tcpClient.SendAsync(ms.ToArray()).First(); //TODO: Firstでよい？
 

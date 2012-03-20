@@ -7,7 +7,7 @@ using System.Reactive.Subjects;
 
 namespace RosSharp.Transport
 {
-    public class RosTcpClient : IDisposable
+    internal sealed class RosTcpClient : IDisposable
     {
         private Socket _socket;
 
@@ -72,7 +72,7 @@ namespace RosSharp.Transport
         }
 
 
-        protected byte[] OnReceive(SocketAsyncEventArgs args)
+        private byte[] OnReceive(SocketAsyncEventArgs args)
         {
             var ret = new byte[args.BytesTransferred];
             Buffer.BlockCopy(args.Buffer, 0, ret, 0, args.BytesTransferred);
@@ -80,14 +80,14 @@ namespace RosSharp.Transport
             return ret;
         }
 
-        protected byte[] AppendData(byte[] bs1, byte[] bs2)
+        private byte[] AppendData(byte[] bs1, byte[] bs2)
         {
             var rs = new byte[bs1.Length + bs2.Length];
             bs1.CopyTo(rs, 0);
             bs2.CopyTo(rs, bs1.Length);
             return rs;
         }
-        protected bool CompleteMessage(int offset, out byte[] current, ref byte[] rest)
+        private bool CompleteMessage(int offset, out byte[] current, ref byte[] rest)
         {
             if (rest.Length == 0)
             {

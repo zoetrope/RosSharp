@@ -10,7 +10,7 @@ using RosSharp.Transport;
 
 namespace RosSharp.Service
 {
-    internal class ServiceProxyFactory
+    internal sealed class ServiceProxyFactory
     {
         public string NodeId { get; private set; }
 
@@ -28,10 +28,8 @@ namespace RosSharp.Service
             var tcpClient = new RosTcpClient();
             var ret = tcpClient.ConnectAsync(uri.Host, uri.Port).First();
 
-            var headerSerializer = new TcpRosHeaderSerializer<ServiceResponseHeader>();
-
             var rec = tcpClient.ReceiveAsync()
-                .Select(x => headerSerializer.Deserialize(new MemoryStream(x)))
+                .Select(x => TcpRosHeaderSerializer.Deserialize(new MemoryStream(x)))
                 .Take(1)
                 .PublishLast();
 
@@ -39,24 +37,21 @@ namespace RosSharp.Service
 
             var service = new TService();
 
-            var header = new ServiceHeader()
+            var header = new 
             {
                 callerid = NodeId,
                 md5sum = service.Md5Sum,
                 service = serviceName  
             };
-
-            var serializer = new TcpRosHeaderSerializer<ServiceHeader>();
-
+            
             var stream = new MemoryStream();
 
-            serializer.Serialize(stream, header);
+            TcpRosHeaderSerializer.Serialize(stream, header);
             var data = stream.ToArray();
 
             tcpClient.SendAsync(data).First();
 
             var test = rec.First();
-            Console.WriteLine(test.callerid);
 
             return request =>
                    {

@@ -10,7 +10,7 @@ namespace Listener
     {
         static void Main(string[] args)
         {
-            ROS.Initialize(new Uri("http://192.168.11.6:11311/"), "192.168.11.2");
+            ROS.Initialize(new Uri("http://192.168.11.5:11311/"), "192.168.11.2");
 
             var node = ROS.CreateNode("Listener");
 

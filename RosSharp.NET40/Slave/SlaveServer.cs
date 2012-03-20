@@ -14,14 +14,13 @@ namespace RosSharp.Slave
     /// <summary>
     /// XML-RPC Server for Slave API
     /// </summary>
-    public sealed class SlaveServer : MarshalByRefObject, ISlave, IDisposable
+    internal sealed class SlaveServer : MarshalByRefObject, ISlave, IDisposable
     {
-        //TODO: サーバ実装を委譲してinternalクラスにしたほうがよいか。
 
         private readonly TopicContainer _topicContainer;
         private readonly RosTopicServer _rosTopicServer;
 
-        public Uri SlaveUri { get; set; }
+        public Uri SlaveUri { get; private set; }
 
         public SlaveServer(int portNumber, TopicContainer topicContainer, RosTopicServer topicServer)
         {
@@ -101,7 +100,7 @@ namespace RosSharp.Slave
         {
             return new object[3]
             {
-                1,
+                StatusCode.Success,
                 "",
                 ROS.MasterUri //TODO: この実装でよい？
             };
@@ -135,7 +134,7 @@ namespace RosSharp.Slave
         {
             return new object[3]
             {
-                1,
+                StatusCode.Success,
                 "",
                 Process.GetCurrentProcess().Id
             };            

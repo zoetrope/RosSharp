@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using RosSharp.Topic;
 
@@ -62,12 +63,12 @@ namespace RosSharp.Slave
         /// <param name="callerId">ROS caller ID.</param>
         /// <param name="msg">A message describing why the node is being shutdown.</param>
         /// <returns>ignore</returns>
-        public IObservable<int> ShutdownAsync(string callerId, string msg)
+        public IObservable<Unit> ShutdownAsync(string callerId, string msg)
         {
             return Observable.FromAsyncPattern<string, string, object[]>(_proxy.BeginShutdown, _proxy.EndShutdown)
                 .Invoke(callerId, msg)
                 .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
-                .Select(ret => (int)ret[2]);
+                .Select(ret => Unit.Default);
         }
 
         /// <summary>
@@ -122,7 +123,7 @@ namespace RosSharp.Slave
         /// <param name="parameterKey">Parameter name, globally resolved.</param>
         /// <param name="parameterValue">New parameter value.</param>
         /// <returns>ignore</returns>
-        public IObservable<int> ParamUpdateAsync(string callerId, string parameterKey, object parameterValue)
+        public IObservable<Unit> ParamUpdateAsync(string callerId, string parameterKey, object parameterValue)
         {
 #if WINDOWS_PHONE
             return ObservableEx
@@ -132,7 +133,7 @@ namespace RosSharp.Slave
                 .FromAsyncPattern<string, string, object, object[]>(_proxy.BeginParamUpdate, _proxy.EndParamUpdate)
                 .Invoke(callerId,parameterKey,parameterValue)
                 .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
-                .Select(ret => (int)ret[2]);
+                .Select(ret => Unit.Default);
         }
 
         /// <summary>
@@ -142,7 +143,7 @@ namespace RosSharp.Slave
         /// <param name="topic">Topic name.</param>
         /// <param name="publishers">List of current publishers for topic in the form of XMLRPC URIs</param>
         /// <returns>ignore</returns>
-        public IObservable<int> PublisherUpdateAsync(string callerId, string topic, string[] publishers)
+        public IObservable<Unit> PublisherUpdateAsync(string callerId, string topic, string[] publishers)
         {
 #if WINDOWS_PHONE
             return ObservableEx
@@ -152,7 +153,7 @@ namespace RosSharp.Slave
                 .FromAsyncPattern<string, string, string[], object[]>(_proxy.BeginPublisherUpdate, _proxy.EndPublisherUpdate)
                 .Invoke(callerId,topic,publishers)
                 .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
-                .Select(ret => (int)ret[2]);
+                .Select(ret => Unit.Default);
         }
 
         /// <summary>

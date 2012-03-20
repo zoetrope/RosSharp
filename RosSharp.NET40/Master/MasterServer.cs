@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Http;
 using CookComputing.XmlRpc;
+using RosSharp.Slave;
 
 namespace RosSharp.Master
 {
@@ -14,30 +17,28 @@ namespace RosSharp.Master
     {
         //TODO: サーバ実装を委譲してinternalクラスにしたほうがよいか。
 
-        private readonly RegistrationTopicContainer _registrationTopicContainer;
-        private readonly RegistrationServiceContainer _registrationServiceContainer;
+        private readonly RegistrationContainer _registrationContainer = new RegistrationContainer();
 
         public Uri MasterUri { get; private set; }
 
+        private readonly HttpServerChannel _channel;
+
         public MasterServer(int portNumber)
         {
-            _registrationTopicContainer = new RegistrationTopicContainer();
-            _registrationServiceContainer = new RegistrationServiceContainer();
+            _channel = new HttpServerChannel("master", portNumber, new XmlRpcServerFormatterSinkProvider());
 
-
-            var channel = new HttpServerChannel("master", portNumber, new XmlRpcServerFormatterSinkProvider());
-            
-            var tmp = new Uri(channel.GetChannelUri());
+            var tmp = new Uri(_channel.GetChannelUri());
 
             MasterUri = new Uri("http://" + ROS.LocalHostName + ":" + tmp.Port);
 
-            ChannelServices.RegisterChannel(channel, false);
+            ChannelServices.RegisterChannel(_channel, false);
             RemotingServices.Marshal(this, "/");
         }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            ChannelServices.UnregisterChannel(_channel);
+            //RemotingServices.Unmarshal(this);
         }
 
         public override object InitializeLifetimeService()
@@ -59,15 +60,37 @@ namespace RosSharp.Master
         /// </returns>
         public object[] RegisterService(string callerId, string service, string serviceApi, string callerApi)
         {
-            _registrationServiceContainer.RegisterService(service, new Uri(serviceApi), new Uri(callerApi));
-
-            //TODO: エラー処理
-            return new object[3]
+            if (string.IsNullOrEmpty(service))
             {
-                1,
-                "Regisered [" + callerId + "] as provider of [" + service + "]",
-                1
-            };
+                return new object[3]
+                {
+                    StatusCode.Error,
+                    "ERROR: parameter [" + service + "] must be a non-empty string",
+                    0
+                };
+            }
+            try
+            {
+                lock (_registrationContainer)
+                {
+                    _registrationContainer.RegisterService(service, new Uri(serviceApi), new Uri(callerApi));
+                }
+                return new object[3]
+                {
+                    StatusCode.Success,
+                    "Regisered [" + callerId + "] as provider of [" + service + "]",
+                    1
+                };
+            }
+            catch (UriFormatException ex)
+            {
+                return new object[3]
+                {
+                    StatusCode.Error,
+                    "ERROR: parameter ["+ serviceApi + "] is not an XMLRPC URI",
+                    0
+                };
+            }
         }
 
         /// <summary>
@@ -84,9 +107,50 @@ namespace RosSharp.Master
         /// </returns>
         public object[] UnregisterService(string callerId, string service, string serviceApi)
         {
-            _registrationServiceContainer.UnregisterService(service, new Uri(serviceApi));
-
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(service))
+            {
+                return new object[3]
+                {
+                    StatusCode.Error,
+                    "ERROR: parameter [" + service + "] must be a non-empty string",
+                    0
+                };
+            }
+            try
+            {
+                bool success;
+                lock (_registrationContainer)
+                {
+                    success = _registrationContainer.UnregisterService(service, new Uri(serviceApi));
+                }
+                if (success)
+                {
+                    return new object[3]
+                    {
+                        StatusCode.Success,
+                        "Unregistered [" + callerId + "] as provider of [" + service + "]",
+                        1
+                    };
+                }
+                else
+                {
+                    return new object[3]
+                    {
+                        StatusCode.Success,
+                        "[" + service + "] is not a registered node",
+                        0
+                    };
+                }
+            }
+            catch (UriFormatException ex)
+            {
+                return new object[3]
+                {
+                    StatusCode.Error,
+                    "ERROR: parameter ["+ serviceApi + "] is not an XMLRPC URI",
+                    0
+                };
+            }
         }
 
         /// <summary>
@@ -105,15 +169,49 @@ namespace RosSharp.Master
         /// </returns>
         public object[] RegisterSubscriber(string callerId, string topic, string topicType, string callerApi)
         {
-            var uris = _registrationTopicContainer.RegsiterSubscriber(topic, topicType, new Uri(callerApi));
-
-            //TODO: エラー処理
-            return new object[3]
+            if (string.IsNullOrEmpty(topic))
             {
-                1,
-                "Subscribed to [" + topic + "]",
-                uris.Select(x => x.ToString()).ToArray()
-            };
+                return new object[3]
+                {
+                    StatusCode.Error,
+                    "ERROR: parameter [" + topic + "] must be a non-empty string",
+                    0
+                };
+            }
+            if (string.IsNullOrEmpty(topicType))
+            {
+                return new object[3]
+                {
+                    StatusCode.Error,
+                    "ERROR: parameter [" + topicType + "] must be a non-empty string",
+                    0
+                };
+            }
+
+            try
+            {
+                List<Uri> uris;
+                lock (_registrationContainer)
+                {
+                    uris = _registrationContainer.RegsiterSubscriber(topic, topicType, new Uri(callerApi));
+                }
+                return new object[3]
+                {
+                    StatusCode.Success,
+                    "Subscribed to [" + topic + "]",
+                    uris.Select(x => x.ToString()).ToArray()
+                };
+            }
+            catch (UriFormatException ex)
+            {
+                return new object[3]
+                {
+                    StatusCode.Error,
+                    "ERROR: parameter ["+ callerApi + "] is not an XMLRPC URI",
+                    0
+                };
+            }
+
         }
 
         /// <summary>
@@ -130,8 +228,51 @@ namespace RosSharp.Master
         /// </returns>
         public object[] UnregisterSubscriber(string callerId, string topic, string callerApi)
         {
-            _registrationTopicContainer.UnregisterSubscriber(topic, new Uri(callerApi));
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(topic))
+            {
+                return new object[3]
+                {
+                    StatusCode.Error,
+                    "ERROR: parameter [" + topic + "] must be a non-empty string",
+                    0
+                };
+            }
+
+            try
+            {
+                bool success;
+                lock (_registrationContainer)
+                {
+                    success = _registrationContainer.UnregisterSubscriber(topic, new Uri(callerApi));
+                }
+                if (success)
+                {
+                    return new object[3]
+                    {
+                        StatusCode.Success,
+                        "Unregistered [" + callerId + "] as topic of [" + topic + "]",
+                        1
+                    };
+                }
+                else
+                {
+                    return new object[3]
+                    {
+                        StatusCode.Success,
+                        "[" + topic + "] is not a registered node",
+                        0
+                    };
+                }
+            }
+            catch (UriFormatException ex)
+            {
+                return new object[3]
+                {
+                    StatusCode.Error,
+                    "ERROR: parameter ["+ callerApi + "] is not an XMLRPC URI",
+                    0
+                };
+            }
         }
 
         /// <summary>
@@ -148,15 +289,59 @@ namespace RosSharp.Master
         /// </returns>
         public object[] RegisterPublisher(string callerId, string topic, string topicType, string callerApi)
         {
-            var uris = _registrationTopicContainer.RegisterPublisher(topic, topicType, new Uri(callerApi));
-
-            //TODO: エラー処理
-            return new object[3]
+            if (string.IsNullOrEmpty(topic))
             {
-                1,
-                "Registered [" + callerId + "] as publisher of [" + topic + "]",
-                uris.Select(x => x.ToString()).ToArray()
-            };
+                return new object[3]
+                {
+                    StatusCode.Error,
+                    "ERROR: parameter [" + topic + "] must be a non-empty string",
+                    0
+                };
+            }
+            if (string.IsNullOrEmpty(topicType))
+            {
+                return new object[3]
+                {
+                    StatusCode.Error,
+                    "ERROR: parameter [" + topicType + "] must be a non-empty string",
+                    0
+                };
+            }
+
+            try
+            {
+                TopicRegistrationInfo info;
+                lock (_registrationContainer)
+                {
+                    info = _registrationContainer.RegisterPublisher(topic, topicType, new Uri(callerApi));
+                    UpdatePublisher(info);
+                }
+                return new object[3]
+                {
+                    1,
+                    "Registered [" + callerId + "] as publisher of [" + topic + "]",
+                    info.SubscriberUris.Select(x => x.ToString()).ToArray()
+                };
+            }
+            catch (UriFormatException ex)
+            {
+                return new object[3]
+                {
+                    StatusCode.Error,
+                    "ERROR: parameter ["+ callerApi + "] is not an XMLRPC URI",
+                    0
+                };
+            }
+        }
+
+        private void UpdatePublisher(TopicRegistrationInfo info)
+        {
+            var slaves = info.SubscriberUris.Select(uri => new SlaveClient(uri));
+
+            var publishers = info.PublisherUris.Select(x => x.ToString()).ToArray();
+
+            //TODO: Firstはだめ？Serverの中なのでどうすべきか。Java版では接続せずに帰ってきてる感じ。
+            slaves.ToList().ForEach(s => s.PublisherUpdateAsync("", info.TopicName, publishers).First());
         }
 
         /// <summary>
@@ -173,8 +358,51 @@ namespace RosSharp.Master
         /// </returns>
         public object[] UnregisterPublisher(string callerId, string topic, string callerApi)
         {
-            _registrationTopicContainer.UnregisterPublisher(topic, new Uri(callerApi));
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(topic))
+            {
+                return new object[3]
+                {
+                    StatusCode.Error,
+                    "ERROR: parameter [" + topic + "] must be a non-empty string",
+                    0
+                };
+            }
+
+            try
+            {
+                bool success;
+                lock (_registrationContainer)
+                {
+                    success = _registrationContainer.UnregisterPublisher(topic, new Uri(callerApi));
+                }
+                if (success)
+                {
+                    return new object[3]
+                    {
+                        StatusCode.Success,
+                        "Unregistered [" + callerId + "] as topic of [" + topic + "]",
+                        1
+                    };
+                }
+                else
+                {
+                    return new object[3]
+                    {
+                        StatusCode.Success,
+                        "[" + topic + "] is not a registered node",
+                        0
+                    };
+                }
+            }
+            catch (UriFormatException ex)
+            {
+                return new object[3]
+                {
+                    StatusCode.Error,
+                    "ERROR: parameter ["+ callerApi + "] is not an XMLRPC URI",
+                    0
+                };
+            }
         }
 
         /// <summary>
@@ -191,8 +419,40 @@ namespace RosSharp.Master
         /// </returns>
         public object[] LookupNode(string callerId, string nodeName)
         {
+            if (string.IsNullOrEmpty(nodeName))
+            {
+                return new object[3]
+                {
+                    StatusCode.Error,
+                    "ERROR: parameter [" + nodeName + "] must be a non-empty string",
+                    0
+                };
+            }
+            Uri uri;
+            lock (_registrationContainer)
+            {
+                uri = _registrationContainer.LookUpNode(nodeName);
+            }
 
-            throw new NotImplementedException();
+            if (uri != null)
+            {
+                return new object[3]
+                {
+                    StatusCode.Success,
+                    "node api: [" + uri + "]",
+                    uri.ToString()
+                };
+            }
+            else
+            {
+                return new object[3]
+                {
+                    StatusCode.Error,
+                    "unknown node [" + nodeName + "]",
+                    ""
+                };
+            }
+
         }
 
         /// <summary>
@@ -243,7 +503,12 @@ namespace RosSharp.Master
         /// </returns>
         public object[] GetUri(string callerId)
         {
-            throw new NotImplementedException();
+            return new object[3]
+            {
+                StatusCode.Success,
+                "",
+                MasterUri.ToString()
+            };
         }
 
         /// <summary>
@@ -258,13 +523,17 @@ namespace RosSharp.Master
         /// </returns>
         public object[] LookupService(string callerId, string service)
         {
-            var uri = _registrationServiceContainer.LookUp(service);
+            Uri uri;
+            lock (_registrationContainer)
+            {
+                uri = _registrationContainer.LookUpService(service);
+            }
 
             if (uri != null)
             {
                 return new object[3]
                 {
-                    1,
+                    StatusCode.Success,
                     "rosrpc URI: [" + uri + "]",
                     uri.ToString()
                 };
@@ -273,7 +542,7 @@ namespace RosSharp.Master
             {
                 return new object[3]
                 {
-                    -1,
+                    StatusCode.Error,
                     "no provider",
                     ""
                 };

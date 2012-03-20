@@ -10,11 +10,9 @@ namespace RosSharp.Tests.Transport
         [TestMethod]
         public void SerializeSubscriberHeader_Success()
         {
-            var serializer = new TcpRosHeaderSerializer<SubscriberHeader>();
-
             var data = new std_msgs.String() { data = "test" };
 
-            var header = new SubscriberHeader()
+            var header = new 
             {
                 callerid = "test",
                 topic = "/chatter",
@@ -24,7 +22,7 @@ namespace RosSharp.Tests.Transport
 
             var ms = new MemoryStream();
 
-            serializer.Serialize(ms, header);
+            TcpRosHeaderSerializer.Serialize(ms, header);
 
             var array = ms.ToArray();
             array.Is(new byte[] { 
@@ -53,8 +51,6 @@ namespace RosSharp.Tests.Transport
         [TestMethod]
         public void DesrializeSubscriberHeader_Success()
         {
-            var serializer = new TcpRosHeaderSerializer<SubscriberHeader>();
-
             var msg = new byte[] { 
                 // length
                 102,0,0,0,
@@ -78,14 +74,14 @@ namespace RosSharp.Tests.Transport
 
             var ms = new MemoryStream(msg);
 
-            var header = serializer.Deserialize(ms);
+            dynamic header = TcpRosHeaderSerializer.Deserialize(ms);
             
             var data = new std_msgs.String() { data = "test" };
 
-            header.callerid.Is("test");
-            header.topic.Is("/chatter");
-            header.md5sum.Is(data.Md5Sum);
-            header.type.Is(data.MessageType);
+            AssertEx.Is(header.callerid, "test");
+            AssertEx.Is(header.topic,"/chatter");
+            AssertEx.Is(header.md5sum,data.Md5Sum);
+            AssertEx.Is(header.type, data.MessageType);
 
             ms.Close();
         }

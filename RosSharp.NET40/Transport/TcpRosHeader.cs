@@ -5,46 +5,54 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
+#if !WINDOWS_PHONE
+using System.Dynamic;
+#endif
+
 namespace RosSharp.Transport
 {
-    internal class SubscriberHeader
+#if WINDOWS_PHONE
+    internal sealed class TcpRosHeader
     {
-        public string callerid { get; set; }
-        public string topic { get; set; }
-        public string md5sum { get; set; }
-        public string type { get; set; }
-        public string message_definition { get; set; }
-    }
-    internal class SubscriberResponseHeader
-    {
-        public string callerid { get; set; }
-        public string topic { get; set; }
-        public string md5sum { get; set; }
-        public string type { get; set; }
-        public string message_definition { get; set; }
-        public string latching { get; set; } // int?
-    }
-
-    internal class ServiceHeader
-    {
-        public string callerid { get; set; }
-        public string service { get; set; }
-        public string md5sum { get; set; }
-    }
-    internal class ServiceResponseHeader
-    {
-        public string callerid { get; set; }
-        public string service { get; set; }
-        public string md5sum { get; set; }
-        public string type { get; set; }
-        public string persistent { get; set; } //新しいROSで増えた？
-    }
-
-    public class TcpRosHeaderSerializer<TDataType> where TDataType : new()
-    {
-        public void Serialize(Stream stream, TDataType data)
+        private Dictionary<string, string> _members;
+        public TcpRosHeader(Dictionary<string,string> members)
         {
-            var list = typeof(TDataType)
+            _members = members;
+        }
+        
+        public string GetValue(string key)
+        {
+            return _members[key];
+        }
+    }
+#else
+    internal sealed class TcpRosHeader : DynamicObject
+    {
+        private Dictionary<string, string> _members;
+        public TcpRosHeader(Dictionary<string,string> members)
+        {
+            _members = members;
+        }
+
+        public override bool TryGetMember(GetMemberBinder binder, out object result)
+        {
+            result = string.Empty;
+            if(!_members.ContainsKey(binder.Name))
+            {
+                return false;
+            }
+
+            result = _members[binder.Name];
+            return true;
+        }
+    }
+#endif
+
+    internal static class TcpRosHeaderSerializer
+    {
+        public static void Serialize(Stream stream, object data)
+        {
+            var list = data.GetType()
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                 .Select(p => p.Name + "=" + p.GetValue(data, null))
                 .ToList();
@@ -62,13 +70,12 @@ namespace RosSharp.Transport
             });
         }
 
-        public TDataType Deserialize(Stream stream)
+        public static TcpRosHeader Deserialize(Stream stream)
         {
             var buf = new byte[4];
             stream.Read(buf, 0, 4);
 
             var length = BitConverter.ToInt32(buf, 0);
-            
             
             var map = new Dictionary<string,string>();
 
@@ -87,15 +94,7 @@ namespace RosSharp.Transport
                 map.Add(items[0],items[1]);
             }
 
-            var ret = new TDataType();
-
-            foreach (var v in map)
-            {
-                var p = typeof(TDataType).GetProperty(v.Key);
-                p.SetValue(ret, v.Value, null);//TODO: Dynamicで受けたほうがいいのか？
-            }
-
-            return ret;
+            return new TcpRosHeader(map);
         }
         
     }

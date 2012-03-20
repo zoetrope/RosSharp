@@ -11,7 +11,7 @@ using RosSharp.Transport;
 namespace RosSharp.Service
 {
     
-    public class ServiceServer<TService, TRequest, TResponse>
+    internal sealed class ServiceServer<TService, TRequest, TResponse>
         where TService : IService<TRequest, TResponse>, new()
         where TRequest : IMessage, new()
         where TResponse : IMessage, new()
@@ -50,11 +50,9 @@ namespace RosSharp.Service
 
         private void Initialize(string serviceName, RosTcpClient client)
         {
-            var headerSerializer =
-                new TcpRosHeaderSerializer<ServiceResponseHeader>();
             client.ReceiveAsync()
                 .Take(1)
-                .Select(b => headerSerializer.Deserialize(new MemoryStream(b)))
+                .Select(b => TcpRosHeaderSerializer.Deserialize(new MemoryStream(b)))
                 .SelectMany(client.ReceiveAsync())
                 .Subscribe(b =>
                            {
@@ -66,7 +64,7 @@ namespace RosSharp.Service
 
 
             var dummy = new TService();
-            var header = new ServiceResponseHeader()
+            var header = new 
             {
                 callerid = _nodeId,
                 md5sum = dummy.Md5Sum,
@@ -75,7 +73,7 @@ namespace RosSharp.Service
             };
 
             var ms = new MemoryStream();
-            headerSerializer.Serialize(ms, header);
+            TcpRosHeaderSerializer.Serialize(ms, header);
             client.SendAsync(ms.ToArray()).First();
         }
 

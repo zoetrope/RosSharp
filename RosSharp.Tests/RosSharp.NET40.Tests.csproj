@@ -37,6 +37,7 @@
       <HintPath>..\Lib\XML-RPC.NET-3.0.0\CookComputing.XmlRpcV2.dll</HintPath>
     </Reference>
     <Reference Include="CookComputing.XmlRpcV2.Moles, Version=3.0.0.0, Culture=neutral, PublicKeyToken=0ae41878053f6703, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Moles.Framework, Version=0.94.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Reactive.Testing, Version=1.0.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Rx-Testing.1.0.11226\lib\Net4-Full\Microsoft.Reactive.Testing.dll</HintPath>
@@ -60,7 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChainingAssertion.MSTest.cs" />
-    <Compile Include="Master\MasterServerTest.cs" />
+    <Compile Include="Master\RegistrationContainerTest.cs" />
     <Compile Include="Node\RosNodeTest.cs" />
     <Compile Include="Parameter\ParameterClientTest.cs" />
     <Compile Include="Parameter\ParameterServerTest.cs" />

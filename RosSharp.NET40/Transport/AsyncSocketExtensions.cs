@@ -5,7 +5,7 @@ using System.Reactive.Linq;
 
 namespace RosSharp.Transport
 {
-    public static class AsyncSocketExtensions
+    internal static class AsyncSocketExtensions
     {
         public static IObservable<SocketAsyncEventArgs> ConnectAsObservable(this Socket socket, EndPoint endpoint)
         {
