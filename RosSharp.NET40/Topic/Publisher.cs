@@ -46,5 +46,10 @@ namespace RosSharp.Topic
         {
             _rosTopics.Add(rosTopicClient);
         }
+
+        public void UpdateSubscriber(List<Uri> uris)
+        {
+            
+        }
     }
 }

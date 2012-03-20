@@ -67,7 +67,8 @@ namespace RosSharp.Topic
         {
             if(!IsConnected)
             {
-                throw new InvalidOperationException("Is not Connected.");
+                return Observable.Empty<SocketAsyncEventArgs>();
+                //throw new InvalidOperationException("Is not Connected.");
             }
             
             var ms = new MemoryStream();

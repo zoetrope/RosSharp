@@ -7,6 +7,6 @@ namespace RosSharp.Topic
 {
     public interface ISubscriber : ITopic
     {
-        void UpdatePublishers();
+        void UpdatePublishers(List<Uri> publishers);
     }
 }

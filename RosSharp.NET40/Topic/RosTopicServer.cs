@@ -8,7 +8,7 @@ using System.Net.Sockets;
 
 namespace RosSharp.Topic
 {
-    internal sealed class RosTopicServer
+    public sealed class RosTopicServer
     {
         private readonly RosTcpListener _listener;
 

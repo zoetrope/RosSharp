@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using RosSharp.Message;
 using RosSharp.Slave;
 using RosSharp.Transport;
@@ -10,7 +13,6 @@ namespace RosSharp.Topic
     public sealed class Subscriber<TDataType> : ISubscriber, IObservable<TDataType> 
         where TDataType : IMessage, new ()
     {
-        private RosTcpClient _tcpClient;
         public Subscriber(string name, string nodeId)
         {
             Name = name;
@@ -20,14 +22,25 @@ namespace RosSharp.Topic
             NodeId = nodeId;
         }
 
-        internal void Connect(TopicParam param) //TODO:非同期待ちにすべき
+        public void UpdatePublishers(List<Uri> publishers)
         {
-            _tcpClient = new RosTcpClient();
-            var ret = _tcpClient.ConnectAsync(param.HostName, param.PortNumber).First();
+            //TODO: 同じPublisherに対する処理
+            var slaves = publishers.Select(x => new SlaveClient(x));
+
+            slaves.ToList()
+                .ForEach(slave =>
+                         slave.RequestTopicAsync(NodeId, Name, new object[1] {new string[1] {"TCPROS"}})
+                             .Subscribe(topicParam => Connect(topicParam)));
+        }
+
+        private void Connect(TopicParam param)
+        {
+            var tcpClient = new RosTcpClient();
+            var ret = tcpClient.ConnectAsync(param.HostName, param.PortNumber).First();
 
             //TODO: RosTopicに委譲
 
-            var last = _tcpClient.ReceiveAsync()
+            var last = tcpClient.ReceiveAsync()
                 .Take(1)
                 .Select(x => TcpRosHeaderSerializer.Deserialize(new MemoryStream(x)))
                 .PublishLast();
@@ -47,26 +60,13 @@ namespace RosSharp.Topic
             var stream = new MemoryStream();
 
             TcpRosHeaderSerializer.Serialize(stream, header);
-            var data = stream.ToArray();
+            var sendData = stream.ToArray();
 
-            _tcpClient.SendAsync(data).First();
+            tcpClient.SendAsync(sendData).First();
 
             var test = last.First();
-        }
 
-        public string NodeId { get; private set; }
-        public string Name { get; private set; }
-
-        public string Type { get; private set; }
-        
-        public void UpdatePublishers()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IDisposable Subscribe(IObserver<TDataType> observer)
-        {
-            return _tcpClient.ReceiveAsync()
+            tcpClient.ReceiveAsync()
                 .Select(x =>
                         {
                             var data = new TDataType();
@@ -75,7 +75,20 @@ namespace RosSharp.Topic
                             data.Deserialize(br);
                             return data;
                         })
-                .Subscribe(observer);
+                .Subscribe(_subject);
+
+        }
+
+        public string NodeId { get; private set; }
+        public string Name { get; private set; }
+
+        public string Type { get; private set; }
+
+        private Subject<TDataType> _subject = new Subject<TDataType>();
+
+        public IDisposable Subscribe(IObserver<TDataType> observer)
+        {
+            return _subject.Subscribe(observer);
         }
     }
 }

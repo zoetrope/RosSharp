@@ -14,7 +14,7 @@ namespace RosSharp.Slave
     /// <summary>
     /// XML-RPC Server for Slave API
     /// </summary>
-    internal sealed class SlaveServer : MarshalByRefObject, ISlave, IDisposable
+    public sealed class SlaveServer : MarshalByRefObject, ISlave, IDisposable
     {
 
         private readonly TopicContainer _topicContainer;
@@ -213,12 +213,15 @@ namespace RosSharp.Slave
             {
                 var subs = _topicContainer.GetSubscribers().First(s => s.Name == topic);
 
-                //TODO: publishersを渡す。
-                subs.UpdatePublishers();
+                subs.UpdatePublishers(publishers.Select(x => new Uri(x)).ToList());
             }
 
-            //TODO: 戻り値は？
-            return new object[0];
+            return new object[3]
+            {
+                StatusCode.Success,
+                "Publisher update received.",
+                0
+            };
         }
 
         /// <summary>

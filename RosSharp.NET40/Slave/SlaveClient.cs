@@ -180,7 +180,7 @@ namespace RosSharp.Slave
 #else
             return Observable
 #endif
-.FromAsyncPattern<string, string, object[], object[]>(_proxy.BeginRequestTopic, _proxy.EndRequestTopic)
+                .FromAsyncPattern<string, string, object[], object[]>(_proxy.BeginRequestTopic, _proxy.EndRequestTopic)
                 .Invoke(callerId, topic, protocols)
                 .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
                 .Select(ret => new TopicParam
