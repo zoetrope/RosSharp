@@ -134,6 +134,9 @@
     <Compile Include="..\RosSharp.NET40\Transport\TcpRosHeader.cs">
       <Link>Transport\TcpRosHeader.cs</Link>
     </Compile>
+    <Compile Include="..\RosSharp.NET40\Utility\RosOutLogger.cs">
+      <Link>Utility\RosOutLogger.cs</Link>
+    </Compile>
     <Compile Include="HashSet.cs" />
     <Compile Include="ObservableEx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -149,7 +152,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="417b1a0a-5ff8-4423-9f62-fe61aa299239" />
+      <UserProperties ProjectLinkReference="417b1a0a-5ff8-4423-9f62-fe61aa299239" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

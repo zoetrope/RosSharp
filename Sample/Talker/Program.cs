@@ -17,22 +17,20 @@ namespace Talker
 
             var node = ROS.CreateNode("Talker");
 
-            var publisher = node.CreatePublisher<RosSharp.std_msgs.String>("chatter");
+            var publisher = node.CreatePublisher<RosSharp.std_msgs.String>("/chatter");
 
-            //TODO: 接続する前に送信できてしまうのはまずい。CreatePublisherを非同期にすべき。
             Console.WriteLine("Press Any Key. Start Send.");
             Console.ReadKey();
-            
-            foreach (var i in Enumerable.Range(0,100))
+
+            int i = 0;
+            while (true)
             {
-                Thread.Sleep(TimeSpan.FromSeconds(1));
-                var data = new RosSharp.std_msgs.String() { data = "test : " + i };
+                var data = new RosSharp.std_msgs.String() {data = "test : " + i++};
                 Console.WriteLine("data = {0}", data.data);
                 publisher.OnNext(data);
+                Thread.Sleep(TimeSpan.FromSeconds(1));
             }
 
-            Console.WriteLine("Press Any Key.");
-            Console.ReadKey();
         }
     }
 }

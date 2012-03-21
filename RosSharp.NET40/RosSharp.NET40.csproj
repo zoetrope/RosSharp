@@ -95,6 +95,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Transport\RosTcpClient.cs" />
     <Compile Include="Transport\TcpRosHeader.cs" />
+    <Compile Include="Utility\RosOutLogger.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
