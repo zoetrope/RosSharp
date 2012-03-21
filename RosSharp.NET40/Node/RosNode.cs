@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using Common.Logging;
 using RosSharp.Master;
 using RosSharp.Message;
 using RosSharp.Service;
@@ -20,10 +21,14 @@ namespace RosSharp.Node
         private readonly RosTopicServer _rosTopicServer;
         private readonly TopicContainer _topicContainer;
 
+        private ILog _logger = LogManager.GetCurrentClassLogger();
+
         public string NodeId { get; set; }
 
         public RosNode(string nodeId)
         {
+            _logger.InfoFormat("Create Node: {0}", nodeId);
+
             NodeId = nodeId;
 
             _masterClient = new MasterClient(ROS.MasterUri);
@@ -38,6 +43,7 @@ namespace RosSharp.Node
         public Subscriber<TDataType> CreateSubscriber<TDataType>(string topicName) 
             where TDataType : IMessage, new()
         {
+            _logger.InfoFormat("Create Subscriber: {0}", topicName);
             var subscriber = new Subscriber<TDataType>(topicName, NodeId);
             _topicContainer.AddSubscriber(subscriber);
 
@@ -52,6 +58,8 @@ namespace RosSharp.Node
         public Publisher<TDataType> CreatePublisher<TDataType>(string topicName) 
             where TDataType : IMessage, new()
         {
+            _logger.InfoFormat("Create Publisher: {0}", topicName);
+
             var publisher = new Publisher<TDataType>(topicName, NodeId);
             _topicContainer.AddPublisher(publisher);
 
@@ -70,6 +78,8 @@ namespace RosSharp.Node
             where TRequest : IMessage, new()
             where TResponse : IMessage, new()
         {
+            _logger.InfoFormat("Create ServiceProxy: {0}", serviceName);
+
             var uri = _masterClient.LookupServiceAsync(NodeId, serviceName).First();
 
             return _serviceProxyFactory.Create<TService, TRequest, TResponse>(serviceName, uri);
@@ -82,6 +92,8 @@ namespace RosSharp.Node
             where TRequest : IMessage, new() 
             where TResponse : IMessage, new()
         {
+            _logger.InfoFormat("Create ServiceServer: {0}", serviceName);
+
             var serviceServer = new ServiceServer<TService, TRequest, TResponse>(NodeId);
             serviceServer.RegisterService(serviceName, service);
 

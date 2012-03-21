@@ -40,7 +40,7 @@ namespace RosSharp.Utility
             var sb = new StringBuilder();
             FormatOutput(sb, level, message, e);
 
-            //RosOutに出力するように。
+            //TODO: RosOutに出力するように。
             Console.Out.WriteLine(sb.ToString());
         }
     }

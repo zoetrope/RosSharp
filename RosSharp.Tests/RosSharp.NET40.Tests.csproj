@@ -43,6 +43,7 @@
       <HintPath>..\packages\Rx-Testing.1.0.11226\lib\Net4-Full\Microsoft.Reactive.Testing.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="RosSharp.Moles, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="RosSharp.NET40.Moles, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Behaviors, Version=0.94.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -83,8 +84,8 @@
   <ItemGroup>
     <Moles Include="CookComputing.XmlRpcV2.moles" />
     <None Include="packages.config" />
-    <Moles Include="RosSharp.NET40.moles" />
     <Moles Include="System.moles" />
+    <Moles Include="RosSharp.NET40.moles" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RosSharp.NET40\RosSharp.NET40.csproj">
@@ -92,7 +93,6 @@
       <Name>RosSharp.NET40</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

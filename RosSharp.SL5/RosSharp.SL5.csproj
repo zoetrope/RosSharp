@@ -141,9 +141,6 @@
     <Compile Include="..\RosSharp.NET40\Transport\TcpRosHeader.cs">
       <Link>Transport\TcpRosHeader.cs</Link>
     </Compile>
-    <Compile Include="..\RosSharp.NET40\Utility\RosOutLogger.cs">
-      <Link>Utility\RosOutLogger.cs</Link>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -152,7 +149,9 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Utility\" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
