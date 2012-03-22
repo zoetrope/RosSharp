@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Http;
+using Common.Logging;
 using CookComputing.XmlRpc;
 using RosSharp.Topic;
 using RosSharp.Transport;
@@ -21,6 +22,8 @@ namespace RosSharp.Slave
         private readonly RosTopicServer _rosTopicServer;
 
         public Uri SlaveUri { get; private set; }
+
+        private ILog _logger = LogManager.GetCurrentClassLogger();
 
         public SlaveServer(int portNumber, TopicContainer topicContainer, RosTopicServer topicServer)
         {
@@ -63,6 +66,7 @@ namespace RosSharp.Slave
         /// </returns>
         public object[] GetBusStats(string callerId)
         {
+            _logger.Debug(m => m("GetBusStats(callerId={0})", callerId));
             throw new NotImplementedException();
         }
 
@@ -84,6 +88,7 @@ namespace RosSharp.Slave
         /// </returns>
         public object[] GetBusInfo(string callerId)
         {
+            _logger.Debug(m => m("GetBusInfo(callerId={0})", callerId));
             throw new NotImplementedException();
         }
 
@@ -98,6 +103,7 @@ namespace RosSharp.Slave
         /// </returns>
         public object[] GetMasterUri(string callerId)
         {
+            _logger.Debug(m => m("GetMasterUri(callerId={0})", callerId));
             return new object[3]
             {
                 StatusCode.Success,
@@ -118,6 +124,7 @@ namespace RosSharp.Slave
         /// </returns>
         public object[] Shutdown(string callerId, string msg)
         {
+            _logger.Debug(m => m("Shutdown(callerId={0},msg={1})", callerId, msg));
             throw new NotImplementedException();
         }
 
@@ -132,6 +139,7 @@ namespace RosSharp.Slave
         /// </returns>
         public object[] GetPid(string callerId)
         {
+            _logger.Debug(m => m("GetPid(callerId={0})", callerId));
             return new object[3]
             {
                 StatusCode.Success,
@@ -152,6 +160,7 @@ namespace RosSharp.Slave
         /// </returns>
         public object[] GetSubscriptions(string callerId)
         {
+            _logger.Debug(m => m("GetSubscriptions(callerId={0})", callerId));
             return new object[]
             {
                 1,
@@ -172,6 +181,7 @@ namespace RosSharp.Slave
         /// </returns>
         public object[] GetPublications(string callerId)
         {
+            _logger.Debug(m => m("GetPublications(callerId={0})", callerId));
             return new object[]
             {
                 1,
@@ -193,6 +203,8 @@ namespace RosSharp.Slave
         /// </returns>
         public object[] ParamUpdate(string callerId, string parameterKey, object parameterValue)
         {
+            _logger.Debug(m => m("ParamUpdate(callerId={0},parameterKey={1},parameterValue={2})"
+                                 , callerId, parameterKey, parameterValue));
             throw new NotImplementedException();
         }
 
@@ -209,6 +221,8 @@ namespace RosSharp.Slave
         /// </returns>
         public object[] PublisherUpdate(string callerId, string topic, string[] publishers)
         {
+            _logger.Debug(m => m("PublisherUpdate(callerId={0},topic={1},publishers={2})"
+                                 , callerId, topic, publishers));
             if(_topicContainer.HasSubscriber(topic))
             {
                 var subs = _topicContainer.GetSubscribers().First(s => s.Name == topic);
@@ -244,8 +258,12 @@ namespace RosSharp.Slave
         /// </returns>
         public object[] RequestTopic(string callerId, string topic, object[] protocols)
         {
+            _logger.Debug(m => m("RequestTopic(callerId={0},topic={1},protocols={2})"
+                                 , callerId, topic, protocols));
+
             if(!_topicContainer.HasPublisher(topic))
             {
+                _logger.Warn(m => m("No publishers for topic: ", topic));
                 return new object[]
                 {
                     -1,
@@ -277,6 +295,8 @@ namespace RosSharp.Slave
                     }
                 };
             }
+
+            _logger.Warn("No supported protocols specified.");
 
             return new object[]
             {

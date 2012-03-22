@@ -3,6 +3,7 @@ using System.Reactive.Subjects;
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Microsoft.Reactive.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RosSharp.Master;
@@ -48,6 +49,8 @@ namespace RosSharp.IntegrationTests
 
             var publisher = node.CreatePublisher<std_msgs.String>("test_topic");
             var subscriber = node.CreateSubscriber<std_msgs.String>("test_topic");
+            
+            Thread.Sleep(TimeSpan.FromSeconds(3));//TODO: Sleepなくしたい
 
             subscriber.Subscribe(observer);
             obs.Subscribe(publisher);
@@ -80,6 +83,8 @@ namespace RosSharp.IntegrationTests
 
             var subscriber = node.CreateSubscriber<std_msgs.String>("test_topic");
             var publisher = node.CreatePublisher<std_msgs.String>("test_topic");
+
+            Thread.Sleep(TimeSpan.FromSeconds(3));//TODO: Sleepなくしたい
 
             subscriber.Subscribe(observer);
             obs.Subscribe(publisher);

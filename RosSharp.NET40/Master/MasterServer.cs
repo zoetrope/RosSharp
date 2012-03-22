@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Http;
+using Common.Logging;
 using CookComputing.XmlRpc;
 using RosSharp.Slave;
 
@@ -22,6 +23,8 @@ namespace RosSharp.Master
         public Uri MasterUri { get; private set; }
 
         private readonly HttpServerChannel _channel;
+
+        private ILog _logger = LogManager.GetCurrentClassLogger();
 
         public MasterServer(int portNumber)
         {
@@ -60,6 +63,9 @@ namespace RosSharp.Master
         /// </returns>
         public object[] RegisterService(string callerId, string service, string serviceApi, string callerApi)
         {
+            _logger.Debug(m => m("RegisterService(callerId={0},service={1},serviceApi={2},callerApi={3})"
+                                 , callerId, service, serviceApi, callerApi));
+
             if (string.IsNullOrEmpty(service))
             {
                 return new object[3]
@@ -107,6 +113,9 @@ namespace RosSharp.Master
         /// </returns>
         public object[] UnregisterService(string callerId, string service, string serviceApi)
         {
+            _logger.Debug(m => m("UnregisterService(callerId={0},service={1},serviceApi={2})"
+                                 , callerId, service, serviceApi));
+
             if (string.IsNullOrEmpty(service))
             {
                 return new object[3]
@@ -169,6 +178,9 @@ namespace RosSharp.Master
         /// </returns>
         public object[] RegisterSubscriber(string callerId, string topic, string topicType, string callerApi)
         {
+            _logger.Debug(m => m("RegisterSubscriber(callerId={0},topic={1},topicType={2},callerApi={3})"
+                                 , callerId, topic, topicType, callerApi));
+
             if (string.IsNullOrEmpty(topic))
             {
                 return new object[3]
@@ -228,6 +240,9 @@ namespace RosSharp.Master
         /// </returns>
         public object[] UnregisterSubscriber(string callerId, string topic, string callerApi)
         {
+            _logger.Debug(m => m("RegisterSubscriber(callerId={0},topic={1},callerApi={2})"
+                                 , callerId, topic, callerApi));
+
             if (string.IsNullOrEmpty(topic))
             {
                 return new object[3]
@@ -289,6 +304,9 @@ namespace RosSharp.Master
         /// </returns>
         public object[] RegisterPublisher(string callerId, string topic, string topicType, string callerApi)
         {
+            _logger.Debug(m => m("RegisterPublisher(callerId={0},topic={1},topicType={2},callerApi={3})"
+                                 , callerId, topic, topicType, callerApi));
+
             if (string.IsNullOrEmpty(topic))
             {
                 return new object[3]
@@ -358,6 +376,9 @@ namespace RosSharp.Master
         /// </returns>
         public object[] UnregisterPublisher(string callerId, string topic, string callerApi)
         {
+            _logger.Debug(m => m("UnregisterPublisher(callerId={0},topic={1},callerApi={2})"
+                                 , callerId, topic, callerApi));
+
             if (string.IsNullOrEmpty(topic))
             {
                 return new object[3]
@@ -419,6 +440,8 @@ namespace RosSharp.Master
         /// </returns>
         public object[] LookupNode(string callerId, string nodeName)
         {
+            _logger.Debug(m => m("UnregisterPublisher(callerId={0},nodeName={1})", callerId, nodeName));
+
             if (string.IsNullOrEmpty(nodeName))
             {
                 return new object[3]
@@ -471,6 +494,8 @@ namespace RosSharp.Master
         /// </returns>
         public object[] GetPublisherTopics(string callerId, string subgraph)
         {
+            _logger.Debug(m => m("GetPublisherTopics(callerId={0},subgraph={1})", callerId, subgraph));
+
             throw new NotImplementedException();
         }
 
@@ -489,6 +514,7 @@ namespace RosSharp.Master
         /// </returns>
         public object[] GetSystemState(string callerId)
         {
+            _logger.Debug(m => m("GetSystemState(callerId={0})", callerId));
             throw new NotImplementedException();
         }
 
@@ -503,6 +529,8 @@ namespace RosSharp.Master
         /// </returns>
         public object[] GetUri(string callerId)
         {
+            _logger.Debug(m => m("GetUri(callerId={0})", callerId));
+
             return new object[3]
             {
                 StatusCode.Success,
@@ -523,6 +551,8 @@ namespace RosSharp.Master
         /// </returns>
         public object[] LookupService(string callerId, string service)
         {
+            _logger.Debug(m => m("LookupService(callerId={0},service={1})", callerId, service));
+
             Uri uri;
             lock (_registrationContainer)
             {

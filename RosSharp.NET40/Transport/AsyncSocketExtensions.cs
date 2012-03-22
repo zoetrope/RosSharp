@@ -2,11 +2,14 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Reactive.Linq;
+using Common.Logging;
 
 namespace RosSharp.Transport
 {
     internal static class AsyncSocketExtensions
     {
+        private static ILog _logger = LogManager.GetCurrentClassLogger();
+
         public static IObservable<SocketAsyncEventArgs> ConnectAsObservable(this Socket socket, EndPoint endpoint)
         {
             var socketEventArg = new SocketAsyncEventArgs { RemoteEndPoint = endpoint };
@@ -19,6 +22,7 @@ namespace RosSharp.Transport
                     .Where(args => args.LastOperation == SocketAsyncOperation.Connect)
                     .Do(x =>
                     {
+                        _logger.Debug(m => m("Connected: Error={0}", x.SocketError));
                         if (x.SocketError != SocketError.Success)
                         {
                             socket.Close();
@@ -52,6 +56,7 @@ namespace RosSharp.Transport
                     .Where(args => args.LastOperation == SocketAsyncOperation.Send)
                     .Do(x =>
                     {
+                        _logger.Debug(m => m("Sent: Error={0}", x.SocketError));
                         if (x.SocketError != SocketError.Success)
                         {
                             socket.Close();
@@ -83,7 +88,8 @@ namespace RosSharp.Transport
                     .Select(e => e.EventArgs)
                     .Where(args => args.LastOperation == SocketAsyncOperation.Receive)
                     .Do(x =>
-                    {
+                        {
+                            _logger.Debug(m => m("Received: Error={0}", x.SocketError));
                         if (x.SocketError != SocketError.Success)
                         {
                             socket.Close();
@@ -121,6 +127,7 @@ namespace RosSharp.Transport
                     .Where(args => args.LastOperation == SocketAsyncOperation.Accept)
                     .Do(x =>
                     {
+                        _logger.Debug(m => m("Accepted: Error={0}", x.SocketError));
                         if (x.SocketError != SocketError.Success)
                         {
                             socket.Close();
