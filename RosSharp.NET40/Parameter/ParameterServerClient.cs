@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 
 namespace RosSharp.Parameter
@@ -24,12 +25,12 @@ namespace RosSharp.Parameter
         /// <param name="callerId">ROS caller ID</param>
         /// <param name="key">Parameter name.</param>
         /// <returns>ignore</returns>
-        public IObservable<int> DeleteParamAsync(string callerId, string key)
+        public IObservable<Unit> DeleteParamAsync(string callerId, string key)
         {
             return Observable.FromAsyncPattern<string, string, object[]>(_proxy.BeginDeleteParam, _proxy.EndDeleteParam)
                 .Invoke(callerId, key)
-                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
-                .Select(ret => (int)ret[2]);
+                .Do(ret => { if ((int) ret[0] != 1) throw new InvalidOperationException((string) ret[1]); })
+                .Select(ret => Unit.Default);
         }
 
         /// <summary>
@@ -39,7 +40,7 @@ namespace RosSharp.Parameter
         /// <param name="key">Parameter name.</param>
         /// <param name="value">Parameter value.</param>
         /// <returns>ignore</returns>
-        public IObservable<int> SetParamAsync(string callerId, string key, object value)
+        public IObservable<Unit> SetParamAsync(string callerId, string key, object value)
         {
 #if WINDOWS_PHONE
             return ObservableEx
@@ -49,7 +50,7 @@ namespace RosSharp.Parameter
                 .FromAsyncPattern<string, string, object, object[]>(_proxy.BeginSetParam, _proxy.EndSetParam)
                 .Invoke(callerId, key, value)
                 .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
-                .Select(ret => (int)ret[2]);
+                .Select(ret => Unit.Default);
         }
 
         /// <summary>
@@ -84,10 +85,10 @@ namespace RosSharp.Parameter
         /// See paramUpdate() in the Node API.
         /// </summary>
         /// <param name="callerId">ROS caller ID.</param>
-        /// <param name="key">Parameter name</param>
         /// <param name="callerApi">Node API URI of subscriber for paramUpdate callbacks.</param>
+        /// <param name="key">Parameter name</param>
         /// <returns>parameterValue</returns>
-        public IObservable<object[]> SubscribeParamAsync(string callerId, string key, string callerApi)
+        public IObservable<object[]> SubscribeParamAsync(string callerId, Uri callerApi, string key)
         {
 #if WINDOWS_PHONE
             return ObservableEx
@@ -95,7 +96,7 @@ namespace RosSharp.Parameter
             return Observable
 #endif
                 .FromAsyncPattern<string, string, string, object[]>(_proxy.BeginSubscribeParam, _proxy.EndSubscribeParam)
-                .Invoke(callerId, key, callerApi)
+                .Invoke(callerId, callerApi.ToString(), key)
                 .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); });
         }
 
@@ -104,10 +105,10 @@ namespace RosSharp.Parameter
         /// See paramUpdate() in the Node API.
         /// </summary>
         /// <param name="callerId">ROS caller ID.</param>
-        /// <param name="key">Parameter name.</param>
         /// <param name="callerApi">Node API URI of subscriber.</param>
+        /// <param name="key">Parameter name.</param>
         /// <returns>number of unsubscribed</returns>
-        public IObservable<int> UnsubscribeParamAsync(string callerId, string key, string callerApi)
+        public IObservable<int> UnsubscribeParamAsync(string callerId, Uri callerApi, string key)
         {
 #if WINDOWS_PHONE
             return ObservableEx
@@ -115,7 +116,7 @@ namespace RosSharp.Parameter
             return Observable
 #endif
                 .FromAsyncPattern<string, string, string, object[]>(_proxy.BeginUnsubscribeParam, _proxy.EndUnsubscribeParam)
-                .Invoke(callerId, key, callerApi)
+                .Invoke(callerId, callerApi.ToString(), key)
                 .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
                 .Select(ret => (int)ret[2]);
         }

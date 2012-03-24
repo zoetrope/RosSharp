@@ -101,14 +101,14 @@ namespace RosSharp.Parameter
         /// See paramUpdate() in the Node API.
         /// </summary>
         /// <param name="callerId">ROS caller ID.</param>
-        /// <param name="key">Parameter name</param>
         /// <param name="callerApi">Node API URI of subscriber for paramUpdate callbacks.</param>
+        /// <param name="key">Parameter name</param>
         /// <returns>
         /// int: code
         /// str: status message
         /// parameterValue
         /// </returns>
-        public object[] SubscribeParam(string callerId, string key, string callerApi)
+        public object[] SubscribeParam(string callerId, string callerApi, string key)
         {
             throw new NotImplementedException();
         }
@@ -118,14 +118,14 @@ namespace RosSharp.Parameter
         /// See paramUpdate() in the Node API.
         /// </summary>
         /// <param name="callerId">ROS caller ID.</param>
-        /// <param name="key">Parameter name.</param>
         /// <param name="callerApi">Node API URI of subscriber.</param>
+        /// <param name="key">Parameter name.</param>
         /// <returns>
         /// int: code
         /// str: status message
         /// int: number of unsubscribed
         /// </returns>
-        public object[] UnsubscribeParam(string callerId, string key, string callerApi)
+        public object[] UnsubscribeParam(string callerId, string callerApi, string key)
         {
             throw new NotImplementedException();
         }

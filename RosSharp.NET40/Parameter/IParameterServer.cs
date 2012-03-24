@@ -69,30 +69,30 @@ namespace RosSharp.Parameter
         /// See paramUpdate() in the Node API.
         /// </summary>
         /// <param name="callerId">ROS caller ID.</param>
-        /// <param name="key">Parameter name</param>
         /// <param name="callerApi">Node API URI of subscriber for paramUpdate callbacks.</param>
+        /// <param name="key">Parameter name</param>
         /// <returns>
         /// int: code
         /// str: status message
         /// parameterValue
         /// </returns>
         [XmlRpcMethod("subscribeParam")]
-        object[] SubscribeParam(string callerId, string key, string callerApi);
+        object[] SubscribeParam(string callerId, string callerApi, string key);
 
         /// <summary>
         /// Retrieve parameter value from server and subscribe to updates to that param. 
         /// See paramUpdate() in the Node API.
         /// </summary>
         /// <param name="callerId">ROS caller ID.</param>
-        /// <param name="key">Parameter name.</param>
         /// <param name="callerApi">Node API URI of subscriber.</param>
+        /// <param name="key">Parameter name.</param>
         /// <returns>
         /// int: code
         /// str: status message
         /// int: number of unsubscribed
         /// </returns>
         [XmlRpcMethod("unsubscribeParam")]
-        object[] UnsubscribeParam(string callerId, string key, string callerApi);
+        object[] UnsubscribeParam(string callerId, string callerApi, string key);
 
         /// <summary>
         /// Check if parameter is stored on server.

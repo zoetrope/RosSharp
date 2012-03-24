@@ -55,9 +55,9 @@ namespace RosSharp.Parameter
         }
 
         [XmlRpcBegin("subscribeParam")]
-        public IAsyncResult BeginSubscribeParam(string callerId, string key, string callerApi, AsyncCallback callback, object state)
+        public IAsyncResult BeginSubscribeParam(string callerId, string callerApi, string key, AsyncCallback callback, object state)
         {
-            return BeginInvoke(MethodBase.GetCurrentMethod(), new object[] { callerId, key, callerApi }, callback, state);
+            return BeginInvoke(MethodBase.GetCurrentMethod(), new object[] { callerId, callerApi, key }, callback, state);
         }
         [XmlRpcEnd]
         public object[] EndSubscribeParam(IAsyncResult result)
@@ -66,9 +66,9 @@ namespace RosSharp.Parameter
         }
 
         [XmlRpcBegin("unsubscribeParam")]
-        public IAsyncResult BeginUnsubscribeParam(string callerId, string key, string callerApi, AsyncCallback callback, object state)
+        public IAsyncResult BeginUnsubscribeParam(string callerId, string callerApi, string key, AsyncCallback callback, object state)
         {
-            return BeginInvoke(MethodBase.GetCurrentMethod(), new object[] { callerId, key, callerApi }, callback, state);
+            return BeginInvoke(MethodBase.GetCurrentMethod(), new object[] { callerId, callerApi, key }, callback, state);
         }
         [XmlRpcEnd]
         public object[] EndUnsubscribeParam(IAsyncResult result)
