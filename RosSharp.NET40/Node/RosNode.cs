@@ -21,7 +21,7 @@ namespace RosSharp.Node
         private readonly RosTopicServer _rosTopicServer;
         private readonly TopicContainer _topicContainer;
 
-        private ILog _logger = LogManager.GetCurrentClassLogger();
+        private readonly ILog _logger = LogManager.GetCurrentClassLogger();
 
         public string NodeId { get; set; }
 
@@ -40,6 +40,12 @@ namespace RosSharp.Node
             _slaveServer = new SlaveServer(0, _topicContainer, _rosTopicServer);
         }
 
+
+        public void Dispose()
+        {
+
+        }
+
         public Subscriber<TDataType> CreateSubscriber<TDataType>(string topicName) 
             where TDataType : IMessage, new()
         {
@@ -54,7 +60,15 @@ namespace RosSharp.Node
 
             return subscriber;
         }
-        
+
+        public void RemoveSubscriber(string topicName)
+        {
+            _masterClient
+                .UnregisterSubscriberAsync(NodeId, topicName, _slaveServer.SlaveUri)
+                .Subscribe(_ => _topicContainer.RemoveSubscriber(topicName));
+        }
+
+
         public Publisher<TDataType> CreatePublisher<TDataType>(string topicName) 
             where TDataType : IMessage, new()
         {
@@ -73,6 +87,13 @@ namespace RosSharp.Node
             return publisher;
         }
 
+        public void RemovePublisher(string topicName)
+        {
+            _masterClient
+                .UnregisterPublisherAsync(NodeId, topicName, _slaveServer.SlaveUri)
+                .Subscribe(_ => _topicContainer.RemovePublisher(topicName));
+        }
+
         public Func<TRequest, IObservable<TResponse>> CreateProxy<TService, TRequest, TResponse>(string serviceName)
             where TService : IService<TRequest, TResponse>, new()
             where TRequest : IMessage, new()
@@ -83,6 +104,11 @@ namespace RosSharp.Node
             var uri = _masterClient.LookupServiceAsync(NodeId, serviceName).First();
 
             return _serviceProxyFactory.Create<TService, TRequest, TResponse>(serviceName, uri);
+        }
+
+        public void RemoveServiceProxy(string serviceName)
+        {
+            
         }
 
         private Dictionary<string, Func<Stream, Stream>> _services = new Dictionary<string, Func<Stream, Stream>>();
@@ -107,7 +133,11 @@ namespace RosSharp.Node
             return Disposable.Empty;//TODO: サービス登録を解除するためのDisposableを返す。
         }
 
-
-
+        public void RemoveService(string serviceName)
+        {
+            _masterClient
+                .UnregisterServiceAsync(NodeId, serviceName, _slaveServer.SlaveUri)
+                .Subscribe(_ => _services.Remove(serviceName));
+        }
     }
 }

@@ -19,6 +19,17 @@ namespace RosSharp
             HostName = ReadHostName();
 
             // log setting
+
+            Console.CancelKeyPress += (sender, args) => Dispose();
+        }
+
+        public static void Dispose()
+        {
+            lock (_nodes)
+            {
+                _nodes.Values.ToList().ForEach(node => node.Dispose());
+                _nodes.Clear();
+            }
         }
 
         private static Uri ReadMasterUri()
@@ -89,9 +100,15 @@ namespace RosSharp
             return HostName;
         }
 
+        private static Dictionary<string, INode> _nodes = new Dictionary<string, INode>();
         public static INode CreateNode(string nodeName)
         {
-            return new RosNode(nodeName);
+            lock (_nodes)
+            {
+                var node = new RosNode(nodeName);
+                _nodes.Add(nodeName, node);
+                return node;
+            }
         }
 
     }
