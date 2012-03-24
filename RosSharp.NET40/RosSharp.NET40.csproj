@@ -43,6 +43,7 @@
       <HintPath>..\packages\xmlrpcnet.3.0.0.266\lib\net20\CookComputing.XmlRpcV2.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Reactive, Version=1.0.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Rx-Main.1.0.11226\lib\Net4\System.Reactive.dll</HintPath>
@@ -56,6 +57,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigurationSectionDesigner.csd.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ConfigurationSectionDesigner.csd</DependentUpon>
+    </Compile>
     <Compile Include="StatusCode.cs" />
     <Compile Include="Master\RegistrationContainer.cs" />
     <Compile Include="Message\SerializeExtensions.cs" />
@@ -101,10 +107,27 @@
     <Compile Include="Utility\RosOutLogger.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="ClassDiagram.cd" />
     <None Include="packages.config" />
+    <None Include="ConfigurationSectionDesigner.csd">
+      <Generator>CsdFileGenerator</Generator>
+      <LastGenOutput>ConfigurationSectionDesigner.csd.cs</LastGenOutput>
+    </None>
+    <None Include="ConfigurationSectionDesigner.csd.config">
+      <DependentUpon>ConfigurationSectionDesigner.csd</DependentUpon>
+    </None>
+    <None Include="ConfigurationSectionDesigner.csd.diagram">
+      <DependentUpon>ConfigurationSectionDesigner.csd</DependentUpon>
+    </None>
+    <None Include="ConfigurationSectionDesigner.csd.xsd">
+      <DependentUpon>ConfigurationSectionDesigner.csd</DependentUpon>
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -22,7 +22,9 @@ namespace RosSharp.IntegrationTests
         [TestInitialize]
         public void Initialize()
         {
-            ROS.Initialize(new Uri("http://localhost:11311/"), "localhost");
+            ROS.Initialize();
+            ROS.MasterUri = new Uri("http://localhost:11311/");
+            ROS.HostName = "localhost";
             _masterServer = new MasterServer(11311);
         }
 

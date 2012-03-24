@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Text;
 using System.Threading;
 using RosSharp;
 
@@ -13,7 +8,9 @@ namespace Talker
     {
         static void Main(string[] args)
         {
-            ROS.Initialize(new Uri("http://192.168.11.5:11311/"), "192.168.11.3");
+            ROS.Initialize();
+            ROS.MasterUri = new Uri("http://192.168.11.5:11311/");
+            ROS.HostName = "192.168.11.3";
 
             var node = ROS.CreateNode("Talker");
 
@@ -29,8 +26,10 @@ namespace Talker
                 Console.WriteLine("data = {0}", data.data);
                 publisher.OnNext(data);
                 Thread.Sleep(TimeSpan.FromSeconds(1));
+                
             }
 
+            
         }
     }
 }

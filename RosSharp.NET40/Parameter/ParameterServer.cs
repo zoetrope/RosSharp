@@ -19,7 +19,7 @@ namespace RosSharp.Parameter
             var channel = new HttpServerChannel("param", portNumber, new XmlRpcServerFormatterSinkProvider());
             var tmp = new Uri(channel.GetChannelUri());
 
-            ParameterServerUri = new Uri("http://" + ROS.LocalHostName + ":" + tmp.Port + "/param");
+            ParameterServerUri = new Uri("http://" + ROS.HostName + ":" + tmp.Port + "/param");
 
             ChannelServices.RegisterChannel(channel, false);
             RemotingServices.Marshal(this, "param");

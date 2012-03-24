@@ -10,7 +10,9 @@ namespace RosSharp
     {
         static void Main(string[] args)
         {
-            ROS.Initialize(new Uri("http://192.168.11.2:11311/"), "192.168.11.2");
+            ROS.Initialize();
+            ROS.MasterUri = new Uri("http://192.168.11.5:11311/");
+            ROS.HostName = "192.168.11.3";
 
             var masterServer = new MasterServer(11311);
 

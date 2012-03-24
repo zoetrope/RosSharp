@@ -99,7 +99,7 @@ namespace RosSharp.Node
 
             var ret1 = _masterClient
                 .RegisterServiceAsync(NodeId, serviceName,
-                    new Uri("rosrpc://" + ROS.LocalHostName + ":" + serviceServer.EndPoint.Port),
+                    new Uri("rosrpc://" + ROS.HostName + ":" + serviceServer.EndPoint.Port),
                     _slaveServer.SlaveUri)
                 .First(); //TODO: Firstはだめ。
 

@@ -32,7 +32,7 @@ namespace RosSharp.Master
 
             var tmp = new Uri(_channel.GetChannelUri());
 
-            MasterUri = new Uri("http://" + ROS.LocalHostName + ":" + tmp.Port);
+            MasterUri = new Uri("http://" + ROS.HostName + ":" + tmp.Port);
 
             ChannelServices.RegisterChannel(_channel, false);
             RemotingServices.Marshal(this, "/");

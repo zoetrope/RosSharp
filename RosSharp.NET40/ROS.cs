@@ -10,36 +10,83 @@ namespace RosSharp
 {
     public static class ROS
     {
-        //TODO: staticではなく、インスタンスを作るべきか？
-        public static Uri MasterUri { get; private set; }
-        public static string LocalHostName { get; private set; }
+        public static Uri MasterUri { get; set; }
+        public static string HostName { get; set; }
 
-        public static void Initialize(Uri masterUri = null, string localHostName = null)
+        public static void Initialize()
         {
-            if(masterUri == null)
-            {
-                MasterUri = new Uri("http://localhost:11311");
-            }
-            else
-            {
-                MasterUri = masterUri;
-            }
+            MasterUri = ReadMasterUri();
+            HostName = ReadHostName();
 
-            if (string.IsNullOrEmpty(localHostName))
+            // log setting
+        }
+
+        private static Uri ReadMasterUri()
+        {
+            if (MasterUri != null)
             {
-                LocalHostName = Dns.GetHostName();
-                //var ipaddresses = Observable.FromAsyncPattern<string, IPAddress[]>(
-                //Dns.BeginGetHostAddresses, Dns.EndGetHostAddresses).Invoke(Dns.GetHostName()).First();
-                //LocalHostName = ipaddresses.First();
-            }
-            else
-            {
-                LocalHostName = localHostName;
+                return MasterUri;
             }
 
 
+            var variable = Environment.GetEnvironmentVariable("ROS_MASTER_URI");
+            if (variable != null)
+            {
+                try
+                {
+                    MasterUri = new Uri(variable);
+                    return MasterUri;
+                }
+                catch(UriFormatException)
+                {
+                }
+            }
 
-            
+            if(ConfigurationSection.Instance != null)
+            {
+                var conf = ConfigurationSection.Instance.Node.MasterUri.Value;
+                try
+                {
+                    MasterUri = new Uri(conf);
+                    return MasterUri;
+                }
+                catch (UriFormatException)
+                {
+                }
+            }
+
+            MasterUri = new Uri("http://localhost:11311");
+            return MasterUri;
+        }
+
+
+        private static string ReadHostName()
+        {
+            if (!string.IsNullOrEmpty(HostName))
+            {
+                return HostName;
+            }
+
+
+            var variable = Environment.GetEnvironmentVariable("ROS_HOSTNAME");
+            if (!string.IsNullOrEmpty(variable))
+            {
+                HostName = variable;
+                return HostName;
+            }
+
+            if (ConfigurationSection.Instance != null)
+            {
+                var conf = ConfigurationSection.Instance.Node.MasterUri.Value;
+                if (!string.IsNullOrEmpty(conf))
+                {
+                    HostName = conf;
+                    return HostName;
+                }
+            }
+
+            HostName = Dns.GetHostName();
+            return HostName;
         }
 
         public static INode CreateNode(string nodeName)

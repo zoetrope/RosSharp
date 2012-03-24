@@ -33,7 +33,7 @@ namespace RosSharp.Slave
             var channel = new HttpServerChannel("slave", portNumber, new XmlRpcServerFormatterSinkProvider());
             var tmp = new Uri(channel.GetChannelUri());
 
-            SlaveUri = new Uri("http://" + ROS.LocalHostName + ":" + tmp.Port + "/slave");
+            SlaveUri = new Uri("http://" + ROS.HostName + ":" + tmp.Port + "/slave");
 
             ChannelServices.RegisterChannel(channel, false);
             RemotingServices.Marshal(this, "slave");
@@ -290,7 +290,7 @@ namespace RosSharp.Slave
                     new object[3]
                     {
                         protocolName,
-                        ROS.LocalHostName,
+                        ROS.HostName,
                         address.Port
                     }
                 };
