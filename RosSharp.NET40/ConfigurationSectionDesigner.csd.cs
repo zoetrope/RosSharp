@@ -74,54 +74,106 @@ namespace RosSharp
         }
         #endregion
         
-        #region Node Property
+        #region MasterUri Property
         /// <summary>
-        /// The XML name of the <see cref="Node"/> property.
+        /// The XML name of the <see cref="MasterUri"/> property.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
-        internal const string NodePropertyName = "node";
+        internal const string MasterUriPropertyName = "ROS_MASTER_URI";
         
         /// <summary>
-        /// Gets or sets the Node.
+        /// Gets or sets the MasterUri.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
-        [global::System.ComponentModel.DescriptionAttribute("The Node.")]
-        [global::System.Configuration.ConfigurationPropertyAttribute(global::RosSharp.ConfigurationSection.NodePropertyName, IsRequired=false, IsKey=false, IsDefaultCollection=false)]
-        public global::RosSharp.NodeElement Node
+        [global::System.ComponentModel.DescriptionAttribute("The MasterUri.")]
+        [global::System.Configuration.ConfigurationPropertyAttribute(global::RosSharp.ConfigurationSection.MasterUriPropertyName, IsRequired=false, IsKey=false, IsDefaultCollection=false)]
+        public global::RosSharp.RosMasterUri MasterUri
         {
             get
             {
-                return ((global::RosSharp.NodeElement)(base[global::RosSharp.ConfigurationSection.NodePropertyName]));
+                return ((global::RosSharp.RosMasterUri)(base[global::RosSharp.ConfigurationSection.MasterUriPropertyName]));
             }
             set
             {
-                base[global::RosSharp.ConfigurationSection.NodePropertyName] = value;
+                base[global::RosSharp.ConfigurationSection.MasterUriPropertyName] = value;
             }
         }
         #endregion
         
-        #region Ros Property
+        #region HostName Property
         /// <summary>
-        /// The XML name of the <see cref="Ros"/> property.
+        /// The XML name of the <see cref="HostName"/> property.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
-        internal const string RosPropertyName = "ros";
+        internal const string HostNamePropertyName = "ROS_HOSTNAME";
         
         /// <summary>
-        /// Gets or sets the Ros.
+        /// Gets or sets the HostName.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
-        [global::System.ComponentModel.DescriptionAttribute("The Ros.")]
-        [global::System.Configuration.ConfigurationPropertyAttribute(global::RosSharp.ConfigurationSection.RosPropertyName, IsRequired=false, IsKey=false, IsDefaultCollection=false)]
-        public global::RosSharp.RosElement Ros
+        [global::System.ComponentModel.DescriptionAttribute("The HostName.")]
+        [global::System.Configuration.ConfigurationPropertyAttribute(global::RosSharp.ConfigurationSection.HostNamePropertyName, IsRequired=false, IsKey=false, IsDefaultCollection=false)]
+        public global::RosSharp.RosHostName HostName
         {
             get
             {
-                return ((global::RosSharp.RosElement)(base[global::RosSharp.ConfigurationSection.RosPropertyName]));
+                return ((global::RosSharp.RosHostName)(base[global::RosSharp.ConfigurationSection.HostNamePropertyName]));
             }
             set
             {
-                base[global::RosSharp.ConfigurationSection.RosPropertyName] = value;
+                base[global::RosSharp.ConfigurationSection.HostNamePropertyName] = value;
+            }
+        }
+        #endregion
+        
+        #region XmlRpcTimeout Property
+        /// <summary>
+        /// The XML name of the <see cref="XmlRpcTimeout"/> property.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        internal const string XmlRpcTimeoutPropertyName = "XMLRPC_TIMEOUT";
+        
+        /// <summary>
+        /// Gets or sets the XmlRpcTimeout.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        [global::System.ComponentModel.DescriptionAttribute("The XmlRpcTimeout.")]
+        [global::System.Configuration.ConfigurationPropertyAttribute(global::RosSharp.ConfigurationSection.XmlRpcTimeoutPropertyName, IsRequired=false, IsKey=false, IsDefaultCollection=false)]
+        public global::RosSharp.XmlRpcTimeout XmlRpcTimeout
+        {
+            get
+            {
+                return ((global::RosSharp.XmlRpcTimeout)(base[global::RosSharp.ConfigurationSection.XmlRpcTimeoutPropertyName]));
+            }
+            set
+            {
+                base[global::RosSharp.ConfigurationSection.XmlRpcTimeoutPropertyName] = value;
+            }
+        }
+        #endregion
+        
+        #region SocketTimeout Property
+        /// <summary>
+        /// The XML name of the <see cref="SocketTimeout"/> property.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        internal const string SocketTimeoutPropertyName = "SOCKET_TIMEOUT";
+        
+        /// <summary>
+        /// Gets or sets the SocketTimeout.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        [global::System.ComponentModel.DescriptionAttribute("The SocketTimeout.")]
+        [global::System.Configuration.ConfigurationPropertyAttribute(global::RosSharp.ConfigurationSection.SocketTimeoutPropertyName, IsRequired=false, IsKey=false, IsDefaultCollection=false)]
+        public global::RosSharp.SocketTimeout SocketTimeout
+        {
+            get
+            {
+                return ((global::RosSharp.SocketTimeout)(base[global::RosSharp.ConfigurationSection.SocketTimeoutPropertyName]));
+            }
+            set
+            {
+                base[global::RosSharp.ConfigurationSection.SocketTimeoutPropertyName] = value;
             }
         }
         #endregion
@@ -180,102 +232,6 @@ namespace RosSharp
     
     
     /// <summary>
-    /// The NodeElement Configuration Element.
-    /// </summary>
-    public partial class NodeElement : global::System.Configuration.ConfigurationElement
-    {
-        
-        #region IsReadOnly override
-        /// <summary>
-        /// Gets a value indicating whether the element is read-only.
-        /// </summary>
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
-        public override bool IsReadOnly()
-        {
-            return false;
-        }
-        #endregion
-        
-        #region MasterUri Property
-        /// <summary>
-        /// The XML name of the <see cref="MasterUri"/> property.
-        /// </summary>
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
-        internal const string MasterUriPropertyName = "ROS_MASTER_URI";
-        
-        /// <summary>
-        /// Gets or sets the MasterUri.
-        /// </summary>
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
-        [global::System.ComponentModel.DescriptionAttribute("The MasterUri.")]
-        [global::System.Configuration.ConfigurationPropertyAttribute(global::RosSharp.NodeElement.MasterUriPropertyName, IsRequired=false, IsKey=false, IsDefaultCollection=false)]
-        public global::RosSharp.RosMasterUri MasterUri
-        {
-            get
-            {
-                return ((global::RosSharp.RosMasterUri)(base[global::RosSharp.NodeElement.MasterUriPropertyName]));
-            }
-            set
-            {
-                base[global::RosSharp.NodeElement.MasterUriPropertyName] = value;
-            }
-        }
-        #endregion
-    }
-}
-namespace RosSharp
-{
-    
-    
-    /// <summary>
-    /// The RosElement Configuration Element.
-    /// </summary>
-    public partial class RosElement : global::System.Configuration.ConfigurationElement
-    {
-        
-        #region IsReadOnly override
-        /// <summary>
-        /// Gets a value indicating whether the element is read-only.
-        /// </summary>
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
-        public override bool IsReadOnly()
-        {
-            return false;
-        }
-        #endregion
-        
-        #region HostName Property
-        /// <summary>
-        /// The XML name of the <see cref="HostName"/> property.
-        /// </summary>
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
-        internal const string HostNamePropertyName = "ROS_HOSTNAME";
-        
-        /// <summary>
-        /// Gets or sets the HostName.
-        /// </summary>
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
-        [global::System.ComponentModel.DescriptionAttribute("The HostName.")]
-        [global::System.Configuration.ConfigurationPropertyAttribute(global::RosSharp.RosElement.HostNamePropertyName, IsRequired=false, IsKey=false, IsDefaultCollection=false)]
-        public global::RosSharp.RosHostName HostName
-        {
-            get
-            {
-                return ((global::RosSharp.RosHostName)(base[global::RosSharp.RosElement.HostNamePropertyName]));
-            }
-            set
-            {
-                base[global::RosSharp.RosElement.HostNamePropertyName] = value;
-            }
-        }
-        #endregion
-    }
-}
-namespace RosSharp
-{
-    
-    
-    /// <summary>
     /// The RosMasterUri Configuration Element.
     /// </summary>
     public partial class RosMasterUri : global::System.Configuration.ConfigurationElement
@@ -314,6 +270,102 @@ namespace RosSharp
             set
             {
                 base[global::RosSharp.RosMasterUri.ValuePropertyName] = value;
+            }
+        }
+        #endregion
+    }
+}
+namespace RosSharp
+{
+    
+    
+    /// <summary>
+    /// The XmlRpcTimeout Configuration Element.
+    /// </summary>
+    public partial class XmlRpcTimeout : global::System.Configuration.ConfigurationElement
+    {
+        
+        #region IsReadOnly override
+        /// <summary>
+        /// Gets a value indicating whether the element is read-only.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        public override bool IsReadOnly()
+        {
+            return false;
+        }
+        #endregion
+        
+        #region Value Property
+        /// <summary>
+        /// The XML name of the <see cref="Value"/> property.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        internal const string ValuePropertyName = "value";
+        
+        /// <summary>
+        /// Gets or sets the Value.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        [global::System.ComponentModel.DescriptionAttribute("The Value.")]
+        [global::System.Configuration.ConfigurationPropertyAttribute(global::RosSharp.XmlRpcTimeout.ValuePropertyName, IsRequired=true, IsKey=false, IsDefaultCollection=false, DefaultValue=3000)]
+        public int Value
+        {
+            get
+            {
+                return ((int)(base[global::RosSharp.XmlRpcTimeout.ValuePropertyName]));
+            }
+            set
+            {
+                base[global::RosSharp.XmlRpcTimeout.ValuePropertyName] = value;
+            }
+        }
+        #endregion
+    }
+}
+namespace RosSharp
+{
+    
+    
+    /// <summary>
+    /// The SocketTimeout Configuration Element.
+    /// </summary>
+    public partial class SocketTimeout : global::System.Configuration.ConfigurationElement
+    {
+        
+        #region IsReadOnly override
+        /// <summary>
+        /// Gets a value indicating whether the element is read-only.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        public override bool IsReadOnly()
+        {
+            return false;
+        }
+        #endregion
+        
+        #region Value Property
+        /// <summary>
+        /// The XML name of the <see cref="Value"/> property.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        internal const string ValuePropertyName = "value";
+        
+        /// <summary>
+        /// Gets or sets the Value.
+        /// </summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
+        [global::System.ComponentModel.DescriptionAttribute("The Value.")]
+        [global::System.Configuration.ConfigurationPropertyAttribute(global::RosSharp.SocketTimeout.ValuePropertyName, IsRequired=true, IsKey=false, IsDefaultCollection=false, DefaultValue=3000)]
+        public int Value
+        {
+            get
+            {
+                return ((int)(base[global::RosSharp.SocketTimeout.ValuePropertyName]));
+            }
+            set
+            {
+                base[global::RosSharp.SocketTimeout.ValuePropertyName] = value;
             }
         }
         #endregion

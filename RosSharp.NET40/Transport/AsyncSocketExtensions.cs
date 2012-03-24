@@ -13,7 +13,7 @@ namespace RosSharp.Transport
         public static IObservable<SocketAsyncEventArgs> ConnectAsObservable(this Socket socket, EndPoint endpoint)
         {
             var socketEventArg = new SocketAsyncEventArgs { RemoteEndPoint = endpoint };
-
+            
             return Observable.Create<SocketAsyncEventArgs>(observer =>
             {
                 var disposable = Observable.FromEventPattern<SocketAsyncEventArgs>(

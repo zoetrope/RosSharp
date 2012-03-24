@@ -13,14 +13,24 @@
   <configurationElements>
     <configurationSection name="ConfigurationSection" codeGenOptions="Singleton, XmlnsProperty" xmlSectionName="rossharp">
       <elementProperties>
-        <elementProperty name="Node" isRequired="false" isKey="false" isDefaultCollection="false" xmlName="node" isReadOnly="false">
+        <elementProperty name="MasterUri" isRequired="false" isKey="false" isDefaultCollection="false" xmlName="ROS_MASTER_URI" isReadOnly="false">
           <type>
-            <configurationElementMoniker name="/7e957972-e0df-4051-b03c-e53f3fb839f3/NodeElement" />
+            <configurationElementMoniker name="/7e957972-e0df-4051-b03c-e53f3fb839f3/RosMasterUri" />
           </type>
         </elementProperty>
-        <elementProperty name="Ros" isRequired="false" isKey="false" isDefaultCollection="false" xmlName="ros" isReadOnly="false">
+        <elementProperty name="HostName" isRequired="false" isKey="false" isDefaultCollection="false" xmlName="ROS_HOSTNAME" isReadOnly="false">
           <type>
-            <configurationElementMoniker name="/7e957972-e0df-4051-b03c-e53f3fb839f3/RosElement" />
+            <configurationElementMoniker name="/7e957972-e0df-4051-b03c-e53f3fb839f3/RosHostName" />
+          </type>
+        </elementProperty>
+        <elementProperty name="XmlRpcTimeout" isRequired="false" isKey="false" isDefaultCollection="false" xmlName="XMLRPC_TIMEOUT" isReadOnly="false">
+          <type>
+            <configurationElementMoniker name="/7e957972-e0df-4051-b03c-e53f3fb839f3/XmlRpcTimeout" />
+          </type>
+        </elementProperty>
+        <elementProperty name="SocketTimeout" isRequired="false" isKey="false" isDefaultCollection="false" xmlName="SOCKET_TIMEOUT" isReadOnly="false">
+          <type>
+            <configurationElementMoniker name="/7e957972-e0df-4051-b03c-e53f3fb839f3/SocketTimeout" />
           </type>
         </elementProperty>
       </elementProperties>
@@ -34,29 +44,29 @@
         </attributeProperty>
       </attributeProperties>
     </configurationElement>
-    <configurationElement name="NodeElement">
-      <elementProperties>
-        <elementProperty name="MasterUri" isRequired="false" isKey="false" isDefaultCollection="false" xmlName="ROS_MASTER_URI" isReadOnly="false">
-          <type>
-            <configurationElementMoniker name="/7e957972-e0df-4051-b03c-e53f3fb839f3/RosMasterUri" />
-          </type>
-        </elementProperty>
-      </elementProperties>
-    </configurationElement>
-    <configurationElement name="RosElement">
-      <elementProperties>
-        <elementProperty name="HostName" isRequired="false" isKey="false" isDefaultCollection="false" xmlName="ROS_HOSTNAME" isReadOnly="false">
-          <type>
-            <configurationElementMoniker name="/7e957972-e0df-4051-b03c-e53f3fb839f3/RosHostName" />
-          </type>
-        </elementProperty>
-      </elementProperties>
-    </configurationElement>
     <configurationElement name="RosMasterUri">
       <attributeProperties>
         <attributeProperty name="Value" isRequired="true" isKey="false" isDefaultCollection="false" xmlName="value" isReadOnly="false">
           <type>
             <externalTypeMoniker name="/7e957972-e0df-4051-b03c-e53f3fb839f3/String" />
+          </type>
+        </attributeProperty>
+      </attributeProperties>
+    </configurationElement>
+    <configurationElement name="XmlRpcTimeout">
+      <attributeProperties>
+        <attributeProperty name="Value" isRequired="true" isKey="false" isDefaultCollection="false" xmlName="value" isReadOnly="false" defaultValue="3000">
+          <type>
+            <externalTypeMoniker name="/7e957972-e0df-4051-b03c-e53f3fb839f3/Int32" />
+          </type>
+        </attributeProperty>
+      </attributeProperties>
+    </configurationElement>
+    <configurationElement name="SocketTimeout">
+      <attributeProperties>
+        <attributeProperty name="Value" isRequired="true" isKey="false" isDefaultCollection="false" xmlName="value" isReadOnly="false" defaultValue="3000">
+          <type>
+            <externalTypeMoniker name="/7e957972-e0df-4051-b03c-e53f3fb839f3/Int32" />
           </type>
         </attributeProperty>
       </attributeProperties>

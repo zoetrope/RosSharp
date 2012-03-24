@@ -1,24 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
 using System.Reactive.Linq;
 using System.Text;
+using Common.Logging;
+using Common.Logging.Simple;
 using RosSharp.Node;
+using RosSharp.Utility;
 
 namespace RosSharp
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class ROS
     {
         public static Uri MasterUri { get; set; }
         public static string HostName { get; set; }
+        public static int XmlRpcTimeout { get; set; }
+        public static int SocketTimeout { get; set; }
 
         public static void Initialize()
         {
             MasterUri = ReadMasterUri();
             HostName = ReadHostName();
+            XmlRpcTimeout = ReadXmlRpcTimeout();
+            SocketTimeout = ReadSocketTimeout();
 
-            // log setting
+            if (LogManager.Adapter is NoOpLoggerFactoryAdapter) //if not setting logger, logger is NoOpLogger
+            {
+                var nv = new NameValueCollection();
+                nv["level"] = "DEBUG";
+                nv["showLogName"] = "true";
+                nv["showDataTime"] = "true";
+                nv["dateTimeFormat"] = "yyyy/MM/dd HH:mm:ss:fff";
+                LogManager.Adapter = new RosOutLoggerFactoryAdapter(nv);
+            }
 
             Console.CancelKeyPress += (sender, args) => Dispose();
         }
@@ -34,19 +53,12 @@ namespace RosSharp
 
         private static Uri ReadMasterUri()
         {
-            if (MasterUri != null)
-            {
-                return MasterUri;
-            }
-
-
             var variable = Environment.GetEnvironmentVariable("ROS_MASTER_URI");
             if (variable != null)
             {
                 try
                 {
-                    MasterUri = new Uri(variable);
-                    return MasterUri;
+                    return new Uri(variable);
                 }
                 catch(UriFormatException)
                 {
@@ -55,52 +67,81 @@ namespace RosSharp
 
             if(ConfigurationSection.Instance != null)
             {
-                var conf = ConfigurationSection.Instance.Node.MasterUri.Value;
+                var conf = ConfigurationSection.Instance.MasterUri.Value;
                 try
                 {
-                    MasterUri = new Uri(conf);
-                    return MasterUri;
+                    return new Uri(conf);
                 }
                 catch (UriFormatException)
                 {
                 }
             }
 
-            MasterUri = new Uri("http://localhost:11311");
-            return MasterUri;
+            return new Uri("http://localhost:11311");
         }
 
 
         private static string ReadHostName()
         {
-            if (!string.IsNullOrEmpty(HostName))
-            {
-                return HostName;
-            }
-
-
             var variable = Environment.GetEnvironmentVariable("ROS_HOSTNAME");
             if (!string.IsNullOrEmpty(variable))
             {
-                HostName = variable;
-                return HostName;
+                return variable;
             }
 
             if (ConfigurationSection.Instance != null)
             {
-                var conf = ConfigurationSection.Instance.Node.MasterUri.Value;
+                var conf = ConfigurationSection.Instance.MasterUri.Value;
                 if (!string.IsNullOrEmpty(conf))
                 {
-                    HostName = conf;
-                    return HostName;
+                    return conf;
                 }
             }
 
-            HostName = Dns.GetHostName();
-            return HostName;
+            return Dns.GetHostName();
         }
 
-        private static Dictionary<string, INode> _nodes = new Dictionary<string, INode>();
+
+        private static int ReadXmlRpcTimeout()
+        {
+            var variable = Environment.GetEnvironmentVariable("ROS_XMLRPC_TIMEOUT");
+            if (!string.IsNullOrEmpty(variable))
+            {
+                int timeout;
+                if(int.TryParse(variable, out timeout))
+                {
+                    return timeout;
+                }
+            }
+
+            if (ConfigurationSection.Instance != null)
+            {
+                return ConfigurationSection.Instance.XmlRpcTimeout.Value;
+            }
+
+            return 1000;
+        }
+        private static int ReadSocketTimeout()
+        {
+            var variable = Environment.GetEnvironmentVariable("ROS_SOCKET_TIMEOUT");
+            if (!string.IsNullOrEmpty(variable))
+            {
+                int timeout;
+                if (int.TryParse(variable, out timeout))
+                {
+                    return timeout;
+                }
+            }
+
+            if (ConfigurationSection.Instance != null)
+            {
+                return ConfigurationSection.Instance.SocketTimeout.Value;
+            }
+
+            return 1000;
+        }
+
+        private static readonly Dictionary<string, INode> _nodes = new Dictionary<string, INode>();
         public static INode CreateNode(string nodeName)
         {
             lock (_nodes)

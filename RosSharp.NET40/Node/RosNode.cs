@@ -43,7 +43,9 @@ namespace RosSharp.Node
 
         public void Dispose()
         {
+            // すべてを終了させる。
 
+            //終了待ち
         }
 
         public Subscriber<TDataType> CreateSubscriber<TDataType>(string topicName) 
