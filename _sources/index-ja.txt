@@ -5,8 +5,9 @@ RosSharpドキュメント
 ***************************************************
 RosSharpは、ROS (Robot Operating System)のC#クライアントライブラリです。
 
-ライセンス: Ms-PL
-Copyright (c) 2012 zoetrope. All Rights Reserved. Licensed undear a Microsoft Permissive License (Ms-PL).
+Copyright (c) 2012 zoetrope. All Rights Reserved.
+
+Licensed undear a Microsoft Permissive License (Ms-PL).
 
 ソースコード: https://github.com/zoetrope/RosSharp
 
@@ -23,7 +24,7 @@ Copyright (c) 2012 zoetrope. All Rights Reserved. Licensed undear a Microsoft Pe
 * RosCore (Master Server & Parameter Server & RosOut Node)
 * GenMsg (Code generation tool from .msg/.srv files)
 
-Does not supported features:
+未実装機能:
 
 * Remapping Arguments
 * Graph Resource Names (supports only the global name)
@@ -52,7 +53,7 @@ Does not supported features:
 NuGet
 ==================================================
 
-RosSharpをインストールするには、NuGet Package Manager Consoleから下記のコマンドを実行してください。 ::
+RosSharpをインストールするには、NuGet Package Manager Consoleから下記のコマンドを実行してください。（準備中） ::
 
   PM> Install-Package RosSharp
 

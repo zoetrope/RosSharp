@@ -6,6 +6,6 @@ Contents:
 .. toctree::
    :maxdepth: 2
    
-   index-ja
    index-en
+   index-ja
 
