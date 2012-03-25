@@ -9,6 +9,5 @@ obj
 /_ReSharper.RosSharp
 *.user
 Thumbs.db
-Doc/build
 /Release
 MolesAssemblies
