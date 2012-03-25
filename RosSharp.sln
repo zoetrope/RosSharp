@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RosSharp", "RosSharp.NET40\RosSharp.csproj", "{417B1A0A-5FF8-4423-9F62-FE61AA299239}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RosSharp", "RosSharp\RosSharp.csproj", "{417B1A0A-5FF8-4423-9F62-FE61AA299239}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RosSharp.SL5", "RosSharp.SL5\RosSharp.SL5.csproj", "{0F0DC1FA-AC0F-4705-98D7-899650C991FA}"
 EndProject
