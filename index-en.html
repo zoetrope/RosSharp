@@ -1,0 +1,312 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>RosSharp Documentation &mdash; RosSharp 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/agogo.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="RosSharp 0.1 documentation" href="index.html" />
+    <link rel="prev" title="RosSharpドキュメント" href="index-ja.html" /> 
+  </head>
+  <body>
+    <div class="header-wrapper">
+      <div class="header">
+        <div class="headertitle"><a
+          href="index.html">RosSharp Documentation</a></div>
+        <div class="rel">
+          <a href="index-ja.html" title="RosSharpドキュメント"
+             accesskey="P">previous</a> |
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="rossharp-documentation">
+<h1>RosSharp Documentation<a class="headerlink" href="#rossharp-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>RosSharp is C# client library for ROS (Robot Operating System).</p>
+<p>License: Ms-PL
+Copyright (c) 2012 zoetrope. All Rights Reserved. Licensed undear a Microsoft Permissive License (Ms-PL).</p>
+<p>Source: <a class="reference external" href="https://github.com/zoetrope/RosSharp">https://github.com/zoetrope/RosSharp</a></p>
+<p>Features:</p>
+<ul class="simple">
+<li>RosSharp is implemented based on Reactive Extensions</li>
+<li>NuGet installation support</li>
+<li>Create ROS Node</li>
+<li>Master/Slave/ParameterServer API XML-RPC Client</li>
+<li>Master/Slave/ParameterServer API XML-RPC Server</li>
+<li>Topic (TCPROS) Connection</li>
+<li>Service Connection</li>
+<li>RosOut (Logging Node)</li>
+<li>RosCore (Master Server &amp; Parameter Server &amp; RosOut Node)</li>
+<li>GenMsg (Code generation tool from .msg/.srv files)</li>
+</ul>
+<p>The following features are not supported:</p>
+<ul class="simple">
+<li>Remapping Arguments</li>
+<li>Graph Resource Names (supports only the global name)</li>
+<li>Clock Node</li>
+<li>roslang</li>
+</ul>
+</div>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>.NET Framework 4</li>
+<li>Reactive Extensions</li>
+<li>Common.Logging</li>
+<li>XML-RPC.NET</li>
+<li>F# Runtime 2.0 (for GenMsg)</li>
+<li>FParsec (for GenMsg)</li>
+</ul>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="use-nuget">
+<h3>use NuGet<a class="headerlink" href="#use-nuget" title="Permalink to this headline">¶</a></h3>
+<p>To install RosSharp, run the following command in the NuGet Package Manager Console</p>
+<div class="highlight-python"><pre>PM&gt; Install-Package RosSharp</pre>
+</div>
+</div>
+<div class="section" id="binary-package">
+<h3>Binary Package<a class="headerlink" href="#binary-package" title="Permalink to this headline">¶</a></h3>
+<p>Downloads</p>
+<p><a class="reference external" href="https://github.com/zoetrope/RosSharp/downloads">https://github.com/zoetrope/RosSharp/downloads</a></p>
+</div>
+</div>
+<div class="section" id="settings">
+<h2>Settings<a class="headerlink" href="#settings" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="initialization">
+<h3>Initialization<a class="headerlink" href="#initialization" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="configuring-in-your-code">
+<h4>Configuring in your code<a class="headerlink" href="#configuring-in-your-code" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-csharp"><div class="highlight"><pre><span class="n">ROS</span><span class="p">.</span><span class="n">HostName</span> <span class="p">=</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+<span class="n">ROS</span><span class="p">.</span><span class="n">MasterUri</span>
+<span class="n">ROS</span><span class="p">.</span><span class="n">XmlRpcTimeout</span>
+<span class="n">ROS</span><span class="p">.</span><span class="n">SocketTimeout</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="app-config">
+<h4>app.config<a class="headerlink" href="#app-config" title="Permalink to this headline">¶</a></h4>
+<p>configuration can be done in your app.config</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
+<span class="nt">&lt;configuration&gt;</span>
+  <span class="nt">&lt;configSections&gt;</span>
+    <span class="nt">&lt;section</span> <span class="na">name=</span><span class="s">&quot;rossharp&quot;</span> <span class="na">type=</span><span class="s">&quot;RosSharp.ConfigurationSection, RosSharp.NET40&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/configSections&gt;</span>
+  <span class="nt">&lt;rossharp&gt;</span>
+    <span class="nt">&lt;ROS_MASTER_URI</span> <span class="na">value=</span><span class="s">&quot;http://localhost:11311&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;ROS_HOSTNAME</span> <span class="na">value=</span><span class="s">&quot;localhost&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;SOCKET_TIMEOUT</span> <span class="na">value=</span><span class="s">&quot;1000&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;XMLRPC_TIMEOUT</span> <span class="na">value=</span><span class="s">&quot;1000&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/rossharp&gt;</span>
+<span class="nt">&lt;/configuration&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="environment">
+<h4>Environment<a class="headerlink" href="#environment" title="Permalink to this headline">¶</a></h4>
+</div>
+</div>
+<div class="section" id="logging">
+<h3>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id1">
+<h4>Configuring in your code<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-csharp"><div class="highlight"><pre><span class="n">LogManager</span><span class="p">.</span><span class="n">Adapter</span> <span class="p">=</span> <span class="k">new</span> <span class="n">RosOutLoggerFactoryAdapter</span><span class="p">(</span><span class="n">properties</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h4>app.config<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<p>see the Common.Logging Documentation</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
+<span class="nt">&lt;configuration&gt;</span>
+  <span class="nt">&lt;configSections&gt;</span>
+    <span class="nt">&lt;sectionGroup</span> <span class="na">name=</span><span class="s">&quot;common&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;section</span> <span class="na">name=</span><span class="s">&quot;logging&quot;</span> <span class="na">type=</span><span class="s">&quot;Common.Logging.ConfigurationSectionHandler, Common.Logging&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/sectionGroup&gt;</span>
+  <span class="nt">&lt;/configSections&gt;</span>
+
+  <span class="nt">&lt;common&gt;</span>
+    <span class="nt">&lt;logging&gt;</span>
+      <span class="nt">&lt;factoryAdapter</span> <span class="na">type=</span><span class="s">&quot;RosSharp.Utility.RosOutLoggerFactoryAdapter, RosSharp.NET40&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;arg</span> <span class="na">key=</span><span class="s">&quot;level&quot;</span> <span class="na">value=</span><span class="s">&quot;DEBUG&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;arg</span> <span class="na">key=</span><span class="s">&quot;showLogName&quot;</span> <span class="na">value=</span><span class="s">&quot;true&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;arg</span> <span class="na">key=</span><span class="s">&quot;showDataTime&quot;</span> <span class="na">value=</span><span class="s">&quot;true&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;arg</span> <span class="na">key=</span><span class="s">&quot;dateTimeFormat&quot;</span> <span class="na">value=</span><span class="s">&quot;yyyy/MM/dd HH:mm:ss:fff&quot;</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;/factoryAdapter&gt;</span>
+    <span class="nt">&lt;/logging&gt;</span>
+  <span class="nt">&lt;/common&gt;</span>
+<span class="nt">&lt;/configuration&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="programming">
+<h2>Programming<a class="headerlink" href="#programming" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="using-derective">
+<h3>using derective<a class="headerlink" href="#using-derective" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-csharp"><div class="highlight"><pre><span class="k">using</span> <span class="nn">RosSharp</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="create-node">
+<h3>Create Node<a class="headerlink" href="#create-node" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-csharp"><div class="highlight"><pre><span class="kt">var</span> <span class="n">node</span> <span class="p">=</span> <span class="n">ROS</span><span class="p">.</span><span class="n">CreateNode</span><span class="p">(</span><span class="s">&quot;Test&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="create-subscriber">
+<h3>Create Subscriber<a class="headerlink" href="#create-subscriber" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-csharp"><div class="highlight"><pre><span class="kt">var</span> <span class="n">subscriber</span> <span class="p">=</span> <span class="n">node</span><span class="p">.</span><span class="n">CreateSubscriber</span><span class="p">&lt;</span><span class="n">RosSharp</span><span class="p">.</span><span class="n">std_msgs</span><span class="p">.</span><span class="n">String</span><span class="p">&gt;(</span><span class="s">&quot;/chatter&quot;</span><span class="p">);</span>
+<span class="n">subscriber</span><span class="p">.</span><span class="n">Subscribe</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">data</span><span class="p">));</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="create-publisher">
+<h3>Create Publisher<a class="headerlink" href="#create-publisher" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-csharp"><div class="highlight"><pre><span class="kt">var</span> <span class="n">publisher</span> <span class="p">=</span> <span class="n">node</span><span class="p">.</span><span class="n">CreatePublisher</span><span class="p">&lt;</span><span class="n">RosSharp</span><span class="p">.</span><span class="n">std_msgs</span><span class="p">.</span><span class="n">String</span><span class="p">&gt;(</span><span class="s">&quot;/chatter&quot;</span><span class="p">);</span>
+<span class="n">publisher</span><span class="p">.</span><span class="n">OnNext</span><span class="p">(</span><span class="k">new</span> <span class="n">RosSharp</span><span class="p">.</span><span class="n">std_msgs</span><span class="p">.</span><span class="n">String</span> <span class="p">{</span><span class="n">data</span> <span class="p">=</span> <span class="s">&quot;test&quot;</span><span class="p">});</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="create-service">
+<h3>Create Service<a class="headerlink" href="#create-service" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-csharp"><div class="highlight"><pre><span class="n">node</span><span class="p">.</span><span class="n">RegisterService</span><span class="p">&lt;</span><span class="n">AddTwoInts</span><span class="p">,</span> <span class="n">AddTwoInts</span><span class="p">.</span><span class="n">Request</span><span class="p">,</span> <span class="n">AddTwoInts</span><span class="p">.</span><span class="n">Response</span><span class="p">&gt;</span>
+              <span class="p">(</span><span class="s">&quot;/add_two_ints&quot;</span><span class="p">,</span> <span class="n">req</span> <span class="p">=&gt;</span> <span class="k">new</span> <span class="n">AddTwoInts</span><span class="p">.</span><span class="n">Response</span> <span class="p">{</span><span class="n">c</span> <span class="p">=</span> <span class="n">req</span><span class="p">.</span><span class="n">a</span> <span class="p">+</span> <span class="n">req</span><span class="p">.</span><span class="n">b</span><span class="p">});</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="use-service">
+<h3>Use Service<a class="headerlink" href="#use-service" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-csharp"><div class="highlight"><pre><span class="kt">var</span> <span class="n">proxy</span> <span class="p">=</span> <span class="n">node</span><span class="p">.</span><span class="n">CreateProxy</span><span class="p">&lt;</span><span class="n">AddTwoInts</span><span class="p">,</span> <span class="n">AddTwoInts</span><span class="p">.</span><span class="n">Request</span><span class="p">,</span> <span class="n">AddTwoInts</span><span class="p">.</span><span class="n">Response</span><span class="p">&gt;(</span><span class="s">&quot;/add_two_ints&quot;</span><span class="p">);</span>
+<span class="n">proxy</span><span class="p">(</span><span class="k">new</span> <span class="n">AddTwoInts</span><span class="p">.</span><span class="n">Request</span><span class="p">()</span> <span class="p">{</span> <span class="n">a</span> <span class="p">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">b</span> <span class="p">=</span> <span class="m">2</span> <span class="p">}).</span><span class="n">Subscribe</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">c</span><span class="p">));</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="parameterserver">
+<h3>ParameterServer<a class="headerlink" href="#parameterserver" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-csharp"><div class="highlight"><pre>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="application">
+<h2>Application<a class="headerlink" href="#application" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="roscore">
+<h3>RosCore<a class="headerlink" href="#roscore" title="Permalink to this headline">¶</a></h3>
+<p>RosCore is</p>
+<ul class="simple">
+<li>a ROS Master</li>
+<li>a ROS ParameterServer</li>
+<li>a rosout logging node</li>
+</ul>
+<p><a class="reference external" href="http://www.ros.org/wiki/roscore">http://www.ros.org/wiki/roscore</a></p>
+<div class="section" id="usage">
+<h4>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h4>
+<p>&gt; RosCore</p>
+</div>
+</div>
+<div class="section" id="genmsg">
+<h3>GenMsg<a class="headerlink" href="#genmsg" title="Permalink to this headline">¶</a></h3>
+<p>GenMsg is a tool that code generation from .msg / .srv format files.</p>
+<div class="section" id="id3">
+<h4>Usage<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+<p>&gt; GenMsg</p>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+        </div>
+        <div class="sidebar">
+          <h3>Table Of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index-ja.html">RosSharpドキュメント</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">RosSharp Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#settings">Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#programming">Programming</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#application">Application</a></li>
+</ul>
+</li>
+</ul>
+
+          <h3 style="margin-top: 1.5em;">Search</h3>
+          <form class="search" action="search.html" method="get">
+            <input type="text" name="q" />
+            <input type="submit" value="Go" />
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+          </form>
+          <p class="searchtip" style="font-size: 90%">
+            Enter search terms or a module, class or function name.
+          </p>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <a href="index-ja.html" title="RosSharpドキュメント"
+             >previous</a> |
+          <a href="genindex.html" title="General Index"
+             >index</a>
+            <br/>
+            <a href="_sources/index-en.txt"
+               rel="nofollow">Show Source</a>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer">
+        &copy; Copyright 2012, zoetrope.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+  </body>
+</html>
