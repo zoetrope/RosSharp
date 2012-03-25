@@ -25,7 +25,7 @@ namespace RosSharp.Slave
 
         private ILog _logger = LogManager.GetCurrentClassLogger();
 
-        public SlaveServer(int portNumber, TopicContainer topicContainer, RosTopicServer topicServer)
+        internal SlaveServer(int portNumber, TopicContainer topicContainer, RosTopicServer topicServer)
         {
             _topicContainer = topicContainer;
             _rosTopicServer = topicServer;
@@ -205,8 +205,19 @@ namespace RosSharp.Slave
         {
             _logger.Debug(m => m("ParamUpdate(callerId={0},parameterKey={1},parameterValue={2})"
                                  , callerId, parameterKey, parameterValue));
-            throw new NotImplementedException();
+
+            var handler = ParameterUpdated;
+            if(handler != null)
+            {
+                //TODO: 非同期に
+                handler(parameterKey, parameterValue);
+            }
+
+            //TODO:
+            return new object[] {};
         }
+
+        internal event Action<string, object> ParameterUpdated;
 
         /// <summary>
         /// Callback from master of current publisher list for specified topic.
@@ -225,9 +236,11 @@ namespace RosSharp.Slave
                                  , callerId, topic, publishers));
             if(_topicContainer.HasSubscriber(topic))
             {
+                //TODO: TryGet?
                 var subs = _topicContainer.GetSubscribers().First(s => s.Name == topic);
-
-                subs.UpdatePublishers(publishers.Select(x => new Uri(x)).ToList());
+                
+                //TODO: 非同期に
+                subs.UpdatePublishers(publishers.Select(x => new Uri(x)).ToList());    
             }
 
             return new object[3]

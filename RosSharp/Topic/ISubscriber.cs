@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RosSharp.Topic
 {
-    public interface ISubscriber : ITopic
+    internal interface ISubscriber : ITopic
     {
         void UpdatePublishers(List<Uri> publishers);
     }

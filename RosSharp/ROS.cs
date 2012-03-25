@@ -8,7 +8,6 @@ using System.Text;
 using Common.Logging;
 using Common.Logging.Simple;
 using RosSharp.Node;
-using RosSharp.Utility;
 
 namespace RosSharp
 {
@@ -91,7 +90,7 @@ namespace RosSharp
 
             if (ConfigurationSection.Instance != null)
             {
-                var conf = ConfigurationSection.Instance.MasterUri.Value;
+                var conf = ConfigurationSection.Instance.HostName.Value;
                 if (!string.IsNullOrEmpty(conf))
                 {
                     return conf;

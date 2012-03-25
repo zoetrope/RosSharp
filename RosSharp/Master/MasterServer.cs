@@ -7,6 +7,7 @@ using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Http;
 using Common.Logging;
 using CookComputing.XmlRpc;
+using RosSharp.Parameter;
 using RosSharp.Slave;
 
 namespace RosSharp.Master
@@ -14,7 +15,7 @@ namespace RosSharp.Master
     /// <summary>
     /// XML-RPC Server for Master API
     /// </summary>
-    public sealed class MasterServer : MarshalByRefObject, IMaster, IDisposable
+    public sealed class MasterServer : MarshalByRefObject, IMaster,IParameterServer, IDisposable
     {
         //TODO: サーバ実装を委譲してinternalクラスにしたほうがよいか。
 
@@ -26,6 +27,8 @@ namespace RosSharp.Master
 
         private ILog _logger = LogManager.GetCurrentClassLogger();
 
+        private ParameterServer _parameterServer;
+
         public MasterServer(int portNumber)
         {
             _channel = new HttpServerChannel("master", portNumber, new XmlRpcServerFormatterSinkProvider());
@@ -36,6 +39,8 @@ namespace RosSharp.Master
 
             ChannelServices.RegisterChannel(_channel, false);
             RemotingServices.Marshal(this, "/");
+
+            _parameterServer = new ParameterServer(MasterUri);
         }
 
         public void Dispose()
@@ -578,6 +583,50 @@ namespace RosSharp.Master
                 };
             }
         }
+
+        #region Implementation of IParameterServer
+
+        public object[] DeleteParam(string callerId, string key)
+        {
+            return _parameterServer.DeleteParam(callerId, key);
+        }
+
+        public object[] SetParam(string callerId, string key, object value)
+        {
+            return _parameterServer.SetParam(callerId, key, value);
+        }
+
+        public object[] GetParam(string callerId, string key)
+        {
+            return _parameterServer.GetParam(callerId, key);
+        }
+
+        public object[] SearchParam(string callerId, string key)
+        {
+            return _parameterServer.SearchParam(callerId, key);
+        }
+
+        public object[] SubscribeParam(string callerId, string callerApi, string key)
+        {
+            return _parameterServer.SubscribeParam(callerId, callerApi, key);
+        }
+
+        public object[] UnsubscribeParam(string callerId, string callerApi, string key)
+        {
+            return _parameterServer.UnsubscribeParam(callerId, callerApi, key);
+        }
+
+        public object[] HasParam(string callerId, string key)
+        {
+            return _parameterServer.HasParam(callerId, key);
+        }
+
+        public object[] GetParamNames(string callerId)
+        {
+            return _parameterServer.GetParamNames(callerId);
+        }
+
+        #endregion
     }
 
 }

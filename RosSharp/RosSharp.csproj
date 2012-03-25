@@ -62,11 +62,14 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ConfigurationSectionDesigner.csd</DependentUpon>
     </Compile>
+    <Compile Include="Parameter\IParameter.cs" />
+    <Compile Include="Parameter\Parameter.cs" />
     <Compile Include="StatusCode.cs" />
     <Compile Include="Master\RegistrationContainer.cs" />
     <Compile Include="Message\SerializeExtensions.cs" />
     <Compile Include="Service\ServiceProxyFactory.cs" />
     <Compile Include="Service\ServiceServer.cs" />
+    <Compile Include="std_msgs\String.cs" />
     <Compile Include="Topic\IPublisher.cs" />
     <Compile Include="Topic\ISubscriber.cs" />
     <Compile Include="Topic\RosTopicServer.cs" />
@@ -93,7 +96,6 @@
     <Compile Include="Slave\SlaveClient.cs" />
     <Compile Include="Slave\SlaveServer.cs" />
     <Compile Include="Message\IMessage.cs" />
-    <Compile Include="std_msgs\String.cs" />
     <Compile Include="Topic\Subscriber.cs" />
     <Compile Include="Parameter\ParameterServerProxy.cs">
       <SubType>Component</SubType>

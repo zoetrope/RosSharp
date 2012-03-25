@@ -59,11 +59,12 @@ namespace RosSharp.Parameter
         /// <param name="callerId">ROS caller ID</param>
         /// <param name="key">Parameter name. If key is a namespace, getParam() will return a parameter tree.</param>
         /// <returns>parameterValue</returns>
-        public IObservable<object[]> GetParamAsync(string callerId, string key)
+        public IObservable<object> GetParamAsync(string callerId, string key)
         {
             return Observable.FromAsyncPattern<string, string, object[]>(_proxy.BeginGetParam, _proxy.EndGetParam)
                 .Invoke(callerId, key)
-                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); });
+                .Do(ret => { if ((int) ret[0] != 1) throw new InvalidOperationException((string) ret[1]); })
+                .Select(ret => ret[2]);
         }
 
         /// <summary>
@@ -88,7 +89,7 @@ namespace RosSharp.Parameter
         /// <param name="callerApi">Node API URI of subscriber for paramUpdate callbacks.</param>
         /// <param name="key">Parameter name</param>
         /// <returns>parameterValue</returns>
-        public IObservable<object[]> SubscribeParamAsync(string callerId, Uri callerApi, string key)
+        public IObservable<object> SubscribeParamAsync(string callerId, Uri callerApi, string key)
         {
 #if WINDOWS_PHONE
             return ObservableEx
@@ -97,7 +98,8 @@ namespace RosSharp.Parameter
 #endif
                 .FromAsyncPattern<string, string, string, object[]>(_proxy.BeginSubscribeParam, _proxy.EndSubscribeParam)
                 .Invoke(callerId, callerApi.ToString(), key)
-                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); });
+                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
+                .Select(ret => ret[2]);
         }
 
         /// <summary>

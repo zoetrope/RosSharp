@@ -22,7 +22,7 @@ namespace RosSharp.Topic
             NodeId = nodeId;
         }
 
-        public void UpdatePublishers(List<Uri> publishers)
+        void ISubscriber.UpdatePublishers(List<Uri> publishers)
         {
             //TODO: 同じPublisherに対する処理
             var slaves = publishers.Select(x => new SlaveClient(x));
@@ -31,6 +31,8 @@ namespace RosSharp.Topic
                 .ForEach(slave =>
                          slave.RequestTopicAsync(NodeId, Name, new object[1] {new string[1] {"TCPROS"}})
                              .Subscribe(topicParam => Connect(topicParam)));
+
+
         }
 
         private void Connect(TopicParam param)
@@ -77,7 +79,14 @@ namespace RosSharp.Topic
                         })
                 .Subscribe(_subject);
 
+
+            var handler = Connected;
+            if (handler != null)
+            {
+                handler();
+            }
         }
+        public event Action Connected;
 
         public string NodeId { get; private set; }
         public string Name { get; private set; }
@@ -90,5 +99,16 @@ namespace RosSharp.Topic
         {
             return _subject.Subscribe(observer);
         }
+
+        string ITopic.Name
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        string ITopic.Type
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
+
 }

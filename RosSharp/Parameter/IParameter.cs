@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RosSharp.Topic
+namespace RosSharp.Parameter
 {
-    internal interface IPublisher : ITopic
+    internal interface IParameter : IDisposable
     {
+        void Update(object value);
     }
 }

@@ -12,7 +12,7 @@ using RosSharp.Parameter.Moles;
 namespace RosSharp.Tests.Parameter
 {
     [TestClass]
-    public class ParameterClientTest
+    public class ParameterServerClientTest
     {
 
         [TestMethod]

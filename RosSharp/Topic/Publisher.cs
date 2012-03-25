@@ -42,14 +42,21 @@ namespace RosSharp.Topic
             
         }
 
+        public event Action Connected;
+
         internal void AddTopic(RosTopicClient<TDataType> rosTopicClient)
         {
             _rosTopics.Add(rosTopicClient);
         }
 
-        public void UpdateSubscriber(List<Uri> uris)
+        internal void UpdateSubscriber(List<Uri> uris)
         {
-            
+
+            var handler = Connected;
+            if(handler != null)
+            {
+                handler();
+            }
         }
     }
 }

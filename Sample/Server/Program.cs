@@ -22,8 +22,7 @@ namespace Server
 
             node.RegisterService<AddTwoInts, AddTwoInts.Request, AddTwoInts.Response>
                 ("/add_two_ints", req => new AddTwoInts.Response {c = req.a + req.b});
-
-
+            
             Console.WriteLine("Press Any Key.");
             Console.ReadKey();
         }

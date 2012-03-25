@@ -6,7 +6,7 @@ using System.Text;
 using Common.Logging;
 using Common.Logging.Simple;
 
-namespace RosSharp.Utility
+namespace RosSharp
 {
 
     public class RosOutLoggerFactoryAdapter : AbstractSimpleLoggerFactoryAdapter

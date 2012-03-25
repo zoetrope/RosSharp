@@ -2,6 +2,7 @@
 using RosSharp.Message;
 using RosSharp.Service;
 using RosSharp.Topic;
+using RosSharp.Parameter;
 
 namespace RosSharp.Node
 {
@@ -30,5 +31,8 @@ namespace RosSharp.Node
             where TResponse : IMessage, new();
 
         void RemoveService(string serviceName);
+
+
+        Parameter<T> GetParameter<T>(string paramName);
     }
 }

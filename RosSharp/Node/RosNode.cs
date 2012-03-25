@@ -7,6 +7,7 @@ using System.Reactive.Linq;
 using Common.Logging;
 using RosSharp.Master;
 using RosSharp.Message;
+using RosSharp.Parameter;
 using RosSharp.Service;
 using RosSharp.Slave;
 using RosSharp.Topic;
@@ -21,6 +22,8 @@ namespace RosSharp.Node
         private readonly RosTopicServer _rosTopicServer;
         private readonly TopicContainer _topicContainer;
 
+        private ParameterServerClient _parameterServerClient;
+
         private readonly ILog _logger = LogManager.GetCurrentClassLogger();
 
         public string NodeId { get; set; }
@@ -32,14 +35,38 @@ namespace RosSharp.Node
             NodeId = nodeId;
 
             _masterClient = new MasterClient(ROS.MasterUri);
-            
+            _parameterServerClient = new ParameterServerClient(ROS.MasterUri);
+
             _serviceProxyFactory = new ServiceProxyFactory(NodeId);
 
             _topicContainer = new TopicContainer();
             _rosTopicServer = new RosTopicServer();
             _slaveServer = new SlaveServer(0, _topicContainer, _rosTopicServer);
+
+            _slaveServer.ParameterUpdated += SlaveServerOnParameterUpdated;
         }
 
+        private void SlaveServerOnParameterUpdated(string key, object value)
+        {
+            if(!_parameters.ContainsKey(key))
+            {
+                return;
+            }
+
+            var param = _parameters[key];
+            param.Update(value);
+        }
+
+        private Dictionary<string, IParameter> _parameters = new Dictionary<string, IParameter>();
+
+        public Parameter<T> GetParameter<T>(string paramName)
+        {
+            if(_parameters.ContainsKey(paramName))
+            {
+                //return _pa
+            }
+            return new Parameter<T>(NodeId, paramName, _slaveServer.SlaveUri, _parameterServerClient);
+        }
 
         public void Dispose()
         {
@@ -58,7 +85,7 @@ namespace RosSharp.Node
             var dummy = new TDataType();
             _masterClient
                 .RegisterSubscriberAsync(NodeId, topicName, dummy.MessageType, _slaveServer.SlaveUri)
-                .Subscribe(subscriber.UpdatePublishers);
+                .Subscribe(((ISubscriber) subscriber).UpdatePublishers);
 
             return subscriber;
         }
