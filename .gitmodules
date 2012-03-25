@@ -1,0 +1,3 @@
+[submodule "Doc/build/html"]
+	path = Doc/build/html
+	url = git@github.com:zoetrope/RosSharp.git
