@@ -35,5 +35,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
-[assembly: InternalsVisibleTo("RosSharp.NET40.Moles")]
+[assembly: InternalsVisibleTo("RosSharp.Moles")]
 [assembly: InternalsVisibleTo("RosSharp.Tests")]

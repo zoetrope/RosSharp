@@ -52,9 +52,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\RosSharp.NET40\RosSharp.NET40.csproj">
+    <ProjectReference Include="..\..\RosSharp.NET40\RosSharp.csproj">
       <Project>{417B1A0A-5FF8-4423-9F62-FE61AA299239}</Project>
-      <Name>RosSharp.NET40</Name>
+      <Name>RosSharp</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

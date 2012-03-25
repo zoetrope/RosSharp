@@ -5,8 +5,9 @@ Overview
 ***************************************************
 RosSharp is C# client library for ROS (Robot Operating System).
 
-License: Ms-PL
-Copyright (c) 2012 zoetrope. All Rights Reserved. Licensed undear a Microsoft Permissive License (Ms-PL).
+Copyright (c) 2012 zoetrope. All Rights Reserved. 
+
+Licensed undear a Microsoft Permissive License (Ms-PL).
 
 Source: https://github.com/zoetrope/RosSharp
 
@@ -52,7 +53,7 @@ Installation
 use NuGet
 ==================================================
 
-To install RosSharp, run the following command in the NuGet Package Manager Console ::
+To install RosSharp, run the following command in the NuGet Package Manager Console (To be prepared) ::
 
   PM> Install-Package RosSharp
 

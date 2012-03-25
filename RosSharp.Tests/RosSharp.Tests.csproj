@@ -33,8 +33,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CookComputing.XmlRpcV2, Version=3.0.0.0, Culture=neutral, PublicKeyToken=a7d6e17aa302004d, processorArchitecture=MSIL">
-      <HintPath>..\Lib\XML-RPC.NET-3.0.0\CookComputing.XmlRpcV2.dll</HintPath>
+    <Reference Include="CookComputing.XmlRpcV2">
+      <HintPath>..\packages\xmlrpcnet.3.0.0.266\lib\net20\CookComputing.XmlRpcV2.dll</HintPath>
     </Reference>
     <Reference Include="CookComputing.XmlRpcV2.Moles, Version=3.0.0.0, Culture=neutral, PublicKeyToken=0ae41878053f6703, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,8 +43,8 @@
       <HintPath>..\packages\Rx-Testing.1.0.11226\lib\Net4-Full\Microsoft.Reactive.Testing.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="RosSharp.Core.Moles, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="RosSharp.Moles, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
-    <Reference Include="RosSharp.NET40.Moles, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Behaviors, Version=0.94.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Core">
@@ -85,12 +85,12 @@
     <Moles Include="CookComputing.XmlRpcV2.moles" />
     <None Include="packages.config" />
     <Moles Include="System.moles" />
-    <Moles Include="RosSharp.NET40.moles" />
+    <Moles Include="RosSharp.moles" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RosSharp.NET40\RosSharp.NET40.csproj">
+    <ProjectReference Include="..\RosSharp.NET40\RosSharp.csproj">
       <Project>{417B1A0A-5FF8-4423-9F62-FE61AA299239}</Project>
-      <Name>RosSharp.NET40</Name>
+      <Name>RosSharp</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
