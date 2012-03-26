@@ -56,7 +56,7 @@ namespace RosSharp.Service
                            {
                                var res = Invoke(new MemoryStream(b));
                                var array = res.ToArray();
-                               client.SendAsync(array).First();
+                               client.SendTaskAsync(array).Wait();
                            });
                 
 
@@ -72,7 +72,7 @@ namespace RosSharp.Service
 
             var ms = new MemoryStream();
             TcpRosHeaderSerializer.Serialize(ms, header);
-            client.SendAsync(ms.ToArray()).First();
+            client.SendTaskAsync(ms.ToArray()).Wait();
         }
 
         private MemoryStream Invoke(Stream stream)

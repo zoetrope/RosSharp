@@ -58,13 +58,13 @@ namespace RosSharp.IntegrationTests
             obs.Subscribe(publisher);
 
             scheduler.AdvanceBy(10);
-            observer.Timeout(TimeSpan.FromSeconds(1)).First().Is(new std_msgs.String() {data = "abc"});
+            observer.Timeout(TimeSpan.FromSeconds(1)).First().data.Is("abc");
 
             scheduler.AdvanceBy(10);
-            observer.Skip(1).Timeout(TimeSpan.FromSeconds(1)).First().Is(new std_msgs.String() { data = "defg" });
+            observer.Skip(1).Timeout(TimeSpan.FromSeconds(1)).First().data.Is("defg");
             
             scheduler.AdvanceBy(10);
-            observer.Skip(2).Timeout(TimeSpan.FromSeconds(1)).First().Is(new std_msgs.String() { data = "hijklmn" });
+            observer.Skip(2).Timeout(TimeSpan.FromSeconds(1)).First().data.Is("hijklmn");
             
         }
 
@@ -92,13 +92,13 @@ namespace RosSharp.IntegrationTests
             obs.Subscribe(publisher);
 
             scheduler.AdvanceBy(10);
-            observer.Timeout(TimeSpan.FromSeconds(1)).First().Is(new std_msgs.String() { data = "abc" });
+            observer.Timeout(TimeSpan.FromSeconds(1)).First().data.Is("abc");
 
             scheduler.AdvanceBy(10);
-            observer.Skip(1).Timeout(TimeSpan.FromSeconds(1)).First().Is(new std_msgs.String() { data = "defg" });
+            observer.Skip(1).Timeout(TimeSpan.FromSeconds(1)).First().data.Is("defg");
 
             scheduler.AdvanceBy(10);
-            observer.Skip(2).Timeout(TimeSpan.FromSeconds(1)).First().Is(new std_msgs.String() { data = "hijklmn" });
+            observer.Skip(2).Timeout(TimeSpan.FromSeconds(1)).First().data.Is("hijklmn");
             
         }
 

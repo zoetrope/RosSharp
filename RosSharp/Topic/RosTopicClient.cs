@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net.Sockets;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using RosSharp.Message;
 using RosSharp.Transport;
 
@@ -58,24 +59,23 @@ namespace RosSharp.Topic
             var ms = new MemoryStream();
             TcpRosHeaderSerializer.Serialize(ms, resHeader);
 
-            _tcpClient.SendAsync(ms.ToArray()).First(); //TODO: Firstでよい？
+            _tcpClient.SendTaskAsync(ms.ToArray()).Wait(); //TODO: Waitでよい？
 
             IsConnected = true;
         }
 
-        public IObservable<SocketAsyncEventArgs> SendAsync(TDataType data)
+        public Task<int> SendTaskAsync(TDataType data)
         {
             if(!IsConnected)
             {
-                return Observable.Empty<SocketAsyncEventArgs>();
-                //throw new InvalidOperationException("Is not Connected.");
+                throw new InvalidOperationException("Is not Connected.");
             }
             
             var ms = new MemoryStream();
             var bw = new BinaryWriter(ms);
             bw.Write(data.SerializeLength);
             data.Serialize(bw);
-            return _tcpClient.SendAsync(ms.ToArray());
+            return _tcpClient.SendTaskAsync(ms.ToArray());
         }
 
         

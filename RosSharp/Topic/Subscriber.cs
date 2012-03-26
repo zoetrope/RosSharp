@@ -38,7 +38,7 @@ namespace RosSharp.Topic
         private void Connect(TopicParam param)
         {
             var tcpClient = new RosTcpClient();
-            var ret = tcpClient.ConnectAsync(param.HostName, param.PortNumber).First();
+            tcpClient.ConnectTaskAsync(param.HostName, param.PortNumber).Wait();
 
             //TODO: RosTopicに委譲
 
@@ -64,7 +64,7 @@ namespace RosSharp.Topic
             TcpRosHeaderSerializer.Serialize(stream, header);
             var sendData = stream.ToArray();
 
-            tcpClient.SendAsync(sendData).First();
+            tcpClient.SendTaskAsync(sendData).Wait();
 
             var test = last.First();
 
@@ -100,15 +100,6 @@ namespace RosSharp.Topic
             return _subject.Subscribe(observer);
         }
 
-        string ITopic.Name
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        string ITopic.Type
-        {
-            get { throw new NotImplementedException(); }
-        }
     }
 
 }

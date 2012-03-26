@@ -5,7 +5,7 @@ using System.Reactive.Linq;
 
 namespace RosSharp.Transport
 {
-    internal sealed class RosTcpListener
+    internal sealed class RosTcpListener : IDisposable
     {
         private Socket _socket;
 
@@ -19,18 +19,28 @@ namespace RosSharp.Transport
             _socket.Listen(50);
         }
 
+        public bool Connected
+        {
+            get { return _socket.Connected; }
+        }
+
         public IObservable<Socket> AcceptAsync()
         {
             return Observable.Create<Socket>(
                 observer => _socket
                     .AcceptAsObservable(_socket.LocalEndPoint)
-                    .Select(x => x.AcceptSocket)
+                    //.Select(x => x.AcceptSocket)
                     .Subscribe(observer));
         }
 
         public IPEndPoint EndPoint
         {
             get { return (IPEndPoint)_socket.LocalEndPoint; }
+        }
+
+        public void Dispose()
+        {
+            _socket.Close();
         }
     }
 }

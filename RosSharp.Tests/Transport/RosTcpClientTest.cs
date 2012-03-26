@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System.Net.Sockets.Moles;
 using System.Reactive.Linq;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RosSharp.Transport;
@@ -19,21 +20,15 @@ namespace RosSharp.Tests.Transport
         {
             var arg  = new SocketAsyncEventArgs();
 
-            var scheduler = new TestScheduler();
+            var task = new Task(() => { });
 
-            MAsyncSocketExtensions.ConnectAsObservableSocketEndPoint = 
-                (t1, t2) => scheduler.CreateHotObservable(OnNext(10, arg));
-
-            var observer = scheduler.CreateObserver<SocketAsyncEventArgs>();
-
+            MAsyncSocketExtensions.ConnectTaskAsyncSocketEndPoint = (t1, t2) => task;
+            
             var client = new RosTcpClient();
 
-            var result = client.ConnectAsync("127.0.0.1", 50000).Subscribe(observer);
+            client.ConnectTaskAsync("127.0.0.1", 50000).ContinueWith(t => { });
 
-            scheduler.AdvanceTo(10);
-
-            observer.Messages.Is(OnNext(10, arg));
-            
+            task.Start();
         }
 
         [TestMethod]

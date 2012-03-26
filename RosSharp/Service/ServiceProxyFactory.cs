@@ -24,7 +24,7 @@ namespace RosSharp.Service
         {
 
             var tcpClient = new RosTcpClient();
-            var ret = tcpClient.ConnectAsync(uri.Host, uri.Port).First();
+            tcpClient.ConnectTaskAsync(uri.Host, uri.Port).Wait();
 
             var rec = tcpClient.ReceiveAsync()
                 .Select(x => TcpRosHeaderSerializer.Deserialize(new MemoryStream(x)))
@@ -47,7 +47,7 @@ namespace RosSharp.Service
             TcpRosHeaderSerializer.Serialize(stream, header);
             var data = stream.ToArray();
 
-            tcpClient.SendAsync(data).First();
+            tcpClient.SendTaskAsync(data).Wait();
 
             var test = rec.First();
 
@@ -76,7 +76,7 @@ namespace RosSharp.Service
                     bw.Write(request.SerializeLength);
                     request.Serialize(bw);
                     var senddata = ms.ToArray();
-                    tcpClient.SendAsync(senddata).First();
+                    tcpClient.SendTaskAsync(senddata).Wait();
 
                     return response.First();
                 });

@@ -44,7 +44,7 @@
     </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="RosSharp.Core.Moles, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
-    <Reference Include="RosSharp.Moles, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="RosSharp.Moles, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Behaviors, Version=0.94.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Core">
@@ -79,6 +79,7 @@
     <Compile Include="Transport\RosTcpClientTest.cs" />
     <Compile Include="Slave\SlaveClientTest.cs" />
     <Compile Include="Transport\RosTcpListenerTest.cs" />
+    <Compile Include="Transport\RosTcpTest.cs" />
     <Compile Include="Transport\TcpRosHeaderTest.cs" />
   </ItemGroup>
   <ItemGroup>

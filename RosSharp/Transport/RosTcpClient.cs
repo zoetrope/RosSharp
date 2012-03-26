@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Threading.Tasks;
 
 namespace RosSharp.Transport
 {
@@ -25,19 +26,23 @@ namespace RosSharp.Transport
             _socket.Close(1000);
         }
 
-        public IObservable<SocketAsyncEventArgs> ConnectAsync(string hostName, int portNumber)
+        public bool Connected
         {
-            
+            get { return _socket.Connected; }
+        }
+
+        public Task ConnectTaskAsync(string hostName, int portNumber)
+        {
             var hostEntry = new DnsEndPoint(hostName, portNumber);
 
             _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-            return _socket.ConnectAsObservable(hostEntry);
+            return _socket.ConnectTaskAsync(hostEntry);
         }
 
-        public IObservable<SocketAsyncEventArgs> SendAsync(byte[] data)
+        public Task<int> SendTaskAsync(byte[] data)
         {
-            return _socket.SendAsObservable(data);
+            return _socket.SendTaskAsync(data);
         }
 
         private IConnectableObservable<SocketAsyncEventArgs> _receiver;
@@ -65,8 +70,15 @@ namespace RosSharp.Transport
 
                         return rest;
                     })
-                    .Subscribe();
-                
+                    .Subscribe(_ => { },
+                               ex =>
+                               {
+                                   Console.WriteLine("ReceiveAsync Error = {0}", ex.Message);
+                                   //_socket.Close();//TODO: 閉じなくてよい？
+                                   observer.OnError(new Exception());
+                                   observer.OnCompleted();
+                               });
+
                 return disposable;
             });
         }
@@ -94,7 +106,7 @@ namespace RosSharp.Transport
                 current = new byte[0];
                 return false;
             }
-            
+
             if (rest.Length < 4 + offset)
             {
                 current = new byte[0];
@@ -120,7 +132,5 @@ namespace RosSharp.Transport
 
             return true;
         }
-
-        
     }
 }

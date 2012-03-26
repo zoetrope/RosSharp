@@ -29,7 +29,7 @@ namespace RosSharp.Topic
         public void OnNext(TDataType value)
         {
             //TODO: SendAsyncは別スレッドで動かすほうが良い
-            _rosTopics.ForEach(x => x.SendAsync(value).First());
+            _rosTopics.ForEach(x => x.SendTaskAsync(value).Wait());
         }
 
         public void OnError(Exception error)

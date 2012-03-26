@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Net.Sockets;
 using System.Net.Sockets.Moles;
+using System.Reactive.Linq;
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Microsoft.Reactive.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RosSharp.Transport;
@@ -18,13 +20,12 @@ namespace RosSharp.Tests.Transport
         [HostType("Moles")]
         public void AcceptAsync_Success()
         {
-            var arg = new SocketAsyncEventArgs();
-            arg.AcceptSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
             var scheduler = new TestScheduler();
 
             MAsyncSocketExtensions.AcceptAsObservableSocketEndPoint =
-                (t1, t2) => scheduler.CreateHotObservable(OnNext(10, arg));
+                (t1, t2) => scheduler.CreateHotObservable(OnNext(10, sock));
 
             var observer = scheduler.CreateObserver<Socket>();
 
@@ -34,8 +35,9 @@ namespace RosSharp.Tests.Transport
 
             scheduler.AdvanceTo(10);
 
-            observer.Messages.Is(OnNext(10, arg.AcceptSocket));
+            observer.Messages.Is(OnNext(10, sock));
 
         }
+
     }
 }
