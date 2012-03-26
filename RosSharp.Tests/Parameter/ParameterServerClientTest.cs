@@ -31,7 +31,8 @@ namespace RosSharp.Tests.Parameter
             MParameterServerProxy.AllInstances.EndDeleteParamIAsyncResult= (t1, t2) => result;
 
             var client = new ParameterServerClient(new Uri("http://localhost"));
-            client.DeleteParamAsync("test", "test_param").First().Is(Unit.Default);
+            var task = client.DeleteParamAsync("test", "test_param");
+            task.Wait();
         }
 
         [TestMethod]
@@ -52,7 +53,7 @@ namespace RosSharp.Tests.Parameter
             var client = new ParameterServerClient(new Uri("http://localhost"));
 
             var ex = AssertEx.Throws<InvalidOperationException>(
-                () => client.DeleteParamAsync("test", "aaa").First());
+                () => client.DeleteParamAsync("test", "aaa").Wait());
             ex.Message.Is("parameter [/aaa] is not set");
         }
 
@@ -73,7 +74,8 @@ namespace RosSharp.Tests.Parameter
             MParameterServerProxy.AllInstances.EndSetParamIAsyncResult= (t1, t2) => result;
 
             var client = new ParameterServerClient(new Uri("http://localhost"));
-            client.SetParamAsync("test", "/test_param", 1234).First().Is(Unit.Default);
+            var task = client.SetParamAsync("test", "/test_param", 1234);
+            task.Wait();
         }
 
         [TestMethod]
@@ -92,7 +94,9 @@ namespace RosSharp.Tests.Parameter
             MParameterServerProxy.AllInstances.EndGetParamIAsyncResult = (t1, t2) => result;
 
             var client = new ParameterServerClient(new Uri("http://localhost"));
-            client.GetParamAsync("test", "rosversion").First().Is("1.6.5");
+            var task = client.GetParamAsync("test", "rosversion");
+            task.Wait();
+            task.Result.Is("1.6.5");
         }
 
         [TestMethod]
@@ -118,7 +122,9 @@ namespace RosSharp.Tests.Parameter
             MParameterServerProxy.AllInstances.EndGetParamIAsyncResult = (t1, t2) => result;
 
             var client = new ParameterServerClient(new Uri("http://localhost"));
-            client.GetParamAsync("test", "foo").First().Is(new object[3] { "1", 1, 1.0 });
+            var task = client.GetParamAsync("test", "foo");
+            task.Wait();
+            task.Result.Is(new object[3] { "1", 1, 1.0 });
         }
         
         [TestMethod]
@@ -146,7 +152,7 @@ namespace RosSharp.Tests.Parameter
             MParameterServerProxy.AllInstances.EndGetParamIAsyncResult = (t1, t2) => result;
 
             var client = new ParameterServerClient(new Uri("http://localhost"));
-            client.GetParamAsync("test", "gains").First();
+            client.GetParamAsync("test", "gains").Wait();
         }
 
         [TestMethod]
@@ -167,7 +173,7 @@ namespace RosSharp.Tests.Parameter
             var client = new ParameterServerClient(new Uri("http://localhost"));
             
             var ex = AssertEx.Throws<InvalidOperationException>(
-                () => client.GetParamAsync("test", "aaa").First());
+                () => client.GetParamAsync("test", "aaa").Wait());
             ex.Message.Is("Parameter [/aaa] is not set");
         }
 
@@ -190,7 +196,7 @@ namespace RosSharp.Tests.Parameter
             var client = new ParameterServerClient(new Uri("http://localhost"));
             
             var ex = AssertEx.Throws<InvalidOperationException>(
-                () => client.SearchParamAsync("test", "rosversion").First());
+                () => client.SearchParamAsync("test", "rosversion").Wait());
             ex.Message.Is("Internal failure: namespace must be global");
         }
 
@@ -210,7 +216,7 @@ namespace RosSharp.Tests.Parameter
             MParameterServerProxy.AllInstances.EndSubscribeParamIAsyncResult = (t1, t2) => result;
 
             var client = new ParameterServerClient(new Uri("http://localhost"));
-            client.SubscribeParamAsync("test", new Uri("http://localhost:11311"), "rosversion").First();
+            client.SubscribeParamAsync("test", new Uri("http://localhost:11311"), "rosversion").Wait();
         }
         
         //var version = client.SubscribeParamAsync("test", server.SlaveUri, "aaa").First();
@@ -234,7 +240,9 @@ namespace RosSharp.Tests.Parameter
             MParameterServerProxy.AllInstances.EndUnsubscribeParamIAsyncResult= (t1, t2) => result;
 
             var client = new ParameterServerClient(new Uri("http://localhost"));
-            client.UnsubscribeParamAsync("test", new Uri("http://localhost:11311"), "rosversion").First().Is(1);
+            var task = client.UnsubscribeParamAsync("test", new Uri("http://localhost:11311"), "rosversion");
+            task.Wait();
+            task.Result.Is(1);
         }
         
         //var version = client.UnsubscribeParamAsync("test", server.SlaveUri, "bbb").First();
@@ -265,7 +273,9 @@ namespace RosSharp.Tests.Parameter
             MParameterServerProxy.AllInstances.EndHasParamIAsyncResult= (t1, t2) => result;
 
             var client = new ParameterServerClient(new Uri("http://localhost"));
-            client.HasParamAsync("test", "/rosversion").First().Is(true);
+            var task = client.HasParamAsync("test", "/rosversion");
+            task.Wait();
+            task.Result.Is(true);
         }
 
         [TestMethod]
@@ -284,7 +294,9 @@ namespace RosSharp.Tests.Parameter
             MParameterServerProxy.AllInstances.EndHasParamIAsyncResult = (t1, t2) => result;
 
             var client = new ParameterServerClient(new Uri("http://localhost"));
-            client.HasParamAsync("test", "/aaa").First().Is(false);
+            var task = client.HasParamAsync("test", "/aaa");
+            task.Wait();
+            task.Result.Is(false);
         }
 
         [TestMethod]
@@ -309,7 +321,9 @@ namespace RosSharp.Tests.Parameter
             MParameterServerProxy.AllInstances.EndGetParamNamesIAsyncResult= (t1, t2) => result;
 
             var client = new ParameterServerClient(new Uri("http://localhost"));
-            client.GetParamNamesAsync("test").First().Is(
+            var task = client.GetParamNamesAsync("test");
+            task.Wait();
+            task.Result.Is(
                 new string[] {"/roslaunch/uris/host_192_168_11_6__51664","/rosversion","/rosdistro","/run_id"});
 
         }

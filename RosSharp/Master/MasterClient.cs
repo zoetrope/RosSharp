@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 
 namespace RosSharp.Master
 {
@@ -27,17 +28,15 @@ namespace RosSharp.Master
         /// <param name="serviceApi">ROSRPC Service URI</param>
         /// <param name="callerApi">XML-RPC URI of caller node</param>
         /// <returns>ignore</returns>
-        public IObservable<Unit> RegisterServiceAsync(string callerId, string service, Uri serviceApi, Uri callerApi)
+        public Task RegisterServiceAsync(string callerId, string service, Uri serviceApi, Uri callerApi)
         {
-#if WINDOWS_PHONE
-            return ObservableEx
-#else
-            return Observable
-#endif
-                .FromAsyncPattern<string, string, string, string, object[]>(_proxy.BeginRegisterService, _proxy.EndRegisterService)
-                .Invoke(callerId, service, serviceApi.ToString(), callerApi.ToString())
-                .Do(ret => { if ((StatusCode)ret[0] != StatusCode.Success) throw new InvalidOperationException((string)ret[1]); })
-                .Select(_ => Unit.Default);
+            return Task<object[]>.Factory.FromAsync((callback, o) =>
+                    _proxy.BeginRegisterService(callerId, service, serviceApi.ToString(), callerApi.ToString(), callback, o),
+                    _proxy.EndRegisterService, null)
+                .ContinueWith(task =>
+                {
+                    if ((StatusCode)task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string)task.Result[1]);
+                });
         }
 
         /// <summary>
@@ -48,17 +47,14 @@ namespace RosSharp.Master
         /// <param name="serviceApi">API URI of service to unregister.
         /// Unregistration will only occur if current registration matches.</param>
         /// <returns>Number of Unregistrations</returns>
-        public IObservable<int> UnregisterServiceAsync(string callerId, string service, Uri serviceApi)
+        public Task<int> UnregisterServiceAsync(string callerId, string service, Uri serviceApi)
         {
-#if WINDOWS_PHONE
-            return ObservableEx
-#else
-            return Observable
-#endif
-                .FromAsyncPattern<string, string, string, object[]>(_proxy.BeginUnregisterService, _proxy.EndUnregisterService)
-                .Invoke(callerId, service, serviceApi.ToString())
-                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
-                .Select(ret => (int)ret[2]);
+            return Task<object[]>.Factory.FromAsync(_proxy.BeginUnregisterService, _proxy.EndUnregisterService, callerId, service, serviceApi.ToString(), null)
+                .ContinueWith(task =>
+                {
+                    if ((StatusCode)task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string)task.Result[1]);
+                    return (int)task.Result[2];
+                });
         }
 
         /// <summary>
@@ -71,17 +67,16 @@ namespace RosSharp.Master
         /// <param name="topicType">Datatype for topic. Must be a package-resource name, i.e. the .msg name.</param>
         /// <param name="callerApi">API URI of subscriber to register. Will be used for new publisher notifications.</param>
         /// <returns>list of XMLRPC API URIs for nodes currently publishing the specified topic.</returns>
-        public IObservable<List<Uri>> RegisterSubscriberAsync(string callerId, string topic, string topicType, Uri callerApi)
+        public Task<List<Uri>> RegisterSubscriberAsync(string callerId, string topic, string topicType, Uri callerApi)
         {
-#if WINDOWS_PHONE
-            return ObservableEx
-#else
-            return Observable
-#endif
-                .FromAsyncPattern<string, string, string, string, object[]>(_proxy.BeginRegisterSubscriber, _proxy.EndRegisterSubscriber)
-                .Invoke(callerId, topic, topicType, callerApi.ToString())
-                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
-                .Select(ret => ((object[])ret[2]).Select(x => new Uri((string)x)).ToList());
+            return Task<object[]>.Factory.FromAsync((callback, o) =>
+                    _proxy.BeginRegisterSubscriber(callerId, topic, topicType, callerApi.ToString(), callback, o),
+                    _proxy.EndRegisterSubscriber, null)
+                .ContinueWith(task =>
+                {
+                    if ((StatusCode)task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string)task.Result[1]);
+                    return ((object[]) task.Result[2]).Select(x => new Uri((string) x)).ToList();
+                });
         }
 
         /// <summary>
@@ -92,17 +87,14 @@ namespace RosSharp.Master
         /// <param name="callerApi">API URI of service to unregister.
         /// Unregistration will only occur if current registration matches.</param>
         /// <returns>Number of Unsubscribed</returns>
-        public IObservable<int> UnregisterSubscriberAsync(string callerId, string topic, Uri callerApi)
+        public Task<int> UnregisterSubscriberAsync(string callerId, string topic, Uri callerApi)
         {
-#if WINDOWS_PHONE
-            return ObservableEx
-#else
-            return Observable
-#endif
-                .FromAsyncPattern<string, string, string, object[]>(_proxy.BeginUnregisterSubscriber, _proxy.EndUnregisterSubscriber)
-                .Invoke(callerId, topic, callerApi.ToString())
-                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
-                .Select(ret => (int)ret[2]);
+            return Task<object[]>.Factory.FromAsync(_proxy.BeginUnregisterSubscriber, _proxy.EndUnregisterSubscriber, callerId, topic, callerApi.ToString(), null)
+                .ContinueWith(task =>
+                {
+                    if ((StatusCode)task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string)task.Result[1]);
+                    return (int)task.Result[2];
+                });
         }
 
         /// <summary>
@@ -113,17 +105,16 @@ namespace RosSharp.Master
         /// <param name="topicType">Datatype for topic. Must be a package-resource name, i.e. the .msg name.</param>
         /// <param name="callerApi">API URI of publisher to register.</param>
         /// <returns>List of current subscribers of topic in the form of XMLRPC URIs.</returns>
-        public IObservable<List<Uri>> RegisterPublisherAsync(string callerId, string topic, string topicType, Uri callerApi)
+        public Task<List<Uri>> RegisterPublisherAsync(string callerId, string topic, string topicType, Uri callerApi)
         {
-#if WINDOWS_PHONE
-            return ObservableEx
-#else
-            return Observable
-#endif
-                .FromAsyncPattern<string, string, string, string, object[]>(_proxy.BeginRegisterPublisher, _proxy.EndRegisterPublisher)
-                .Invoke(callerId, topic, topicType, callerApi.ToString())
-                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
-                .Select(ret => ((object[])ret[2]).Select(x => new Uri((string)x)).ToList());
+            return Task<object[]>.Factory.FromAsync((callback, o) =>
+                    _proxy.BeginRegisterPublisher(callerId, topic, topicType, callerApi.ToString(), callback, o),
+                    _proxy.EndRegisterPublisher, null)
+                .ContinueWith(task =>
+                {
+                    if ((StatusCode)task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string)task.Result[1]);
+                    return ((object[])task.Result[2]).Select(x => new Uri((string)x)).ToList();
+                });
         }
 
         /// <summary>
@@ -134,17 +125,14 @@ namespace RosSharp.Master
         /// <param name="callerApi">API URI of publisher to unregister.
         /// Unregistration will only occur if current registration matches.</param>
         /// <returns>Number of Unregistered</returns>
-        public IObservable<int> UnregisterPublisherAsync(string callerId, string topic, Uri callerApi)
+        public Task<int> UnregisterPublisherAsync(string callerId, string topic, Uri callerApi)
         {
-#if WINDOWS_PHONE
-            return ObservableEx
-#else
-            return Observable
-#endif
-                .FromAsyncPattern<string, string, string, object[]>(_proxy.BeginUnregisterPublisher, _proxy.EndUnregisterPublisher)
-                .Invoke(callerId, topic, callerApi.ToString())
-                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
-                .Select(ret => (int)ret[2]);
+            return Task<object[]>.Factory.FromAsync(_proxy.BeginUnregisterPublisher, _proxy.EndUnregisterPublisher, callerId, topic, callerApi.ToString(), null)
+                .ContinueWith(task =>
+                {
+                    if ((StatusCode)task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string)task.Result[1]);
+                    return (int)task.Result[2];
+                });
         }
 
         /// <summary>
@@ -155,13 +143,14 @@ namespace RosSharp.Master
         /// <param name="callerId">ROS Caller ID</param>
         /// <param name="nodeName">Name of node to lookup</param>
         /// <returns>URI of the Node</returns>
-        public IObservable<Uri> LookupNodeAsync(string callerId, string nodeName)
+        public Task<Uri> LookupNodeAsync(string callerId, string nodeName)
         {
-            return Observable.FromAsyncPattern<string, string, object[]>(_proxy.BeginLookupNode, _proxy.EndLookupNode)
-                .Invoke(callerId, nodeName)
-                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
-                .Select(ret => new Uri((string)ret[2]));
-
+            return Task<object[]>.Factory.FromAsync(_proxy.BeginLookupNode, _proxy.EndLookupNode, callerId, nodeName, null)
+                .ContinueWith(task =>
+                {
+                    if ((StatusCode)task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string)task.Result[1]);
+                    return new Uri((string)task.Result[2]);
+                });
         }
 
         /// <summary>
@@ -174,17 +163,18 @@ namespace RosSharp.Master
         /// Subgraph namespace is resolved relative to the caller's namespace.
         /// Use emptry string to specify all names.</param>
         /// <returns>TopicInfo list</returns>
-        public IObservable<List<TopicInfo>> GetPublisherTopicsAsync(string callerId, string subgraph)
+        public Task<List<TopicInfo>> GetPublisherTopicsAsync(string callerId, string subgraph)
         {
-            return Observable.FromAsyncPattern<string, string, object[]>(_proxy.BeginGetPublisherTopics, _proxy.EndGetPublisherTopics)
-                .Invoke(callerId, subgraph)
-                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
-                .Select(ret =>
-                    ((object[])ret[2]).Select(x => new TopicInfo()
+            return Task<object[]>.Factory.FromAsync(_proxy.BeginGetPublisherTopics, _proxy.EndGetPublisherTopics, callerId, subgraph, null)
+                .ContinueWith(task =>
+                {
+                    if ((StatusCode)task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string)task.Result[1]);
+                    return ((object[])task.Result[2]).Select(x => new TopicInfo()
                     {
                         TopicName = (string)((object[])x)[0],
                         TypeName = (string)((object[])x)[1]
-                    }).ToList());
+                    }).ToList();
+                });
         }
 
         /// <summary>
@@ -192,33 +182,34 @@ namespace RosSharp.Master
         /// </summary>
         /// <param name="callerId">ROS Caller ID</param>
         /// <returns>System state</returns>
-        public IObservable<SystemState> GetSystemStateAsync(string callerId)
+        public Task<SystemState> GetSystemStateAsync(string callerId)
         {
-            return Observable.FromAsyncPattern<string, object[]>(_proxy.BeginGetSystemState, _proxy.EndGetSystemState)
-                .Invoke(callerId)
-                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
-                .Select(ret =>
-                    new SystemState()
+            return Task<object[]>.Factory.FromAsync(_proxy.BeginGetSystemState, _proxy.EndGetSystemState, callerId, null)
+                .ContinueWith(task =>
+                {
+                    if ((StatusCode)task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string)task.Result[1]);
+                    return new SystemState()
                     {
-                        Publishers = ((object[][][])ret[2])[0]
+                        Publishers = ((object[][][])task.Result[2])[0]
                         .Select(x => new PublisherSystemState()
                             {
                                 TopicName = (string)x[0],
                                 Publishers = ((object[])x[1]).Cast<string>().ToList()
                             }).ToList(),
-                        Subscribers = ((object[][][])ret[2])[1]
+                        Subscribers = ((object[][][])task.Result[2])[1]
                         .Select(x => new SubscriberSystemState()
                             {
                                 TopicName = (string)x[0],
                                 Subscribers = ((object[])x[1]).Cast<string>().ToList()
                             }).ToList(),
-                        Services = ((object[][][])ret[2])[2]
+                        Services = ((object[][][])task.Result[2])[2]
                         .Select(x => new ServiceSystemState()
                             {
                                 ServiceName = (string)x[0],
                                 Services = ((object[])x[1]).Cast<string>().ToList()
                             }).ToList()
-                    });
+                    };
+                });
         }
 
         /// <summary>
@@ -226,12 +217,14 @@ namespace RosSharp.Master
         /// </summary>
         /// <param name="callerId">ROS Caller ID</param>
         /// <returns>URI of the master</returns>
-        public IObservable<Uri> GetUriAsync(string callerId)
+        public Task<Uri> GetUriAsync(string callerId)
         {
-            return Observable.FromAsyncPattern<string, object[]>(_proxy.BeginGetUri, _proxy.EndGetUri)
-                .Invoke(callerId)
-                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
-                .Select(ret => new Uri((string)ret[2]));
+            return Task<object[]>.Factory.FromAsync(_proxy.BeginGetUri, _proxy.EndGetUri, callerId, null)
+                .ContinueWith(task =>
+                {
+                    if ((StatusCode)task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string)task.Result[1]);
+                    return new Uri((string)task.Result[2]);
+                });
         }
 
         /// <summary>
@@ -240,12 +233,14 @@ namespace RosSharp.Master
         /// <param name="callerId">ROS caller ID</param>
         /// <param name="service">Fully-qualified name of service</param>
         /// <returns>URI of the service</returns>
-        public IObservable<Uri> LookupServiceAsync(string callerId, string service)
+        public Task<Uri> LookupServiceAsync(string callerId, string service)
         {
-            return Observable.FromAsyncPattern<string, string, object[]>(_proxy.BeginLookupService, _proxy.EndLookupService)
-                .Invoke(callerId, service)
-                .Do(ret => { if ((int)ret[0] != 1) throw new InvalidOperationException((string)ret[1]); })
-                .Select(ret => new Uri((string)ret[2]));
+            return Task<object[]>.Factory.FromAsync(_proxy.BeginLookupService, _proxy.EndLookupService, callerId,service, null)
+                .ContinueWith(task =>
+                {
+                    if ((StatusCode)task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string)task.Result[1]);
+                    return new Uri((string)task.Result[2]);
+                });
         }
     }
 

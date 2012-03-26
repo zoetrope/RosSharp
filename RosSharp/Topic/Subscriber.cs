@@ -30,7 +30,7 @@ namespace RosSharp.Topic
             slaves.ToList()
                 .ForEach(slave =>
                          slave.RequestTopicAsync(NodeId, Name, new object[1] {new string[1] {"TCPROS"}})
-                             .Subscribe(topicParam => Connect(topicParam)));
+                             .ContinueWith(task => Connect(task.Result)));
 
 
         }

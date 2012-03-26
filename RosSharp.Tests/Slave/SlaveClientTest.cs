@@ -29,7 +29,9 @@ namespace RosSharp.Tests.Slave
 
             var client = new SlaveClient(new Uri("http://localhost"));
 
-            client.GetBusInfoAsync("/test").First().Is(25346);
+            var task = client.GetBusInfoAsync("/test");
+            task.Wait();
+            task.Result.Is(25346);
         }
 
 
@@ -50,7 +52,9 @@ namespace RosSharp.Tests.Slave
 
             var client = new SlaveClient(new Uri("http://localhost"));
 
-            client.GetPidAsync("/test").First().Is(25346);
+            var task = client.GetPidAsync("/test");
+            task.Wait();
+            task.Result.Is(25346);
         }
 
         [TestMethod]
@@ -70,8 +74,9 @@ namespace RosSharp.Tests.Slave
 
             var client = new SlaveClient(new Uri("http://localhost"));
 
-            var uri = client.GetMasterUriAsync("/test").First();
-            uri.Is(new Uri("http://localhost:11311"));
+            var task = client.GetMasterUriAsync("/test");
+            task.Wait();
+            task.Result.Is(new Uri("http://localhost:11311"));
         }
 
 
@@ -104,14 +109,15 @@ namespace RosSharp.Tests.Slave
 
             var client = new SlaveClient(new Uri("http://localhost"));
 
-            var subs = client.GetPublicationsAsync("/test").First();
+            var task = client.GetPublicationsAsync("/test");
+            task.Wait();
 
-            subs.Count.Is(2);
-            subs[0].Name.Is("/rosout");
-            subs[0].Type.Is("rosgraph_msgs/Log");
+            task.Result.Count.Is(2);
+            task.Result[0].Name.Is("/rosout");
+            task.Result[0].Type.Is("rosgraph_msgs/Log");
 
-            subs[1].Name.Is("/chatter");
-            subs[1].Type.Is("std_msgs/String");
+            task.Result[1].Name.Is("/chatter");
+            task.Result[1].Type.Is("std_msgs/String");
         }
 
         [TestMethod]
@@ -131,9 +137,10 @@ namespace RosSharp.Tests.Slave
 
             var client = new SlaveClient(new Uri("http://localhost"));
 
-            var subs = client.GetPublicationsAsync("/test").First();
+            var task = client.GetPublicationsAsync("/test");
+            task.Wait();
 
-            subs.Count.Is(0);
+            task.Result.Count.Is(0);
         }
 
         [TestMethod]
@@ -159,11 +166,12 @@ namespace RosSharp.Tests.Slave
 
             var client = new SlaveClient(new Uri("http://localhost"));
 
-            var subs = client.GetSubscriptionsAsync("/test").First();
+            var task = client.GetSubscriptionsAsync("/test");
+            task.Wait();
 
-            subs.Count.Is(1);
-            subs[0].Name.Is("/chatter");
-            subs[0].Type.Is("std_msgs/String");
+            task.Result.Count.Is(1);
+            task.Result[0].Name.Is("/chatter");
+            task.Result[0].Type.Is("std_msgs/String");
         }
 
         [TestMethod]
@@ -183,9 +191,10 @@ namespace RosSharp.Tests.Slave
 
             var client = new SlaveClient(new Uri("http://localhost"));
 
-            var subs = client.GetSubscriptionsAsync("/test").First();
+            var task = client.GetSubscriptionsAsync("/test");
+            task.Wait();
 
-            subs.Count.Is(0);
+            task.Result.Count.Is(0);
         }
 
         [TestMethod]
@@ -209,7 +218,8 @@ namespace RosSharp.Tests.Slave
 
             var client = new SlaveClient(new Uri("http://localhost"));
 
-            var topics = client.RequestTopicAsync("/test", "/rosout", new object[1] { new string[1] { "TCPROS" } }).First();
+            var task= client.RequestTopicAsync("/test", "/rosout", new object[1] { new string[1] { "TCPROS" } });
+            task.Wait();
 
 
         }
@@ -231,7 +241,8 @@ namespace RosSharp.Tests.Slave
 
             var client = new SlaveClient(new Uri("http://localhost"));
 
-            var topics = client.PublisherUpdateAsync("/test", "topic", new string[1] { "http://192.168.1.2:8989" }).First();
+            var task = client.PublisherUpdateAsync("/test", "topic", new string[1] { "http://192.168.1.2:8989" });
+            task.Wait();
 
         }
         [TestMethod]
@@ -251,7 +262,8 @@ namespace RosSharp.Tests.Slave
 
             var client = new SlaveClient(new Uri("http://localhost"));
 
-            var topics = client.RequestTopicAsync("/test", "/rosout", new object[1] { new string[1] { "UDPROS" } }).First();
+            var task = client.RequestTopicAsync("/test", "/rosout", new object[1] { new string[1] { "UDPROS" } });
+            task.Wait();
 
         }
 
@@ -272,7 +284,8 @@ namespace RosSharp.Tests.Slave
 
             var client = new SlaveClient(new Uri("http://localhost"));
 
-            var topics = client.RequestTopicAsync("/test", "/chatter", new object[1] { new string[1] { "TCPROS" } }).First();
+            var task = client.RequestTopicAsync("/test", "/chatter", new object[1] { new string[1] { "TCPROS" } });
+            task.Wait();
 
         }
 

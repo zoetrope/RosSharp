@@ -85,7 +85,7 @@ namespace RosSharp.Node
             var dummy = new TDataType();
             _masterClient
                 .RegisterSubscriberAsync(NodeId, topicName, dummy.MessageType, _slaveServer.SlaveUri)
-                .Subscribe(((ISubscriber) subscriber).UpdatePublishers);
+                .ContinueWith(task => ((ISubscriber) subscriber).UpdatePublishers(task.Result));
 
             return subscriber;
         }
@@ -94,7 +94,7 @@ namespace RosSharp.Node
         {
             _masterClient
                 .UnregisterSubscriberAsync(NodeId, topicName, _slaveServer.SlaveUri)
-                .Subscribe(_ => _topicContainer.RemoveSubscriber(topicName));
+                .ContinueWith(task => _topicContainer.RemoveSubscriber(topicName));
         }
 
 
@@ -111,7 +111,7 @@ namespace RosSharp.Node
 
             _masterClient
                 .RegisterPublisherAsync(NodeId, topicName, publisher.Type, _slaveServer.SlaveUri)
-                .Subscribe(publisher.UpdateSubscriber);
+                .ContinueWith(task => publisher.UpdateSubscriber(task.Result));
 
             return publisher;
         }
@@ -120,7 +120,7 @@ namespace RosSharp.Node
         {
             _masterClient
                 .UnregisterPublisherAsync(NodeId, topicName, _slaveServer.SlaveUri)
-                .Subscribe(_ => _topicContainer.RemovePublisher(topicName));
+                .ContinueWith(_ => _topicContainer.RemovePublisher(topicName));
         }
 
         public TService CreateProxy<TService>(string serviceName)
@@ -128,9 +128,10 @@ namespace RosSharp.Node
         {
             _logger.InfoFormat("Create ServiceProxy: {0}", serviceName);
 
-            var uri = _masterClient.LookupServiceAsync(NodeId, serviceName).First();
+            var task = _masterClient.LookupServiceAsync(NodeId, serviceName);
+            task.Wait();
 
-            return _serviceProxyFactory.Create<TService>(serviceName, uri);
+            return _serviceProxyFactory.Create<TService>(serviceName, task.Result);
         }
 
         public void RemoveServiceProxy(string serviceName)
@@ -148,11 +149,11 @@ namespace RosSharp.Node
             var serviceServer = new ServiceServer<TService>(NodeId);
             serviceServer.RegisterService(serviceName, service);
 
-            var ret1 = _masterClient
+            _masterClient
                 .RegisterServiceAsync(NodeId, serviceName,
                     new Uri("rosrpc://" + ROS.HostName + ":" + serviceServer.EndPoint.Port),
                     _slaveServer.SlaveUri)
-                .First(); //TODO: Firstはだめ。
+                .Wait(); //TODO: Waitはだめ。
 
             _services.Add(serviceName, service);
 
@@ -163,7 +164,7 @@ namespace RosSharp.Node
         {
             _masterClient
                 .UnregisterServiceAsync(NodeId, serviceName, _slaveServer.SlaveUri)
-                .Subscribe(_ => _services.Remove(serviceName));
+                .ContinueWith(_ => _services.Remove(serviceName));
         }
     }
 }

@@ -30,11 +30,14 @@ namespace RosSharp.Parameter
         {
             get
             {
-                return _parameterServerClient.GetParamAsync(NodeId, Name).Select(_converter.ConvertTo).First();
+                var task = _parameterServerClient.GetParamAsync(NodeId, Name);
+                task.Wait();
+                return _converter.ConvertTo(task.Result);
             }
             set
             {
-                _parameterServerClient.SetParamAsync(NodeId, Name, _converter.ConvertFrom(value)).First();
+                var task = _parameterServerClient.SetParamAsync(NodeId, Name,_converter.ConvertFrom(value));
+                task.Wait();
             }
         }
 
@@ -44,9 +47,14 @@ namespace RosSharp.Parameter
             if (_parameterSubject == null)
             {
                 _parameterSubject = new Subject<T>();
-                var value = _parameterServerClient.SubscribeParamAsync(NodeId, _slaveUri, Name).First();
-                var data = _converter.ConvertTo(value); //TODO: SetParamしてないのにSubscribeするとおかしなデータが来る
-                _parameterSubject.OnNext(data);
+                _parameterServerClient.SubscribeParamAsync(NodeId, _slaveUri, Name)
+                    .ContinueWith(
+                        task =>
+                        {
+                            var val = _converter.ConvertTo(task.Result);
+                            _parameterSubject.OnNext(val);
+                        });
+                //TODO: SetParamしてないのにSubscribeするとおかしなデータが来る
             }
 
             return _parameterSubject.Subscribe(observer);
@@ -62,7 +70,7 @@ namespace RosSharp.Parameter
         {
             if (_parameterSubject != null)
             {
-                _parameterServerClient.UnsubscribeParamAsync(NodeId, _slaveUri, Name).First();
+                _parameterServerClient.UnsubscribeParamAsync(NodeId, _slaveUri, Name).Wait();
                 _parameterSubject = null;
             }
         }

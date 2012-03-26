@@ -24,7 +24,7 @@ namespace RosSharp.IntegrationTests
 
             var parameterClient = new ParameterServerClient(new Uri("http://localhost:11311"));
 
-            parameterClient.GetParamAsync("", "").First();
+            parameterClient.GetParamAsync("", "").Wait();
         }
     }
 }

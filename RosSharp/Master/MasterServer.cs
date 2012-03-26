@@ -363,8 +363,8 @@ namespace RosSharp.Master
 
             var publishers = info.PublisherUris.Select(x => x.ToString()).ToArray();
 
-            //TODO: Firstはだめ？Serverの中なのでどうすべきか。Java版では接続せずに帰ってきてる感じ。
-            slaves.ToList().ForEach(s => s.PublisherUpdateAsync("", info.TopicName, publishers).First());
+            //TODO: Waitはだめ？Serverの中なのでどうすべきか。Java版では接続せずに帰ってきてる感じ。
+            slaves.ToList().ForEach(s => s.PublisherUpdateAsync("", info.TopicName, publishers).Wait());
         }
 
         /// <summary>
