@@ -9,19 +9,30 @@ using RosSharp.Service;
 
 namespace Server
 {
-    public class AddTwoInts : IService<AddTwoInts.Request, AddTwoInts.Response>
+    public class AddTwoInts : ServiceBase<AddTwoInts.Request, AddTwoInts.Response>
     {
-        public string ServiceType
+        public AddTwoInts()
+        {
+            
+        }
+
+        public AddTwoInts(Func<Request,Response> action)
+            :base(action)
+        {
+            
+        }
+
+        public override string ServiceType
         {
             get { return "test_ros/AddTwoInts";}
         }
 
-        public string Md5Sum
+        public override string Md5Sum
         {
             get { return "6a2e34150c00229791cc89ff309fff21"; }
         }
 
-        public string ServiceDefinition
+        public override string ServiceDefinition
         {
             get { throw new NotImplementedException(); }
         }

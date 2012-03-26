@@ -19,10 +19,8 @@ namespace RosSharp.Service
             NodeId = nodeId;
         }
 
-        public Func<TRequest, IObservable<TResponse>> Create<TService, TRequest, TResponse>(string serviceName, Uri uri)
-            where TService : IService<TRequest, TResponse>, new()
-            where TRequest : IMessage, new()
-            where TResponse : IMessage, new()
+        public TService Create<TService>(string serviceName, Uri uri)
+            where TService : IService, new()
         {
 
             var tcpClient = new RosTcpClient();
@@ -53,34 +51,37 @@ namespace RosSharp.Service
 
             var test = rec.First();
 
-            return request =>
-                   {
 
-                       var response = tcpClient.ReceiveAsync(offset: 1)
-                           .Select(x =>
-                                   {
-                                       //TODO: エラー処理
-                                       var res = new TResponse();
-                                       var br = new BinaryReader(new MemoryStream(x));
-                                       br.ReadInt32();
-                                       res.Deserialize(br);
-                                       return res;
-                                   })
-                           .Take(1)
-                           .PublishLast();
+            service.SetAction(
+                request =>
+                {
 
-                       response.Connect();
+                    var response = tcpClient.ReceiveAsync(offset: 1)
+                        .Select(x =>
+                                {
+                                    //TODO: エラー処理
+                                    var res = service.CreateResponse();
+                                    var br = new BinaryReader(new MemoryStream(x));
+                                    br.ReadInt32();
+                                    res.Deserialize(br);
+                                    return res;
+                                })
+                        .Take(1)
+                        .PublishLast();
 
-                       var ms = new MemoryStream();
-                       var bw = new BinaryWriter(ms);
-                       bw.Write(request.SerializeLength);
-                       request.Serialize(bw);
-                       var senddata = ms.ToArray();
-                       tcpClient.SendAsync(senddata).First();
+                    response.Connect();
 
-                       return response;
-                   };
+                    var ms = new MemoryStream();
+                    var bw = new BinaryWriter(ms);
+                    bw.Write(request.SerializeLength);
+                    request.Serialize(bw);
+                    var senddata = ms.ToArray();
+                    tcpClient.SendAsync(senddata).First();
 
+                    return response.First();
+                });
+
+            return service;
         }
     }
 }

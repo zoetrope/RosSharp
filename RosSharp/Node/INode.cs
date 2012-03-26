@@ -18,17 +18,13 @@ namespace RosSharp.Node
 
         void RemovePublisher(string topicName);
 
-        Func<TRequest, IObservable<TResponse>> CreateProxy<TService, TRequest, TResponse>(string serviceName)
-            where TService : IService<TRequest, TResponse>, new()
-            where TRequest : IMessage, new()
-            where TResponse : IMessage, new();
+        TService CreateProxy<TService>(string serviceName)
+            where TService : IService, new();
 
         void RemoveServiceProxy(string serviceName);
 
-        IDisposable RegisterService<TService, TRequest, TResponse>(string serviceName, Func<TRequest, TResponse> service)
-            where TService : IService<TRequest, TResponse>, new()
-            where TRequest : IMessage, new()
-            where TResponse : IMessage, new();
+        IDisposable RegisterService<TService>(string serviceName, TService service)
+            where TService : IService, new();
 
         void RemoveService(string serviceName);
 

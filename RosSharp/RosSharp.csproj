@@ -64,6 +64,7 @@
     </Compile>
     <Compile Include="Parameter\IParameter.cs" />
     <Compile Include="Parameter\Parameter.cs" />
+    <Compile Include="Service\ServiceBase.cs" />
     <Compile Include="StatusCode.cs" />
     <Compile Include="Master\RegistrationContainer.cs" />
     <Compile Include="Message\SerializeExtensions.cs" />

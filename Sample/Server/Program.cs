@@ -18,10 +18,9 @@ namespace Server
 
             var node = ROS.CreateNode("Server");
 
-            node.RegisterService<AddTwoInts, AddTwoInts.Request, AddTwoInts.Response>("/add_two_ints", add_two_ints);
+            node.RegisterService("/add_two_ints", new AddTwoInts(add_two_ints));
 
-            node.RegisterService<AddTwoInts, AddTwoInts.Request, AddTwoInts.Response>
-                ("/add_two_ints", req => new AddTwoInts.Response {c = req.a + req.b});
+            node.RegisterService("/add_two_ints",new AddTwoInts(req => new AddTwoInts.Response {c = req.a + req.b}));
             
             Console.WriteLine("Press Any Key.");
             Console.ReadKey();

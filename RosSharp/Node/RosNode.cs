@@ -123,16 +123,14 @@ namespace RosSharp.Node
                 .Subscribe(_ => _topicContainer.RemovePublisher(topicName));
         }
 
-        public Func<TRequest, IObservable<TResponse>> CreateProxy<TService, TRequest, TResponse>(string serviceName)
-            where TService : IService<TRequest, TResponse>, new()
-            where TRequest : IMessage, new()
-            where TResponse : IMessage, new()
+        public TService CreateProxy<TService>(string serviceName)
+            where TService : IService, new()
         {
             _logger.InfoFormat("Create ServiceProxy: {0}", serviceName);
 
             var uri = _masterClient.LookupServiceAsync(NodeId, serviceName).First();
 
-            return _serviceProxyFactory.Create<TService, TRequest, TResponse>(serviceName, uri);
+            return _serviceProxyFactory.Create<TService>(serviceName, uri);
         }
 
         public void RemoveServiceProxy(string serviceName)
@@ -140,16 +138,14 @@ namespace RosSharp.Node
             
         }
 
-        private Dictionary<string, Func<Stream, Stream>> _services = new Dictionary<string, Func<Stream, Stream>>();
+        private Dictionary<string, IService> _services = new Dictionary<string, IService>();
 
-        public IDisposable RegisterService<TService, TRequest, TResponse>(string serviceName, Func<TRequest, TResponse> service) 
-            where TService : IService<TRequest, TResponse>, new() 
-            where TRequest : IMessage, new() 
-            where TResponse : IMessage, new()
+        public IDisposable RegisterService<TService>(string serviceName, TService service) 
+            where TService : IService, new()
         {
             _logger.InfoFormat("Create ServiceServer: {0}", serviceName);
 
-            var serviceServer = new ServiceServer<TService, TRequest, TResponse>(NodeId);
+            var serviceServer = new ServiceServer<TService>(NodeId);
             serviceServer.RegisterService(serviceName, service);
 
             var ret1 = _masterClient
@@ -158,6 +154,7 @@ namespace RosSharp.Node
                     _slaveServer.SlaveUri)
                 .First(); //TODO: Firstはだめ。
 
+            _services.Add(serviceName, service);
 
             return Disposable.Empty;//TODO: サービス登録を解除するためのDisposableを返す。
         }

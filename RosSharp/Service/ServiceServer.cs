@@ -11,13 +11,11 @@ using RosSharp.Transport;
 namespace RosSharp.Service
 {
     
-    internal sealed class ServiceServer<TService, TRequest, TResponse>
-        where TService : IService<TRequest, TResponse>, new()
-        where TRequest : IMessage, new()
-        where TResponse : IMessage, new()
+    internal sealed class ServiceServer<TService>
+        where TService : IService, new ()
     {
 
-        private Func<TRequest, TResponse> _service;
+        private IService _service;
 
         private string _nodeId;
 
@@ -33,7 +31,7 @@ namespace RosSharp.Service
             _nodeId = nodeId;
         }
 
-        public IDisposable RegisterService(string serviceName, Func<TRequest, TResponse> service)
+        public IDisposable RegisterService(string serviceName, IService service)
         {
             _service = service;
 
@@ -79,13 +77,14 @@ namespace RosSharp.Service
 
         private MemoryStream Invoke(Stream stream)
         {
-            var req = new TRequest();
+            var dummy = new TService();
+            var req = dummy.CreateRequest();
 
             var br = new BinaryReader(stream);
             var len = br.ReadInt32();
             req.Deserialize(br);
             
-            var res = _service(req);
+            var res = _service.Invoke(req);
 
             var ms = new MemoryStream();
             var bw = new BinaryWriter(ms);
