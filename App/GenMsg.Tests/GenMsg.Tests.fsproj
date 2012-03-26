@@ -69,8 +69,8 @@
     <Compile Include="RosServiceParserTest.fs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GenMsg\GenMsg.fsproj">
-      <Name>GenMsg</Name>
+    <ProjectReference Include="..\GenMsg.Lib\GenMsg.Lib.fsproj">
+      <Name>GenMsg.Lib</Name>
       <Project>{13bd4894-20f5-428f-ad57-afa5e733f832}</Project>
       <Private>True</Private>
     </ProjectReference>

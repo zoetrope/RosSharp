@@ -1,16 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Text;
-using System.Threading;
-using CookComputing.XmlRpc;
 using RosSharp.Master;
-using RosSharp.Parameter;
-using RosSharp.Slave;
-using RosSharp.Topic;
 
-namespace RosSharp
+namespace RosSharp.RosCore
 {
     class Program
     {

@@ -28,11 +28,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Sample\Client\Cli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RosSharp.IntegrationTests", "RosSharp.IntegrationTests\RosSharp.IntegrationTests.csproj", "{C810FB6F-B9FD-4E03-8D12-96B35BF60975}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "GenMsg", "App\GenMsg\GenMsg.fsproj", "{13BD4894-20F5-428F-AD57-AFA5E733F832}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "GenMsg.Lib", "App\GenMsg.Lib\GenMsg.Lib.fsproj", "{13BD4894-20F5-428F-AD57-AFA5E733F832}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "GenMsg.Tests", "App\GenMsg.Tests\GenMsg.Tests.fsproj", "{37548AA3-9223-4DD3-BC46-9668518D7B87}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParameterClient", "Sample\ParameterClient\ParameterClient.csproj", "{31592B97-7CFB-4592-AF05-D689BA80BB19}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenMsg", "App\GenMsg\GenMsg.csproj", "{2FDE74DC-9A76-4B89-AEDC-B98871E74758}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
@@ -157,6 +159,16 @@ Global
 		{31592B97-7CFB-4592-AF05-D689BA80BB19}.Release|Mixed Platforms.Build.0 = Release|x86
 		{31592B97-7CFB-4592-AF05-D689BA80BB19}.Release|x86.ActiveCfg = Release|x86
 		{31592B97-7CFB-4592-AF05-D689BA80BB19}.Release|x86.Build.0 = Release|x86
+		{2FDE74DC-9A76-4B89-AEDC-B98871E74758}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{2FDE74DC-9A76-4B89-AEDC-B98871E74758}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{2FDE74DC-9A76-4B89-AEDC-B98871E74758}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{2FDE74DC-9A76-4B89-AEDC-B98871E74758}.Debug|x86.ActiveCfg = Debug|x86
+		{2FDE74DC-9A76-4B89-AEDC-B98871E74758}.Debug|x86.Build.0 = Debug|x86
+		{2FDE74DC-9A76-4B89-AEDC-B98871E74758}.Release|Any CPU.ActiveCfg = Release|x86
+		{2FDE74DC-9A76-4B89-AEDC-B98871E74758}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{2FDE74DC-9A76-4B89-AEDC-B98871E74758}.Release|Mixed Platforms.Build.0 = Release|x86
+		{2FDE74DC-9A76-4B89-AEDC-B98871E74758}.Release|x86.ActiveCfg = Release|x86
+		{2FDE74DC-9A76-4B89-AEDC-B98871E74758}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -170,5 +182,6 @@ Global
 		{25D53A55-E534-4CCA-9358-A51971838437} = {57BD2B28-6427-4973-A179-C1841417F349}
 		{13BD4894-20F5-428F-AD57-AFA5E733F832} = {57BD2B28-6427-4973-A179-C1841417F349}
 		{37548AA3-9223-4DD3-BC46-9668518D7B87} = {57BD2B28-6427-4973-A179-C1841417F349}
+		{2FDE74DC-9A76-4B89-AEDC-B98871E74758} = {57BD2B28-6427-4973-A179-C1841417F349}
 	EndGlobalSection
 EndGlobal

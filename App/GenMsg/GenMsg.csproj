@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{25D53A55-E534-4CCA-9358-A51971838437}</ProjectGuid>
+    <ProjectGuid>{2FDE74DC-9A76-4B89-AEDC-B98871E74758}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RosSharp.RosCore</RootNamespace>
-    <AssemblyName>RosCore</AssemblyName>
+    <RootNamespace>RosSharp.GenMsg</RootNamespace>
+    <AssemblyName>GenMsg</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -35,20 +35,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CookComputing.XmlRpcServerV2">
-      <HintPath>..\..\packages\xmlrpcnet-server.3.0.0.266\lib\net20\CookComputing.XmlRpcServerV2.dll</HintPath>
-    </Reference>
-    <Reference Include="CookComputing.XmlRpcV2">
-      <HintPath>..\..\packages\xmlrpcnet.3.0.0.266\lib\net20\CookComputing.XmlRpcV2.dll</HintPath>
-    </Reference>
     <Reference Include="NDesk.Options">
       <HintPath>..\..\packages\NDesk.Options.0.2.1\lib\NDesk.Options.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Reactive, Version=1.0.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Rx-Main.1.0.11226\lib\Net4\System.Reactive.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -60,14 +51,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
+    <ProjectReference Include="..\GenMsg.Lib\GenMsg.Lib.fsproj">
+      <Project>{13BD4894-20F5-428F-AD57-AFA5E733F832}</Project>
+      <Name>GenMsg.Lib</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\RosSharp\RosSharp.csproj">
-      <Project>{417B1A0A-5FF8-4423-9F62-FE61AA299239}</Project>
-      <Name>RosSharp</Name>
-    </ProjectReference>
+    <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

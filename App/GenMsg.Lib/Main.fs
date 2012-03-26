@@ -1,4 +1,6 @@
-﻿open RosSharp.GenMsg.Ast
+﻿module RosSharp.GenMsg.Generator
+
+open RosSharp.GenMsg.Ast
 open RosSharp.GenMsg.Base
 open RosSharp.GenMsg.Parser
 open RosSharp.GenMsg.Preprocessor
@@ -9,8 +11,7 @@ open FParsec
 open System
 open System.IO
 
-[<EntryPoint>]
-let main(argv: string[]) =
+let Generate(argv: string[]) =
     
     //let text = File.ReadAllText("../../msg/roslib/Header.msg")
     //let text = File.ReadAllText("../../msg/roslib/Time.msg")
