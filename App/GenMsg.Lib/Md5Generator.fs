@@ -10,9 +10,9 @@ open RosSharp.GenMsg.Parser
 open RosSharp.GenMsg.Preprocessor
 open FParsec;
 
-// 引数で渡せるようにしたい。
-let dirNameList = [@"C:\Users\zoetrope\Documents\Visual Studio 2010\Projects\RosSharp\App\GenMsg.Lib\msg";
-                   @"C:\Users\zoetrope\Documents\Visual Studio 2010\Projects\RosSharp\App\GenMsg.Lib\msg\roslib"]
+type Md5GeneratorSetting() =
+    static let mutable dirs = new ResizeArray<string>()
+    static member includeDirectories = dirs
 
 let getFileName (names : string list) =
    String.Join(@"\",names) + ".msg"
@@ -46,7 +46,9 @@ let rec getMd5OriginalName t =
    | Duration -> "duration"
    | FixedArray (x, size) -> getMd5OriginalName x + "[" + size.ToString() + "]"
    | VariableArray (x) -> getMd5OriginalName x + "[]"
-   | UserDefinition (names) -> searchMsgFile dirNameList names |> parseMessageFile |> getMessageMd5 //ユーザ定義型はMD5に置き換え
+   | UserDefinition (names) -> searchMsgFile Md5GeneratorSetting.includeDirectories names 
+                                |> parseMessageFile 
+                                |> getMessageMd5 //ユーザ定義型はMD5に置き換え
 
 and getMd5Definition (msg : RosMessage) =
    match msg with
