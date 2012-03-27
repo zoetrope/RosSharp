@@ -36,8 +36,9 @@ namespace RosSharp.IntegrationTests
         public void ServerAndProxy()
         {
             var node = ROS.CreateNode("test");
-            node.RegisterService("/add_two_ints", new AddTwoInts(add_two_ints));
-            var proxy = node.CreateProxy<AddTwoInts>("/add_two_ints");
+            node.RegisterService("/add_two_ints", new AddTwoInts(add_two_ints)).Wait();
+
+            var proxy = node.CreateProxy<AddTwoInts>("/add_two_ints").Result;
             var ret = proxy.Invoke(new AddTwoInts.Request() {a = 1, b = 2});
             ret.c.Is(3);
         }

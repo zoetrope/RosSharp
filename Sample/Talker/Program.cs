@@ -14,7 +14,7 @@ namespace Talker
 
             var node = ROS.CreateNode("Talker");
 
-            var publisher = node.CreatePublisher<RosSharp.std_msgs.String>("/chatter");
+            var publisher = node.CreatePublisher<RosSharp.std_msgs.String>("/chatter").Result;
 
             Console.WriteLine("Press Any Key. Start Send.");
             Console.ReadKey();

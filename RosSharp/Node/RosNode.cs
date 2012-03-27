@@ -11,6 +11,7 @@ using RosSharp.Parameter;
 using RosSharp.Service;
 using RosSharp.Slave;
 using RosSharp.Topic;
+using System.Threading.Tasks;
 
 namespace RosSharp.Node
 {
@@ -75,7 +76,7 @@ namespace RosSharp.Node
             //終了待ち
         }
 
-        public Subscriber<TDataType> CreateSubscriber<TDataType>(string topicName) 
+        public Task<Subscriber<TDataType>> CreateSubscriber<TDataType>(string topicName) 
             where TDataType : IMessage, new()
         {
             _logger.InfoFormat("Create Subscriber: {0}", topicName);
@@ -83,22 +84,22 @@ namespace RosSharp.Node
             _topicContainer.AddSubscriber(subscriber);
 
             var dummy = new TDataType();
-            _masterClient
-                .RegisterSubscriberAsync(NodeId, topicName, dummy.MessageType, _slaveServer.SlaveUri)
-                .ContinueWith(task => ((ISubscriber) subscriber).UpdatePublishers(task.Result));
 
-            return subscriber;
+            return _masterClient
+                .RegisterSubscriberAsync(NodeId, topicName, dummy.MessageType, _slaveServer.SlaveUri)
+                .ContinueWith(task => ((ISubscriber) subscriber).UpdatePublishers(task.Result)) //TODO: 例外チェックは必要？
+                .ContinueWith(_ => subscriber);
         }
 
-        public void RemoveSubscriber(string topicName)
+        public Task RemoveSubscriber(string topicName)
         {
-            _masterClient
+            return _masterClient
                 .UnregisterSubscriberAsync(NodeId, topicName, _slaveServer.SlaveUri)
                 .ContinueWith(task => _topicContainer.RemoveSubscriber(topicName));
         }
 
 
-        public Publisher<TDataType> CreatePublisher<TDataType>(string topicName) 
+        public Task<Publisher<TDataType>> CreatePublisher<TDataType>(string topicName) 
             where TDataType : IMessage, new()
         {
             _logger.InfoFormat("Create Publisher: {0}", topicName);
@@ -109,59 +110,49 @@ namespace RosSharp.Node
             _rosTopicServer.AcceptAsync()
                 .Subscribe(socket => publisher.AddTopic(new RosTopicClient<TDataType>(socket, NodeId, topicName)));
 
-            _masterClient
+            return _masterClient
                 .RegisterPublisherAsync(NodeId, topicName, publisher.Type, _slaveServer.SlaveUri)
-                .ContinueWith(task => publisher.UpdateSubscriber(task.Result));
-
-            return publisher;
+                .ContinueWith(task => publisher.UpdateSubscriber(task.Result))
+                .ContinueWith(_ => publisher);
         }
 
-        public void RemovePublisher(string topicName)
+        public Task RemovePublisher(string topicName)
         {
-            _masterClient
+            return _masterClient
                 .UnregisterPublisherAsync(NodeId, topicName, _slaveServer.SlaveUri)
                 .ContinueWith(_ => _topicContainer.RemovePublisher(topicName));
         }
 
-        public TService CreateProxy<TService>(string serviceName)
+        public Task<TService> CreateProxy<TService>(string serviceName)
             where TService : IService, new()
         {
             _logger.InfoFormat("Create ServiceProxy: {0}", serviceName);
 
-            var result = _masterClient.LookupServiceAsync(NodeId, serviceName).Result;
+            return _masterClient.LookupServiceAsync(NodeId, serviceName)
+                .ContinueWith(task => _serviceProxyFactory.Create<TService>(serviceName, task.Result));
 
-            return _serviceProxyFactory.Create<TService>(serviceName, result);
-        }
-
-        public void RemoveServiceProxy(string serviceName)
-        {
-            
         }
 
         private Dictionary<string, IService> _services = new Dictionary<string, IService>();
 
-        public IDisposable RegisterService<TService>(string serviceName, TService service) 
+        public Task RegisterService<TService>(string serviceName, TService service) 
             where TService : IService, new()
         {
             _logger.InfoFormat("Create ServiceServer: {0}", serviceName);
 
             var serviceServer = new ServiceServer<TService>(NodeId);
             serviceServer.RegisterService(serviceName, service);
-
-            _masterClient
-                .RegisterServiceAsync(NodeId, serviceName,
-                    new Uri("rosrpc://" + ROS.HostName + ":" + serviceServer.EndPoint.Port),
-                    _slaveServer.SlaveUri)
-                .Wait(); //TODO: Waitはだめ。
-
             _services.Add(serviceName, service);
 
-            return Disposable.Empty;//TODO: サービス登録を解除するためのDisposableを返す。
+            var serviceUri = new Uri("rosrpc://" + ROS.HostName + ":" + serviceServer.EndPoint.Port);
+
+            return _masterClient
+                .RegisterServiceAsync(NodeId, serviceName, serviceUri, _slaveServer.SlaveUri);
         }
 
-        public void RemoveService(string serviceName)
+        public Task RemoveService(string serviceName)
         {
-            _masterClient
+            return _masterClient
                 .UnregisterServiceAsync(NodeId, serviceName, _slaveServer.SlaveUri)
                 .ContinueWith(_ => _services.Remove(serviceName));
         }

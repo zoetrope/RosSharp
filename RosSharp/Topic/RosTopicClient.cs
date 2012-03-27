@@ -27,6 +27,7 @@ namespace RosSharp.Topic
 
             _tcpClient = new RosTcpClient(socket);
 
+            //TODO: コンストラクタで非同期開始はよくない
             _tcpClient.ReceiveAsync()
                 .Take(1)
                 .Subscribe(OnReceiveHeader);
@@ -38,7 +39,6 @@ namespace RosSharp.Topic
             IsConnected = false;
         }
 
-        //TODO: voidじゃだめでは？
         private void OnReceiveHeader(byte[] data)
         {
             var reqHeader = TcpRosHeaderSerializer.Deserialize(new MemoryStream(data));

@@ -56,7 +56,7 @@ namespace RosSharp.Service
                            {
                                var res = Invoke(new MemoryStream(b));
                                var array = res.ToArray();
-                               client.SendTaskAsync(array).Wait();
+                               client.SendTaskAsync(array).Wait();//TODO: Waitしても意味なくね？Subscribe自体の終了を待たねば。
                            });
                 
 

@@ -80,13 +80,13 @@ namespace RosSharp.Topic
                 .Subscribe(_subject);
 
 
-            var handler = Connected;
+            var handler = OnConnected;
             if (handler != null)
             {
                 handler();
             }
         }
-        public event Action Connected;
+        public event Action OnConnected;
 
         public string NodeId { get; private set; }
         public string Name { get; private set; }

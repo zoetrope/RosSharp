@@ -20,7 +20,7 @@ namespace Client
 
             var node = ROS.CreateNode("Client");
 
-            var proxy = node.CreateProxy<AddTwoInts>("/add_two_ints");
+            var proxy = node.CreateProxy<AddTwoInts>("/add_two_ints").Result;
             
             //Thread.Sleep(TimeSpan.FromSeconds(3));
 

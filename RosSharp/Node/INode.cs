@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using RosSharp.Message;
 using RosSharp.Service;
 using RosSharp.Topic;
@@ -8,25 +9,23 @@ namespace RosSharp.Node
 {
     public interface INode : IDisposable
     {
-        Subscriber<TDataType> CreateSubscriber<TDataType>(string topicName) 
+        Task<Subscriber<TDataType>> CreateSubscriber<TDataType>(string topicName) 
             where TDataType : IMessage, new();
 
-        void RemoveSubscriber(string topicName);
+        Task RemoveSubscriber(string topicName);
 
-        Publisher<TDataType> CreatePublisher<TDataType>(string topicName) 
+        Task<Publisher<TDataType>> CreatePublisher<TDataType>(string topicName) 
             where TDataType : IMessage, new();
 
-        void RemovePublisher(string topicName);
+        Task RemovePublisher(string topicName);
 
-        TService CreateProxy<TService>(string serviceName)
+        Task<TService> CreateProxy<TService>(string serviceName)
             where TService : IService, new();
 
-        void RemoveServiceProxy(string serviceName);
-
-        IDisposable RegisterService<TService>(string serviceName, TService service)
+        Task RegisterService<TService>(string serviceName, TService service)
             where TService : IService, new();
 
-        void RemoveService(string serviceName);
+        Task RemoveService(string serviceName);
 
 
         Parameter<T> GetParameter<T>(string paramName);
