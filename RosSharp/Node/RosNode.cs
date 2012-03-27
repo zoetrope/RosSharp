@@ -128,10 +128,9 @@ namespace RosSharp.Node
         {
             _logger.InfoFormat("Create ServiceProxy: {0}", serviceName);
 
-            var task = _masterClient.LookupServiceAsync(NodeId, serviceName);
-            task.Wait();
+            var result = _masterClient.LookupServiceAsync(NodeId, serviceName).Result;
 
-            return _serviceProxyFactory.Create<TService>(serviceName, task.Result);
+            return _serviceProxyFactory.Create<TService>(serviceName, result);
         }
 
         public void RemoveServiceProxy(string serviceName)

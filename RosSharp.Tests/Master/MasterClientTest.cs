@@ -69,9 +69,7 @@ namespace RosSharp.Tests.Master
 
             var client = new MasterClient(new Uri("http://localhost"));
 
-            var task = client.UnregisterServiceAsync("/test", "/myservice", new Uri("http://localhost"));
-            task.Wait();
-            task.Result.Is(1);
+            client.UnregisterServiceAsync("/test", "/myservice", new Uri("http://localhost")).Result.Is(1);
         }
 
         [TestMethod]
@@ -91,9 +89,7 @@ namespace RosSharp.Tests.Master
 
             var client = new MasterClient(new Uri("http://localhost"));
 
-            var task = client.UnregisterServiceAsync("/test", "/myservice", new Uri("http://localhost"));
-            task.Wait();
-            task.Result.Is(0);
+            client.UnregisterServiceAsync("/test", "/myservice", new Uri("http://localhost")).Result.Is(0);
         }
 
         [TestMethod]
@@ -134,9 +130,7 @@ namespace RosSharp.Tests.Master
 
             var client = new MasterClient(new Uri("http://localhost"));
 
-            var task =  client.RegisterSubscriberAsync("/test", "topic1", "std_msgs/String", new Uri("http://192.168.11.2:11112"));
-            task.Wait();
-
+            client.RegisterSubscriberAsync("/test", "topic1", "std_msgs/String", new Uri("http://192.168.11.2:11112")).Wait();
         }
 
         [TestMethod]
@@ -177,10 +171,8 @@ namespace RosSharp.Tests.Master
 
             var client = new MasterClient(new Uri("http://localhost"));
 
-            var task = client.RegisterPublisherAsync("/test", "topic1", "std_msgs/String", new Uri("http://192.168.11.2:11113"));
-            task.Wait();
-            task.Result[0].Is(new Uri("http://192.168.11.2:11112/"));
-
+            client.RegisterPublisherAsync("/test", "topic1", "std_msgs/String", new Uri("http://192.168.11.2:11113"))
+                .Result[0].Is(new Uri("http://192.168.11.2:11112/"));
         }
 
         [TestMethod]
@@ -200,10 +192,7 @@ namespace RosSharp.Tests.Master
 
             var client = new MasterClient(new Uri("http://localhost"));
 
-            var task = client.LookupNodeAsync("/test", "/rosout");
-            task.Wait();
-            task.Result.Is(new Uri("http://192.168.11.4:59511/"));
-
+            client.LookupNodeAsync("/test", "/rosout").Result.Is(new Uri("http://192.168.11.4:59511/"));
         }
 
         [TestMethod]
@@ -315,11 +304,10 @@ namespace RosSharp.Tests.Master
 
             var client = new MasterClient(new Uri("http://localhost"));
 
-            var task = client.GetSystemStateAsync("/test");
-            task.Wait();
-            task.Result.Publishers.Count.Is(3);
-            task.Result.Subscribers.Count.Is(2);
-            task.Result.Services.Count.Is(2);
+            var ret = client.GetSystemStateAsync("/test").Result;
+            ret.Publishers.Count.Is(3);
+            ret.Subscribers.Count.Is(2);
+            ret.Services.Count.Is(2);
         }
 
         [TestMethod]
@@ -359,10 +347,7 @@ namespace RosSharp.Tests.Master
 
             var client = new MasterClient(new Uri("http://localhost"));
 
-            var task = client.GetUriAsync("/test");
-            task.Wait();
-            task.Result.Is(new Uri("http://192.168.11.4:11311/"));
-
+            client.GetUriAsync("/test").Result.Is(new Uri("http://192.168.11.4:11311/"));
         }
 
         [TestMethod]
@@ -405,10 +390,7 @@ namespace RosSharp.Tests.Master
 
             var client = new MasterClient(new Uri("http://localhost"));
 
-            var task = client.LookupServiceAsync("/test", "/service_test");
-            task.Wait();
-            task.Result.Is(new Uri("rosrpc://192.168.11.5:37171"));
-
+            client.LookupServiceAsync("/test", "/service_test").Result.Is(new Uri("rosrpc://192.168.11.5:37171"));
         }
 
         [TestMethod]

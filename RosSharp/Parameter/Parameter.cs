@@ -30,14 +30,12 @@ namespace RosSharp.Parameter
         {
             get
             {
-                var task = _parameterServerClient.GetParamAsync(NodeId, Name);
-                task.Wait();
-                return _converter.ConvertTo(task.Result);
+                var result = _parameterServerClient.GetParamAsync(NodeId, Name).Result;
+                return _converter.ConvertTo(result);
             }
             set
             {
-                var task = _parameterServerClient.SetParamAsync(NodeId, Name,_converter.ConvertFrom(value));
-                task.Wait();
+                _parameterServerClient.SetParamAsync(NodeId, Name,_converter.ConvertFrom(value)).Wait();
             }
         }
 
