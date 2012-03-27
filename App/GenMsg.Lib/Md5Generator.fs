@@ -21,16 +21,6 @@ let searchMsgFile dirs fileName =
    dirs |> Seq.map(fun dir -> dir + "\\" + (getFileName fileName))
         |> Seq.find(fun file -> File.Exists(file))
 
-
-// 別に持って行く？
-let getAst fileName =
-   let context = { Levels = []; CurrentLevel = 0; NewLevel = 0 }
-   File.ReadAllText(fileName)
-   |> fun t -> t.Replace("\r\n", "\n")
-   |> deleteLineComment
-   |> runParserOnString (spaces >>. pRosMessages .>> eof) context ""
-   |> extractExprs
-
 let generateMd5 (input : string) =
    let md5 = new MD5CryptoServiceProvider()
    let data = Encoding.UTF8.GetBytes(input)
@@ -56,7 +46,7 @@ let rec getMd5OriginalName t =
    | Duration -> "duration"
    | FixedArray (x, size) -> getMd5OriginalName x + "[" + size.ToString() + "]"
    | VariableArray (x) -> getMd5OriginalName x + "[]"
-   | UserDefinition (names) -> searchMsgFile dirNameList names |> getAst |> getMessageMd5 //ユーザ定義型はMD5に置き換え
+   | UserDefinition (names) -> searchMsgFile dirNameList names |> parseMessageFile |> getMessageMd5 //ユーザ定義型はMD5に置き換え
 
 and getMd5Definition (msg : RosMessage) =
    match msg with

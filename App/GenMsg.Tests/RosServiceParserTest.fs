@@ -16,5 +16,5 @@ let ``RosService AddTwoInts`` ()=
     Given "int64 a\nint64 b\n---\nint64 sum"
         |> When runParserOnString (pRosService .>> eof) context ""
         |> extractExprs
-        |> It should equal (([Leaf (Int64,Variable "a"); Leaf (Int64,Variable "b")],[Leaf (Int64,Variable "sum")]))
+        |> It should equal ((Service([Leaf (Int64,Variable "a"); Leaf (Int64,Variable "b")],[Leaf (Int64,Variable "sum")])))
         |> Verify

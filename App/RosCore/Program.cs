@@ -1,4 +1,5 @@
 ﻿using System;
+using NDesk.Options;
 using RosSharp.Master;
 
 namespace RosSharp.RosCore
@@ -11,6 +12,14 @@ namespace RosSharp.RosCore
 
             int portNumber = 11311;
 
+            var optionSet = new OptionSet()
+            {
+                {"p|port=", v => portNumber = int.Parse(v)}
+            };
+
+            optionSet.Parse(args);
+            
+            /*
             if(args.Length == 2)
             {
                 if (args[0] != "-p" || !int.TryParse(args[1], out portNumber))
@@ -21,6 +30,7 @@ namespace RosSharp.RosCore
                     Environment.Exit(0);
                 }
             }
+            */
 
             var masterServer = new MasterServer(portNumber);
 

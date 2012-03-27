@@ -35,7 +35,6 @@ let ``Md5Generator AddTwoInts Response``()=
         |> Verify
 
 
-//TODO: HeaderだけでMD5を算出。それを展開した文字列でもう一度MD5を算出。
 [<Scenario>]
 let ``Md5Generator Time``()=
     let context = { Levels = []; CurrentLevel = 0; NewLevel = 0 }
@@ -47,6 +46,7 @@ let ``Md5Generator Time``()=
         |> It should equal "09c1c9ce296734b4da898e62d1d0ae17"
         |> Verify
         
+//HeaderだけでMD5を算出。それを展開した文字列でもう一度MD5を算出。
 [<Scenario>]
 let ``Md5Generator Time2``()=
     Given "2176decaecbce78abc3b96ef049fabed header\n" + 

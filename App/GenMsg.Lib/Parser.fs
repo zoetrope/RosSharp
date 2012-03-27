@@ -2,8 +2,11 @@
 
 open RosSharp.GenMsg.Ast
 open RosSharp.GenMsg.Base
-open FParsec
+open RosSharp.GenMsg.Preprocessor
+
 open System
+open System.IO
+
 open FParsec
 open FParsec.Primitives
 open FParsec.CharParsers
@@ -73,7 +76,7 @@ do pRosTypeRef := choice[attempt(pFixedArray .>> spaces1)
                          attempt(pPrimitive .>> spaces1)
                          attempt(pUserDefinition .>> spaces1)]
 
-                   // -?[0-9]+(\.[0-9]*)?([eE][+-]?[0-9]+)?
+// 数値リテラル -?[0-9]+(\.[0-9]*)?([eE][+-]?[0-9]+)?
 let numberFormat =     NumberLiteralOptions.AllowMinusSign
                    ||| NumberLiteralOptions.AllowFraction
                    ||| NumberLiteralOptions.AllowExponent
@@ -91,7 +94,7 @@ let pStringValue =
    normalCharSnippet
    |>> StringValue
 
-//TODO:
+// 定数の値のパーサ
 let pValue = pNumberValue <|> pStringValue
 
 // 定数のパーサ (定数=値)
@@ -121,7 +124,7 @@ let pMember : Parser<_> = parse {
 
 //*****************************************************************
 // オフサイドルールによるパーサ
-// 下記の記事のコードを利用させていただいております。
+// 下記の記事のコードを利用しています。
 // http://d.hatena.ne.jp/htid46/20111207/1323210001
 
 let updateNewLevel newLevel c = { c with NewLevel = newLevel }
@@ -213,5 +216,23 @@ let pRosService = parse {
     do! pEndOfLine
     do! spaces
     let! res = pRosMessages
-    return req, res
+    return Service(req, res)
 }
+
+
+//*****************************************************************
+let parseMessageFile fileName =
+    let context = { Levels = []; CurrentLevel = 0; NewLevel = 0 }
+    File.ReadAllText(fileName)
+    |> fun t -> t.Replace("\r\n", "\n")
+    |> deleteLineComment
+    |> runParserOnString (spaces >>. pRosMessages .>> eof) context ""
+    |> extractExprs
+   
+let parseServiceFile fileName =
+    let context = { Levels = []; CurrentLevel = 0; NewLevel = 0 }
+    File.ReadAllText(fileName)
+    |> fun t -> t.Replace("\r\n", "\n")
+    |> deleteLineComment
+    |> runParserOnString (spaces >>. pRosService .>> eof) context ""
+    |> extractExprs
