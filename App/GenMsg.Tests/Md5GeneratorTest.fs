@@ -2,7 +2,9 @@
 
 open NaturalSpec
 open RosSharp.GenMsg.Md5Generator
-
+open RosSharp.GenMsg.Base
+open RosSharp.GenMsg.Parser
+open FParsec
 
 [<Scenario>]
 let ``Md5Generator String``()=
@@ -36,9 +38,12 @@ let ``Md5Generator AddTwoInts Response``()=
 //TODO: HeaderだけでMD5を算出。それを展開した文字列でもう一度MD5を算出。
 [<Scenario>]
 let ``Md5Generator Time``()=
+    let context = { Levels = []; CurrentLevel = 0; NewLevel = 0 }
     Given "Header header\n" + 
           "time rostime"
-        |> When generateMd5
+        |> runParserOnString (spaces >>. pRosMessages .>> eof) context ""
+        |> extractExprs
+        |> When getMessageMd5
         |> It should equal "09c1c9ce296734b4da898e62d1d0ae17"
         |> Verify
         

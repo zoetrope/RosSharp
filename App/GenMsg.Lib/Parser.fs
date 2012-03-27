@@ -73,19 +73,37 @@ do pRosTypeRef := choice[attempt(pFixedArray .>> spaces1)
                          attempt(pPrimitive .>> spaces1)
                          attempt(pUserDefinition .>> spaces1)]
 
+                   // -?[0-9]+(\.[0-9]*)?([eE][+-]?[0-9]+)?
+let numberFormat =     NumberLiteralOptions.AllowMinusSign
+                   ||| NumberLiteralOptions.AllowFraction
+                   ||| NumberLiteralOptions.AllowExponent
+
+let pNumberValue =
+   numberLiteral numberFormat "number"
+   |>> fun nl ->
+           if nl.IsInteger then IntValue (int32 nl.String)
+           else FloatValue (float nl.String)
+
+
+let normalCharSnippet = manySatisfy (fun c -> c <> '\n')
+
+let pStringValue =
+   normalCharSnippet
+   |>> StringValue
+
 //TODO:
-let pValue = pstring ""
+let pValue = pNumberValue <|> pStringValue
 
 // 定数のパーサ (定数=値)
 let pConst = parse {
-    let! name, value = tuple2 pIdentifier (pstring "=" >>. pValue)
-    return Constant(name,value)
+   let! name, value = tuple2 pIdentifier (pstring "=" >>. pValue)
+   return Constant(name,value)
 }
 
 // 変数のパーサ (変数名)
 let pVariable = parse {
-    let! name = pIdentifier
-    return Variable(name)
+   let! name = pIdentifier
+   return Variable(name)
 }
 
 // 空白のパーサ（spacesでは改行まで取ってしまうので。）
@@ -93,11 +111,13 @@ let pWhitespaces : Parser<_> = many (pchar '\t' <|> pchar ' ')
 
 // メンバのパーサ (型名 変数 or 定数)
 let pMember : Parser<_> = parse {
-        let! t = pRosType 
-        let! f = (pVariable <|> pConst)
-        let! _ = pWhitespaces
-        return t,f
-    }
+       let! t = pRosType
+       let! f = choice[attempt(pConst)
+                       attempt(pVariable)]
+       let! _ = pWhitespaces
+       return t,f
+   }
+
 
 //*****************************************************************
 // オフサイドルールによるパーサ

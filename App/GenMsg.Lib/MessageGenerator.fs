@@ -107,11 +107,13 @@ let createDefaultConstructor (name : string) (msgs : RosMessage list) =
     (msgs |> Seq.map(fun msg -> getInitialize msg) |> fun x -> String.Join("",x) ) + 
     "        }\n"
 
+//TODO:定数に対応
 let createProperty (msg : RosMessage) = 
     match msg with
     | Leaf (t, Variable(name)) -> "        public " + getTypeName t + " " + name + " { get; set; }\n"
-    | Leaf (t, Constant(name, value)) -> "       public const " + getTypeName t + " " + name + " = " + value + ";\n"
-
+    //| Leaf (t, Constant(name, value)) -> "       public const " + getTypeName t + " " + name + " = " + value + ";\n"
+    
+//TODO: getMessageDefinitionをつくる
 let createMessageMember ns name msgs =
     "        public string MessageType\n" +
     "        {\n" +
@@ -123,7 +125,7 @@ let createMessageMember ns name msgs =
     "        }\n" +
     "        public string MessageDefinition\n" +
     "        {\n" +
-    "            get { return @\"" + getMessageDefinition msgs + "\"; }\n" +
+    "            get { return @\"" + "getMessageDefinition msgs" + "\"; }\n" +
     "        }\n"
 
 let createSerialize (msg : RosMessage) = 

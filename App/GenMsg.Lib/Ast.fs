@@ -18,8 +18,12 @@ type RosType = Bool
              | VariableArray of RosType
              | UserDefinition of string list
 
+type ConstValue = IntValue   of int32
+                | FloatValue of float
+                | StringValue of string
+
 type RosField = Variable of string
-              | Constant of string * string
+              | Constant of string * ConstValue
 
 type RosMessage =
     | Node of RosType * RosField * RosMessage list

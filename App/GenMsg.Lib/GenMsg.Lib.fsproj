@@ -44,9 +44,9 @@
     <None Include="packages.config" />
     <Compile Include="Ast.fs" />
     <Compile Include="Base.fs" />
-    <Compile Include="Md5Generator.fs" />
     <Compile Include="Preprocessor.fs" />
     <Compile Include="Parser.fs" />
+    <Compile Include="Md5Generator.fs" />
     <Compile Include="MessageGenerator.fs" />
     <Compile Include="ServiceGenerator.fs" />
     <Compile Include="Main.fs" />
