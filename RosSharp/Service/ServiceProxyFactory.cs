@@ -51,37 +51,11 @@ namespace RosSharp.Service
 
             var test = rec.First();
 
-
-            service.SetAction(
-                request =>
-                {
-
-                    var response = tcpClient.ReceiveAsync(offset: 1)
-                        .Select(x =>
-                                {
-                                    //TODO: エラー処理
-                                    var res = service.CreateResponse();
-                                    var br = new BinaryReader(new MemoryStream(x));
-                                    br.ReadInt32();
-                                    res.Deserialize(br);
-                                    return res;
-                                })
-                        .Take(1)
-                        .PublishLast();
-
-                    response.Connect();
-
-                    var ms = new MemoryStream();
-                    var bw = new BinaryWriter(ms);
-                    bw.Write(request.SerializeLength);
-                    request.Serialize(bw);
-                    var senddata = ms.ToArray();
-                    tcpClient.SendTaskAsync(senddata).Wait();
-
-                    return response.First();
-                });
+            //TODO: proxyは返さない？どっかに持っておかなくてよい？
+            var proxy = new ServiceProxy<TService>(service, tcpClient);
 
             return service;
         }
+
     }
 }

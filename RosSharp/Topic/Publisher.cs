@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Sockets;
 using System.Reactive.Linq;
 using RosSharp.Message;
 
@@ -44,8 +45,11 @@ namespace RosSharp.Topic
 
         public event Action OnConnected;
 
-        internal void AddTopic(RosTopicClient<TDataType> rosTopicClient)
+        internal void AddTopic(Socket socket)
         {
+            var rosTopicClient = new RosTopicClient<TDataType>(Name, NodeId);
+            rosTopicClient.Start(socket); //TODO: ここでエラーが発生したらどう伝える？
+
             _rosTopics.Add(rosTopicClient);
         }
 

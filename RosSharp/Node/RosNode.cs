@@ -12,6 +12,7 @@ using RosSharp.Service;
 using RosSharp.Slave;
 using RosSharp.Topic;
 using System.Threading.Tasks;
+using RosSharp.Transport;
 
 namespace RosSharp.Node
 {
@@ -20,7 +21,7 @@ namespace RosSharp.Node
         private readonly MasterClient _masterClient;
         private readonly SlaveServer _slaveServer;
         private readonly ServiceProxyFactory _serviceProxyFactory;
-        private readonly RosTopicServer _rosTopicServer;
+        private readonly RosTcpListener _rosTcpListener;
         private readonly TopicContainer _topicContainer;
 
         private ParameterServerClient _parameterServerClient;
@@ -41,8 +42,8 @@ namespace RosSharp.Node
             _serviceProxyFactory = new ServiceProxyFactory(NodeId);
 
             _topicContainer = new TopicContainer();
-            _rosTopicServer = new RosTopicServer();
-            _slaveServer = new SlaveServer(0, _topicContainer, _rosTopicServer);
+            _rosTcpListener = new RosTcpListener(0);
+            _slaveServer = new SlaveServer(0, _topicContainer, _rosTcpListener);
 
             _slaveServer.ParameterUpdated += SlaveServerOnParameterUpdated;
         }
@@ -107,8 +108,8 @@ namespace RosSharp.Node
             var publisher = new Publisher<TDataType>(topicName, NodeId);
             _topicContainer.AddPublisher(publisher);
 
-            _rosTopicServer.AcceptAsync()
-                .Subscribe(socket => publisher.AddTopic(new RosTopicClient<TDataType>(socket, NodeId, topicName)));
+            _rosTcpListener.AcceptAsync()
+                .Subscribe(socket => publisher.AddTopic(socket));
 
             return _masterClient
                 .RegisterPublisherAsync(NodeId, topicName, publisher.Type, _slaveServer.SlaveUri)

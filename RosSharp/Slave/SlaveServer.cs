@@ -19,16 +19,16 @@ namespace RosSharp.Slave
     {
 
         private readonly TopicContainer _topicContainer;
-        private readonly RosTopicServer _rosTopicServer;
+        private readonly RosTcpListener _rosTcpListener;
 
         public Uri SlaveUri { get; private set; }
 
         private ILog _logger = LogManager.GetCurrentClassLogger();
 
-        internal SlaveServer(int portNumber, TopicContainer topicContainer, RosTopicServer topicServer)
+        internal SlaveServer(int portNumber, TopicContainer topicContainer, RosTcpListener tcpListener)
         {
             _topicContainer = topicContainer;
-            _rosTopicServer = topicServer;
+            _rosTcpListener = tcpListener;
 
             var channel = new HttpServerChannel("slave", portNumber, new XmlRpcServerFormatterSinkProvider());
             var tmp = new Uri(channel.GetChannelUri());
@@ -294,7 +294,7 @@ namespace RosSharp.Slave
                     continue;
                 }
 
-                var address = _rosTopicServer.AdvertiseAddress;
+                var address = _rosTcpListener.EndPoint;
                 
                 return new object[3]
                 {

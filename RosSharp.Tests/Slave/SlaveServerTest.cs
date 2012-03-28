@@ -7,6 +7,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RosSharp.Slave;
 using RosSharp.Topic;
+using RosSharp.Transport;
 
 namespace RosSharp.Tests.Slave
 {
@@ -22,8 +23,8 @@ namespace RosSharp.Tests.Slave
             var topicContainer = new TopicContainer();
             topicContainer.AddPublisher(new Publisher<std_msgs.String>("/test_topic", "test"));
 
-            var rosTopicServer = new RosTopicServer();
-            _slaveServer = new SlaveServer(0, topicContainer, rosTopicServer);
+            var tcpListener = new RosTcpListener(0);
+            _slaveServer = new SlaveServer(0, topicContainer, tcpListener);
         }
 
         [TestMethod]

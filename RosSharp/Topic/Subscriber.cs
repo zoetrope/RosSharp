@@ -27,6 +27,7 @@ namespace RosSharp.Topic
             //TODO: 同じPublisherに対する処理
             var slaves = publishers.Select(x => new SlaveClient(x));
 
+            //TODO: 並列に動かすべき？
             slaves.ToList()
                 .ForEach(slave =>
                          slave.RequestTopicAsync(NodeId, Name, new object[1] {new string[1] {"TCPROS"}})
@@ -37,48 +38,9 @@ namespace RosSharp.Topic
 
         private void Connect(TopicParam param)
         {
-            var tcpClient = new RosTcpClient();
-            tcpClient.ConnectTaskAsync(param.HostName, param.PortNumber).Wait();
-
-            //TODO: RosTopicに委譲
-
-            var last = tcpClient.ReceiveAsync()
-                .Take(1)
-                .Select(x => TcpRosHeaderSerializer.Deserialize(new MemoryStream(x)))
-                .PublishLast();
-                //.Subscribe(x => Console.WriteLine(x.topic + "/" + x.type));
-
-            last.Connect();
-
-            var dummy = new TDataType();
-            var header = new 
-            {
-                callerid = NodeId,
-                topic = Name,
-                md5sum = dummy.Md5Sum,
-                type = dummy.MessageType
-            };
-
-            var stream = new MemoryStream();
-
-            TcpRosHeaderSerializer.Serialize(stream, header);
-            var sendData = stream.ToArray();
-
-            tcpClient.SendTaskAsync(sendData).Wait();
-
-            var test = last.First();
-
-            tcpClient.ReceiveAsync()
-                .Select(x =>
-                        {
-                            var data = new TDataType();
-                            var br = new BinaryReader(new MemoryStream(x));
-                            br.ReadInt32();
-                            data.Deserialize(br);
-                            return data;
-                        })
-                .Subscribe(_subject);
-
+            //TODO: serverを複数持てるようにする
+            var server = new RosTopicServer<TDataType>(Name,NodeId);
+            server.Start(param, _subject);//TODO: こいつは非同期に。
 
             var handler = OnConnected;
             if (handler != null)

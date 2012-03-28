@@ -244,30 +244,30 @@ namespace RosSharp.Master
         }
     }
 
-    public class TopicInfo
+    public sealed class TopicInfo
     {
         public string TopicName { get; set; }
         public string TypeName { get; set; }
     }
 
-    public class SystemState
+    public sealed class SystemState
     {
         public List<PublisherSystemState> Publishers { get; set; }
         public List<SubscriberSystemState> Subscribers { get; set; }
         public List<ServiceSystemState> Services { get; set; }
     }
 
-    public class PublisherSystemState
+    public sealed class PublisherSystemState
     {
         public string TopicName { get; set; }
         public List<string> Publishers { get; set; }
     }
-    public class SubscriberSystemState
+    public sealed class SubscriberSystemState
     {
         public string TopicName { get; set; }
         public List<string> Subscribers { get; set; }
     }
-    public class ServiceSystemState
+    public sealed class ServiceSystemState
     {
         public string ServiceName { get; set; }
         public List<string> Services { get; set; }

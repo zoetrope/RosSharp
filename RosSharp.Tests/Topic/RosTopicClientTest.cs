@@ -16,8 +16,8 @@ namespace RosSharp.Tests.Topic
         {
             var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-            var topic = new RosTopicClient<std_msgs.String>(sock,"mynode","mytopic");
-
+            var topic = new RosTopicClient<std_msgs.String>("mynode","mytopic");
+            topic.Start(sock);
             
         }
     }
