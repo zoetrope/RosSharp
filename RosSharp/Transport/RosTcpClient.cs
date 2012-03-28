@@ -23,7 +23,7 @@ namespace RosSharp.Transport
 
         public void Dispose()
         {
-            _socket.Close(1000);
+            _socket.Close();
         }
 
         public bool Connected

@@ -11,21 +11,6 @@ using System.Dynamic;
 
 namespace RosSharp.Transport
 {
-#if WINDOWS_PHONE
-    internal sealed class TcpRosHeader
-    {
-        private Dictionary<string, string> _members;
-        public TcpRosHeader(Dictionary<string,string> members)
-        {
-            _members = members;
-        }
-        
-        public string GetValue(string key)
-        {
-            return _members[key];
-        }
-    }
-#else
     internal sealed class TcpRosHeader : DynamicObject
     {
         private Dictionary<string, string> _members;
@@ -46,7 +31,6 @@ namespace RosSharp.Transport
             return true;
         }
     }
-#endif
 
     internal static class TcpRosHeaderSerializer
     {

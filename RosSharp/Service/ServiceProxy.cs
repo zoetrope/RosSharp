@@ -22,7 +22,7 @@ namespace RosSharp.Service
             _service.SetAction(Invoke);
         }
 
-        internal IMessage Invoke(IMessage request)
+        internal IMessage Invoke(IMessage request) //TODO: 非同期にできそうだけど・・・
         {
             var response = tcpClient.ReceiveAsync(offset: 1)
                 .Select(x =>

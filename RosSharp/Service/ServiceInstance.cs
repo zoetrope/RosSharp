@@ -24,7 +24,7 @@ namespace RosSharp.Service
             client = new RosTcpClient(s);
         }
 
-        internal void Initialize(string serviceName)
+        internal void Initialize(string serviceName) //TODO: 非同期に。
         {
             client.ReceiveAsync()
                 .Take(1)

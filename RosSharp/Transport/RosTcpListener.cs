@@ -29,7 +29,6 @@ namespace RosSharp.Transport
             return Observable.Create<Socket>(
                 observer => _socket
                     .AcceptAsObservable(_socket.LocalEndPoint)
-                    //.Select(x => x.AcceptSocket)
                     .Subscribe(observer));
         }
 

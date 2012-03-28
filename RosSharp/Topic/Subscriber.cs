@@ -10,7 +10,7 @@ using RosSharp.Transport;
 
 namespace RosSharp.Topic
 {
-    public sealed class Subscriber<TDataType> : ISubscriber, IObservable<TDataType> 
+    public sealed class Subscriber<TDataType> : ISubscriber, IObservable<TDataType> ,IDisposable
         where TDataType : IMessage, new ()
     {
         public Subscriber(string name, string nodeId)
@@ -62,6 +62,11 @@ namespace RosSharp.Topic
             return _subject.Subscribe(observer);
         }
 
+        public void Dispose()
+        {
+            //TODO: UnregisterSubscriberは？
+            throw new NotImplementedException();
+        }
     }
 
 }

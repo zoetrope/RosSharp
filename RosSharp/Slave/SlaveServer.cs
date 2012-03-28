@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Http;
+using System.Threading.Tasks;
 using Common.Logging;
 using CookComputing.XmlRpc;
 using RosSharp.Topic;
@@ -209,11 +210,13 @@ namespace RosSharp.Slave
             var handler = ParameterUpdated;
             if(handler != null)
             {
-                //TODO: 非同期に
-                handler(parameterKey, parameterValue);
+                Task.Factory.FromAsync(handler.BeginInvoke, handler.EndInvoke, parameterKey, parameterValue, null)
+                    .ContinueWith(task => _logger.Error("PramUpdateError", task.Exception)
+                                  , TaskContinuationOptions.OnlyOnFaulted);
+
             }
 
-            //TODO:
+            //TODO:戻り値を調べる
             return new object[] {};
         }
 

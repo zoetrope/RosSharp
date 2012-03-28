@@ -19,12 +19,11 @@ namespace RosSharp.Service
             NodeId = nodeId;
         }
 
-        public TService Create<TService>(string serviceName, Uri uri)
+        public TService Create<TService>(string serviceName, Uri uri) //TODO: 非同期にしなくては。
             where TService : IService, new()
         {
-
             var tcpClient = new RosTcpClient();
-            tcpClient.ConnectTaskAsync(uri.Host, uri.Port).Wait();
+            tcpClient.ConnectTaskAsync(uri.Host, uri.Port).Wait();//TODO: waitではなくcontinueWith
 
             var rec = tcpClient.ReceiveAsync()
                 .Select(x => TcpRosHeaderSerializer.Deserialize(new MemoryStream(x)))

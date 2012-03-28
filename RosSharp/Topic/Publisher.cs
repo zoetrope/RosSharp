@@ -6,7 +6,7 @@ using RosSharp.Message;
 
 namespace RosSharp.Topic
 {
-    public sealed class Publisher<TDataType> : IPublisher, IObserver<TDataType> 
+    public sealed class Publisher<TDataType> : IPublisher, IObserver<TDataType>, IDisposable
         where TDataType : IMessage, new()
     {
         private List<RosTopicClient<TDataType>> _rosTopics = new List<RosTopicClient<TDataType>>();
@@ -61,6 +61,12 @@ namespace RosSharp.Topic
             {
                 handler();
             }
+        }
+
+        public void Dispose()
+        {
+            //TODO: UnregisterPublisherはどうする？
+            throw new NotImplementedException();
         }
     }
 }

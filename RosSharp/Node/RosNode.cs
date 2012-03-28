@@ -114,7 +114,7 @@ namespace RosSharp.Node
             return _masterClient
                 .RegisterPublisherAsync(NodeId, topicName, publisher.Type, _slaveServer.SlaveUri)
                 .ContinueWith(task => publisher.UpdateSubscriber(task.Result))
-                .ContinueWith(_ => publisher);
+                .ContinueWith(_ => publisher); //TODO: 例外起きたときは？
         }
 
         public Task RemovePublisher(string topicName)
