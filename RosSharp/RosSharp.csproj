@@ -64,6 +64,7 @@
     </Compile>
     <Compile Include="Parameter\IParameter.cs" />
     <Compile Include="Parameter\Parameter.cs" />
+    <Compile Include="Topic\RosTopicException.cs" />
     <Compile Include="Service\ServiceBase.cs" />
     <Compile Include="Service\ServiceInstance.cs" />
     <Compile Include="Service\ServiceProxy.cs" />

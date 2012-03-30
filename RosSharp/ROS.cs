@@ -19,14 +19,14 @@ namespace RosSharp
         public static Uri MasterUri { get; set; }
         public static string HostName { get; set; }
         public static int XmlRpcTimeout { get; set; }
-        public static int SocketTimeout { get; set; }
+        public static int TopicTimeout { get; set; }
 
         public static void Initialize()
         {
             MasterUri = ReadMasterUri();
             HostName = ReadHostName();
             XmlRpcTimeout = ReadXmlRpcTimeout();
-            SocketTimeout = ReadSocketTimeout();
+            TopicTimeout = ReadTopicTimeout();
 
             if (LogManager.Adapter is NoOpLoggerFactoryAdapter) //if not setting logger, logger is NoOpLogger
             {
@@ -120,9 +120,9 @@ namespace RosSharp
 
             return 1000;
         }
-        private static int ReadSocketTimeout()
+        private static int ReadTopicTimeout()
         {
-            var variable = Environment.GetEnvironmentVariable("ROS_SOCKET_TIMEOUT");
+            var variable = Environment.GetEnvironmentVariable("ROS_TOPIC_TIMEOUT");
             if (!string.IsNullOrEmpty(variable))
             {
                 int timeout;
@@ -134,7 +134,7 @@ namespace RosSharp
 
             if (ConfigurationSection.Instance != null)
             {
-                return ConfigurationSection.Instance.SocketTimeout.Value;
+                return ConfigurationSection.Instance.TopicTimeout.Value;
             }
 
             return 1000;

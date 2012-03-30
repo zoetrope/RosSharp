@@ -59,7 +59,7 @@
       </nestedChildShapes>
     </configurationElementShape>
     <configurationElementShape Id="2b772a39-fb57-4d35-a6f2-9b1ff152129f" absoluteBounds="3.75, 5, 1.5, 1.2960416666666665" outlineDashStyle="Solid" outlineThickness="0.015625">
-      <configurationElementMoniker name="/7e957972-e0df-4051-b03c-e53f3fb839f3/SocketTimeout" />
+      <configurationElementMoniker name="/7e957972-e0df-4051-b03c-e53f3fb839f3/TopicTimeout" />
       <nestedChildShapes>
         <elementListCompartment Id="7de50277-4ef4-4948-a2d0-5aa9720f2419" absoluteBounds="3.7650000000000006, 5.41, 1.4700000000000002, 0.49479166666666663" name="AttributeProperties" titleTextColor="Black" itemTextColor="Black" />
         <elementListCompartment Id="52751b26-d979-4cc5-8b66-6ac44c055b00" absoluteBounds="3.7650000000000006, 5.9147916666666669, 1.4700000000000002, 0.28125" name="ElementProperties" titleTextColor="Black" itemTextColor="Black" />

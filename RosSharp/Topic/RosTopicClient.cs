@@ -1,11 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Net.Sockets;
+using System.Reactive;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Threading.Tasks;
+using Common.Logging;
 using RosSharp.Message;
-using RosSharp.Slave;
 using RosSharp.Transport;
 
 namespace RosSharp.Topic
@@ -14,32 +14,33 @@ namespace RosSharp.Topic
         where TDataType : IMessage, new()
     {
         private RosTcpClient _tcpClient;
+        private ILog _logger = LogManager.GetCurrentClassLogger();
 
         public string NodeId { get; private set; }
         public string TopicName { get; private set; }
 
-        public bool IsConnected { get;private set; }
+        public bool Connected { get;private set; }
 
         public RosTopicClient(string nodeId, string topicName)
         {
-            IsConnected = false;
+            Connected = false;
 
             NodeId = nodeId;
             TopicName = topicName;
-
         }
 
         public void Dispose()
         {
             _tcpClient.Dispose();
-            IsConnected = false;
+            Connected = false;
         }
 
         public Task<int> SendTaskAsync(TDataType data)
         {
-            if(!IsConnected)
+            if(!Connected)
             {
-                throw new InvalidOperationException("Is not Connected.");
+                _logger.Error(m => m("Not Connected"));
+                throw new InvalidOperationException("Not Connected");
             }
             
             var ms = new MemoryStream();
@@ -50,38 +51,55 @@ namespace RosSharp.Topic
         }
 
 
-        public void Start(Socket socket)
+        public IObservable<Unit> StartAsync(Socket socket)
         {
             _tcpClient = new RosTcpClient(socket);
 
-            _tcpClient.ReceiveAsync()
+            return _tcpClient.ReceiveAsync()
                 .Take(1)
-                .Subscribe(OnReceiveHeader);
+                .Timeout(TimeSpan.FromMilliseconds(ROS.TopicTimeout))
+                .Select(OnReceivedHeader);
         }
 
-        private void OnReceiveHeader(byte[] data)
+        private Unit OnReceivedHeader(byte[] data)
         {
-            var reqHeader = TcpRosHeaderSerializer.Deserialize(new MemoryStream(data));
-            //TODO: 受信したデータのチェック
+            var dummy = new TDataType();
+            dynamic reqHeader = TcpRosHeaderSerializer.Deserialize(new MemoryStream(data));
 
-            var temp = new TDataType();
+            if(reqHeader.topic != TopicName)
+            {
+                _logger.Error(m => m("TopicName mismatch error, expected={0} but actual={1}", TopicName, reqHeader.topic));
+                throw new RosTopicException("TopicName mismatch error");
+            }
+            if (reqHeader.type != dummy.MessageType)
+            {
+                _logger.Error(m => m("TopicType mismatch error, expected={0} but actual={1}", dummy.MessageType, reqHeader.type));
+                throw new RosTopicException("TopicType mismatch error");
+            }
+            if (reqHeader.md5sum != dummy.Md5Sum)
+            {
+                _logger.Error(m => m("MD5Sum mismatch error, expected={0} but actual={1}", dummy.Md5Sum, reqHeader.md5sum));
+                throw new RosTopicException("MD5Sum mismatch error");
+            }
 
             var resHeader = new
             {
                 callerid = NodeId,
                 latching = "0",
-                md5sum = temp.Md5Sum,
-                message_definition = temp.MessageDefinition,
+                md5sum = dummy.Md5Sum,
+                message_definition = dummy.MessageDefinition,
                 topic = TopicName,
-                type = temp.MessageType
+                type = dummy.MessageType
             };
 
             var ms = new MemoryStream();
             TcpRosHeaderSerializer.Serialize(ms, resHeader);
 
-            _tcpClient.SendTaskAsync(ms.ToArray()).Wait(); //TODO: Waitでよい？
+            _tcpClient.SendTaskAsync(ms.ToArray()).Wait();
 
-            IsConnected = true;
+            Connected = true;
+
+            return Unit.Default;
         }
 
     }

@@ -23,14 +23,14 @@
             <configurationElementMoniker name="/7e957972-e0df-4051-b03c-e53f3fb839f3/RosHostName" />
           </type>
         </elementProperty>
-        <elementProperty name="XmlRpcTimeout" isRequired="false" isKey="false" isDefaultCollection="false" xmlName="XMLRPC_TIMEOUT" isReadOnly="false">
+        <elementProperty name="XmlRpcTimeout" isRequired="false" isKey="false" isDefaultCollection="false" xmlName="ROS_XMLRPC_TIMEOUT" isReadOnly="false">
           <type>
             <configurationElementMoniker name="/7e957972-e0df-4051-b03c-e53f3fb839f3/XmlRpcTimeout" />
           </type>
         </elementProperty>
-        <elementProperty name="SocketTimeout" isRequired="false" isKey="false" isDefaultCollection="false" xmlName="SOCKET_TIMEOUT" isReadOnly="false">
+        <elementProperty name="TopicTimeout" isRequired="false" isKey="false" isDefaultCollection="false" xmlName="ROS_TOPIC_TIMEOUT" isReadOnly="false">
           <type>
-            <configurationElementMoniker name="/7e957972-e0df-4051-b03c-e53f3fb839f3/SocketTimeout" />
+            <configurationElementMoniker name="/7e957972-e0df-4051-b03c-e53f3fb839f3/TopicTimeout" />
           </type>
         </elementProperty>
       </elementProperties>
@@ -62,7 +62,7 @@
         </attributeProperty>
       </attributeProperties>
     </configurationElement>
-    <configurationElement name="SocketTimeout">
+    <configurationElement name="TopicTimeout">
       <attributeProperties>
         <attributeProperty name="Value" isRequired="true" isKey="false" isDefaultCollection="false" xmlName="value" isReadOnly="false" defaultValue="3000">
           <type>

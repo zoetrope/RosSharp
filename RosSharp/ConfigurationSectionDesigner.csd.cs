@@ -131,7 +131,7 @@ namespace RosSharp
         /// The XML name of the <see cref="XmlRpcTimeout"/> property.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
-        internal const string XmlRpcTimeoutPropertyName = "XMLRPC_TIMEOUT";
+        internal const string XmlRpcTimeoutPropertyName = "ROS_XMLRPC_TIMEOUT";
         
         /// <summary>
         /// Gets or sets the XmlRpcTimeout.
@@ -152,28 +152,28 @@ namespace RosSharp
         }
         #endregion
         
-        #region SocketTimeout Property
+        #region TopicTimeout Property
         /// <summary>
-        /// The XML name of the <see cref="SocketTimeout"/> property.
+        /// The XML name of the <see cref="TopicTimeout"/> property.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
-        internal const string SocketTimeoutPropertyName = "SOCKET_TIMEOUT";
+        internal const string TopicTimeoutPropertyName = "ROS_TOPIC_TIMEOUT";
         
         /// <summary>
-        /// Gets or sets the SocketTimeout.
+        /// Gets or sets the TopicTimeout.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
-        [global::System.ComponentModel.DescriptionAttribute("The SocketTimeout.")]
-        [global::System.Configuration.ConfigurationPropertyAttribute(global::RosSharp.ConfigurationSection.SocketTimeoutPropertyName, IsRequired=false, IsKey=false, IsDefaultCollection=false)]
-        public global::RosSharp.SocketTimeout SocketTimeout
+        [global::System.ComponentModel.DescriptionAttribute("The TopicTimeout.")]
+        [global::System.Configuration.ConfigurationPropertyAttribute(global::RosSharp.ConfigurationSection.TopicTimeoutPropertyName, IsRequired=false, IsKey=false, IsDefaultCollection=false)]
+        public global::RosSharp.TopicTimeout TopicTimeout
         {
             get
             {
-                return ((global::RosSharp.SocketTimeout)(base[global::RosSharp.ConfigurationSection.SocketTimeoutPropertyName]));
+                return ((global::RosSharp.TopicTimeout)(base[global::RosSharp.ConfigurationSection.TopicTimeoutPropertyName]));
             }
             set
             {
-                base[global::RosSharp.ConfigurationSection.SocketTimeoutPropertyName] = value;
+                base[global::RosSharp.ConfigurationSection.TopicTimeoutPropertyName] = value;
             }
         }
         #endregion
@@ -328,9 +328,9 @@ namespace RosSharp
     
     
     /// <summary>
-    /// The SocketTimeout Configuration Element.
+    /// The TopicTimeout Configuration Element.
     /// </summary>
-    public partial class SocketTimeout : global::System.Configuration.ConfigurationElement
+    public partial class TopicTimeout : global::System.Configuration.ConfigurationElement
     {
         
         #region IsReadOnly override
@@ -356,16 +356,16 @@ namespace RosSharp
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("ConfigurationSectionDesigner.CsdFileGenerator", "2.0.0.0")]
         [global::System.ComponentModel.DescriptionAttribute("The Value.")]
-        [global::System.Configuration.ConfigurationPropertyAttribute(global::RosSharp.SocketTimeout.ValuePropertyName, IsRequired=true, IsKey=false, IsDefaultCollection=false, DefaultValue=3000)]
+        [global::System.Configuration.ConfigurationPropertyAttribute(global::RosSharp.TopicTimeout.ValuePropertyName, IsRequired=true, IsKey=false, IsDefaultCollection=false, DefaultValue=3000)]
         public int Value
         {
             get
             {
-                return ((int)(base[global::RosSharp.SocketTimeout.ValuePropertyName]));
+                return ((int)(base[global::RosSharp.TopicTimeout.ValuePropertyName]));
             }
             set
             {
-                base[global::RosSharp.SocketTimeout.ValuePropertyName] = value;
+                base[global::RosSharp.TopicTimeout.ValuePropertyName] = value;
             }
         }
         #endregion

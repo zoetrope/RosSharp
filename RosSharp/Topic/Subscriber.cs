@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using RosSharp.Message;
@@ -36,17 +37,25 @@ namespace RosSharp.Topic
 
         }
 
+        private CompositeDisposable _disposables;
+
         private void Connect(TopicParam param)
         {
             //TODO: serverを複数持てるようにする
             var server = new RosTopicServer<TDataType>(Name,NodeId);
-            server.Start(param, _subject);//TODO: こいつは非同期に。
 
-            var handler = OnConnected;
-            if (handler != null)
-            {
-                handler();
-            }
+            server.StartAsync(param).ContinueWith(
+                task =>
+                {
+                    var d = task.Result.Subscribe(_subject);
+                    _disposables.Add(d);
+                    var handler = OnConnected;
+                    if (handler != null)
+                    {
+                        handler();
+                    }
+                });
+
         }
         public event Action OnConnected;
 

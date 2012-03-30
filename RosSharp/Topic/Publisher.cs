@@ -48,7 +48,7 @@ namespace RosSharp.Topic
         internal void AddTopic(Socket socket)
         {
             var rosTopicClient = new RosTopicClient<TDataType>(Name, NodeId);
-            rosTopicClient.Start(socket); //TODO: ここでエラーが発生したらどう伝える？
+            rosTopicClient.StartAsync(socket).First(); //TODO: ここでエラーが発生したらどう伝える？
 
             _rosTopics.Add(rosTopicClient);
         }
