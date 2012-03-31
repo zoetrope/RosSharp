@@ -14,7 +14,7 @@ using RosSharp.Transport.Moles;
 namespace RosSharp.Tests.Transport
 {
     [TestClass]
-    public class RosTcpListenerTest : ReactiveTest
+    public class TcpRosListenerTest : ReactiveTest
     {
         [TestMethod]
         [HostType("Moles")]

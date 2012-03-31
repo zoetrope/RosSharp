@@ -100,7 +100,7 @@ namespace RosSharp.Tests.Transport
             var ms = new MemoryStream();
 
             var ex = AssertEx.Throws<RosTopicException>(() => TcpRosHeaderSerializer.Serialize(ms, new object()));
-            ex.Message.Is("Header has not properties");
+            ex.Message.Is("Header does not have properties");
         }
 
         [TestMethod]
@@ -110,7 +110,7 @@ namespace RosSharp.Tests.Transport
 
             var ms = new MemoryStream(msg);
             var ex = AssertEx.Throws<RosTopicException>(() => TcpRosHeaderSerializer.Deserialize(ms));
-            ex.Message.Is("Stream is too short");
+            ex.Message.Is("Stream length is too short");
         }
 
         [TestMethod]
@@ -139,7 +139,7 @@ namespace RosSharp.Tests.Transport
 
             var ms = new MemoryStream(msg);
             var ex = AssertEx.Throws<RosTopicException>(() => TcpRosHeaderSerializer.Deserialize(ms));
-            ex.Message.Is("not contains '='");
+            ex.Message.Is("Header does not contain '='");
         }
     }
 

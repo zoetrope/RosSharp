@@ -112,8 +112,8 @@ namespace RosSharp.Node
                 .Subscribe(socket => publisher.AddTopic(socket));
 
             return _masterClient
-                .RegisterPublisherAsync(NodeId, topicName, publisher.Type, _slaveServer.SlaveUri)
-                .ContinueWith(task => publisher.UpdateSubscriber(task.Result))
+                .RegisterPublisherAsync(NodeId, topicName, publisher.MessageType, _slaveServer.SlaveUri)
+                .ContinueWith(task => publisher.UpdateSubscribers(task.Result))
                 .ContinueWith(_ => publisher); //TODO: 例外起きたときは？
         }
 

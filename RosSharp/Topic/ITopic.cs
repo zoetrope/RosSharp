@@ -2,7 +2,7 @@
 {
     public interface ITopic
     {
-        string Name { get; }
-        string Type { get; }
+        string TopicName { get; }
+        string MessageType { get; }
     }
 }

@@ -106,11 +106,11 @@ namespace RosSharp.Tests.Slave
             var ret = client.GetPublicationsAsync("/test").Result;
 
             ret.Count.Is(2);
-            ret[0].Name.Is("/rosout");
-            ret[0].Type.Is("rosgraph_msgs/Log");
+            ret[0].TopicName.Is("/rosout");
+            ret[0].MessageType.Is("rosgraph_msgs/Log");
 
-            ret[1].Name.Is("/chatter");
-            ret[1].Type.Is("std_msgs/String");
+            ret[1].TopicName.Is("/chatter");
+            ret[1].MessageType.Is("std_msgs/String");
         }
 
         [TestMethod]
@@ -159,8 +159,8 @@ namespace RosSharp.Tests.Slave
             var ret = client.GetSubscriptionsAsync("/test").Result;
 
             ret.Count.Is(1);
-            ret[0].Name.Is("/chatter");
-            ret[0].Type.Is("std_msgs/String");
+            ret[0].TopicName.Is("/chatter");
+            ret[0].MessageType.Is("std_msgs/String");
         }
 
         [TestMethod]

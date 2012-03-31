@@ -133,7 +133,7 @@ namespace RosSharp.Tests.Topic
 
             var ex = AssertEx.Throws<AggregateException>(() => task.Wait());
             ex.InnerException.GetType().Is(typeof(RosTopicException));
-            ex.InnerException.Message.Is("Stream is too short");
+            ex.InnerException.Message.Is("Stream length is too short");
         }
 
         [TestMethod]

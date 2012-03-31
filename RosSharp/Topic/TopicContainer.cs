@@ -15,7 +15,7 @@ namespace RosSharp.Topic
 
         public bool AddPublisher(IPublisher publisher)
         {
-            return _publishers.TryAdd(publisher.Name, publisher);
+            return _publishers.TryAdd(publisher.TopicName, publisher);
         }
 
         public bool RemovePublisher(string topicName)
@@ -26,7 +26,7 @@ namespace RosSharp.Topic
         
         public bool AddSubscriber(ISubscriber subscriber)
         {
-            return _subscribers.TryAdd(subscriber.Name, subscriber);
+            return _subscribers.TryAdd(subscriber.TopicName, subscriber);
         }
         
         public bool RemoveSubscriber(string topicName)

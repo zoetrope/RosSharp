@@ -48,8 +48,8 @@ namespace RosSharp.Transport
 
             if(list.Count == 0)
             {
-                _logger.Error("Header has not properties");
-                throw new RosTopicException("Header has not properties");
+                _logger.Error("Header does not have properties");
+                throw new RosTopicException("Header does not have properties");
             }
 
             var length = list.Sum(x => x.Length + 4);
@@ -69,8 +69,8 @@ namespace RosSharp.Transport
         {
             if(stream.Length < 4)
             {
-                _logger.Error("Stream is too short");
-                throw new RosTopicException("Stream is too short");
+                _logger.Error("Stream length is too short");
+                throw new RosTopicException("Stream length is too short");
             }
 
             var buf = new byte[4];
@@ -80,7 +80,7 @@ namespace RosSharp.Transport
 
             if (length + 4 != stream.Length)
             {
-                _logger.Error(m => m("Stream length mismatch, expect={0} actual={1}", length, stream.Length));
+                _logger.Error(m => m("Stream length mismatch, expected={0} actual={1}", length, stream.Length));
                 throw new RosTopicException("Stream length mismatch");
             }
 
@@ -94,7 +94,7 @@ namespace RosSharp.Transport
 
                 if(stream.Position + len > length+4)
                 {
-                    _logger.Error(m => m("Stream length mismatch, expect={0} actual={1}", length, stream.Length));
+                    _logger.Error(m => m("Stream length mismatch, expected={0} actual={1}", length, stream.Length));
                     throw new RosTopicException("Stream length mismatch");
                 }
 
@@ -106,8 +106,8 @@ namespace RosSharp.Transport
 
                 if(items.Count() != 2)
                 {
-                    _logger.Error("not contains '='");
-                    throw new RosTopicException("not contains '='");
+                    _logger.Error("Header does not contain '='");
+                    throw new RosTopicException("Header does not contain '='");
                 }
 
                 map.Add(items[0],items[1]);

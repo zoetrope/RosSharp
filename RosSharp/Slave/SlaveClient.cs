@@ -45,10 +45,10 @@ namespace RosSharp.Slave
         {
             return Task<object[]>.Factory.FromAsync(_proxy.BeginGetBusInfo, _proxy.EndGetBusInfo, callerId, null)
                 .ContinueWith(task =>
-                              {
-                                  if ((StatusCode)task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string)task.Result[1]);
-                                  return (object[]) task.Result[2];
-                              });
+                {
+                    if ((StatusCode) task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string) task.Result[1]);
+                    return (object[]) task.Result[2];
+                });
         }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace RosSharp.Slave
                     if ((StatusCode)task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string)task.Result[1]);
                     //TODO: 空リストのとき
                     return ((string[][]) task.Result[2])
-                        .Select(x => new TopicInfo() {Name = (string) x[0], Type = (string) x[1]}).ToList();
+                        .Select(x => new TopicInfo() {TopicName = (string) x[0], MessageType = (string) x[1]}).ToList();
                 });
         }
 
@@ -129,7 +129,7 @@ namespace RosSharp.Slave
                 {
                     if ((StatusCode)task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string)task.Result[1]);
                     return ((object[])task.Result[2])
-                    .Select(x => new TopicInfo() { Name = ((string[])x)[0], Type = ((string[])x)[1] }).ToList();
+                    .Select(x => new TopicInfo() { TopicName = ((string[])x)[0], MessageType = ((string[])x)[1] }).ToList();
                 });
         }
 
@@ -208,7 +208,7 @@ namespace RosSharp.Slave
 
     public class TopicInfo : ITopic
     {
-        public string Name { get; set; }
-        public string Type { get; set; }
+        public string TopicName { get; set; }
+        public string MessageType { get; set; }
     }
 }

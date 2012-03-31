@@ -51,14 +51,16 @@ namespace RosSharp.Topic
         }
 
 
-        public IObservable<Unit> StartAsync(Socket socket)
+        public Task StartAsync(Socket socket)
         {
             _client = new TcpRosClient(socket);
 
-            return _client.ReceiveAsync()
-                .Take(1)
-                .Timeout(TimeSpan.FromMilliseconds(ROS.TopicTimeout))
-                .Select(OnReceivedHeader);
+            return Task.Factory.StartNew(
+                () =>
+                _client.ReceiveAsync()
+                    .Take(1)
+                    .Timeout(TimeSpan.FromMilliseconds(ROS.TopicTimeout))
+                    .Select(OnReceivedHeader).First());
         }
 
         private Unit OnReceivedHeader(byte[] data)
@@ -68,17 +70,17 @@ namespace RosSharp.Topic
 
             if(reqHeader.topic != TopicName)
             {
-                _logger.Error(m => m("TopicName mismatch error, expected={0} but actual={1}", TopicName, reqHeader.topic));
+                _logger.Error(m => m("TopicName mismatch error, expected={0} actual={1}", TopicName, reqHeader.topic));
                 throw new RosTopicException("TopicName mismatch error");
             }
             if (reqHeader.type != dummy.MessageType)
             {
-                _logger.Error(m => m("TopicType mismatch error, expected={0} but actual={1}", dummy.MessageType, reqHeader.type));
+                _logger.Error(m => m("TopicType mismatch error, expected={0} actual={1}", dummy.MessageType, reqHeader.type));
                 throw new RosTopicException("TopicType mismatch error");
             }
             if (reqHeader.md5sum != dummy.Md5Sum)
             {
-                _logger.Error(m => m("MD5Sum mismatch error, expected={0} but actual={1}", dummy.Md5Sum, reqHeader.md5sum));
+                _logger.Error(m => m("MD5Sum mismatch error, expected={0} actual={1}", dummy.Md5Sum, reqHeader.md5sum));
                 throw new RosTopicException("MD5Sum mismatch error");
             }
 

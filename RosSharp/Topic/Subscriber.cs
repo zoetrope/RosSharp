@@ -1,24 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Threading.Tasks;
 using RosSharp.Message;
 using RosSharp.Slave;
-using RosSharp.Transport;
 
 namespace RosSharp.Topic
 {
+    /// <summary>
+    /// Subscribes message on a ROS Topic
+    /// </summary>
+    /// <typeparam name="TDataType">Message Type</typeparam>
     public sealed class Subscriber<TDataType> : ISubscriber, IObservable<TDataType> ,IDisposable
         where TDataType : IMessage, new ()
     {
-        public Subscriber(string name, string nodeId)
+        internal Subscriber(string topicName, string nodeId)
         {
-            Name = name;
+            TopicName = topicName;
             var dummy = new TDataType();
-            Type = dummy.MessageType;
+            MessageType = dummy.MessageType;
 
             NodeId = nodeId;
         }
@@ -27,13 +29,10 @@ namespace RosSharp.Topic
         {
             //TODO: 同じPublisherに対する処理
             var slaves = publishers.Select(x => new SlaveClient(x));
-
-            //TODO: 並列に動かすべき？
-            slaves.ToList()
-                .ForEach(slave =>
-                         slave.RequestTopicAsync(NodeId, Name, new object[1] {new string[1] {"TCPROS"}})
-                             .ContinueWith(task => Connect(task.Result)));
-
+            
+            Parallel.ForEach(slaves,
+                slave => slave.RequestTopicAsync(NodeId, TopicName, new object[1] { new string[1] { "TCPROS" } })
+                    .ContinueWith(task => Connect(task.Result), TaskContinuationOptions.OnlyOnRanToCompletion));
 
         }
 
@@ -41,14 +40,17 @@ namespace RosSharp.Topic
 
         private void Connect(TopicParam param)
         {
-            //TODO: serverを複数持てるようにする
-            var server = new RosTopicServer<TDataType>(Name,NodeId);
+            //TODO: serverを複数持てるようにする。保持しておく。ロックも必要。
+            var server = new RosTopicServer<TDataType>(TopicName,NodeId);
 
             server.StartAsync(param).ContinueWith(
                 task =>
                 {
                     var d = task.Result.Subscribe(_subject);
-                    _disposables.Add(d);
+                    lock (_disposables)
+                    {
+                        _disposables.Add(d);
+                    }
                     var handler = OnConnected;
                     if (handler != null)
                     {
@@ -60,9 +62,9 @@ namespace RosSharp.Topic
         public event Action OnConnected;
 
         public string NodeId { get; private set; }
-        public string Name { get; private set; }
+        public string TopicName { get; private set; }
 
-        public string Type { get; private set; }
+        public string MessageType { get; private set; }
 
         private Subject<TDataType> _subject = new Subject<TDataType>();
 
@@ -71,10 +73,20 @@ namespace RosSharp.Topic
             return _subject.Subscribe(observer);
         }
 
+        internal event Action Disposing;
+
         public void Dispose()
         {
-            //TODO: UnregisterSubscriberは？
-            throw new NotImplementedException();
+            var handler = Disposing;
+            if (handler != null)
+            {
+                handler();
+            }
+
+            lock (_disposables)
+            {
+                _disposables.Dispose();
+            }
         }
     }
 

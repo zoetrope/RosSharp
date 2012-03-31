@@ -117,17 +117,17 @@ namespace RosSharp.Topic
 
             if (header.topic != TopicName)
             {
-                _logger.Error(m => m("TopicName mismatch error, expected={0} but actual={1}", TopicName, header.topic));
+                _logger.Error(m => m("TopicName mismatch error, expected={0} actual={1}", TopicName, header.topic));
                 throw new RosTopicException("TopicName mismatch error");
             }
             if (header.type != dummy.MessageType)
             {
-                _logger.Error(m => m("TopicType mismatch error, expected={0} but actual={1}", dummy.MessageType, header.type));
+                _logger.Error(m => m("TopicType mismatch error, expected={0} actual={1}", dummy.MessageType, header.type));
                 throw new RosTopicException("TopicType mismatch error");
             }
             if (header.md5sum != dummy.Md5Sum)
             {
-                _logger.Error(m => m("MD5Sum mismatch error, expected={0} but actual={1}", dummy.Md5Sum, header.md5sum));
+                _logger.Error(m => m("MD5Sum mismatch error, expected={0} actual={1}", dummy.Md5Sum, header.md5sum));
                 throw new RosTopicException("MD5Sum mismatch error");
             }
 

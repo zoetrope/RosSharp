@@ -12,7 +12,7 @@ using RosSharp.Transport.Moles;
 namespace RosSharp.Tests.Transport
 {
     [TestClass]
-    public class RosTcpClientTest : ReactiveTest
+    public class TcpRosClientTest : ReactiveTest
     {
         [TestMethod]
         [HostType("Moles")]

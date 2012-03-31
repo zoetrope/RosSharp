@@ -17,6 +17,7 @@ namespace RosSharp.Tests.Topic
         [TestInitialize]
         public void Initialize()
         {
+            ROS.Initialize();
             ROS.TopicTimeout = 2000;
         }
 
@@ -42,7 +43,7 @@ namespace RosSharp.Tests.Topic
             var topic = new RosTopicClient<std_msgs.String>("mynode","mytopic");
 
             topic.Connected.Is(false);
-            topic.StartAsync(sock).Timeout(TimeSpan.FromSeconds(3)).First();
+            topic.StartAsync(sock).Wait();
             topic.Connected.Is(true);
         }
 
@@ -55,8 +56,9 @@ namespace RosSharp.Tests.Topic
             var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             var topic = new RosTopicClient<std_msgs.String>("mynode", "mytopic");
 
-            var ex = AssertEx.Throws<InvalidOperationException>(() => topic.StartAsync(sock).First());
-            ex.Message.Is("Receive Error");
+            var ex = AssertEx.Throws<AggregateException>(() => topic.StartAsync(sock).Wait());
+            ex.InnerException.GetType().Is(typeof(InvalidOperationException));
+            ex.InnerException.Message.Is("Receive Error");
         }
 
         [TestMethod]
@@ -79,8 +81,9 @@ namespace RosSharp.Tests.Topic
             var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             var topic = new RosTopicClient<std_msgs.String>("mynode", "mytopic");
 
-            var ex = AssertEx.Throws<RosTopicException>(() => topic.StartAsync(sock).First());
-            ex.Message.Is("TopicName mismatch error");
+            var ex = AssertEx.Throws<AggregateException>(() => topic.StartAsync(sock).Wait());
+            ex.InnerException.GetType().Is(typeof(RosTopicException));
+            ex.InnerException.Message.Is("TopicName mismatch error");
         }
 
         [TestMethod]
@@ -101,7 +104,8 @@ namespace RosSharp.Tests.Topic
             var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             var topic = new RosTopicClient<std_msgs.String>("mynode", "mytopic");
 
-            AssertEx.Throws<RuntimeBinderException>(() => topic.StartAsync(sock).First());
+            var ex = AssertEx.Throws<AggregateException>(() => topic.StartAsync(sock).Wait());
+            ex.InnerException.GetType().Is(typeof(RuntimeBinderException));
         }
         [TestMethod]
         [HostType("Moles")]
@@ -115,7 +119,8 @@ namespace RosSharp.Tests.Topic
             var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             var topic = new RosTopicClient<std_msgs.String>("mynode", "mytopic");
 
-            AssertEx.Throws<TimeoutException>(() => topic.StartAsync(sock).First());
+            var ex = AssertEx.Throws<AggregateException>(() => topic.StartAsync(sock).Wait());
+            ex.InnerException.GetType().Is(typeof(TimeoutException));
         }
 
         [TestMethod]
@@ -139,8 +144,9 @@ namespace RosSharp.Tests.Topic
             var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             var topic = new RosTopicClient<std_msgs.String>("mynode", "mytopic");
 
-            var ex = AssertEx.Throws<InvalidOperationException>(() => topic.StartAsync(sock).First());
-            ex.Message.Is("Send Error");
+            var ex = AssertEx.Throws<AggregateException>(() => topic.StartAsync(sock).Wait());
+            ex.InnerException.GetType().Is(typeof(InvalidOperationException));
+            ex.InnerException.Message.Is("Send Error");
         }
         
         [TestMethod]
@@ -163,8 +169,8 @@ namespace RosSharp.Tests.Topic
 
             var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             var topic = new RosTopicClient<std_msgs.String>("mynode", "mytopic");
-            
-            topic.StartAsync(sock).Timeout(TimeSpan.FromSeconds(3)).First();
+
+            topic.StartAsync(sock).Wait();
             topic.SendTaskAsync(new std_msgs.String() {data = "test"}).Result.Is(12);
         }
 

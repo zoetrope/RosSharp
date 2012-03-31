@@ -166,7 +166,7 @@ namespace RosSharp.Slave
             {
                 1,
                 "Success",
-                _topicContainer.GetSubscribers().Select(x => new object[] {x.Name, x.Type}).ToArray()
+                _topicContainer.GetSubscribers().Select(x => new object[] {x.TopicName, x.MessageType}).ToArray()
             };
         }
 
@@ -187,7 +187,7 @@ namespace RosSharp.Slave
             {
                 1,
                 "Success",
-                _topicContainer.GetPublishers().Select(x => new object[] {x.Name, x.Type}).ToArray()
+                _topicContainer.GetPublishers().Select(x => new object[] {x.TopicName, x.MessageType}).ToArray()
             };
         }
 
@@ -240,7 +240,7 @@ namespace RosSharp.Slave
             if(_topicContainer.HasSubscriber(topic))
             {
                 //TODO: TryGet?
-                var subs = _topicContainer.GetSubscribers().First(s => s.Name == topic);
+                var subs = _topicContainer.GetSubscribers().First(s => s.TopicName == topic);
                 
                 //TODO: 非同期に
                 subs.UpdatePublishers(publishers.Select(x => new Uri(x)).ToList());    
