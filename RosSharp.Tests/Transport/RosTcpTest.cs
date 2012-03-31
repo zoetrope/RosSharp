@@ -16,13 +16,13 @@ namespace RosSharp.Tests.Transport
         [TestMethod]
         public void Receive_Error()
         {
-            var listener = new RosTcpListener(0);
+            var listener = new TcpRosListener(0);
 
             listener.AcceptAsync()
                 .Do(_ => Console.WriteLine("Connected"))
                 .Subscribe(s =>
                 {
-                    new RosTcpClient(s).ReceiveAsync()
+                    new TcpRosClient(s).ReceiveAsync()
                         .Subscribe(data => Console.WriteLine("Received:{0}", data),
                                    ex => Console.WriteLine("Received Error: {0}", ex.Message));
                     Thread.Sleep(TimeSpan.FromSeconds(3));
@@ -32,7 +32,7 @@ namespace RosSharp.Tests.Transport
 
             int port = listener.EndPoint.Port;
 
-            var client3 = new RosTcpClient();
+            var client3 = new TcpRosClient();
 
             client3.ConnectTaskAsync("localhost", port).Wait();
 
@@ -54,11 +54,11 @@ namespace RosSharp.Tests.Transport
         [TestMethod]
         public void SendAndReceive()
         {
-            var listener = new RosTcpListener(0);
+            var listener = new TcpRosListener(0);
 
             listener.AcceptAsync()
                 .Do(_ => Console.WriteLine("Connected"))
-                .Subscribe(s => new RosTcpClient(s).ReceiveAsync()
+                .Subscribe(s => new TcpRosClient(s).ReceiveAsync()
                                     .Subscribe(data => Console.WriteLine("Received:{0}", data)));
 
             int port = listener.EndPoint.Port;
@@ -66,7 +66,7 @@ namespace RosSharp.Tests.Transport
             Console.WriteLine("Press Any Key 3");
             Console.ReadKey();
 
-            var client3 = new RosTcpClient();
+            var client3 = new TcpRosClient();
 
             client3.ConnectTaskAsync("localhost", port).Wait();
 
@@ -77,20 +77,20 @@ namespace RosSharp.Tests.Transport
         [TestMethod]
         public void MultipleConnection()
         {
-            var listener = new RosTcpListener(0);
+            var listener = new TcpRosListener(0);
 
             listener.AcceptAsync().Subscribe(
                 x => Console.WriteLine("new socket = {0}", x.RemoteEndPoint),
                 ex => Console.WriteLine("accept error = {0}", ex.Message));
 
             int port = listener.EndPoint.Port;
-            var client1 = new RosTcpClient();
+            var client1 = new TcpRosClient();
             client1.ConnectTaskAsync("localhost", port)
                 .ContinueWith(t => Console.WriteLine("task.ex={0}", t.Exception));
-            var client2 = new RosTcpClient();
+            var client2 = new TcpRosClient();
             client2.ConnectTaskAsync("localhost", port)
                 .ContinueWith(t => Console.WriteLine("task.ex={0}", t.Exception));
-            var client3 = new RosTcpClient();
+            var client3 = new TcpRosClient();
             client3.ConnectTaskAsync("localhost", port)
                 .ContinueWith(t => Console.WriteLine("task.ex={0}", t.Exception));
         }
@@ -98,7 +98,7 @@ namespace RosSharp.Tests.Transport
         [TestMethod]
         public void DisposeError()
         {
-            var listener = new RosTcpListener(0);
+            var listener = new TcpRosListener(0);
 
             listener.AcceptAsync().Subscribe(
                 x => Console.WriteLine("new socket = {0}", x.RemoteEndPoint),
@@ -112,7 +112,7 @@ namespace RosSharp.Tests.Transport
             Console.WriteLine("Press Any Key 3");
             Console.ReadKey();
 
-            var client3 = new RosTcpClient();
+            var client3 = new TcpRosClient();
 
             try
             {

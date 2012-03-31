@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net.Sockets;
 using System.Reactive.Linq;
 using System.Text;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RosSharp.Slave;
 using RosSharp.Topic;
+using RosSharp.Transport;
 using RosSharp.Transport.Moles;
 
 namespace RosSharp.Tests.Topic
@@ -16,29 +18,59 @@ namespace RosSharp.Tests.Topic
     [TestClass]
     public class RosTopicServerTest
     {
-        [TestMethod]
-        public void TestMethod1()
+        [TestInitialize]
+        public void Initialize()
         {
-            var t = Task.Factory.StartNew(() => { throw new Exception(); })
-                .ContinueWith(task => Console.WriteLine("Fail"), TaskContinuationOptions.OnlyOnFaulted)
-                .ContinueWith(task => Console.WriteLine("Run"), TaskContinuationOptions.OnlyOnRanToCompletion);
-
-            Thread.Sleep(TimeSpan.FromSeconds(5));
+            ROS.Initialize();
+            ROS.TopicTimeout = 2000;
         }
 
         [TestMethod]
         [HostType("Moles")]
         public void StartAsync_Success()
         {
+            var str = new std_msgs.String(){data = "test message"};
+            var header = new
+            {
+                callerid = "test",
+                topic = "mytopic",
+                md5sum = str.Md5Sum,
+                type = str.MessageType
+            };
+            var headerStream = new MemoryStream();
+            TcpRosHeaderSerializer.Serialize(headerStream, header);
+
+            var dataStream = new MemoryStream();
+            var bw = new BinaryWriter(dataStream);
+            bw.Write(str.SerializeLength);
+            str.Serialize(bw);
+
+            MTcpRosClient.AllInstances.ConnectTaskAsyncStringInt32 = (t1, t2, t3) => Task.Factory.StartNew(() => { });
+            
+            // 1.Receive Header, 2.Receive Data(std_msgs.String)
+            int count = 0;
+            MTcpRosClient.AllInstances.ReceiveAsyncInt32 = (t1, t2) => {
+                if(count == 0)
+                {
+                    count++;
+                    return Observable.Return(headerStream.ToArray());
+                }
+                else
+                {
+                    return Observable.Return(dataStream.ToArray());
+                }
+            };
+
+            MTcpRosClient.AllInstances.SendTaskAsyncByteArray = (t1, t2) => Task<int>.Factory.StartNew(() => t2.Length);
+
             var server = new RosTopicServer<std_msgs.String>("mynode", "mytopic");
 
-            var task = server.StartAsync(new TopicParam() {HostName = "localhost", PortNumber = 1234, ProtocolName = "TCPROS"});
+            var task = server.StartAsync(new TopicParam() { HostName = "test", PortNumber = 1234, ProtocolName = "TCPROS" });
 
-            var x = task.ContinueWith(
-                t => Console.WriteLine("EEEEEEEEEEEE={0}", t.Exception),
-                TaskContinuationOptions.OnlyOnFaulted);
+            var subscriber = task.Result;
 
-            Thread.Sleep(TimeSpan.FromSeconds(5));
+            var rec = subscriber.Timeout(TimeSpan.FromSeconds(3)).First();
+            rec.data.Is("test message");
         }
 
         [TestMethod]
@@ -56,18 +88,100 @@ namespace RosSharp.Tests.Topic
 
         [TestMethod]
         [HostType("Moles")]
-        public void StartAsync_SendError()
+        public void StartAsync_SendAsyncError()
         {
-
-            MRosTcpClient.AllInstances.ConnectTaskAsyncStringInt32 = (t1, t2, t3) => Task.Factory.StartNew(() => { });
-            MRosTcpClient.AllInstances.ReceiveAsyncInt32 = (t1, t2) => { throw new InvalidOperationException("Receive Error"); };
+            MTcpRosClient.AllInstances.ConnectTaskAsyncStringInt32 = (t1, t2, t3) => Task.Factory.StartNew(() => { });
+            MTcpRosClient.AllInstances.ReceiveAsyncInt32 = (t1, t2) => Observable.Return(new byte[0]);
 
             var server = new RosTopicServer<std_msgs.String>("mynode", "mytopic");
 
             var task = server.StartAsync(new TopicParam() { HostName = "test", PortNumber = 1234, ProtocolName = "TCPROS" });
 
             var ex = AssertEx.Throws<AggregateException>(() => task.Wait());
-            ex.InnerException.GetType().Is(typeof(SocketException));
+            ex.InnerException.GetType().Is(typeof(ArgumentException));
+        }
+
+        [TestMethod]
+        [HostType("Moles")]
+        public void StartAsync_SendError()
+        {
+            MTcpRosClient.AllInstances.ConnectTaskAsyncStringInt32 = (t1, t2, t3) => Task.Factory.StartNew(() => { });
+            MTcpRosClient.AllInstances.ReceiveAsyncInt32 = (t1, t2) => Observable.Return(new byte[0]);
+            MTcpRosClient.AllInstances.SendTaskAsyncByteArray = (t1, t2) => Task<int>.Factory.StartNew(() => { throw new InvalidOperationException("Send Error"); });
+
+            var server = new RosTopicServer<std_msgs.String>("mynode", "mytopic");
+
+            var task = server.StartAsync(new TopicParam() { HostName = "test", PortNumber = 1234, ProtocolName = "TCPROS" });
+
+            var ex = AssertEx.Throws<AggregateException>(() => task.Wait());
+            ex.InnerException.GetType().Is(typeof(InvalidOperationException));
+            ex.InnerException.Message.Is("Send Error");
+
+        }
+
+        [TestMethod]
+        [HostType("Moles")]
+        public void StartAsync_HeaderDeserializeError()
+        {
+            MTcpRosClient.AllInstances.ConnectTaskAsyncStringInt32 = (t1, t2, t3) => Task.Factory.StartNew(() => { });
+            MTcpRosClient.AllInstances.ReceiveAsyncInt32 = (t1, t2) => Observable.Return(new byte[0]);
+            MTcpRosClient.AllInstances.SendTaskAsyncByteArray = (t1, t2) => Task<int>.Factory.StartNew(() => t2.Length);
+
+            var server = new RosTopicServer<std_msgs.String>("mynode", "mytopic");
+
+            var task = server.StartAsync(new TopicParam() { HostName = "test", PortNumber = 1234, ProtocolName = "TCPROS" });
+
+            var ex = AssertEx.Throws<AggregateException>(() => task.Wait());
+            ex.InnerException.GetType().Is(typeof(RosTopicException));
+            ex.InnerException.Message.Is("Stream is too short");
+        }
+
+        [TestMethod]
+        [HostType("Moles")]
+        public void StartAsync_ReceiveHeaderTimeoutError()
+        {
+            ROS.TopicTimeout = 100;
+
+            MTcpRosClient.AllInstances.ConnectTaskAsyncStringInt32 = (t1, t2, t3) => Task.Factory.StartNew(() => { });
+            MTcpRosClient.AllInstances.ReceiveAsyncInt32 = (t1, t2) => Observable.Return(new byte[0]).Delay(TimeSpan.FromSeconds(3));
+            MTcpRosClient.AllInstances.SendTaskAsyncByteArray = (t1, t2) => Task<int>.Factory.StartNew(() => t2.Length);
+
+            var server = new RosTopicServer<std_msgs.String>("mynode", "mytopic");
+
+            var task = server.StartAsync(new TopicParam() {HostName = "test", PortNumber = 1234, ProtocolName = "TCPROS"});
+
+            var ex = AssertEx.Throws<AggregateException>(() => task.Wait());
+            ex.InnerException.GetType().Is(typeof (TimeoutException));
+        }
+
+
+        [TestMethod]
+        [HostType("Moles")]
+        public void StartAsync_ReceiveHeaderMismatch()
+        {
+            var str = new std_msgs.String();
+            var header = new
+            {
+                callerid = "test",
+                topic = "mytopic",
+                md5sum = "aaaaaaaaaaaaa",
+                type = str.MessageType
+            };
+            var stream = new MemoryStream();
+            TcpRosHeaderSerializer.Serialize(stream, header);
+
+
+            MTcpRosClient.AllInstances.ConnectTaskAsyncStringInt32 = (t1, t2, t3) => Task.Factory.StartNew(() => { });
+            MTcpRosClient.AllInstances.ReceiveAsyncInt32 = (t1, t2) => Observable.Return(stream.ToArray());
+            MTcpRosClient.AllInstances.SendTaskAsyncByteArray = (t1, t2) => Task<int>.Factory.StartNew(() => t2.Length);
+
+            var server = new RosTopicServer<std_msgs.String>("mynode", "mytopic");
+
+            var task = server.StartAsync(new TopicParam() { HostName = "test", PortNumber = 1234, ProtocolName = "TCPROS" });
+
+            var ex = AssertEx.Throws<AggregateException>(() => task.Wait());
+            ex.InnerException.GetType().Is(typeof(RosTopicException));
+            ex.InnerException.Message.Is("MD5Sum mismatch error");
         }
     }
 }

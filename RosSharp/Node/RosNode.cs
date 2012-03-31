@@ -21,7 +21,7 @@ namespace RosSharp.Node
         private readonly MasterClient _masterClient;
         private readonly SlaveServer _slaveServer;
         private readonly ServiceProxyFactory _serviceProxyFactory;
-        private readonly RosTcpListener _rosTcpListener;
+        private readonly TcpRosListener _tcpRosListener;
         private readonly TopicContainer _topicContainer;
 
         private ParameterServerClient _parameterServerClient;
@@ -42,8 +42,8 @@ namespace RosSharp.Node
             _serviceProxyFactory = new ServiceProxyFactory(NodeId);
 
             _topicContainer = new TopicContainer();
-            _rosTcpListener = new RosTcpListener(0);
-            _slaveServer = new SlaveServer(0, _topicContainer, _rosTcpListener);
+            _tcpRosListener = new TcpRosListener(0);
+            _slaveServer = new SlaveServer(0, _topicContainer, _tcpRosListener);
 
             _slaveServer.ParameterUpdated += SlaveServerOnParameterUpdated;
         }
@@ -108,7 +108,7 @@ namespace RosSharp.Node
             var publisher = new Publisher<TDataType>(topicName, NodeId);
             _topicContainer.AddPublisher(publisher);
 
-            _rosTcpListener.AcceptAsync()
+            _tcpRosListener.AcceptAsync()
                 .Subscribe(socket => publisher.AddTopic(socket));
 
             return _masterClient

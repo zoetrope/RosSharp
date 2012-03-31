@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RosSharp.Topic;
 using RosSharp.Transport;
 
 namespace RosSharp.Tests.Transport
@@ -7,6 +8,12 @@ namespace RosSharp.Tests.Transport
     [TestClass]
     public class TcpRosHeaderTest
     {
+        [TestInitialize]
+        public void Initialize()
+        {
+            ROS.Initialize();
+        }
+
         [TestMethod]
         public void SerializeSubscriberHeader_Success()
         {
@@ -84,6 +91,55 @@ namespace RosSharp.Tests.Transport
             AssertEx.Is(header.type, data.MessageType);
 
             ms.Close();
+        }
+
+
+        [TestMethod]
+        public void Serialize_EmptyError()
+        {
+            var ms = new MemoryStream();
+
+            var ex = AssertEx.Throws<RosTopicException>(() => TcpRosHeaderSerializer.Serialize(ms, new object()));
+            ex.Message.Is("Header has not properties");
+        }
+
+        [TestMethod]
+        public void Deserialize_EmptyError()
+        {
+            var msg = new byte[0];
+
+            var ms = new MemoryStream(msg);
+            var ex = AssertEx.Throws<RosTopicException>(() => TcpRosHeaderSerializer.Deserialize(ms));
+            ex.Message.Is("Stream is too short");
+        }
+
+        [TestMethod]
+        public void Deserialize_LengthMismatch()
+        {
+            var msg = new byte[] {100, 0, 0, 0, 0};
+
+            var ms = new MemoryStream(msg);
+            var ex = AssertEx.Throws<RosTopicException>(() => TcpRosHeaderSerializer.Deserialize(ms));
+            ex.Message.Is("Stream length mismatch");
+        }
+
+        [TestMethod]
+        public void Deserialize_LengthMismatch2()
+        {
+            var msg = new byte[] {4, 0, 0, 0, 1, 0, 0, 0};
+
+            var ms = new MemoryStream(msg);
+            var ex = AssertEx.Throws<RosTopicException>(() => TcpRosHeaderSerializer.Deserialize(ms));
+            ex.Message.Is("Stream length mismatch");
+        }
+        [TestMethod]
+        public void Deserialize_NotContainsEqual()
+        {
+            var msg = new byte[] {6, 0, 0, 0, 2, 0, 0, 0, 0, 0};
+
+            var ms = new MemoryStream(msg);
+            var ex = AssertEx.Throws<RosTopicException>(() => TcpRosHeaderSerializer.Deserialize(ms));
+            ex.Message.Is("not contains '='");
         }
     }
 

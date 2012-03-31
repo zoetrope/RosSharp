@@ -16,7 +16,7 @@ namespace RosSharp.Service
         where TService : IService, new ()
     {
         private string _nodeId;
-        private RosTcpListener _listener;
+        private TcpRosListener _listener;
 
         public IPEndPoint EndPoint
         {
@@ -30,7 +30,7 @@ namespace RosSharp.Service
 
         public IDisposable RegisterService(string serviceName, IService service)
         {
-            _listener = new RosTcpListener(0);
+            _listener = new TcpRosListener(0);
             var disp = _listener.AcceptAsync()
                 .Select(s => new ServiceInstance<TService>(_nodeId,service, s))
                 .Subscribe(client => client.Initialize(serviceName));

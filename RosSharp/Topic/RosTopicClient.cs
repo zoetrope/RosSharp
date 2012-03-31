@@ -13,7 +13,7 @@ namespace RosSharp.Topic
     internal sealed class RosTopicClient<TDataType> : IDisposable
         where TDataType : IMessage, new()
     {
-        private RosTcpClient _tcpClient;
+        private TcpRosClient _client;
         private ILog _logger = LogManager.GetCurrentClassLogger();
 
         public string NodeId { get; private set; }
@@ -31,7 +31,7 @@ namespace RosSharp.Topic
 
         public void Dispose()
         {
-            _tcpClient.Dispose();
+            _client.Dispose();
             Connected = false;
         }
 
@@ -47,15 +47,15 @@ namespace RosSharp.Topic
             var bw = new BinaryWriter(ms);
             bw.Write(data.SerializeLength);
             data.Serialize(bw);
-            return _tcpClient.SendTaskAsync(ms.ToArray());
+            return _client.SendTaskAsync(ms.ToArray());
         }
 
 
         public IObservable<Unit> StartAsync(Socket socket)
         {
-            _tcpClient = new RosTcpClient(socket);
+            _client = new TcpRosClient(socket);
 
-            return _tcpClient.ReceiveAsync()
+            return _client.ReceiveAsync()
                 .Take(1)
                 .Timeout(TimeSpan.FromMilliseconds(ROS.TopicTimeout))
                 .Select(OnReceivedHeader);
@@ -95,7 +95,7 @@ namespace RosSharp.Topic
             var ms = new MemoryStream();
             TcpRosHeaderSerializer.Serialize(ms, resHeader);
 
-            _tcpClient.SendTaskAsync(ms.ToArray()).Wait();
+            _client.SendTaskAsync(ms.ToArray()).Wait();
 
             Connected = true;
 

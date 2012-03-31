@@ -22,7 +22,7 @@ namespace RosSharp.Service
         public TService Create<TService>(string serviceName, Uri uri) //TODO: 非同期にしなくては。
             where TService : IService, new()
         {
-            var tcpClient = new RosTcpClient();
+            var tcpClient = new TcpRosClient();
             tcpClient.ConnectTaskAsync(uri.Host, uri.Port).Wait();//TODO: waitではなくcontinueWith
 
             var rec = tcpClient.ReceiveAsync()

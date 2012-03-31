@@ -13,18 +13,18 @@ namespace RosSharp.Service
             where TService : IService, new()
     {
         private TService _service;
-        RosTcpClient tcpClient;
+        TcpRosClient _client;
 
-        public ServiceProxy(TService service,RosTcpClient client)
+        public ServiceProxy(TService service,TcpRosClient client)
         {
-            tcpClient = client;
+            _client = client;
             _service = service;
             _service.SetAction(Invoke);
         }
 
         internal IMessage Invoke(IMessage request) //TODO: 非同期にできそうだけど・・・
         {
-            var response = tcpClient.ReceiveAsync(offset: 1)
+            var response = _client.ReceiveAsync(offset: 1)
                 .Select(x =>
                 {
                     //TODO: エラー処理
@@ -44,7 +44,7 @@ namespace RosSharp.Service
             bw.Write(request.SerializeLength);
             request.Serialize(bw);
             var senddata = ms.ToArray();
-            tcpClient.SendTaskAsync(senddata).Wait();
+            _client.SendTaskAsync(senddata).Wait();
 
             return response.First();
         }

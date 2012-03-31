@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 
 namespace RosSharp.Transport
 {
-    internal sealed class RosTcpClient : IDisposable
+    internal sealed class TcpRosClient : IDisposable
     {
         private Socket _socket;
 
-        public RosTcpClient()
+        public TcpRosClient()
         {
         }
 
-        public RosTcpClient(Socket socket)
+        public TcpRosClient(Socket socket)
         {
             _socket = socket;
         }

@@ -29,7 +29,7 @@ namespace RosSharp.Tests.Transport
 
             var observer = scheduler.CreateObserver<Socket>();
 
-            var client = new RosTcpListener(0);
+            var client = new TcpRosListener(0);
 
             var result = client.AcceptAsync().Subscribe(observer);
 

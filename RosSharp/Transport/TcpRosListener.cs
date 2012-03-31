@@ -5,11 +5,11 @@ using System.Reactive.Linq;
 
 namespace RosSharp.Transport
 {
-    internal sealed class RosTcpListener : IDisposable
+    internal sealed class TcpRosListener : IDisposable
     {
         private Socket _socket;
 
-        public RosTcpListener(int portNumber)
+        public TcpRosListener(int portNumber)
         {
             var hostEntry = new IPEndPoint(IPAddress.Any, portNumber);
 

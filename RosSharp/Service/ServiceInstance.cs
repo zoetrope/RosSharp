@@ -14,14 +14,14 @@ namespace RosSharp.Service
     {
         private IService _service;
         private string _nodeId;
-        private RosTcpClient client;
+        private TcpRosClient client;
 
         public ServiceInstance(string nodeId, IService service, Socket s)
         {
             _nodeId = nodeId;
             _service = service;
 
-            client = new RosTcpClient(s);
+            client = new TcpRosClient(s);
         }
 
         internal void Initialize(string serviceName) //TODO: 非同期に。

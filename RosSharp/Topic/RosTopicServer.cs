@@ -12,7 +12,7 @@ namespace RosSharp.Topic
     internal sealed class RosTopicServer<TDataType> : IDisposable
         where TDataType : IMessage, new()
     {
-        private RosTcpClient _tcpClient;
+        private TcpRosClient _client;
         private ILog _logger = LogManager.GetCurrentClassLogger();
 
         public string NodeId { get; private set; }
@@ -26,33 +26,45 @@ namespace RosSharp.Topic
 
         public void Dispose()
         {
-            _tcpClient.Dispose();
+            _client.Dispose();
         }
 
         public Task<IObservable<TDataType>> StartAsync(TopicParam param)
         {
-            _tcpClient = new RosTcpClient();
+            _client = new TcpRosClient();
 
             var tcs = new TaskCompletionSource<IObservable<TDataType>>();
-
-
-            _tcpClient.ConnectTaskAsync(param.HostName, param.PortNumber)
-                .ContinueWith(t =>
+            _client.ConnectTaskAsync(param.HostName, param.PortNumber)
+                .ContinueWith(t1 =>
                 {
-                    t.Wait();
-                    if (t.IsFaulted) tcs.SetException(t.Exception.InnerException);
-                    else if (t.IsCanceled) tcs.SetCanceled();
-                    else tcs.SetResult(OnConnected());
+                    if (t1.IsFaulted) tcs.SetException(t1.Exception.InnerException);
+                    else if (t1.IsCanceled) tcs.SetCanceled();
+                    else
+                    {
+                        try
+                        {
+                            OnConnected().ContinueWith(t2 =>
+                            {
+                                if (t2.IsFaulted) tcs.SetException(t2.Exception.InnerException);
+                                else if (t2.IsCanceled) tcs.SetCanceled();
+                                else tcs.SetResult(t2.Result);
+                            });
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.Error("", ex);
+                            tcs.SetException(ex);
+                        }
+                    }
                 });
 
             return tcs.Task;
         }
 
 
-        private IObservable<TDataType> OnConnected()
+        private Task<IObservable<TDataType>> OnConnected()
         {
-            Console.WriteLine("OnConnected");
-            var last = _tcpClient.ReceiveAsync()
+            var last = _client.ReceiveAsync()
                 .Take(1)
                 .Select(x => TcpRosHeaderSerializer.Deserialize(new MemoryStream(x)))
                 .PublishLast();
@@ -60,7 +72,7 @@ namespace RosSharp.Topic
             last.Connect();
 
             var dummy = new TDataType();
-            var header = new
+            var sendHeader = new
             {
                 callerid = NodeId,
                 topic = TopicName,
@@ -69,11 +81,34 @@ namespace RosSharp.Topic
             };
 
             var stream = new MemoryStream();
-            TcpRosHeaderSerializer.Serialize(stream, header);
+            TcpRosHeaderSerializer.Serialize(stream, sendHeader);
 
-            return _tcpClient.SendTaskAsync(stream.ToArray()) //ヘッダを送信
-                .ContinueWith(task => last.SelectMany(OnReceivedHeader) //ヘッダの返信を受信
-                ).Result;
+            var tcs = new TaskCompletionSource<IObservable<TDataType>>();
+            _client.SendTaskAsync(stream.ToArray())
+                .ContinueWith(task =>
+                {
+                    if (task.IsFaulted) tcs.SetException(task.Exception.InnerException);
+                    else if (task.IsCanceled) tcs.SetCanceled();
+                    else {
+                        try
+                        {
+                            var recvHeader = last.Timeout(TimeSpan.FromMilliseconds(ROS.TopicTimeout)).First();
+                            tcs.SetResult(OnReceivedHeader(recvHeader));
+                        }
+                        catch(RosTopicException ex)
+                        {
+                            _logger.Error("Header Deserialize Error", ex);
+                            tcs.SetException(ex);
+                        }
+                        catch (TimeoutException ex)
+                        {
+                            _logger.Error("Receive Header Timeout Error", ex);
+                            tcs.SetException(ex);
+                        }
+                    }
+                });
+
+            return tcs.Task;
         }
 
         private IObservable<TDataType> OnReceivedHeader(dynamic header)
@@ -96,7 +131,7 @@ namespace RosSharp.Topic
                 throw new RosTopicException("MD5Sum mismatch error");
             }
 
-            return _tcpClient.ReceiveAsync().Select(Deserialize); //その後はストリーミングでデータ受信
+            return _client.ReceiveAsync().Select(Deserialize);
         }
 
         private TDataType Deserialize(byte[] x)
@@ -104,7 +139,7 @@ namespace RosSharp.Topic
             var data = new TDataType();
             var br = new BinaryReader(new MemoryStream(x));
             var len = br.ReadInt32();
-            if(br.BaseStream.Length != len)
+            if (br.BaseStream.Length != len + 4)
             {
                 _logger.Error("Received Invalid Message");
                 throw new RosTopicException("Received Invalid Message");

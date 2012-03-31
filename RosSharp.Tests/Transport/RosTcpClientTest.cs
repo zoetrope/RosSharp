@@ -24,7 +24,7 @@ namespace RosSharp.Tests.Transport
 
             MAsyncSocketExtensions.ConnectTaskAsyncSocketEndPoint = (t1, t2) => task;
             
-            var client = new RosTcpClient();
+            var client = new TcpRosClient();
 
             client.ConnectTaskAsync("127.0.0.1", 50000).ContinueWith(t => { });
 
@@ -59,7 +59,7 @@ namespace RosSharp.Tests.Transport
 
             var observer = scheduler.CreateObserver<TcpRosHeader>();
 
-            var client = new RosTcpClient();
+            var client = new TcpRosClient();
 
 
             var result = client.ReceiveAsync()
