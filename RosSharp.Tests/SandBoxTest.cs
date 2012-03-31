@@ -116,5 +116,36 @@ namespace RosSharp.Tests
                 Console.WriteLine(ex);
             }
         }
+
+
+        [TestMethod]
+        public void MultipleSubject()
+        {
+            var sub1 = new Subject<int>();
+            var sub2 = new Subject<int>();
+            var sub3 = new Subject<int>();
+
+            var aggregator = new Subject<int>();
+
+            sub1.Subscribe(aggregator);
+            sub2.Subscribe(aggregator);
+
+            var dis1 = aggregator.Subscribe(x => Console.WriteLine("Subscriber1={0}", x));
+            var dis2 = aggregator.Subscribe(x => Console.WriteLine("Subscriber2={0}", x));
+
+            sub1.OnNext(1);
+            sub2.OnNext(10);
+
+            sub3.Subscribe(aggregator);
+            var dis3 = aggregator.Subscribe(x => Console.WriteLine("Subscriber3={0}", x));
+
+            sub3.OnNext(100);
+
+            dis1.Dispose();
+
+            sub1.OnNext(2);
+            sub2.OnNext(20);
+            sub3.OnNext(200);
+        }
     }
 }
