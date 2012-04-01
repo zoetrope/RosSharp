@@ -86,6 +86,7 @@
 <li>Reactive Extensions</li>
 <li>Common.Logging</li>
 <li>XML-RPC.NET</li>
+<li>NDesk.Options</li>
 <li>F# Runtime 2.0 (for GenMsg)</li>
 <li>FParsec (for GenMsg)</li>
 </ul>
@@ -109,9 +110,11 @@
 <h3>初期化<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="id7">
 <h4>プログラムで<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-csharp"><div class="highlight"><pre><span class="n">ROS</span><span class="p">.</span><span class="n">HostName</span> <span class="p">=</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
-<span class="n">ROS</span><span class="p">.</span><span class="n">MasterUri</span>
-<span class="n">ROS</span><span class="p">.</span><span class="n">Timeout</span>
+<div class="highlight-csharp"><div class="highlight"><pre><span class="n">ROS</span><span class="p">.</span><span class="n">Initialize</span><span class="p">();</span>
+<span class="n">ROS</span><span class="p">.</span><span class="n">HostName</span> <span class="p">=</span> <span class="s">&quot;192.168.1.11&quot;</span><span class="p">;</span>
+<span class="n">ROS</span><span class="p">.</span><span class="n">MasterUri</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Uri</span><span class="p">(</span><span class="s">&quot;http://192.168.1.10:11311&quot;</span><span class="p">);</span>
+<span class="n">ROS</span><span class="p">.</span><span class="n">TopicTimeout</span> <span class="p">=</span> <span class="m">3000</span><span class="p">;</span>
+<span class="n">ROS</span><span class="p">.</span><span class="n">XmlRpcTimeout</span> <span class="p">=</span> <span class="m">3000</span><span class="p">;</span>
 </pre></div>
 </div>
 </div>
@@ -120,13 +123,13 @@
 <div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
 <span class="nt">&lt;configuration&gt;</span>
   <span class="nt">&lt;configSections&gt;</span>
-    <span class="nt">&lt;section</span> <span class="na">name=</span><span class="s">&quot;rossharp&quot;</span> <span class="na">type=</span><span class="s">&quot;RosSharp.ConfigurationSection, RosSharp.NET40&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;section</span> <span class="na">name=</span><span class="s">&quot;rossharp&quot;</span> <span class="na">type=</span><span class="s">&quot;RosSharp.ConfigurationSection, RosSharp&quot;</span><span class="nt">/&gt;</span>
   <span class="nt">&lt;/configSections&gt;</span>
   <span class="nt">&lt;rossharp&gt;</span>
     <span class="nt">&lt;ROS_MASTER_URI</span> <span class="na">value=</span><span class="s">&quot;http://localhost:11311&quot;</span><span class="nt">/&gt;</span>
     <span class="nt">&lt;ROS_HOSTNAME</span> <span class="na">value=</span><span class="s">&quot;localhost&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;SOCKET_TIMEOUT</span> <span class="na">value=</span><span class="s">&quot;1000&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;XMLRPC_TIMEOUT</span> <span class="na">value=</span><span class="s">&quot;1000&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;ROS_TOPIC_TIMEOUT</span> <span class="na">value=</span><span class="s">&quot;1000&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;ROS_XMLRPC_TIMEOUT</span> <span class="na">value=</span><span class="s">&quot;1000&quot;</span><span class="nt">/&gt;</span>
   <span class="nt">&lt;/rossharp&gt;</span>
 <span class="nt">&lt;/configuration&gt;</span>
 </pre></div>
@@ -134,6 +137,10 @@
 </div>
 <div class="section" id="id9">
 <h4>環境変数<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h4>
+<p>ROS_MASTER_URI
+ROS_HOSTNAME
+ROS_TOPIC_TIMEOUT
+ROS_XMLRPC_TIMEOUT</p>
 </div>
 </div>
 <div class="section" id="id10">
@@ -157,7 +164,7 @@
 
   <span class="nt">&lt;common&gt;</span>
     <span class="nt">&lt;logging&gt;</span>
-      <span class="nt">&lt;factoryAdapter</span> <span class="na">type=</span><span class="s">&quot;RosSharp.Utility.RosOutLoggerFactoryAdapter, RosSharp.NET40&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;factoryAdapter</span> <span class="na">type=</span><span class="s">&quot;RosSharp.RosOutLoggerFactoryAdapter, RosSharp&quot;</span><span class="nt">&gt;</span>
         <span class="nt">&lt;arg</span> <span class="na">key=</span><span class="s">&quot;level&quot;</span> <span class="na">value=</span><span class="s">&quot;DEBUG&quot;</span> <span class="nt">/&gt;</span>
         <span class="nt">&lt;arg</span> <span class="na">key=</span><span class="s">&quot;showLogName&quot;</span> <span class="na">value=</span><span class="s">&quot;true&quot;</span> <span class="nt">/&gt;</span>
         <span class="nt">&lt;arg</span> <span class="na">key=</span><span class="s">&quot;showDataTime&quot;</span> <span class="na">value=</span><span class="s">&quot;true&quot;</span> <span class="nt">/&gt;</span>
@@ -203,21 +210,24 @@
 </div>
 <div class="section" id="create-service">
 <h3>Create Service<a class="headerlink" href="#create-service" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-csharp"><div class="highlight"><pre><span class="n">node</span><span class="p">.</span><span class="n">RegisterService</span><span class="p">&lt;</span><span class="n">AddTwoInts</span><span class="p">,</span> <span class="n">AddTwoInts</span><span class="p">.</span><span class="n">Request</span><span class="p">,</span> <span class="n">AddTwoInts</span><span class="p">.</span><span class="n">Response</span><span class="p">&gt;</span>
-              <span class="p">(</span><span class="s">&quot;/add_two_ints&quot;</span><span class="p">,</span> <span class="n">req</span> <span class="p">=&gt;</span> <span class="k">new</span> <span class="n">AddTwoInts</span><span class="p">.</span><span class="n">Response</span> <span class="p">{</span><span class="n">c</span> <span class="p">=</span> <span class="n">req</span><span class="p">.</span><span class="n">a</span> <span class="p">+</span> <span class="n">req</span><span class="p">.</span><span class="n">b</span><span class="p">});</span>
+<div class="highlight-csharp"><div class="highlight"><pre><span class="n">node</span><span class="p">.</span><span class="n">RegisterService</span><span class="p">(</span><span class="s">&quot;/add_two_ints&quot;</span><span class="p">,</span><span class="k">new</span> <span class="n">AddTwoInts</span><span class="p">(</span><span class="n">req</span> <span class="p">=&gt;</span> <span class="k">new</span> <span class="n">AddTwoInts</span><span class="p">.</span><span class="n">Response</span> <span class="p">{</span><span class="n">c</span> <span class="p">=</span> <span class="n">req</span><span class="p">.</span><span class="n">a</span> <span class="p">+</span> <span class="n">req</span><span class="p">.</span><span class="n">b</span><span class="p">})).</span><span class="n">Wait</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="use-service">
 <h3>Use Service<a class="headerlink" href="#use-service" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-csharp"><div class="highlight"><pre><span class="kt">var</span> <span class="n">proxy</span> <span class="p">=</span> <span class="n">node</span><span class="p">.</span><span class="n">CreateProxy</span><span class="p">&lt;</span><span class="n">AddTwoInts</span><span class="p">,</span> <span class="n">AddTwoInts</span><span class="p">.</span><span class="n">Request</span><span class="p">,</span> <span class="n">AddTwoInts</span><span class="p">.</span><span class="n">Response</span><span class="p">&gt;(</span><span class="s">&quot;/add_two_ints&quot;</span><span class="p">);</span>
-<span class="n">proxy</span><span class="p">(</span><span class="k">new</span> <span class="n">AddTwoInts</span><span class="p">.</span><span class="n">Request</span><span class="p">()</span> <span class="p">{</span> <span class="n">a</span> <span class="p">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">b</span> <span class="p">=</span> <span class="m">2</span> <span class="p">}).</span><span class="n">Subscribe</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">c</span><span class="p">));</span>
+<div class="highlight-csharp"><div class="highlight"><pre><span class="kt">var</span> <span class="n">proxy</span> <span class="p">=</span> <span class="n">node</span><span class="p">.</span><span class="n">CreateProxy</span><span class="p">&lt;</span><span class="n">AddTwoInts</span><span class="p">&gt;(</span><span class="s">&quot;/add_two_ints&quot;</span><span class="p">).</span><span class="n">Result</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">res</span> <span class="p">=</span> <span class="n">proxy</span><span class="p">.</span><span class="n">Invoke</span><span class="p">(</span><span class="k">new</span> <span class="n">AddTwoInts</span><span class="p">.</span><span class="n">Request</span><span class="p">()</span> <span class="p">{</span><span class="n">a</span> <span class="p">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">b</span> <span class="p">=</span> <span class="m">2</span><span class="p">});</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">res</span><span class="p">.</span><span class="n">c</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="parameterserver">
 <h3>ParameterServer<a class="headerlink" href="#parameterserver" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-csharp"><div class="highlight"><pre>
+<div class="highlight-csharp"><div class="highlight"><pre><span class="kt">var</span> <span class="n">param</span> <span class="p">=</span> <span class="n">node</span><span class="p">.</span><span class="n">GetParameter</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;(</span><span class="s">&quot;rosversion&quot;</span><span class="p">);</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">param</span><span class="p">.</span><span class="n">Value</span><span class="p">);</span>
+<span class="n">param</span><span class="p">.</span><span class="n">Value</span> <span class="p">=</span> <span class="s">&quot;test&quot;</span><span class="p">;</span>
+<span class="n">param</span><span class="p">.</span><span class="n">Subscribe</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">x</span><span class="p">));</span>
 </pre></div>
 </div>
 </div>
@@ -235,7 +245,7 @@
 <p><a class="reference external" href="http://www.ros.org/wiki/roscore">http://www.ros.org/wiki/roscore</a></p>
 <div class="section" id="usage">
 <h4>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h4>
-<p>&gt; RosCore</p>
+<p>&gt; RosCore -p 11311</p>
 </div>
 </div>
 <div class="section" id="genmsg">
@@ -243,7 +253,7 @@
 <p>GenMsg is a tool that code generation from .msg / .srv format files.</p>
 <div class="section" id="id15">
 <h4>Usage<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h4>
-<p>&gt; GenMsg</p>
+<p>&gt; GenMsg -t msg -i &#8221;..msgroslib&#8221; &#8221;..msgroslibTime.msg&#8221;</p>
 </div>
 </div>
 </div>
