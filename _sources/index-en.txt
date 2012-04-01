@@ -7,7 +7,7 @@ RosSharp is C# client library for ROS (Robot Operating System).
 
 Copyright (c) 2012 zoetrope. All Rights Reserved. 
 
-Licensed undear a Microsoft Permissive License (Ms-PL).
+Licensed undear the BSD License
 
 Source: https://github.com/zoetrope/RosSharp
 
@@ -112,10 +112,11 @@ configuration can be done in your app.config
 Environment Variable
 -------------------------------------------------
 
-ROS_MASTER_URI
-ROS_HOSTNAME
-ROS_TOPIC_TIMEOUT
-ROS_XMLRPC_TIMEOUT
+* ROS_MASTER_URI
+* ROS_HOSTNAME
+* ROS_TOPIC_TIMEOUT
+* ROS_XMLRPC_TIMEOUT
+
 
 
 Logging
