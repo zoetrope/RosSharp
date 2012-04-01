@@ -41,6 +41,7 @@ Requirements
 * Reactive Extensions
 * Common.Logging
 * XML-RPC.NET
+* NDesk.Options
 
 * F# Runtime 2.0 (for GenMsg)
 * FParsec (for GenMsg)
@@ -77,10 +78,11 @@ Configuring in your code
 
 .. code-block:: csharp
 
-   ROS.HostName = "";
-   ROS.MasterUri
-   ROS.XmlRpcTimeout
-   ROS.SocketTimeout
+   ROS.Initialize();
+   ROS.HostName = "192.168.1.11";
+   ROS.MasterUri = new Uri("http://192.168.1.10:11311");
+   ROS.TopicTimeout = 3000;
+   ROS.XmlRpcTimeout = 3000;
 
 
 
@@ -95,22 +97,25 @@ configuration can be done in your app.config
     <?xml version="1.0" encoding="utf-8"?>
     <configuration>
       <configSections>
-        <section name="rossharp" type="RosSharp.ConfigurationSection, RosSharp.NET40"/>
+        <section name="rossharp" type="RosSharp.ConfigurationSection, RosSharp"/>
       </configSections>
       <rossharp>
         <ROS_MASTER_URI value="http://localhost:11311"/>
         <ROS_HOSTNAME value="localhost"/>
-        <SOCKET_TIMEOUT value="1000"/>
-        <XMLRPC_TIMEOUT value="1000"/>
+        <ROS_TOPIC_TIMEOUT value="1000"/>
+        <ROS_XMLRPC_TIMEOUT value="1000"/>
       </rossharp>
     </configuration>
 
 
 
-Environment
+Environment Variable
 -------------------------------------------------
 
-
+ROS_MASTER_URI
+ROS_HOSTNAME
+ROS_TOPIC_TIMEOUT
+ROS_XMLRPC_TIMEOUT
 
 
 Logging
@@ -144,7 +149,7 @@ see the Common.Logging Documentation
 
       <common>
         <logging>
-          <factoryAdapter type="RosSharp.Utility.RosOutLoggerFactoryAdapter, RosSharp.NET40">
+          <factoryAdapter type="RosSharp.RosOutLoggerFactoryAdapter, RosSharp">
             <arg key="level" value="DEBUG" />
             <arg key="showLogName" value="true" />
             <arg key="showDataTime" value="true" />
@@ -197,8 +202,7 @@ Create Service
 
 .. code-block:: csharp
 
-  node.RegisterService<AddTwoInts, AddTwoInts.Request, AddTwoInts.Response>
-                ("/add_two_ints", req => new AddTwoInts.Response {c = req.a + req.b});
+  node.RegisterService("/add_two_ints",new AddTwoInts(req => new AddTwoInts.Response {c = req.a + req.b})).Wait();
 
 
 Use Service
@@ -207,8 +211,9 @@ Use Service
 
 .. code-block:: csharp
 
-  var proxy = node.CreateProxy<AddTwoInts, AddTwoInts.Request, AddTwoInts.Response>("/add_two_ints");
-  proxy(new AddTwoInts.Request() { a = 1, b = 2 }).Subscribe(x => Console.WriteLine(x.c));
+  var proxy = node.CreateProxy<AddTwoInts>("/add_two_ints").Result;
+  var res = proxy.Invoke(new AddTwoInts.Request() {a = 1, b = 2});
+  Console.WriteLine(res.c);
 
 
 ParameterServer
@@ -216,6 +221,12 @@ ParameterServer
 
 
 .. code-block:: csharp
+
+  var param = node.GetParameter<string>("rosversion");
+  Console.WriteLine(param.Value);
+  param.Value = "test";
+  param.Subscribe(x => Console.WriteLine(x));
+
 
 
 Application
@@ -236,7 +247,7 @@ http://www.ros.org/wiki/roscore
 Usage
 --------------------------------------------------
 
-> RosCore
+> RosCore -p 11311
 
 
 
@@ -249,5 +260,5 @@ GenMsg is a tool that code generation from .msg / .srv format files.
 Usage
 --------------------------------------------------
 
-> GenMsg
+> GenMsg -t msg -i "..\msg\roslib" "..\msg\roslib\Time.msg"
 

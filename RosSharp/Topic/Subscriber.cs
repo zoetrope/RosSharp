@@ -16,6 +16,7 @@ namespace RosSharp.Topic
     public sealed class Subscriber<TDataType> : ISubscriber, IObservable<TDataType>, IDisposable
         where TDataType : IMessage, new()
     {
+        private List<RosTopicServer<TDataType>> _rosTopicServers = new List<RosTopicServer<TDataType>>();
         private Subject<TDataType> _aggregateSubject = new Subject<TDataType>();
         private CompositeDisposable _disposables = new CompositeDisposable();
 
@@ -66,7 +67,7 @@ namespace RosSharp.Topic
 
             Parallel.ForEach(slaves,
                              slave => slave.RequestTopicAsync(NodeId, TopicName, new object[1] {new string[1] {"TCPROS"}})
-                                          .ContinueWith(task => Connect(task.Result), TaskContinuationOptions.OnlyOnRanToCompletion));
+                                          .ContinueWith(task => ConnectServer(task.Result, slave), TaskContinuationOptions.OnlyOnRanToCompletion));
         }
 
         public string TopicName { get; private set; }
@@ -75,10 +76,11 @@ namespace RosSharp.Topic
 
         #endregion
 
-        private void Connect(TopicParam param)
+        private void ConnectServer(TopicParam param, SlaveClient client)
         {
             //TODO: serverを複数持てるようにする。保持しておく。ロックも必要。
             var server = new RosTopicServer<TDataType>(TopicName, NodeId);
+            _rosTopicServers.Add(server);
 
             server.StartAsync(param).ContinueWith(
                 task =>
