@@ -48,7 +48,11 @@ namespace RosSharp.Parameter
         /// </summary>
         /// <param name="callerId"> ROS caller ID </param>
         /// <param name="key"> Parameter name. </param>
-        /// <returns> int: code str: status message int: ignore </returns>
+        /// <returns>
+        /// [0] = int: code <br/>
+        /// [1] = str: status message <br/>
+        /// [2] = int: ignore
+        /// </returns>
         [XmlRpcMethod("deleteParam")]
         object[] DeleteParam(string callerId, string key);
 
@@ -58,7 +62,11 @@ namespace RosSharp.Parameter
         /// <param name="callerId"> ROS caller ID </param>
         /// <param name="key"> Parameter name. </param>
         /// <param name="value"> Parameter value. </param>
-        /// <returns> int: code str: status message int: ignore </returns>
+        /// <returns>
+        /// [0] = int: code <br/>
+        /// [1] = str: status message <br/>
+        /// [2] = int: ignore
+        /// </returns>
         [XmlRpcMethod("setParam")]
         object[] SetParam(string callerId, string key, object value);
 
@@ -67,7 +75,11 @@ namespace RosSharp.Parameter
         /// </summary>
         /// <param name="callerId"> ROS caller ID </param>
         /// <param name="key"> Parameter name. If key is a namespace, getParam() will return a parameter tree. </param>
-        /// <returns> int: code str: status message parameterValue </returns>
+        /// <returns>
+        /// [0] = int: code <br/>
+        /// [1] = str: status message <br/>
+        /// [2] = parameterValue
+        /// </returns>
         [XmlRpcMethod("getParam")]
         object[] GetParam(string callerId, string key);
 
@@ -76,7 +88,11 @@ namespace RosSharp.Parameter
         /// </summary>
         /// <param name="callerId"> ROS caller ID </param>
         /// <param name="key"> Parameter name to search for. </param>
-        /// <returns> int: code str: status message str: foundKey </returns>
+        /// <returns>
+        /// [0] = int: code <br/>
+        /// [1] = str: status message <br/>
+        /// [2] = str: foundKey
+        /// </returns>
         [XmlRpcMethod("searchParam")]
         object[] SearchParam(string callerId, string key);
 
@@ -86,7 +102,11 @@ namespace RosSharp.Parameter
         /// <param name="callerId"> ROS caller ID. </param>
         /// <param name="callerApi"> Node API URI of subscriber for paramUpdate callbacks. </param>
         /// <param name="key"> Parameter name </param>
-        /// <returns> int: code str: status message parameterValue </returns>
+        /// <returns>
+        /// [0] = int: code <br/>
+        /// [1] = str: status message <br/>
+        /// [2] = parameterValue
+        /// </returns>
         [XmlRpcMethod("subscribeParam")]
         object[] SubscribeParam(string callerId, string callerApi, string key);
 
@@ -96,7 +116,11 @@ namespace RosSharp.Parameter
         /// <param name="callerId"> ROS caller ID. </param>
         /// <param name="callerApi"> Node API URI of subscriber. </param>
         /// <param name="key"> Parameter name. </param>
-        /// <returns> int: code str: status message int: number of unsubscribed </returns>
+        /// <returns>
+        /// [0] = int: code <br/>
+        /// [1] = str: status message <br/>
+        /// [2] = int: number of unsubscribed
+        /// </returns>
         [XmlRpcMethod("unsubscribeParam")]
         object[] UnsubscribeParam(string callerId, string callerApi, string key);
 
@@ -105,7 +129,11 @@ namespace RosSharp.Parameter
         /// </summary>
         /// <param name="callerId"> ROS caller ID. </param>
         /// <param name="key"> Parameter name. </param>
-        /// <returns> int: code str: status message bool: hasParam </returns>
+        /// <returns>
+        /// [0] = int: code <br/>
+        /// [1] = str: status message <br/>
+        /// [2] = bool: hasParam
+        /// </returns>
         [XmlRpcMethod("hasParam")]
         object[] HasParam(string callerId, string key);
 
@@ -113,7 +141,11 @@ namespace RosSharp.Parameter
         ///   Get list of all parameter names stored on this server.
         /// </summary>
         /// <param name="callerId"> ROS caller ID. </param>
-        /// <returns> int: code str: status message str[]: parameter name list </returns>
+        /// <returns>
+        /// [0] = int: code <br/>
+        /// [1] = str: status message <br/>
+        /// [2] = str[]: parameter name list
+        /// </returns>
         [XmlRpcMethod("getParamNames")]
         object[] GetParamNames(string callerId);
     }

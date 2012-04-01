@@ -77,7 +77,11 @@ namespace RosSharp.Parameter
         /// </summary>
         /// <param name="callerId"> ROS caller ID </param>
         /// <param name="key"> Parameter name. </param>
-        /// <returns> int: code str: status message int: ignore </returns>
+        /// <returns>
+        /// [0] = int: code <br/>
+        /// [1] = str: status message <br/>
+        /// [2] = int: ignore
+        /// </returns>
         public object[] DeleteParam(string callerId, string key)
         {
             throw new NotImplementedException();
@@ -89,7 +93,11 @@ namespace RosSharp.Parameter
         /// <param name="callerId"> ROS caller ID </param>
         /// <param name="key"> Parameter name. </param>
         /// <param name="value"> Parameter value. </param>
-        /// <returns> int: code str: status message int: ignore </returns>
+        /// <returns>
+        /// [0] = int: code <br/>
+        /// [1] = str: status message <br/>
+        /// [2] = int: ignore
+        /// </returns>
         public object[] SetParam(string callerId, string key, object value)
         {
             throw new NotImplementedException();
@@ -100,7 +108,11 @@ namespace RosSharp.Parameter
         /// </summary>
         /// <param name="callerId"> ROS caller ID </param>
         /// <param name="key"> Parameter name. If key is a namespace, getParam() will return a parameter tree. </param>
-        /// <returns> int: code str: status message parameterValue </returns>
+        /// <returns>
+        /// [0] = int: code <br/>
+        /// [1] = str: status message <br/>
+        /// [2] = parameterValue
+        /// </returns>
         public object[] GetParam(string callerId, string key)
         {
             throw new NotImplementedException();
@@ -111,7 +123,11 @@ namespace RosSharp.Parameter
         /// </summary>
         /// <param name="callerId"> ROS caller ID </param>
         /// <param name="key"> Parameter name to search for. </param>
-        /// <returns> int: code str: status message str: foundKey </returns>
+        /// <returns>
+        /// [0] = int: code <br/>
+        /// [1] = str: status message <br/>
+        /// [2] = str: foundKey
+        /// </returns>
         public object[] SearchParam(string callerId, string key)
         {
             throw new NotImplementedException();
@@ -123,7 +139,11 @@ namespace RosSharp.Parameter
         /// <param name="callerId"> ROS caller ID. </param>
         /// <param name="callerApi"> Node API URI of subscriber for paramUpdate callbacks. </param>
         /// <param name="key"> Parameter name </param>
-        /// <returns> int: code str: status message parameterValue </returns>
+        /// <returns>
+        /// [0] = int: code <br/>
+        /// [1] = str: status message <br/>
+        /// [2] = parameterValue
+        /// </returns>
         public object[] SubscribeParam(string callerId, string callerApi, string key)
         {
             throw new NotImplementedException();
@@ -135,7 +155,11 @@ namespace RosSharp.Parameter
         /// <param name="callerId"> ROS caller ID. </param>
         /// <param name="callerApi"> Node API URI of subscriber. </param>
         /// <param name="key"> Parameter name. </param>
-        /// <returns> int: code str: status message int: number of unsubscribed </returns>
+        /// <returns>
+        /// [0] = int: code <br/>
+        /// [1] = str: status message <br/>
+        /// [2] = int: number of unsubscribed
+        /// </returns>
         public object[] UnsubscribeParam(string callerId, string callerApi, string key)
         {
             throw new NotImplementedException();
@@ -146,7 +170,11 @@ namespace RosSharp.Parameter
         /// </summary>
         /// <param name="callerId"> ROS caller ID. </param>
         /// <param name="key"> Parameter name. </param>
-        /// <returns> int: code str: status message bool: hasParam </returns>
+        /// <returns>
+        /// [0] = int: code <br/>
+        /// [1] = str: status message <br/>
+        /// [2] = bool: hasParam
+        /// </returns>
         public object[] HasParam(string callerId, string key)
         {
             throw new NotImplementedException();
@@ -156,7 +184,11 @@ namespace RosSharp.Parameter
         ///   Get list of all parameter names stored on this server.
         /// </summary>
         /// <param name="callerId"> ROS caller ID. </param>
-        /// <returns> int: code str: status message str[]: parameter name list </returns>
+        /// <returns>
+        /// [0] = int: code <br/>
+        /// [1] = str: status message <br/>
+        /// [2] = str[]: parameter name list
+        /// </returns>
         public object[] GetParamNames(string callerId)
         {
             throw new NotImplementedException();
