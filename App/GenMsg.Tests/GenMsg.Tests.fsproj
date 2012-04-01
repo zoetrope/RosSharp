@@ -35,11 +35,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FParsec">
-      <HintPath>..\..\packages\FParsec.0.9.1.1\lib\net40\FParsec.dll</HintPath>
+      <HintPath>..\..\packages\FParsec.0.9.2.0\lib\net40\FParsec.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FParsecCS">
-      <HintPath>..\..\packages\FParsec.0.9.1.1\lib\net40\FParsecCS.dll</HintPath>
+      <HintPath>..\..\packages\FParsec.0.9.2.0\lib\net40\FParsecCS.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FSharp.Core">

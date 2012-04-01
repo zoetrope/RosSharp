@@ -41,7 +41,6 @@
     <None Include="App.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="packages.config" />
     <Compile Include="Ast.fs" />
     <Compile Include="Base.fs" />
     <Compile Include="Preprocessor.fs" />
@@ -50,14 +49,15 @@
     <Compile Include="MessageGenerator.fs" />
     <Compile Include="ServiceGenerator.fs" />
     <Compile Include="Generator.fs" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FParsec">
-      <HintPath>..\..\packages\FParsec.0.9.1.1\lib\net40\FParsec.dll</HintPath>
+      <HintPath>..\..\packages\FParsec.0.9.2.0\lib\net40\FParsec.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FParsecCS">
-      <HintPath>..\..\packages\FParsec.0.9.1.1\lib\net40\FParsecCS.dll</HintPath>
+      <HintPath>..\..\packages\FParsec.0.9.2.0\lib\net40\FParsecCS.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="mscorlib" />

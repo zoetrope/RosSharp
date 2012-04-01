@@ -1,4 +1,36 @@
-﻿using System;
+﻿#region License Terms
+
+// ================================================================================
+// RosSharp
+// 
+// Software License Agreement (BSD License)
+// 
+// Copyright (C) 2012 zoetrope
+// All rights reserved.
+// 
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are met:
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+// 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+// DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+// (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+// ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// ================================================================================
+
+#endregion
+
+using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Sockets;
@@ -14,15 +46,12 @@ using RosSharp.Transport;
 namespace RosSharp.Slave
 {
     /// <summary>
-    /// XML-RPC Server for Slave API
+    ///   XML-RPC Server for Slave API
     /// </summary>
     public sealed class SlaveServer : MarshalByRefObject, ISlave, IDisposable
     {
-
-        private readonly TopicContainer _topicContainer;
         private readonly TcpRosListener _tcpRosListener;
-
-        public Uri SlaveUri { get; private set; }
+        private readonly TopicContainer _topicContainer;
 
         private ILog _logger = LogManager.GetCurrentClassLogger();
 
@@ -40,31 +69,24 @@ namespace RosSharp.Slave
             RemotingServices.Marshal(this, "slave");
         }
 
+        public Uri SlaveUri { get; private set; }
+
+        #region IDisposable Members
+
         public void Dispose()
         {
             throw new NotImplementedException();
         }
 
-        public override object InitializeLifetimeService()
-        {
-            return null;
-        }
+        #endregion
+
+        #region ISlave Members
 
         /// <summary>
-        /// Retrieve transport/topic statistics.
+        ///   Retrieve transport/topic statistics.
         /// </summary>
-        /// <param name="callerId">ROS caller ID.</param>
-        /// <returns>
-        /// int: code
-        /// str: status message
-        /// stats:
-        ///   [publishStats, subscribeStats, serviceStats]
-        ///     publishStats: [[topicName, messageDataSent, pubConnectionData]...]
-        ///     subscribeStats: [[topicName, subConnectionData]...]
-        ///     serviceStats: (proposed) [numRequests, bytesReceived, bytesSent]
-        ///     pubConnectionData: [connectionId, bytesSent, numSent, connected]* 
-        ///     subConnectionData: [connectionId, bytesReceived, dropEstimate, connected]*
-        /// </returns>
+        /// <param name="callerId"> ROS caller ID. </param>
+        /// <returns> int: code str: status message stats: [publishStats, subscribeStats, serviceStats] publishStats: [[topicName, messageDataSent, pubConnectionData]...] subscribeStats: [[topicName, subConnectionData]...] serviceStats: (proposed) [numRequests, bytesReceived, bytesSent] pubConnectionData: [connectionId, bytesSent, numSent, connected]* subConnectionData: [connectionId, bytesReceived, dropEstimate, connected]* </returns>
         public object[] GetBusStats(string callerId)
         {
             _logger.Debug(m => m("GetBusStats(callerId={0})", callerId));
@@ -72,21 +94,10 @@ namespace RosSharp.Slave
         }
 
         /// <summary>
-        /// Retrieve transport/topic connection information.
+        ///   Retrieve transport/topic connection information.
         /// </summary>
-        /// <param name="callerId">ROS caller ID.</param>
-        /// <returns>
-        /// int: code
-        /// str: status message
-        /// businfo:
-        ///   [[connectionId1, destinationId1, direction1, transport1, topic1, connected1]... ]
-        ///     connectionId is defined by the node and is opaque.
-        ///     destinationId is the XMLRPC URI of the destination.
-        ///     direction is one of 'i', 'o', or 'b' (in, out, both).
-        ///     transport is the transport type (e.g. 'TCPROS').
-        ///     topic is the topic name.
-        ///     connected1 indicates connection status. 
-        /// </returns>
+        /// <param name="callerId"> ROS caller ID. </param>
+        /// <returns> int: code str: status message businfo: [[connectionId1, destinationId1, direction1, transport1, topic1, connected1]... ] connectionId is defined by the node and is opaque. destinationId is the XMLRPC URI of the destination. direction is one of 'i', 'o', or 'b' (in, out, both). transport is the transport type (e.g. 'TCPROS'). topic is the topic name. connected1 indicates connection status. </returns>
         public object[] GetBusInfo(string callerId)
         {
             _logger.Debug(m => m("GetBusInfo(callerId={0})", callerId));
@@ -94,14 +105,10 @@ namespace RosSharp.Slave
         }
 
         /// <summary>
-        /// Get the URI of the master node.
+        ///   Get the URI of the master node.
         /// </summary>
-        /// <param name="callerId">ROS caller ID.</param>
-        /// <returns>
-        /// int: code
-        /// str: status message
-        /// str: URI of the master
-        /// </returns>
+        /// <param name="callerId"> ROS caller ID. </param>
+        /// <returns> int: code str: status message str: URI of the master </returns>
         public object[] GetMasterUri(string callerId)
         {
             _logger.Debug(m => m("GetMasterUri(callerId={0})", callerId));
@@ -114,15 +121,11 @@ namespace RosSharp.Slave
         }
 
         /// <summary>
-        /// Stop this server.
+        ///   Stop this server.
         /// </summary>
-        /// <param name="callerId">ROS caller ID.</param>
-        /// <param name="msg">A message describing why the node is being shutdown.</param>
-        /// <returns>
-        /// int: code
-        /// str: status message
-        /// int: ignore
-        /// </returns>
+        /// <param name="callerId"> ROS caller ID. </param>
+        /// <param name="msg"> A message describing why the node is being shutdown. </param>
+        /// <returns> int: code str: status message int: ignore </returns>
         public object[] Shutdown(string callerId, string msg)
         {
             _logger.Debug(m => m("Shutdown(callerId={0},msg={1})", callerId, msg));
@@ -130,14 +133,10 @@ namespace RosSharp.Slave
         }
 
         /// <summary>
-        /// Get the PID of this server.
+        ///   Get the PID of this server.
         /// </summary>
-        /// <param name="callerId">ROS caller ID.</param>
-        /// <returns>
-        /// int: code
-        /// str: status message
-        /// int: server process pid
-        /// </returns>
+        /// <param name="callerId"> ROS caller ID. </param>
+        /// <returns> int: code str: status message int: server process pid </returns>
         public object[] GetPid(string callerId)
         {
             _logger.Debug(m => m("GetPid(callerId={0})", callerId));
@@ -146,19 +145,14 @@ namespace RosSharp.Slave
                 StatusCode.Success,
                 "",
                 Process.GetCurrentProcess().Id
-            };            
+            };
         }
 
         /// <summary>
-        /// Retrieve a list of topics that this node subscribes to
+        ///   Retrieve a list of topics that this node subscribes to
         /// </summary>
-        /// <param name="callerId">ROS caller ID.</param>
-        /// <returns>
-        /// int: code
-        /// str: status message
-        /// topicList is a list of topics this node subscribes to and is of the form
-        ///   [ [topic1, topicType1]...[topicN, topicTypeN]]]
-        /// </returns>
+        /// <param name="callerId"> ROS caller ID. </param>
+        /// <returns> int: code str: status message topicList is a list of topics this node subscribes to and is of the form [ [topic1, topicType1]...[topicN, topicTypeN]]] </returns>
         public object[] GetSubscriptions(string callerId)
         {
             _logger.Debug(m => m("GetSubscriptions(callerId={0})", callerId));
@@ -171,15 +165,10 @@ namespace RosSharp.Slave
         }
 
         /// <summary>
-        /// Retrieve a list of topics that this node publishes.
+        ///   Retrieve a list of topics that this node publishes.
         /// </summary>
-        /// <param name="callerId">ROS caller ID.</param>
-        /// <returns>
-        /// int: code
-        /// str: status message
-        /// topicList is a list of topics published by this node and is of the form
-        ///   [ [topic1, topicType1]...[topicN, topicTypeN]]]
-        /// </returns>
+        /// <param name="callerId"> ROS caller ID. </param>
+        /// <returns> int: code str: status message topicList is a list of topics published by this node and is of the form [ [topic1, topicType1]...[topicN, topicTypeN]]] </returns>
         public object[] GetPublications(string callerId)
         {
             _logger.Debug(m => m("GetPublications(callerId={0})", callerId));
@@ -192,58 +181,47 @@ namespace RosSharp.Slave
         }
 
         /// <summary>
-        /// Callback from master with updated value of subscribed parameter.
+        ///   Callback from master with updated value of subscribed parameter.
         /// </summary>
-        /// <param name="callerId">ROS caller ID.</param>
-        /// <param name="parameterKey">Parameter name, globally resolved.</param>
-        /// <param name="parameterValue">New parameter value.</param>
-        /// <returns>
-        /// int: code
-        /// str: status message
-        /// int: ignore
-        /// </returns>
+        /// <param name="callerId"> ROS caller ID. </param>
+        /// <param name="parameterKey"> Parameter name, globally resolved. </param>
+        /// <param name="parameterValue"> New parameter value. </param>
+        /// <returns> int: code str: status message int: ignore </returns>
         public object[] ParamUpdate(string callerId, string parameterKey, object parameterValue)
         {
             _logger.Debug(m => m("ParamUpdate(callerId={0},parameterKey={1},parameterValue={2})"
                                  , callerId, parameterKey, parameterValue));
 
             var handler = ParameterUpdated;
-            if(handler != null)
+            if (handler != null)
             {
                 Task.Factory.FromAsync(handler.BeginInvoke, handler.EndInvoke, parameterKey, parameterValue, null)
                     .ContinueWith(task => _logger.Error("PramUpdateError", task.Exception)
                                   , TaskContinuationOptions.OnlyOnFaulted);
-
             }
 
             //TODO:戻り値を調べる
             return new object[] {};
         }
 
-        internal event Action<string, object> ParameterUpdated;
-
         /// <summary>
-        /// Callback from master of current publisher list for specified topic.
+        ///   Callback from master of current publisher list for specified topic.
         /// </summary>
-        /// <param name="callerId">ROS caller ID.</param>
-        /// <param name="topic">Topic name.</param>
-        /// <param name="publishers">List of current publishers for topic in the form of XMLRPC URIs</param>
-        /// <returns>
-        /// int: code
-        /// str: status message
-        /// int: ignore
-        /// </returns>
+        /// <param name="callerId"> ROS caller ID. </param>
+        /// <param name="topic"> Topic name. </param>
+        /// <param name="publishers"> List of current publishers for topic in the form of XMLRPC URIs </param>
+        /// <returns> int: code str: status message int: ignore </returns>
         public object[] PublisherUpdate(string callerId, string topic, string[] publishers)
         {
             _logger.Debug(m => m("PublisherUpdate(callerId={0},topic={1},publishers={2})"
                                  , callerId, topic, publishers));
-            if(_topicContainer.HasSubscriber(topic))
+            if (_topicContainer.HasSubscriber(topic))
             {
                 //TODO: TryGet?
                 var subs = _topicContainer.GetSubscribers().First(s => s.TopicName == topic);
-                
+
                 //TODO: 非同期に
-                subs.UpdatePublishers(publishers.Select(x => new Uri(x)).ToList());    
+                subs.UpdatePublishers(publishers.Select(x => new Uri(x)).ToList());
             }
 
             return new object[3]
@@ -255,29 +233,18 @@ namespace RosSharp.Slave
         }
 
         /// <summary>
-        /// Publisher node API method called by a subscriber node.
-        /// This requests that source allocate a channel for communication.
-        /// Subscriber provides a list of desired protocols for communication.
-        /// Publisher returns the selected protocol along with any additional params required for establishing connection.
-        /// For example, for a TCP/IP-based connection, the source node may return a port number of TCP/IP server.
+        ///   Publisher node API method called by a subscriber node. This requests that source allocate a channel for communication. Subscriber provides a list of desired protocols for communication. Publisher returns the selected protocol along with any additional params required for establishing connection. For example, for a TCP/IP-based connection, the source node may return a port number of TCP/IP server.
         /// </summary>
-        /// <param name="callerId">ROS caller ID.</param>
-        /// <param name="topic">Topic name.</param>
-        /// <param name="protocols">
-        /// List of desired protocols for communication in order of preference. Each protocol is a list of the form
-        ///   [ProtocolName, ProtocolParam1, ProtocolParam2...N]
-        /// </param>
-        /// <returns>
-        /// int: code
-        /// str: status message
-        /// protocolParams may be an empty list if there are no compatible protocols.
-        /// </returns>
+        /// <param name="callerId"> ROS caller ID. </param>
+        /// <param name="topic"> Topic name. </param>
+        /// <param name="protocols"> List of desired protocols for communication in order of preference. Each protocol is a list of the form [ProtocolName, ProtocolParam1, ProtocolParam2...N] </param>
+        /// <returns> int: code str: status message protocolParams may be an empty list if there are no compatible protocols. </returns>
         public object[] RequestTopic(string callerId, string topic, object[] protocols)
         {
             _logger.Debug(m => m("RequestTopic(callerId={0},topic={1},protocols={2})"
                                  , callerId, topic, protocols));
 
-            if(!_topicContainer.HasPublisher(topic))
+            if (!_topicContainer.HasPublisher(topic))
             {
                 _logger.Warn(m => m("No publishers for topic: ", topic));
                 return new object[]
@@ -298,7 +265,7 @@ namespace RosSharp.Slave
                 }
 
                 var address = _tcpRosListener.EndPoint;
-                
+
                 return new object[3]
                 {
                     1,
@@ -320,7 +287,15 @@ namespace RosSharp.Slave
                 "No supported protocols specified.",
                 "null"
             };
-
         }
+
+        #endregion
+
+        public override object InitializeLifetimeService()
+        {
+            return null;
+        }
+
+        internal event Action<string, object> ParameterUpdated;
     }
 }

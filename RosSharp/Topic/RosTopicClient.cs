@@ -1,4 +1,36 @@
-﻿using System;
+﻿#region License Terms
+
+// ================================================================================
+// RosSharp
+// 
+// Software License Agreement (BSD License)
+// 
+// Copyright (C) 2012 zoetrope
+// All rights reserved.
+// 
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are met:
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+// 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+// DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+// (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+// ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// ================================================================================
+
+#endregion
+
+using System;
 using System.IO;
 using System.Net.Sockets;
 using System.Reactive;
@@ -16,11 +48,6 @@ namespace RosSharp.Topic
         private TcpRosClient _client;
         private ILog _logger = LogManager.GetCurrentClassLogger();
 
-        public string NodeId { get; private set; }
-        public string TopicName { get; private set; }
-
-        public bool Connected { get;private set; }
-
         public RosTopicClient(string nodeId, string topicName)
         {
             Connected = false;
@@ -29,20 +56,29 @@ namespace RosSharp.Topic
             TopicName = topicName;
         }
 
+        public string NodeId { get; private set; }
+        public string TopicName { get; private set; }
+
+        public bool Connected { get; private set; }
+
+        #region IDisposable Members
+
         public void Dispose()
         {
             _client.Dispose();
             Connected = false;
         }
 
+        #endregion
+
         public Task<int> SendTaskAsync(TDataType data)
         {
-            if(!Connected)
+            if (!Connected)
             {
                 _logger.Error(m => m("Not Connected"));
                 throw new InvalidOperationException("Not Connected");
             }
-            
+
             var ms = new MemoryStream();
             var bw = new BinaryWriter(ms);
             bw.Write(data.SerializeLength);
@@ -68,7 +104,7 @@ namespace RosSharp.Topic
             var dummy = new TDataType();
             dynamic reqHeader = TcpRosHeaderSerializer.Deserialize(new MemoryStream(data));
 
-            if(reqHeader.topic != TopicName)
+            if (reqHeader.topic != TopicName)
             {
                 _logger.Error(m => m("TopicName mismatch error, expected={0} actual={1}", TopicName, reqHeader.topic));
                 throw new RosTopicException("TopicName mismatch error");
@@ -103,6 +139,5 @@ namespace RosSharp.Topic
 
             return Unit.Default;
         }
-
     }
 }

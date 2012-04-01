@@ -7,7 +7,7 @@ RosSharpは、ROS (Robot Operating System)のC#クライアントライブラリ
 
 Copyright (c) 2012 zoetrope. All Rights Reserved.
 
-Licensed undear a Microsoft Permissive License (Ms-PL).
+Licensed undear the BSD License
 
 ソースコード: https://github.com/zoetrope/RosSharp
 
@@ -108,10 +108,10 @@ https://github.com/zoetrope/RosSharp/downloads
 環境変数
 -------------------------------------------------
 
-ROS_MASTER_URI
-ROS_HOSTNAME
-ROS_TOPIC_TIMEOUT
-ROS_XMLRPC_TIMEOUT
+* ROS_MASTER_URI
+* ROS_HOSTNAME
+* ROS_TOPIC_TIMEOUT
+* ROS_XMLRPC_TIMEOUT
 
 
 ログ
