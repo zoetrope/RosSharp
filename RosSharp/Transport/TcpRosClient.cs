@@ -37,13 +37,15 @@ using System.Net.Sockets;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
+using Common.Logging;
 
 namespace RosSharp.Transport
 {
     internal sealed class TcpRosClient : IDisposable
     {
-        private IConnectableObservable<SocketAsyncEventArgs> _receiver;
         private Socket _socket;
+        private BehaviorSubject<SocketAsyncEventArgs> _behaviorSubject;
+        private ILog _logger = LogManager.GetCurrentClassLogger();
 
         public TcpRosClient()
         {
@@ -84,22 +86,24 @@ namespace RosSharp.Transport
 
         public IObservable<byte[]> ReceiveAsync(int offset = 0)
         {
-            if (_receiver == null)
+            if(_behaviorSubject ==null)
             {
-                _receiver = _socket.ReceiveAsObservable().Publish();
-                _receiver.Connect(); //TODO: connectのタイミングはここでよいか？
+                _behaviorSubject = new BehaviorSubject<SocketAsyncEventArgs>(null);
+                _socket.ReceiveAsObservable().Subscribe(_behaviorSubject);
             }
-
             return Observable.Create<byte[]>(observer =>
             {
-                var disposable = _receiver
+                var disposable = _behaviorSubject
+                    .Where(x => x != null)
                     .Select(OnReceive)
                     .Scan(new byte[] {}, (abs, bs) =>
                     {
                         var rest = AppendData(abs, bs);
+
                         byte[] current;
                         if (CompleteMessage(offset, out current, ref rest))
                         {
+                            _logger.Debug(m => m("OnNext = {0}", current.Dump()));
                             observer.OnNext(current);
                         }
 
@@ -109,7 +113,6 @@ namespace RosSharp.Transport
                                ex =>
                                {
                                    Console.WriteLine("ReceiveAsync Error = {0}", ex.Message);
-                                   //_socket.Close();//TODO: 閉じなくてよい？
                                    observer.OnError(new Exception());
                                    observer.OnCompleted();
                                });
@@ -124,6 +127,7 @@ namespace RosSharp.Transport
             var ret = new byte[args.BytesTransferred];
             Buffer.BlockCopy(args.Buffer, 0, ret, 0, args.BytesTransferred);
 
+            //_logger.Debug(m => m("rest = {0}", ret.Dump()));
             return ret;
         }
 

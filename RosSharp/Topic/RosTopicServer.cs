@@ -88,7 +88,7 @@ namespace RosSharp.Topic
                         }
                         catch (Exception ex)
                         {
-                            _logger.Error("", ex);
+                            _logger.Error("Connect Error", ex);
                             tcs.SetException(ex);
                         }
                     }

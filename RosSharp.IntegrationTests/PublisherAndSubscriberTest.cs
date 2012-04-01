@@ -54,7 +54,7 @@ namespace RosSharp.IntegrationTests
 
             var publisher = node.CreatePublisher<std_msgs.String>("test_topic").Result;
             var subscriber = node.CreateSubscriber<std_msgs.String>("test_topic").Result;
-            
+
             Thread.Sleep(TimeSpan.FromSeconds(3));//TODO: Sleepなくしたい
 
             subscriber.Subscribe(observer);

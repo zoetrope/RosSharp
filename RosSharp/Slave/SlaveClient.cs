@@ -190,11 +190,12 @@ namespace RosSharp.Slave
         /// </summary>
         /// <param name="callerId"> ROS caller ID. </param>
         /// <param name="topic"> Topic name. </param>
-        /// <param name="protocols"> List of desired protocols for communication in order of preference. Each protocol is a list of the form [ProtocolName, ProtocolParam1, ProtocolParam2...N] </param>
+        /// <param name="infos"> List of desired protocols for communication in order of preference. Each protocol is a list of the form [ProtocolName, ProtocolParam1, ProtocolParam2...N] </param>
         /// <returns> protocolParams may be an empty list if there are no compatible protocols. </returns>
-        public Task<TopicParam> RequestTopicAsync(string callerId, string topic, object[] protocols)
+        public Task<TopicParam> RequestTopicAsync(string callerId, string topic, List<ProtocolInfo> infos)
         {
-            //TODO: protocolsの型を明確に。
+            var protocols = infos.Select(
+                info => new List<string>() {info.Protocol.ToString()}.Concat(info.ProtocolParams).ToArray()).ToArray();
 
             return Task<object[]>.Factory.FromAsync(_proxy.BeginRequestTopic, _proxy.EndRequestTopic, callerId, topic, protocols, null)
                 .ContinueWith(task =>
@@ -210,14 +211,14 @@ namespace RosSharp.Slave
         }
     }
 
-    public class TopicParam
+    public sealed class TopicParam
     {
         public string ProtocolName { get; set; }
         public string HostName { get; set; }
         public int PortNumber { get; set; }
     }
 
-    public class TopicInfo : ITopic
+    public sealed class TopicInfo : ITopic
     {
         #region ITopic Members
 
@@ -225,5 +226,23 @@ namespace RosSharp.Slave
         public string MessageType { get; set; }
 
         #endregion
+    }
+
+
+    public enum ProtocolType
+    {
+        TCPROS,
+        UDPROS
+    }
+    public sealed class ProtocolInfo
+    {
+        public ProtocolInfo(ProtocolType type, params string[] parameters)
+        {
+            Protocol = type;
+            ProtocolParams = parameters.ToList();
+        }
+
+        public ProtocolType Protocol { get; private set; }
+        public List<string> ProtocolParams { get; private set; }
     }
 }

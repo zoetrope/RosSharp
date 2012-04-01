@@ -94,11 +94,12 @@ namespace RosSharp.Topic
 
         void ISubscriber.UpdatePublishers(List<Uri> publishers)
         {
+            
             //TODO: 同じPublisherに対する処理
             var slaves = publishers.Select(x => new SlaveClient(x));
 
             Parallel.ForEach(slaves,
-                             slave => slave.RequestTopicAsync(NodeId, TopicName, new object[1] {new string[1] {"TCPROS"}})
+                             slave => slave.RequestTopicAsync(NodeId, TopicName,new List<ProtocolInfo> { new ProtocolInfo (ProtocolType.TCPROS)})
                                           .ContinueWith(task => ConnectServer(task.Result, slave), TaskContinuationOptions.OnlyOnRanToCompletion));
         }
 

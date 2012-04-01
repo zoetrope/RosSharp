@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reactive.Linq;
 using CookComputing.XmlRpc.Moles;
@@ -205,7 +206,7 @@ namespace RosSharp.Tests.Slave
 
             var client = new SlaveClient(new Uri("http://localhost"));
 
-            client.RequestTopicAsync("/test", "/rosout", new object[1] { new string[1] { "TCPROS" } }).Wait();
+            client.RequestTopicAsync("/test", "/rosout", new List<ProtocolInfo> { new ProtocolInfo(ProtocolType.TCPROS) }).Wait();
 
         }
 
@@ -246,7 +247,7 @@ namespace RosSharp.Tests.Slave
 
             var client = new SlaveClient(new Uri("http://localhost"));
 
-            client.RequestTopicAsync("/test", "/rosout", new object[1] { new string[1] { "UDPROS" } }).Wait();
+            client.RequestTopicAsync("/test", "/rosout", new List<ProtocolInfo> { new ProtocolInfo (ProtocolType.UDPROS)}).Wait();
             
 
         }
@@ -268,7 +269,7 @@ namespace RosSharp.Tests.Slave
 
             var client = new SlaveClient(new Uri("http://localhost"));
 
-            client.RequestTopicAsync("/test", "/chatter", new object[1] { new string[1] { "TCPROS" } }).Wait();
+            client.RequestTopicAsync("/test", "/chatter", new List<ProtocolInfo> { new ProtocolInfo(ProtocolType.TCPROS) }).Wait();
 
         }
 

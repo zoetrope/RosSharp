@@ -32,9 +32,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Reactive.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Common.Logging;
 
@@ -70,7 +72,7 @@ namespace RosSharp.Transport
                     .Where(args => args.LastOperation == SocketAsyncOperation.Receive)
                     .Do(x =>
                     {
-                        _logger.Debug(m => m("Received: Error={0}", x.SocketError));
+                        _logger.Debug(m => m("Received: Code={0}", x.SocketError));
                         if (x.SocketError != SocketError.Success)
                         {
                             socket.Close();
@@ -102,6 +104,17 @@ namespace RosSharp.Transport
                     .Subscribe(observer);
                 return disposable;
             });
+        }
+
+        public static string Dump(this byte[] data)
+        {
+            var sb = new StringBuilder();
+            foreach (var b in data)
+            {
+                if (b < 16) sb.Append('0');
+                sb.Append(Convert.ToString(b, 16));
+            }
+            return sb.ToString();
         }
     }
 }
