@@ -67,7 +67,6 @@ namespace RosSharp.Transport
             {
                 var disposable = Observable.FromEventPattern<SocketAsyncEventArgs>(
                     ev => arg.Completed += ev, ev => arg.Completed -= ev)
-                    //.Do(x=>Console.WriteLine("last = {0}",x.EventArgs.LastOperation))
                     .Select(e => e.EventArgs)
                     .Where(args => args.LastOperation == SocketAsyncOperation.Receive)
                     .Do(x =>

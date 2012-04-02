@@ -44,7 +44,7 @@ namespace RosSharp.Transport
     internal sealed class TcpRosClient : IDisposable
     {
         private Socket _socket;
-        private BehaviorSubject<SocketAsyncEventArgs> _behaviorSubject;
+        private OneLineCacheSubject<SocketAsyncEventArgs> _behaviorSubject;
         private ILog _logger = LogManager.GetCurrentClassLogger();
 
         public TcpRosClient()
@@ -88,7 +88,7 @@ namespace RosSharp.Transport
         {
             if(_behaviorSubject ==null)
             {
-                _behaviorSubject = new BehaviorSubject<SocketAsyncEventArgs>(null);
+                _behaviorSubject = new OneLineCacheSubject<SocketAsyncEventArgs>();
                 _socket.ReceiveAsObservable().Subscribe(_behaviorSubject);
             }
             return Observable.Create<byte[]>(observer =>
@@ -173,4 +173,5 @@ namespace RosSharp.Transport
             return true;
         }
     }
+
 }

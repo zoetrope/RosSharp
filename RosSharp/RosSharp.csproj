@@ -95,6 +95,7 @@
     <Compile Include="Topic\Publisher.cs" />
     <Compile Include="ROS.cs" />
     <Compile Include="Node\RosNode.cs" />
+    <Compile Include="Transport\OneLineCacheSubject.cs" />
     <Compile Include="Transport\TcpRosListener.cs" />
     <Compile Include="Topic\RosTopicClient.cs" />
     <Compile Include="Slave\SlaveClient.cs" />
