@@ -76,6 +76,7 @@
     <Compile Include="Topic\RosTopicServerTest.cs" />
     <Compile Include="Topic\SubscriberTest.cs" />
     <Compile Include="Topic\TopicContainerTest.cs" />
+    <Compile Include="Transport\OneLineCacheSubjectTest.cs" />
     <Compile Include="Transport\TcpRosClientTest.cs" />
     <Compile Include="Slave\SlaveClientTest.cs" />
     <Compile Include="Transport\TcpRosListenerTest.cs" />

@@ -21,6 +21,8 @@ namespace RosSharp.IntegrationTests
             ROS.Initialize();
             ROS.MasterUri = new Uri("http://localhost:11311/");
             ROS.HostName = "localhost";
+            ROS.TopicTimeout = 3000;
+            ROS.XmlRpcTimeout = 3000;
 
             _masterServer = new MasterServer(11311);
         }
@@ -46,6 +48,7 @@ namespace RosSharp.IntegrationTests
 
         static AddTwoInts.Response add_two_ints(AddTwoInts.Request req)
         {
+            Console.WriteLine("a={0},b={1}", req.a, req.b);
             return new AddTwoInts.Response() { c = req.a + req.b };
         }
     }

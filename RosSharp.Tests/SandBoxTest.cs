@@ -147,5 +147,17 @@ namespace RosSharp.Tests
             sub2.OnNext(20);
             sub3.OnNext(200);
         }
+
+        [TestMethod]
+        public void Rx_Subject()
+        {
+            var sub = new Subject<int>();
+
+            sub.OnNext(1);
+
+            sub.Subscribe(Console.WriteLine);
+
+            Thread.Sleep(TimeSpan.FromSeconds(3));
+        }
     }
 }
