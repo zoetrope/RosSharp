@@ -16,7 +16,7 @@ let getTypeName fileName =
     Path.GetFileNameWithoutExtension(fileName)
 
 let saveFile outputDir typeName text = 
-    File.AppendAllText(outputDir + @"\" + typeName + ".cs", text)
+    File.WriteAllText(outputDir + @"\" + typeName + ".cs", text)
 
 let generateMessage (fileName : string) (ns : string) (outputDir : string) (includeDirs : ResizeArray<string>) =
     Md5GeneratorSetting.includeDirectories.AddRange(includeDirs)

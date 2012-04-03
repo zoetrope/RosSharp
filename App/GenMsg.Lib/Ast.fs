@@ -2,7 +2,9 @@
 
 type RosType = Bool
              | Int8
+             | Char
              | UInt8
+             | Byte
              | Int16
              | UInt16
              | Int32

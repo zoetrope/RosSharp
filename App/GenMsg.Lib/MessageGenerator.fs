@@ -6,11 +6,62 @@ open RosSharp.GenMsg.Md5Generator
 open System
 open System.Text
 
+
+
+
+let rec getOriginalName t =
+   match t with
+   | Bool -> "bool"
+   | Int8 -> "int8"
+   | Char -> "char"
+   | UInt8 -> "uint8"
+   | Byte -> "byte"
+   | Int16 -> "int16"
+   | UInt16 -> "uint16"
+   | Int32 -> "int32"
+   | UInt32 -> "uint32"
+   | Int64 -> "int64"
+   | UInt64 -> "uint64"
+   | Float32 -> "float32"
+   | Float64 -> "float64"
+   | String -> "string"
+   | Time -> "time"
+   | Duration -> "duration"
+   | FixedArray (x, size) -> getOriginalName x + "[" + size.ToString() + "]"
+   | VariableArray (x) -> getOriginalName x + "[]"
+   | UserDefinition (names) -> String.Join("/", names)
+
+
+let getConstValue v =
+    match v with
+        | IntValue(x) -> string(x)
+        | FloatValue(x) -> string(x)
+        | StringValue(x) -> "\"" + x + "\""
+
+let getDefinition (msg : RosMessage) =
+   match msg with
+   | Leaf (t, Variable(name)) -> getOriginalName t + " " + name
+   | Leaf (t, Constant(name, value)) -> getOriginalName t + " " + name  + "=" + getOriginalConstValue value
+   | Node (t,Variable(f),m) -> getOriginalName t + " " + f
+
+let getMessageDefinition (msgs : RosMessage list) =
+   msgs |> Seq.map(fun msg -> getDefinition msg) |> fun x -> String.Join(@"\n", x)
+
+let getServiceDefinitions (service : RosService) =
+   match service with
+   | Service (req, res) -> (getMessageDefinition req) + @"---\n" + (getMessageDefinition res)
+
+
+
+
+
 let rec getTypeName t =
     match t with
     | Bool -> "bool"
     | Int8 -> "sbyte"
+    | Char -> "sbyte"
     | UInt8 -> "byte"
+    | Byte -> "byte"
     | Int16 -> "short"
     | UInt16 -> "ushort"
     | Int32 -> "int"
@@ -30,7 +81,9 @@ let rec getSerialize t v =
     match t with
     | Bool -> "bw.Write(" + v + ");"
     | Int8 -> "bw.Write(" + v + ");"
+    | Char -> "bw.Write(" + v + ");"
     | UInt8 -> "bw.Write(" + v + ");"
+    | Byte -> "bw.Write(" + v + ");"
     | Int16 -> "bw.Write(" + v + ");"
     | UInt16 -> "bw.Write(" + v + ");"
     | Int32 -> "bw.Write(" + v + ");"
@@ -50,7 +103,9 @@ let rec getDeserialize t v =
     match t with
     | Bool -> v + " = br.ReadBoolean();"
     | Int8 -> v + " = br.ReadSByte();"
+    | Char -> v + " = br.ReadSByte();"
     | UInt8 -> v + " = br.ReadByte();"
+    | Byte -> v + " = br.ReadByte();"
     | Int16 -> v + " = br.ReadInt16();"
     | UInt16 -> v + " = br.ReadUInt16();"
     | Int32 -> v + " = br.ReadInt32();"
@@ -70,7 +125,9 @@ let rec getSerializeLength t v =
     match t with
     | Bool -> "1"
     | Int8 -> "1"
+    | Char -> "1"
     | UInt8 -> "1"
+    | Byte -> "1"
     | Int16 -> "2"
     | UInt16 -> "2"
     | Int32 -> "4"
@@ -89,139 +146,166 @@ let rec getSerializeLength t v =
     
 let getInit (t : RosType) (name : string) =
     match t with
-    | UserDefinition (names) -> name + " = new " + String.Join(".", names) + "();\n"
-    | FixedArray (x, size) -> name + " = new " + getTypeName x + "[" + size.ToString() + "];\n"
-    | VariableArray (x) -> name + " = new List<" + getTypeName x + ">();\n"
-    | String -> name + " = string.Empty;\n"
+    | UserDefinition (names) -> name + " = new " + String.Join(".", names) + "();\r\n"
+    | FixedArray (x, size) -> name + " = new " + getTypeName x + "[" + size.ToString() + "];\r\n"
+    | VariableArray (x) -> name + " = new List<" + getTypeName x + ">();\r\n"
+    | String -> name + " = string.Empty;\r\n"
     | _ -> ""
     
 
 let getInitialize (msg : RosMessage) = 
     match msg with
     | Leaf (t, Variable(name)) -> getInit t name
+    | Leaf (_, Constant(_,_)) -> ""
 
 
 let createDefaultConstructor (name : string) (msgs : RosMessage list) =
-    "        public " + name + "()\n" +
-    "        {\n" + 
-    (msgs |> Seq.map(fun msg -> getInitialize msg) |> fun x -> String.Join("",x) ) + 
-    "        }\n"
+    "        public " + name + "()\r\n" +
+    "        {\r\n" + 
+    (msgs |> Seq.map(fun msg -> getInitialize msg) 
+          |> Seq.filter(fun x -> x <> "")
+          |> Seq.map(fun x -> "            " + x)
+          |> fun x -> String.Join("",x) ) + 
+    "        }\r\n"
 
-//TODO:定数に対応
 let createProperty (msg : RosMessage) = 
     match msg with
-    | Leaf (t, Variable(name)) -> "        public " + getTypeName t + " " + name + " { get; set; }\n"
-    //| Leaf (t, Constant(name, value)) -> "       public const " + getTypeName t + " " + name + " = " + value + ";\n"
+    | Leaf (t, Variable(name)) -> "        public " + getTypeName t + " " + name + " { get; set; }\r\n"
+    | Leaf (t, Constant(name, value)) -> "        public const " + getTypeName t + " " + name + " = " + getConstValue value + ";\r\n"
     
-//TODO: getMessageDefinitionをつくる
+let getFullName ns name =
+    if String.IsNullOrEmpty(ns) then
+        name
+    else
+        ns + "/" + name
+
 let createMessageMember ns name msgs =
-    "        public string MessageType\n" +
-    "        {\n" +
-    "            get { return \"" + ns + "/" + name + "\"; }\n" +
-    "        }\n" +
-    "        public string Md5Sum\n" +
-    "        {\n" +
-    "            get { return \"" + getMessageMd5 msgs + "\"; }\n" +
-    "        }\n" +
-    "        public string MessageDefinition\n" +
-    "        {\n" +
-    "            get { return @\"" + "getMessageDefinition msgs" + "\"; }\n" +
-    "        }\n"
+    "        public string MessageType\r\n" +
+    "        {\r\n" +
+    "            get { return \"" + (getFullName ns name) + "\"; }\r\n" +
+    "        }\r\n" +
+    "        public string Md5Sum\r\n" +
+    "        {\r\n" +
+    "            get { return \"" + getMessageMd5 msgs + "\"; }\r\n" +
+    "        }\r\n" +
+    "        public string MessageDefinition\r\n" +
+    "        {\r\n" +
+    "            get { return \"" + getMessageDefinition msgs + "\"; }\r\n" +
+    "        }\r\n"
 
 let createSerialize (msg : RosMessage) = 
     match msg with
     | Leaf (t, Variable(name)) -> getSerialize t name
-    //| Leaf (t, Constant(name, value)) -> 
+    | Leaf (_, Constant(_, _)) -> ""
     
     
 let createSerializeMethod (msgs : RosMessage list) =
-    "        public void Serialize(BinaryWriter bw)\n" +
-    "        {\n" + 
-    (msgs |> Seq.map (fun msg -> "            " + (createSerialize msg) + "\n" ) |> Seq.reduce (+) )+
-    "        }\n"
+    "        public void Serialize(BinaryWriter bw)\r\n" +
+    "        {\r\n" + 
+    (msgs |> Seq.map(fun msg -> createSerialize msg)
+          |> Seq.filter(fun x -> x <> "")
+          |> Seq.map (fun x -> "            " + x + "\r\n" ) 
+          |> Seq.reduce (+) ) +
+    "        }\r\n"
     
 let createSerializeLength (msg : RosMessage) = 
     match msg with
     | Leaf (t, Variable(name)) -> getSerializeLength t name
-    //| Leaf (t, Constant(name, value)) -> 
+    | Leaf (_, Constant(_, _)) -> ""
 
 let createSerializeLengthProperty (msgs : RosMessage list) =
-    "        public int SerializeLength\n" +
-    "        {\n" + 
-    "            get { return " + String.Join(" + ",(msgs |> Seq.map (fun msg -> createSerializeLength msg))) + "; }\n" +
-    "        }\n"
+    "        public int SerializeLength\r\n" +
+    "        {\r\n" + 
+    "            get { return " + 
+    String.Join(" + ",(msgs |> Seq.map (fun msg -> createSerializeLength msg)
+                            |> Seq.filter(fun x -> x <> ""))) + "; }\r\n" +
+    "        }\r\n"
     
 let createConstructor (name : string) (msgs : RosMessage list) =
-    "        public " + name + "(BinaryReader br)\n" +
-    "        {\n" + 
-    "            Deserialize(br);\n" + 
-    "        }\n"
+    "        public " + name + "(BinaryReader br)\r\n" +
+    "        {\r\n" + 
+    "            Deserialize(br);\r\n" + 
+    "        }\r\n"
 
 let createDeserialize (msg : RosMessage) = 
     match msg with
     | Leaf (t, Variable(name)) -> getDeserialize t name
-    //| Leaf (t, Constant(name, value)) -> 
+    | Leaf (_, Constant(_, _)) -> ""
    
 let createDeserializeMethod (msgs : RosMessage list) =
-    "        public void Deserialize(BinaryReader br)\n" +
-    "        {\n" + 
-    (msgs |> Seq.map (fun msg -> "            " + (createDeserialize msg) + "\n" ) |> Seq.reduce (+) )+
-    "        }\n"
+    "        public void Deserialize(BinaryReader br)\r\n" +
+    "        {\r\n" + 
+    (msgs |> Seq.map(fun msg -> createDeserialize msg)
+          |> Seq.filter(fun x -> x <> "")
+          |> Seq.map (fun x -> "            " + x + "\r\n" ) |> Seq.reduce (+) )+
+    "        }\r\n"
 
 
 let getHashCode (msg : RosMessage) =
     match msg with
     | Leaf (t, Variable(name)) -> name + ".GetHashCode();"
+    | Leaf (_, Constant(_, _)) -> ""
 
 
 let getEquals (msg : RosMessage) =
     match msg with
     | Leaf (t, Variable(name)) -> "other." + name + ".Equals(" + name + ")"
+    | Leaf (_, Constant(_, _)) -> ""
+    
 
 let createEqualityMethods (name : string) (msgs : RosMessage list) =
-    "        public bool Equals(" + name + " other)\n" +
-    "        {\n" + 
-    "            if (ReferenceEquals(null, other)) return false;\n" + 
-    "            if (ReferenceEquals(this, other)) return true;\n" + 
-    "            return " + String.Join(" && ",msgs |> Seq.map(fun msg -> getEquals msg)) + ";\n" +
-    "        }\n" + 
+    "        public bool Equals(" + name + " other)\r\n" +
+    "        {\r\n" + 
+    "            if (ReferenceEquals(null, other)) return false;\r\n" + 
+    "            if (ReferenceEquals(this, other)) return true;\r\n" + 
+    "            return " + String.Join(" && ",msgs |> Seq.map(fun msg -> getEquals msg)
+                                                    |> Seq.filter(fun x -> x <> "")) + ";\r\n" +
+    "        }\r\n" + 
     
-    "        public override bool Equals(object obj)\n" +
-    "        {\n" + 
-    "            if (ReferenceEquals(null, obj)) return false;\n" + 
-    "            if (ReferenceEquals(this, obj)) return true;\n" + 
-    "            if (obj.GetType() != typeof(" + name + ")) return false;\n" + 
-    "            return Equals((" + name + ")obj);\n" + 
-    "        }\n" + 
+    "        public override bool Equals(object obj)\r\n" +
+    "        {\r\n" + 
+    "            if (ReferenceEquals(null, obj)) return false;\r\n" + 
+    "            if (ReferenceEquals(this, obj)) return true;\r\n" + 
+    "            if (obj.GetType() != typeof(" + name + ")) return false;\r\n" + 
+    "            return Equals((" + name + ")obj);\r\n" + 
+    "        }\r\n" + 
 
-    "        public override int GetHashCode()\n" +
-    "        {\n" + 
-    "            unchecked\n" + 
-    "            {\n" + 
-    "                int result = 0;\n" +
-    (msgs |> Seq.map(fun msg -> "                result = (result * 397) ^ " + getHashCode msg) 
-          |> fun x -> String.Join("\n", x)
-    ) + "\n" +
-    "                return result;\n" +
-    "            }\n" + 
-    "        }\n"
+    "        public override int GetHashCode()\r\n" +
+    "        {\r\n" + 
+    "            unchecked\r\n" + 
+    "            {\r\n" + 
+    "                int result = 0;\r\n" +
+    (msgs |> Seq.map(fun msg -> getHashCode msg)
+          |> Seq.filter(fun x -> x <> "")
+          |> Seq.map(fun x -> "                result = (result * 397) ^ " + x) 
+          |> fun x -> String.Join("\r\n", x)
+    ) + "\r\n" +
+    "                return result;\r\n" +
+    "            }\r\n" + 
+    "        }\r\n"
 
+    
+let getFullNameSpace ns =
+    if String.IsNullOrEmpty(ns) then
+        "RosSharp"
+    else
+        "RosSharp." + ns
 
 
 let createHeader (ns : string) (name : string) =
-    "using System;\n" +
-    "using System.IO;\n" +
-    "using System.Linq;\n" +
-    "using RosSharp.Message;\n" +
-    "using System.Collections.Generic;\n" +
-    "namespace RosSharp." + ns + "\n" +
-    "{\n" + 
-    "    public class " + name + " : IMessage\n" +
-    "    {\n"
+    "using System;\r\n" +
+    "using System.IO;\r\n" +
+    "using System.Linq;\r\n" +
+    "using RosSharp.Message;\r\n" +
+    "using System.Collections.Generic;\r\n" +
+    "namespace " + getFullNameSpace ns + "\r\n" +
+    "{\r\n" + 
+    "    public class " + name + " : IMessage\r\n" +
+    "    {\r\n"
 
 let createFooter =
-    "    }\n" + 
-    "}\n"
+    "    }\r\n" + 
+    "}\r\n"
 
 let generateMessageClass (ns : string) (name : string) (msgs : RosMessage list) =
     let sb = new StringBuilder()

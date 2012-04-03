@@ -14,7 +14,9 @@ open FParsec.CharParsers
 // プリミティブ型のパーサ
 let pBool = stringReturn "bool" RosType.Bool
 let pInt8 = stringReturn "int8" RosType.Int8
+let pChar = stringReturn "char" RosType.Char
 let pUInt8 = stringReturn "uint8" RosType.UInt8
+let pByte = stringReturn "byte" RosType.Byte
 let pInt16 = stringReturn "int16" RosType.Int16
 let pUInt16 = stringReturn "uint16" RosType.UInt16
 let pInt32 = stringReturn "int32" RosType.Int32
@@ -43,7 +45,9 @@ let pUserDefinition = parse {
 // プリミティブ型のパーサ
 let pPrimitive = choice[attempt(pBool)
                         attempt(pInt8)
+                        attempt(pChar)
                         attempt(pUInt8)
+                        attempt(pByte)
                         attempt(pInt16)
                         attempt(pUInt16)
                         attempt(pInt32)
