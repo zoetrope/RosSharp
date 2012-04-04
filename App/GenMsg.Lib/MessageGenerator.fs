@@ -47,7 +47,7 @@ let getDefinition (msg : RosMessage) =
 let getMessageDefinition (msgs : RosMessage list) =
    msgs |> Seq.map(fun msg -> getDefinition msg) |> fun x -> String.Join(@"\n", x)
 
-let getServiceDefinitions (service : RosService) =
+let getServiceDefinition (service : RosService) =
    match service with
    | Service (req, res) -> (getMessageDefinition req) + @"---\n" + (getMessageDefinition res)
 
@@ -179,11 +179,13 @@ let getFullName ns name =
     else
         ns + "/" + name
 
-let createMessageMember ns name msgs =
+let createMessageType ns name =
     "        public string MessageType\r\n" +
     "        {\r\n" +
     "            get { return \"" + (getFullName ns name) + "\"; }\r\n" +
-    "        }\r\n" +
+    "        }\r\n"
+
+let createMessageMember msgs =
     "        public string Md5Sum\r\n" +
     "        {\r\n" +
     "            get { return \"" + getMessageMd5 msgs + "\"; }\r\n" +
@@ -291,32 +293,39 @@ let getFullNameSpace ns =
     else
         "RosSharp." + ns
 
-
-let createHeader (ns : string) (name : string) =
+        
+let createNamespace (ns : string) =
     "using System;\r\n" +
+    "using System.Collections.Generic;\r\n" +
     "using System.IO;\r\n" +
     "using System.Linq;\r\n" +
     "using RosSharp.Message;\r\n" +
-    "using System.Collections.Generic;\r\n" +
+    "using RosSharp.Service;\r\n" +
     "namespace " + getFullNameSpace ns + "\r\n" +
-    "{\r\n" + 
+    "{\r\n"
+
+let createHeader (name : string) =
     "    public class " + name + " : IMessage\r\n" +
     "    {\r\n"
 
 let createFooter =
-    "    }\r\n" + 
+    "    }\r\n"
+
+let createNamespaceFooter =
     "}\r\n"
 
 let generateMessageClass (ns : string) (name : string) (msgs : RosMessage list) =
     let sb = new StringBuilder()
     
-    sb.Append(createHeader ns name) |> ignore
+    sb.Append(createNamespace ns) |> ignore
+    sb.Append(createHeader name) |> ignore
     
     sb.Append(createDefaultConstructor name msgs) |> ignore
     sb.Append(createConstructor name msgs) |> ignore
     msgs |> List.iter (fun msg -> createProperty msg |> sb.Append |> ignore)
     
-    sb.Append(createMessageMember ns name msgs) |> ignore
+    sb.Append(createMessageType ns name) |> ignore
+    sb.Append(createMessageMember msgs) |> ignore
     
     sb.Append(createSerializeMethod msgs) |> ignore
     sb.Append(createDeserializeMethod msgs) |> ignore
@@ -325,5 +334,6 @@ let generateMessageClass (ns : string) (name : string) (msgs : RosMessage list) 
     sb.Append(createEqualityMethods name msgs) |> ignore
 
     sb.Append(createFooter) |> ignore
+    sb.Append(createNamespaceFooter) |> ignore
 
     sb.ToString()
