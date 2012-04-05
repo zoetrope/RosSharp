@@ -31,16 +31,24 @@ namespace RosSharp.GenMsg
 
             if (generateType == "msg")
             {
-                files.ForEach(file => Generator.generateMessage(file, ns, outputDir, includeDirs));
+                files.ForEach(file =>
+                {
+                    var fileName = Generator.generateMessage(file, ns, outputDir, includeDirs);
+                    Console.WriteLine("Generated {0}", fileName);
+                });
             }
             else if(generateType == "srv")
             {
-                files.ForEach(file => Generator.generateService(file, ns, outputDir, includeDirs));
+                files.ForEach(file =>
+                {
+                    var fileName = Generator.generateService(file, ns, outputDir, includeDirs);
+                    Console.WriteLine("Generated {0}", fileName);
+                });
             }
 
-            Console.WriteLine("Success.");
+            Console.WriteLine("Finish.");
 
-            Console.ReadKey();
+            //Console.ReadKey();
         }
     }
 }

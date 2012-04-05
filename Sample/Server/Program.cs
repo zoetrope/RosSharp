@@ -20,7 +20,7 @@ namespace Server
 
             node.RegisterService("/add_two_ints", new AddTwoInts(add_two_ints)).Wait();
 
-            node.RegisterService("/add_two_ints",new AddTwoInts(req => new AddTwoInts.Response {c = req.a + req.b})).Wait();
+            node.RegisterService("/add_two_ints",new AddTwoInts(req => new AddTwoInts.Response {sum = req.a + req.b})).Wait();
             
             Console.WriteLine("Press Any Key.");
             Console.ReadKey();
@@ -29,7 +29,7 @@ namespace Server
         static AddTwoInts.Response add_two_ints(AddTwoInts.Request req)
         {
             Console.WriteLine("add_two_ints: a = {0}, b = {1}", req.a, req.b);
-            return new AddTwoInts.Response() { c = req.a + req.b };
+            return new AddTwoInts.Response() { sum = req.a + req.b };
         }
 
     }

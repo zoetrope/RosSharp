@@ -16,7 +16,11 @@ let getTypeName fileName =
     Path.GetFileNameWithoutExtension(fileName)
 
 let saveFile outputDir typeName text = 
-    File.WriteAllText(outputDir + @"\" + typeName + ".cs", text)
+    if Directory.Exists(outputDir) = false then
+        Directory.CreateDirectory(outputDir) |> ignore
+    let fileName = outputDir + @"\" + typeName + ".cs"
+    File.WriteAllText(fileName, text)
+    fileName
 
 let generateMessage (fileName : string) (ns : string) (outputDir : string) (includeDirs : ResizeArray<string>) =
     Md5GeneratorSetting.includeDirectories.AddRange(includeDirs)
@@ -24,7 +28,7 @@ let generateMessage (fileName : string) (ns : string) (outputDir : string) (incl
     let typeName = getTypeName fileName
     let text = generateMessageClass ns typeName ast
     saveFile outputDir typeName text
-    text
+
 
 let generateService (fileName : string) (ns : string) (outputDir : string) (includeDirs : ResizeArray<string>) =
     Md5GeneratorSetting.includeDirectories.AddRange(includeDirs)
@@ -32,5 +36,5 @@ let generateService (fileName : string) (ns : string) (outputDir : string) (incl
     let typeName = getTypeName fileName
     let text = generateServiceClass ns typeName ast
     saveFile outputDir typeName text
-    text
+
 

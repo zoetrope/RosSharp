@@ -49,6 +49,7 @@
     <Compile Include="MessageGenerator.fs" />
     <Compile Include="ServiceGenerator.fs" />
     <Compile Include="Generator.fs" />
+    <Compile Include="AssemblyInfo.fs" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

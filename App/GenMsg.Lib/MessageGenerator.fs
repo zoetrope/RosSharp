@@ -141,7 +141,7 @@ let rec getSerializeLength t v =
     | Duration -> "8"
     | FixedArray (x, size) -> v + ".Sum(x => " + getSerializeLength x "x" + ")"
     | VariableArray (x) -> v + ".Sum(x => " + getSerializeLength x "x" + ")"
-    | UserDefinition (names) -> v + ".SerializeLength()"
+    | UserDefinition (names) -> v + ".SerializeLength"
 
     
 let getInit (t : RosType) (name : string) =

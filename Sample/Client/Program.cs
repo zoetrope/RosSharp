@@ -6,7 +6,6 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Threading;
 using RosSharp;
-using Server;
 
 namespace Client
 {
@@ -25,12 +24,12 @@ namespace Client
             //Thread.Sleep(TimeSpan.FromSeconds(3));
 
             var res1 = proxy.Invoke(new AddTwoInts.Request() {a = 1, b = 2});
-            Console.WriteLine(res1.c);
+            Console.WriteLine(res1.sum);
 
             Thread.Sleep(TimeSpan.FromSeconds(3));
 
             var res2 = proxy.Invoke(new AddTwoInts.Request() {a = 3, b = 4});
-            Console.WriteLine(res2.c);
+            Console.WriteLine(res2.sum);
 
             Console.WriteLine("Press Any Key.");
             Console.ReadKey();

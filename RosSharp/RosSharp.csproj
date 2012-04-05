@@ -62,6 +62,39 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ConfigurationSectionDesigner.csd</DependentUpon>
     </Compile>
+    <Compile Include="Generated\AddTwoInts.cs" />
+    <Compile Include="Generated\Bool.cs" />
+    <Compile Include="Generated\Byte.cs" />
+    <Compile Include="Generated\ByteMultiArray.cs" />
+    <Compile Include="Generated\Char.cs" />
+    <Compile Include="Generated\ColorRGBA.cs" />
+    <Compile Include="Generated\Duration.cs" />
+    <Compile Include="Generated\Float32.cs" />
+    <Compile Include="Generated\Float32MultiArray.cs" />
+    <Compile Include="Generated\Float64.cs" />
+    <Compile Include="Generated\Float64MultiArray.cs" />
+    <Compile Include="Generated\Header.cs" />
+    <Compile Include="Generated\Int16.cs" />
+    <Compile Include="Generated\Int16MultiArray.cs" />
+    <Compile Include="Generated\Int32.cs" />
+    <Compile Include="Generated\Int32MultiArray.cs" />
+    <Compile Include="Generated\Int64.cs" />
+    <Compile Include="Generated\Int64MultiArray.cs" />
+    <Compile Include="Generated\Int8.cs" />
+    <Compile Include="Generated\Int8MultiArray.cs" />
+    <Compile Include="Generated\Log.cs" />
+    <Compile Include="Generated\MultiArrayDimension.cs" />
+    <Compile Include="Generated\MultiArrayLayout.cs" />
+    <Compile Include="Generated\String.cs" />
+    <Compile Include="Generated\Time.cs" />
+    <Compile Include="Generated\UInt16.cs" />
+    <Compile Include="Generated\UInt16MultiArray.cs" />
+    <Compile Include="Generated\UInt32.cs" />
+    <Compile Include="Generated\UInt32MultiArray.cs" />
+    <Compile Include="Generated\UInt64.cs" />
+    <Compile Include="Generated\UInt64MultiArray.cs" />
+    <Compile Include="Generated\UInt8.cs" />
+    <Compile Include="Generated\UInt8MultiArray.cs" />
     <Compile Include="Parameter\IParameter.cs" />
     <Compile Include="Parameter\Parameter.cs" />
     <Compile Include="Topic\RosTopicException.cs" />
@@ -73,7 +106,6 @@
     <Compile Include="Message\SerializeExtensions.cs" />
     <Compile Include="Service\ServiceProxyFactory.cs" />
     <Compile Include="Service\ServiceServer.cs" />
-    <Compile Include="std_msgs\String.cs" />
     <Compile Include="Topic\IPublisher.cs" />
     <Compile Include="Topic\ISubscriber.cs" />
     <Compile Include="Topic\RosTopicServer.cs" />
@@ -135,6 +167,7 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
