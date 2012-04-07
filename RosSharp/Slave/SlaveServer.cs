@@ -250,7 +250,12 @@ namespace RosSharp.Slave
             }
 
             //TODO:戻り値を調べる
-            return new object[] {};
+            return new object[]
+            {
+                StatusCode.Success,
+                "parameter update [" + parameterKey + "]",
+                0
+            };
         }
 
         /// <summary>

@@ -46,9 +46,12 @@ namespace RosSharp.Slave
     public sealed class SlaveClient
     {
         private SlaveProxy _proxy;
+        public Uri SlaveUri { get; private set; }
 
         public SlaveClient(Uri uri)
         {
+            SlaveUri = uri;
+
             _proxy = new SlaveProxy();
             _proxy.Url = uri.ToString();
             _proxy.Timeout = ROS.XmlRpcTimeout;

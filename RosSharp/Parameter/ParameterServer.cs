@@ -31,10 +31,15 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Http;
+using System.Threading.Tasks;
+using Common.Logging;
 using CookComputing.XmlRpc;
+using RosSharp.Slave;
 
 namespace RosSharp.Parameter
 {
@@ -44,6 +49,10 @@ namespace RosSharp.Parameter
     public sealed class ParameterServer : MarshalByRefObject, IParameterServer, IDisposable
     {
         private readonly HttpServerChannel _channel;
+        private Dictionary<string, object> _parameters = new Dictionary<string, object>();
+        private Dictionary<string, List<SlaveClient>> _subscribers = new Dictionary<string, List<SlaveClient>>();
+        private ILog _logger = LogManager.GetCurrentClassLogger();
+
         public ParameterServer(Uri uri)
         {
             ParameterServerUri = uri;
@@ -86,7 +95,27 @@ namespace RosSharp.Parameter
         /// </returns>
         public object[] DeleteParam(string callerId, string key)
         {
-            throw new NotImplementedException();
+            lock (_parameters)
+            {
+                if (_parameters.ContainsKey(key))
+                {
+                    _parameters.Remove(key);
+                    return new object[]
+                    {
+                        StatusCode.Success,
+                        "parameter [" + key + "] deleted",
+                        0
+                    };
+                }
+            }
+
+            _logger.Error(m => m("DeleteParam: parameter [{0}] is not set", key));
+            return new object[]
+            {
+                StatusCode.Error,
+                "parameter [" + key + "] is not set",
+                0
+            };
         }
 
         /// <summary>
@@ -102,7 +131,31 @@ namespace RosSharp.Parameter
         /// </returns>
         public object[] SetParam(string callerId, string key, object value)
         {
-            throw new NotImplementedException();
+            lock (_parameters)
+            {
+                _parameters[key] = value;
+            }
+
+            lock (_subscribers)
+            {
+                if(_subscribers.ContainsKey(key))
+                {
+                    Parallel.ForEach(
+                        _subscribers[key],
+                        x => x.ParamUpdateAsync(callerId, key, value)
+                                 .ContinueWith(
+                                     task => _logger.Error("Parameter Update Error", task.Exception.InnerException),
+                                     TaskContinuationOptions.OnlyOnFaulted)
+                        );
+                }
+            }
+
+            return new object[]
+            {
+                StatusCode.Success,
+                "parameter [" + key + "]",
+                value
+            };
         }
 
         /// <summary>
@@ -117,7 +170,26 @@ namespace RosSharp.Parameter
         /// </returns>
         public object[] GetParam(string callerId, string key)
         {
-            throw new NotImplementedException();
+            lock (_parameters)
+            {
+                if (_parameters.ContainsKey(key))
+                {
+                    return new object[]
+                    {
+                        StatusCode.Success,
+                        "parameter [" + key + "]",
+                        _parameters[key]
+                    };
+                }
+            }
+
+            _logger.Error(m => m("GetParam: parameter [{0}] is not set", key));
+            return new object[]
+            {
+                StatusCode.Error,
+                "parameter [" + key + "] is not set",
+                0
+            };
         }
 
         /// <summary>
@@ -148,7 +220,51 @@ namespace RosSharp.Parameter
         /// </returns>
         public object[] SubscribeParam(string callerId, string callerApi, string key)
         {
-            throw new NotImplementedException();
+            Uri callerUri;
+            try
+            {
+                callerUri = new Uri(callerApi);
+            }
+            catch (UriFormatException ex)
+            {
+                _logger.Error("SubscribeParam: callerApi is invalid", ex);
+                return new object[]
+                {
+                    StatusCode.Error,
+                    "",
+                    0
+                };
+            }
+            lock (_subscribers)
+            {
+                if (_subscribers.ContainsKey(key))
+                {
+                    if (!_subscribers[key].Any(x=>x.SlaveUri== callerUri))
+                    {
+                        _subscribers[key].Add(new SlaveClient(callerUri));
+                    }
+                }
+                else
+                {
+                    _subscribers.Add(key, new List<SlaveClient>() {new SlaveClient(callerUri)});
+                }
+            }
+
+            object value = 0;
+            lock (_parameters)
+            {
+                if (_parameters.ContainsKey(key))
+                {
+                    value = _parameters[key];
+                }
+            }
+
+            return new object[]
+            {
+                StatusCode.Success,
+                "Subscribed to parameter [" + key + "]",
+                value
+            };
         }
 
         /// <summary>
@@ -164,7 +280,44 @@ namespace RosSharp.Parameter
         /// </returns>
         public object[] UnsubscribeParam(string callerId, string callerApi, string key)
         {
-            throw new NotImplementedException();
+            Uri callerUri;
+            try
+            {
+                callerUri = new Uri(callerApi);
+            }
+            catch (UriFormatException ex)
+            {
+                _logger.Error("UnsubscribeParam: callerApi is invalid", ex);
+                return new object[]
+                {
+                    StatusCode.Error,
+                    "",
+                    0
+                };
+            }
+            lock (_subscribers)
+            {
+                if (_subscribers.ContainsKey(key))
+                {
+                    if (!_subscribers[key].Any(x=>x.SlaveUri==callerUri))
+                    {
+                        var index = _subscribers[key].FindIndex(x => x.SlaveUri == callerUri);
+                        _subscribers[key].RemoveAt(index);
+                    }
+                    if (_subscribers[key].Count == 0)
+                    {
+                        _subscribers.Remove(key);
+                    }
+                }
+            }
+
+            return new object[]
+            {
+                StatusCode.Success,
+                "Unsubscribed to parameter [" + key + "]",
+                1
+            };
+
         }
 
         /// <summary>
@@ -179,7 +332,15 @@ namespace RosSharp.Parameter
         /// </returns>
         public object[] HasParam(string callerId, string key)
         {
-            throw new NotImplementedException();
+            lock (_parameters)
+            {
+                return new object[]
+                {
+                    StatusCode.Success,
+                    key,
+                    _parameters.ContainsKey(key)
+                };
+            }
         }
 
         /// <summary>
@@ -193,7 +354,15 @@ namespace RosSharp.Parameter
         /// </returns>
         public object[] GetParamNames(string callerId)
         {
-            throw new NotImplementedException();
+            lock (_subscribers)
+            {
+                return new object[]
+                {
+                    StatusCode.Success,
+                    "Parameter names",
+                    _subscribers.Keys.ToArray()
+                };
+            }
         }
 
         #endregion
