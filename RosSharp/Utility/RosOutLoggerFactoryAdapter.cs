@@ -40,21 +40,22 @@ using Common.Logging.Simple;
 
 namespace RosSharp
 {
-    public class RosOutLogger : AbstractSimpleLogger
+    public sealed class RosOutLoggerFactoryAdapter : AbstractSimpleLoggerFactoryAdapter
     {
-        public RosOutLogger(string logName, LogLevel logLevel, bool showLevel, bool showDateTime, bool showLogName,
-                            string dateTimeFormat)
-            : base(logName, logLevel, showLevel, showDateTime, showLogName, dateTimeFormat)
+        public RosOutLoggerFactoryAdapter()
+            : base(null)
         {
         }
 
-        protected override void WriteInternal(LogLevel level, object message, Exception e)
+        public RosOutLoggerFactoryAdapter(NameValueCollection properties)
+            : base(properties)
         {
-            var sb = new StringBuilder();
-            FormatOutput(sb, level, message, e);
+        }
 
-            //TODO: RosOutに出力するように。
-            Console.Out.WriteLine(sb.ToString());
+        protected override ILog CreateLogger(string name, LogLevel level, bool showLevel, bool showDateTime,
+                                             bool showLogName, string dateTimeFormat)
+        {
+            return new RosOutLogger(name, level, showLevel, showDateTime, showLogName, dateTimeFormat);
         }
     }
 }

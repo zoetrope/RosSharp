@@ -51,9 +51,6 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Sample\Server\AddTwoInts.cs">
-      <Link>AddTwoInts.cs</Link>
-    </Compile>
     <Compile Include="ChainingAssertion.MSTest.cs" />
     <Compile Include="MasterTest.cs" />
     <Compile Include="ParameterServerTest.cs" />

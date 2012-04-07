@@ -8,7 +8,7 @@
     <ProjectGuid>{572772C7-D172-497F-A428-D10141BBCA72}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Talker</RootNamespace>
+    <RootNamespace>RosSharp.Sample</RootNamespace>
     <AssemblyName>Talker</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>

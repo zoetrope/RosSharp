@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using RosSharp;
 
-namespace Listener
+namespace RosSharp.Sample
 {
     class Program
     {

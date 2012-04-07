@@ -32,29 +32,39 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
-using Common.Logging;
-using Common.Logging.Simple;
+using RosSharp.core;
 
 namespace RosSharp
 {
-    public class RosOutLogger : AbstractSimpleLogger
+    public sealed class RosOut
     {
-        public RosOutLogger(string logName, LogLevel logLevel, bool showLevel, bool showDateTime, bool showLogName,
-                            string dateTimeFormat)
-            : base(logName, logLevel, showLevel, showDateTime, showLogName, dateTimeFormat)
+        public void Start()
         {
+            var node = ROS.CreateNode("/rosout");
+
+            var publisher = node.CreatePublisherAsync<Log>("/rosout_agg").Result;
+            var subscriber = node.CreateSubscriberAsync<Log>("/rosout").Result;
+
+            subscriber.Subscribe(publisher);
+
+            node.RegisterServiceAsync("/rosout/get_loggers", new GetLoggers(GetLoggers)).Wait();
+            node.RegisterServiceAsync("/rosout/set_logger_level", new SetLoggerLevel(SetLoggerLevel)).Wait();
         }
 
-        protected override void WriteInternal(LogLevel level, object message, Exception e)
+        private SetLoggerLevel.Response SetLoggerLevel(SetLoggerLevel.Request request)
         {
-            var sb = new StringBuilder();
-            FormatOutput(sb, level, message, e);
+            var level = request.level;
+            var logger = request.logger;
+            
+            return new SetLoggerLevel.Response();
+        }
 
-            //TODO: RosOutに出力するように。
-            Console.Out.WriteLine(sb.ToString());
+        private GetLoggers.Response GetLoggers(GetLoggers.Request request)
+        {
+
+            return new GetLoggers.Response(){loggers = new List<string>()};
         }
     }
 }

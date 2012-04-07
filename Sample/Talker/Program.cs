@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Threading;
-using RosSharp;
 
-namespace Talker
+namespace RosSharp.Sample
 {
     class Program
     {
