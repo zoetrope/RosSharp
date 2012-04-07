@@ -12,7 +12,7 @@ namespace RosSharp.Sample
 
             var node = ROS.CreateNode("Server");
 
-            var param = node.GetParameter<string>("rosversion");
+            var param = node.CreateParameterAsync<string>("rosversion").Result;
 
             param.Subscribe(x => Console.WriteLine(x));
 

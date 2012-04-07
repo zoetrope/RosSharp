@@ -32,10 +32,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using Common.Logging;
 using RosSharp.Master;
 using RosSharp.Message;
@@ -50,17 +46,16 @@ namespace RosSharp.Node
 {
     public class RosNode : INode
     {
+        private bool _disposed;
         private readonly ILog _logger = LogManager.GetCurrentClassLogger();
         private readonly MasterClient _masterClient;
+        private readonly ParameterServerClient _parameterServerClient;
+        private readonly Dictionary<string, IParameter> _parameters = new Dictionary<string, IParameter>();
         private readonly ServiceProxyFactory _serviceProxyFactory;
+        private readonly Dictionary<string, IService> _services = new Dictionary<string, IService>();
         private readonly SlaveServer _slaveServer;
         private readonly TcpRosListener _tcpRosListener;
         private readonly TopicContainer _topicContainer;
-
-        private ParameterServerClient _parameterServerClient;
-
-        private Dictionary<string, IParameter> _parameters = new Dictionary<string, IParameter>();
-        private Dictionary<string, IService> _services = new Dictionary<string, IService>();
 
         public RosNode(string nodeId)
         {
@@ -80,31 +75,47 @@ namespace RosSharp.Node
             _slaveServer.ParameterUpdated += SlaveServerOnParameterUpdated;
         }
 
-        public string NodeId { get; set; }
+        public string NodeId { get; private set; }
 
         #region INode Members
 
-        public Parameter<T> GetParameter<T>(string paramName)
+        public Task<Parameter<T>> CreateParameterAsync<T>(string paramName)
         {
+            if (_disposed) throw new ObjectDisposedException("RosNode");
+
             if (_parameters.ContainsKey(paramName))
             {
-                //return _pa
+                //throw
             }
-            return new Parameter<T>(NodeId, paramName, _slaveServer.SlaveUri, _parameterServerClient);
+
+            //TODO:  HasParamでチェックして、あればGetParam,なければSetParam。戻り値もTaskに。
+            return Task.Factory.StartNew(() => 
+                new Parameter<T>(NodeId, paramName, _slaveServer.SlaveUri, _parameterServerClient));
+
         }
 
         public void Dispose()
         {
+            if (_disposed) throw new ObjectDisposedException("RosNode");
             //TODO: すべてを終了させる。
 
             //終了待ち
 
             _slaveServer.Dispose();
+
+            _disposed = true;
         }
 
         public Task<Subscriber<TMessage>> CreateSubscriberAsync<TMessage>(string topicName)
             where TMessage : IMessage, new()
         {
+            if (_disposed) throw new ObjectDisposedException("RosNode");
+
+            if (_topicContainer.HasSubscriber(topicName))
+            {
+                //throw
+            }
+
             _logger.InfoFormat("Create Subscriber: {0}", topicName);
             var subscriber = new Subscriber<TMessage>(topicName, NodeId);
             _topicContainer.AddSubscriber(subscriber);
@@ -117,18 +128,16 @@ namespace RosSharp.Node
                 .ContinueWith(_ => subscriber);
         }
 
-        //TODO: Remove系はpublicじゃなくてもいいか？Subscriber.Disposeで十分？
-        public Task RemoveSubscriberAsync(string topicName)
-        {
-            return _masterClient
-                .UnregisterSubscriberAsync(NodeId, topicName, _slaveServer.SlaveUri)
-                .ContinueWith(task => _topicContainer.RemoveSubscriber(topicName));
-        }
-
-
         public Task<Publisher<TMessage>> CreatePublisherAsync<TMessage>(string topicName)
             where TMessage : IMessage, new()
         {
+            if (_disposed) throw new ObjectDisposedException("RosNode");
+
+            if (_topicContainer.HasPublisher(topicName))
+            {
+                //throw
+            }
+
             _logger.InfoFormat("Create Publisher: {0}", topicName);
 
             var publisher = new Publisher<TMessage>(topicName, NodeId);
@@ -143,17 +152,15 @@ namespace RosSharp.Node
                 .ContinueWith(_ => publisher); //TODO: 例外起きたときは？
         }
 
-        //TODO: Remove系はpublicじゃなくてもいいか？Subscriber.Disposeで十分？
-        public Task RemovePublisherAsync(string topicName)
-        {
-            return _masterClient
-                .UnregisterPublisherAsync(NodeId, topicName, _slaveServer.SlaveUri)
-                .ContinueWith(_ => _topicContainer.RemovePublisher(topicName));
-        }
-
         public Task<TService> CreateProxyAsync<TService>(string serviceName)
             where TService : IService, new()
         {
+            if (_disposed) throw new ObjectDisposedException("RosNode");
+            //if (_serviceProxyFactory.(serviceName))
+            {
+                //throw
+            }
+
             _logger.InfoFormat("Create ServiceProxy: {0}", serviceName);
 
             return _masterClient.LookupServiceAsync(NodeId, serviceName)
@@ -163,6 +170,12 @@ namespace RosSharp.Node
         public Task RegisterServiceAsync<TService>(string serviceName, TService service)
             where TService : IService, new()
         {
+            if (_disposed) throw new ObjectDisposedException("RosNode");
+            if (_services.ContainsKey(serviceName))
+            {
+                //throw
+            }
+
             _logger.InfoFormat("Create ServiceServer: {0}", serviceName);
 
             var serviceServer = new ServiceServer<TService>(NodeId);
@@ -175,15 +188,30 @@ namespace RosSharp.Node
                 .RegisterServiceAsync(NodeId, serviceName, serviceUri, _slaveServer.SlaveUri);
         }
 
-        //TODO: Remove系はpublicじゃなくてもいいか？Subscriber.Disposeで十分？
-        public Task RemoveServiceAsync(string serviceName)
+        #endregion
+
+        //TODO: Dispose呼ばれたときに以下のメソッドを呼び出す。
+
+        internal Task RemoveSubscriberAsync(string topicName)
+        {
+            return _masterClient
+                .UnregisterSubscriberAsync(NodeId, topicName, _slaveServer.SlaveUri)
+                .ContinueWith(task => _topicContainer.RemoveSubscriber(topicName));
+        }
+
+        internal Task RemovePublisherAsync(string topicName)
+        {
+            return _masterClient
+                .UnregisterPublisherAsync(NodeId, topicName, _slaveServer.SlaveUri)
+                .ContinueWith(_ => _topicContainer.RemovePublisher(topicName));
+        }
+
+        internal Task RemoveServiceAsync(string serviceName)
         {
             return _masterClient
                 .UnregisterServiceAsync(NodeId, serviceName, _slaveServer.SlaveUri)
                 .ContinueWith(_ => _services.Remove(serviceName));
         }
-
-        #endregion
 
         private void SlaveServerOnParameterUpdated(string key, object value)
         {

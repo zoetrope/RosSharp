@@ -37,23 +37,65 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Text;
+using System.Threading.Tasks;
+using CookComputing.XmlRpc;
 
 namespace RosSharp.Parameter
 {
-    public class Parameter<T> : IObservable<T>, IParameter
+    public sealed class Parameter<T> : IObservable<T>, IParameter
     {
-        private IParameterCoverter<T> _converter;
-        private ParameterServerClient _parameterServerClient;
+        private readonly IParameterCoverter<T> _converter;
+        private readonly ParameterServerClient _parameterServerClient;
         private Subject<T> _parameterSubject;
-        private Uri _slaveUri;
+        private readonly Uri _slaveUri;
 
-        public Parameter(string nodeId, string paramName, Uri slaveUri, ParameterServerClient client)
+        internal Parameter(string nodeId, string paramName, Uri slaveUri, ParameterServerClient client)
         {
             NodeId = nodeId;
             Name = paramName;
             _slaveUri = slaveUri;
 
             _parameterServerClient = client;
+
+
+            if(typeof(T).IsPrimitive || typeof(T) == typeof(string))
+            {
+                _converter = new PrimitiveParameterConverter<T>();
+            }
+            else if(typeof(T) == typeof(List<>))
+            {
+                _converter = new ListParameterConverter<T>();
+            }
+            else if (typeof(T) == typeof(DictionaryParameter))
+            {
+                _converter = new DictionaryParameterConverter<T>();
+            }
+            else
+            {
+                throw new ArgumentException("invalid Type Argument");
+            }
+        }
+
+        internal Task Initialize()
+        {
+            return _parameterServerClient.HasParamAsync(NodeId, Name)
+                .ContinueWith(task =>
+                {
+                    if (task.Result)
+                    {
+                        return _parameterServerClient.GetParamAsync(NodeId, Name);
+                    }
+                    else
+                    {
+                        return _parameterServerClient.SetParamAsync(NodeId, Name, new XmlRpcStruct());
+                    }
+                })
+                .Unwrap()
+                .ContinueWith(task =>
+                {
+
+                });
+
         }
 
         public string NodeId { get; private set; }
@@ -63,10 +105,15 @@ namespace RosSharp.Parameter
         {
             get
             {
+                //TODO: エラー処理は？
                 var result = _parameterServerClient.GetParamAsync(NodeId, Name).Result;
                 return _converter.ConvertTo(result);
             }
-            set { _parameterServerClient.SetParamAsync(NodeId, Name, _converter.ConvertFrom(value)).Wait(); }
+            set
+            {
+                //TODO: エラー処理は？
+                _parameterServerClient.SetParamAsync(NodeId, Name, _converter.ConvertFrom(value)).Wait();
+            }
         }
 
         #region IObservable<T> Members
@@ -75,18 +122,26 @@ namespace RosSharp.Parameter
         {
             if (_parameterSubject == null)
             {
+                //TODO: ここで初期化してよい？Subscribeが呼ばれるするまでSubscribeParamを実行せずにすむので効率的？
                 _parameterSubject = new Subject<T>();
+                var disposable = _parameterSubject.Subscribe(observer);
                 _parameterServerClient.SubscribeParamAsync(NodeId, _slaveUri, Name)
                     .ContinueWith(
                         task =>
                         {
+                            //TODO: SetParamしてないのにSubscribeするとおかしなデータが来る
+                            //TODO: Convertが失敗したときの処理
                             var val = _converter.ConvertTo(task.Result);
                             _parameterSubject.OnNext(val);
-                        });
-                //TODO: SetParamしてないのにSubscribeするとおかしなデータが来る
+                        }); //TODO: SubscribeParamAsyncがエラーの時は？
+                
+                return disposable;
             }
-
-            return _parameterSubject.Subscribe(observer);
+            else
+            {
+                return _parameterSubject.Subscribe(observer);
+            }
+            
         }
 
         #endregion
@@ -95,6 +150,7 @@ namespace RosSharp.Parameter
 
         void IParameter.Update(object value)
         {
+            //TODO: Convertが失敗したときの処理
             var data = _converter.ConvertTo(value);
             _parameterSubject.OnNext(data);
         }
@@ -106,63 +162,6 @@ namespace RosSharp.Parameter
                 _parameterServerClient.UnsubscribeParamAsync(NodeId, _slaveUri, Name).Wait();
                 _parameterSubject = null;
             }
-        }
-
-        #endregion
-    }
-
-    internal interface IParameterCoverter<T>
-    {
-        T ConvertTo(object value);
-        object ConvertFrom(T value);
-    }
-
-    internal class PrimitiveParameterConverter<T> : IParameterCoverter<T>
-    {
-        #region IParameterCoverter<T> Members
-
-        public T ConvertTo(object value)
-        {
-            return (T) value;
-        }
-
-        public object ConvertFrom(T value)
-        {
-            return value;
-        }
-
-        #endregion
-    }
-
-    internal class ListParameterConverter<T> : IParameterCoverter<T>
-    {
-        #region IParameterCoverter<T> Members
-
-        public T ConvertTo(object value)
-        {
-            throw new NotImplementedException();
-        }
-
-        public object ConvertFrom(T value)
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
-    }
-
-    internal class DictionaryParameterConverter<T> : IParameterCoverter<T>
-    {
-        #region IParameterCoverter<T> Members
-
-        public T ConvertTo(object value)
-        {
-            throw new NotImplementedException();
-        }
-
-        public object ConvertFrom(T value)
-        {
-            throw new NotImplementedException();
         }
 
         #endregion

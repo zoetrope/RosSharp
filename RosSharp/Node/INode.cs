@@ -44,22 +44,15 @@ namespace RosSharp.Node
         Task<Subscriber<TMessage>> CreateSubscriberAsync<TMessage>(string topicName)
             where TMessage : IMessage, new();
 
-        Task RemoveSubscriberAsync(string topicName);
-
         Task<Publisher<TMessage>> CreatePublisherAsync<TMessage>(string topicName)
             where TMessage : IMessage, new();
-
-        Task RemovePublisherAsync(string topicName);
 
         Task<TService> CreateProxyAsync<TService>(string serviceName)
             where TService : IService, new();
 
         Task RegisterServiceAsync<TService>(string serviceName, TService service)
             where TService : IService, new();
-
-        Task RemoveServiceAsync(string serviceName);
-
-
-        Parameter<T> GetParameter<T>(string paramName);
+        
+        Task<Parameter<T>> CreateParameterAsync<T>(string paramName);
     }
 }
