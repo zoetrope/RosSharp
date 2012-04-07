@@ -207,7 +207,7 @@ let createSerializeMethod (msgs : RosMessage list) =
     (msgs |> Seq.map(fun msg -> createSerialize msg)
           |> Seq.filter(fun x -> x <> "")
           |> Seq.map (fun x -> "            " + x + "\r\n" ) 
-          |> Seq.reduce (+) ) +
+          |> fun msg -> String.Join("", msg)) +
     "        }\r\n"
     
 let createSerializeLength (msg : RosMessage) = 
@@ -219,9 +219,12 @@ let createSerializeLengthProperty (msgs : RosMessage list) =
     "        public int SerializeLength\r\n" +
     "        {\r\n" + 
     "            get { return " + 
-    String.Join(" + ",(msgs |> Seq.map (fun msg -> createSerializeLength msg)
-                            |> Seq.filter(fun x -> x <> ""))) + "; }\r\n" +
-    "        }\r\n"
+    if msgs.IsEmpty then
+        "0; }\r\n"
+    else
+        String.Join(" + ",(msgs |> Seq.map (fun msg -> createSerializeLength msg)
+                                |> Seq.filter(fun x -> x <> ""))) + "; }\r\n"
+    + "        }\r\n"
     
 let createConstructor (name : string) (msgs : RosMessage list) =
     "        public " + name + "(BinaryReader br)\r\n" +
@@ -239,7 +242,8 @@ let createDeserializeMethod (msgs : RosMessage list) =
     "        {\r\n" + 
     (msgs |> Seq.map(fun msg -> createDeserialize msg)
           |> Seq.filter(fun x -> x <> "")
-          |> Seq.map (fun x -> "            " + x + "\r\n" ) |> Seq.reduce (+) )+
+          |> Seq.map (fun x -> "            " + x + "\r\n" )
+          |> fun msg -> String.Join("", msg) ) +
     "        }\r\n"
 
 
@@ -260,9 +264,12 @@ let createEqualityMethods (name : string) (msgs : RosMessage list) =
     "        {\r\n" + 
     "            if (ReferenceEquals(null, other)) return false;\r\n" + 
     "            if (ReferenceEquals(this, other)) return true;\r\n" + 
-    "            return " + String.Join(" && ",msgs |> Seq.map(fun msg -> getEquals msg)
-                                                    |> Seq.filter(fun x -> x <> "")) + ";\r\n" +
-    "        }\r\n" + 
+    if msgs.IsEmpty then
+        "            return true;\r\n"
+    else
+        "            return " + String.Join(" && ",msgs |> Seq.map(fun msg -> getEquals msg)
+                                                        |> Seq.filter(fun x -> x <> "")) + ";\r\n"
+    + "        }\r\n" + 
     
     "        public override bool Equals(object obj)\r\n" +
     "        {\r\n" + 
