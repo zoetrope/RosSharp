@@ -69,6 +69,7 @@
     <Compile Include="Generated\Char.cs" />
     <Compile Include="Generated\ColorRGBA.cs" />
     <Compile Include="Generated\Duration.cs" />
+    <Compile Include="Generated\Empty.cs" />
     <Compile Include="Generated\Float32.cs" />
     <Compile Include="Generated\Float32MultiArray.cs" />
     <Compile Include="Generated\Float64.cs" />

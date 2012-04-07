@@ -42,8 +42,8 @@ using RosSharp.Transport;
 
 namespace RosSharp.Topic
 {
-    internal sealed class RosTopicClient<TDataType> : IDisposable
-        where TDataType : IMessage, new()
+    internal sealed class RosTopicClient<TMessage> : IDisposable
+        where TMessage : IMessage, new()
     {
         private TcpRosClient _client;
         private ILog _logger = LogManager.GetCurrentClassLogger();
@@ -71,7 +71,7 @@ namespace RosSharp.Topic
 
         #endregion
 
-        public Task<int> SendTaskAsync(TDataType data)
+        public Task<int> SendTaskAsync(TMessage data)
         {
             if (!Connected)
             {
@@ -101,7 +101,7 @@ namespace RosSharp.Topic
 
         private Unit OnReceivedHeader(byte[] data)
         {
-            var dummy = new TDataType();
+            var dummy = new TMessage();
             dynamic reqHeader = TcpRosHeaderSerializer.Deserialize(new MemoryStream(data));
 
             if (reqHeader.topic != TopicName)

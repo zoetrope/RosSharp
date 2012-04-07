@@ -41,23 +41,23 @@ namespace RosSharp.Node
 {
     public interface INode : IDisposable
     {
-        Task<Subscriber<TDataType>> CreateSubscriber<TDataType>(string topicName)
-            where TDataType : IMessage, new();
+        Task<Subscriber<TMessage>> CreateSubscriberAsync<TMessage>(string topicName)
+            where TMessage : IMessage, new();
 
-        Task RemoveSubscriber(string topicName);
+        Task RemoveSubscriberAsync(string topicName);
 
-        Task<Publisher<TDataType>> CreatePublisher<TDataType>(string topicName)
-            where TDataType : IMessage, new();
+        Task<Publisher<TMessage>> CreatePublisherAsync<TMessage>(string topicName)
+            where TMessage : IMessage, new();
 
-        Task RemovePublisher(string topicName);
+        Task RemovePublisherAsync(string topicName);
 
-        Task<TService> CreateProxy<TService>(string serviceName)
+        Task<TService> CreateProxyAsync<TService>(string serviceName)
             where TService : IService, new();
 
-        Task RegisterService<TService>(string serviceName, TService service)
+        Task RegisterServiceAsync<TService>(string serviceName, TService service)
             where TService : IService, new();
 
-        Task RemoveService(string serviceName);
+        Task RemoveServiceAsync(string serviceName);
 
 
         Parameter<T> GetParameter<T>(string paramName);

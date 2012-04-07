@@ -42,16 +42,16 @@ namespace RosSharp.Topic
     /// <summary>
     ///   Publishes message on a ROS Topic
     /// </summary>
-    /// <typeparam name="TDataType"> Message Type </typeparam>
-    public sealed class Publisher<TDataType> : IPublisher, IObserver<TDataType>, IDisposable
-        where TDataType : IMessage, new()
+    /// <typeparam name="TMessage"> Message Type </typeparam>
+    public sealed class Publisher<TMessage> : IPublisher, IObserver<TMessage>, IDisposable
+        where TMessage : IMessage, new()
     {
         private ILog _logger = LogManager.GetCurrentClassLogger();
-        private List<RosTopicClient<TDataType>> _rosTopicClients = new List<RosTopicClient<TDataType>>();
+        private List<RosTopicClient<TMessage>> _rosTopicClients = new List<RosTopicClient<TMessage>>();
 
         internal Publisher(string topicName, string nodeId)
         {
-            var dummy = new TDataType();
+            var dummy = new TMessage();
 
             TopicName = topicName;
             MessageType = dummy.MessageType;
@@ -84,9 +84,9 @@ namespace RosSharp.Topic
 
         #endregion
 
-        #region IObserver<TDataType> Members
+        #region IObserver<TMessage> Members
 
-        public void OnNext(TDataType value)
+        public void OnNext(TMessage value)
         {
             lock (_rosTopicClients) //ロック範囲が広い？
             {
@@ -118,7 +118,7 @@ namespace RosSharp.Topic
 
         internal Task AddTopic(Socket socket)
         {
-            var rosTopicClient = new RosTopicClient<TDataType>(TopicName, NodeId);
+            var rosTopicClient = new RosTopicClient<TMessage>(TopicName, NodeId);
             return rosTopicClient.StartAsync(socket)
                 .ContinueWith(task =>
                 {

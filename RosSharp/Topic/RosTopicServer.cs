@@ -41,8 +41,8 @@ using RosSharp.Transport;
 
 namespace RosSharp.Topic
 {
-    internal sealed class RosTopicServer<TDataType> : IDisposable
-        where TDataType : IMessage, new()
+    internal sealed class RosTopicServer<TMessage> : IDisposable
+        where TMessage : IMessage, new()
     {
         private TcpRosClient _client;
         private ILog _logger = LogManager.GetCurrentClassLogger();
@@ -65,11 +65,11 @@ namespace RosSharp.Topic
 
         #endregion
 
-        public Task<IObservable<TDataType>> StartAsync(TopicParam param)
+        public Task<IObservable<TMessage>> StartAsync(TopicParam param)
         {
             _client = new TcpRosClient();
 
-            var tcs = new TaskCompletionSource<IObservable<TDataType>>();
+            var tcs = new TaskCompletionSource<IObservable<TMessage>>();
             _client.ConnectTaskAsync(param.HostName, param.PortNumber)
                 .ContinueWith(t1 =>
                 {
@@ -98,7 +98,7 @@ namespace RosSharp.Topic
         }
 
 
-        private Task<IObservable<TDataType>> OnConnected()
+        private Task<IObservable<TMessage>> OnConnected()
         {
             var last = _client.ReceiveAsync()
                 .Take(1)
@@ -107,7 +107,7 @@ namespace RosSharp.Topic
 
             last.Connect();
 
-            var dummy = new TDataType();
+            var dummy = new TMessage();
             var sendHeader = new
             {
                 callerid = NodeId,
@@ -119,7 +119,7 @@ namespace RosSharp.Topic
             var stream = new MemoryStream();
             TcpRosHeaderSerializer.Serialize(stream, sendHeader);
 
-            var tcs = new TaskCompletionSource<IObservable<TDataType>>();
+            var tcs = new TaskCompletionSource<IObservable<TMessage>>();
             _client.SendTaskAsync(stream.ToArray())
                 .ContinueWith(task =>
                 {
@@ -148,9 +148,9 @@ namespace RosSharp.Topic
             return tcs.Task;
         }
 
-        private IObservable<TDataType> OnReceivedHeader(dynamic header)
+        private IObservable<TMessage> OnReceivedHeader(dynamic header)
         {
-            var dummy = new TDataType();
+            var dummy = new TMessage();
 
             if (header.topic != TopicName)
             {
@@ -171,9 +171,9 @@ namespace RosSharp.Topic
             return _client.ReceiveAsync().Select(Deserialize);
         }
 
-        private TDataType Deserialize(byte[] x)
+        private TMessage Deserialize(byte[] x)
         {
-            var data = new TDataType();
+            var data = new TMessage();
             var br = new BinaryReader(new MemoryStream(x));
             var len = br.ReadInt32();
             if (br.BaseStream.Length != len + 4)

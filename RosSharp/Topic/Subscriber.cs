@@ -44,18 +44,18 @@ namespace RosSharp.Topic
     /// <summary>
     ///   Subscribes message on a ROS Topic
     /// </summary>
-    /// <typeparam name="TDataType"> Message Type </typeparam>
-    public sealed class Subscriber<TDataType> : ISubscriber, IObservable<TDataType>, IDisposable
-        where TDataType : IMessage, new()
+    /// <typeparam name="TMessage"> Message Type </typeparam>
+    public sealed class Subscriber<TMessage> : ISubscriber, IObservable<TMessage>, IDisposable
+        where TMessage : IMessage, new()
     {
-        private Subject<TDataType> _aggregateSubject = new Subject<TDataType>();
+        private Subject<TMessage> _aggregateSubject = new Subject<TMessage>();
         private CompositeDisposable _disposables = new CompositeDisposable();
-        private List<RosTopicServer<TDataType>> _rosTopicServers = new List<RosTopicServer<TDataType>>();
+        private List<RosTopicServer<TMessage>> _rosTopicServers = new List<RosTopicServer<TMessage>>();
 
         internal Subscriber(string topicName, string nodeId)
         {
             TopicName = topicName;
-            var dummy = new TDataType();
+            var dummy = new TMessage();
             MessageType = dummy.MessageType;
 
             NodeId = nodeId;
@@ -81,9 +81,9 @@ namespace RosSharp.Topic
 
         #endregion
 
-        #region IObservable<TDataType> Members
+        #region IObservable<TMessage> Members
 
-        public IDisposable Subscribe(IObserver<TDataType> observer)
+        public IDisposable Subscribe(IObserver<TMessage> observer)
         {
             return _aggregateSubject.Subscribe(observer);
         }
@@ -112,7 +112,7 @@ namespace RosSharp.Topic
         private void ConnectServer(TopicParam param, SlaveClient client)
         {
             //TODO: serverを複数持てるようにする。保持しておく。ロックも必要。
-            var server = new RosTopicServer<TDataType>(TopicName, NodeId);
+            var server = new RosTopicServer<TMessage>(TopicName, NodeId);
             _rosTopicServers.Add(server);
 
             server.StartAsync(param).ContinueWith(
