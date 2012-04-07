@@ -49,8 +49,6 @@ namespace RosSharp.Master
     /// </summary>
     public sealed class MasterServer : MarshalByRefObject, IMaster, IParameterServer, IDisposable
     {
-        //TODO: サーバ実装を委譲してinternalクラスにしたほうがよいか。
-
         private readonly HttpServerChannel _channel;
         private readonly RegistrationContainer _registrationContainer = new RegistrationContainer();
 
@@ -79,7 +77,7 @@ namespace RosSharp.Master
         public void Dispose()
         {
             ChannelServices.UnregisterChannel(_channel);
-            //RemotingServices.Unmarshal(this);
+            RemotingServices.Disconnect(this);
         }
 
         #endregion
@@ -650,6 +648,8 @@ namespace RosSharp.Master
             var slaves = info.SubscriberUris.Select(uri => new SlaveClient(uri));
 
             var publishers = info.PublisherUris.Select(x => x.ToString()).ToArray();
+
+            _logger.Debug(m => m("UpdatePublisher: slaves={0}, publishers={1}", slaves.Count(), publishers.Length));
 
             //TODO: Waitはだめ？Serverの中なのでどうすべきか。Java版では接続せずに帰ってきてる感じ。
             slaves.ToList().ForEach(s => s.PublisherUpdateAsync("", info.TopicName, publishers).Wait());

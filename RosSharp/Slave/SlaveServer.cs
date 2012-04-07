@@ -50,23 +50,28 @@ namespace RosSharp.Slave
     /// </summary>
     public sealed class SlaveServer : MarshalByRefObject, ISlave, IDisposable
     {
+        private readonly HttpServerChannel _channel;
         private readonly TcpRosListener _tcpRosListener;
         private readonly TopicContainer _topicContainer;
+        private string _nodeId;
 
         private ILog _logger = LogManager.GetCurrentClassLogger();
 
-        internal SlaveServer(int portNumber, TopicContainer topicContainer, TcpRosListener listener)
+        internal SlaveServer(string nodeId, int portNumber, TopicContainer topicContainer, TcpRosListener listener)
         {
+            _nodeId = nodeId;
             _topicContainer = topicContainer;
             _tcpRosListener = listener;
 
-            var channel = new HttpServerChannel("slave", portNumber, new XmlRpcServerFormatterSinkProvider());
-            var tmp = new Uri(channel.GetChannelUri());
+            string slaveName = nodeId + "_slave";
 
-            SlaveUri = new Uri("http://" + ROS.HostName + ":" + tmp.Port + "/slave");
+            _channel = new HttpServerChannel(slaveName, portNumber, new XmlRpcServerFormatterSinkProvider());
+            var tmp = new Uri(_channel.GetChannelUri());
 
-            ChannelServices.RegisterChannel(channel, false);
-            RemotingServices.Marshal(this, "slave");
+            SlaveUri = new Uri("http://" + ROS.HostName + ":" + tmp.Port + "/" + slaveName);
+
+            ChannelServices.RegisterChannel(_channel, false);
+            RemotingServices.Marshal(this, slaveName);
         }
 
         public Uri SlaveUri { get; private set; }
@@ -75,9 +80,8 @@ namespace RosSharp.Slave
 
         public void Dispose()
         {
-            ISlave s;
-            
-            throw new NotImplementedException();
+            ChannelServices.UnregisterChannel(_channel);
+            RemotingServices.Disconnect(this);
         }
 
         #endregion

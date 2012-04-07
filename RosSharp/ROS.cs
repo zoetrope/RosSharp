@@ -77,7 +77,8 @@ namespace RosSharp
         {
             lock (_nodes)
             {
-                _nodes.Values.ToList().ForEach(node => node.Dispose());
+                //TODO:RosNode.Disposeをユーザが呼んだときの処理を実装すること
+                //_nodes.Values.ToList().ForEach(node => node.Dispose());
                 _nodes.Clear();
             }
         }

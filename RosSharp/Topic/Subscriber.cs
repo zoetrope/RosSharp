@@ -33,6 +33,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
@@ -50,6 +51,7 @@ namespace RosSharp.Topic
     {
         private Subject<TMessage> _aggregateSubject = new Subject<TMessage>();
         private CompositeDisposable _disposables = new CompositeDisposable();
+        private ReplaySubject<Unit> _onConnectedSubject = new ReplaySubject<Unit>();
         private List<RosTopicServer<TMessage>> _rosTopicServers = new List<RosTopicServer<TMessage>>();
 
         internal Subscriber(string topicName, string nodeId)
@@ -94,13 +96,12 @@ namespace RosSharp.Topic
 
         void ISubscriber.UpdatePublishers(List<Uri> publishers)
         {
-            
             //TODO: 同じPublisherに対する処理
             var slaves = publishers.Select(x => new SlaveClient(x));
 
             Parallel.ForEach(slaves,
-                             slave => slave.RequestTopicAsync(NodeId, TopicName,new List<ProtocolInfo> { new ProtocolInfo (ProtocolType.TCPROS)})
-                                          .ContinueWith(task => ConnectServer(task.Result, slave), TaskContinuationOptions.OnlyOnRanToCompletion));
+                             slave => slave.RequestTopicAsync(NodeId, TopicName, new List<ProtocolInfo> {new ProtocolInfo(ProtocolType.TCPROS)})
+                                          .ContinueWith(task => ConnectServer(task.Result), TaskContinuationOptions.OnlyOnRanToCompletion));
         }
 
         public string TopicName { get; private set; }
@@ -109,10 +110,10 @@ namespace RosSharp.Topic
 
         #endregion
 
-        private void ConnectServer(TopicParam param, SlaveClient client)
+        private void ConnectServer(TopicParam param)
         {
             //TODO: serverを複数持てるようにする。保持しておく。ロックも必要。
-            var server = new RosTopicServer<TMessage>(TopicName, NodeId);
+            var server = new RosTopicServer<TMessage>(NodeId, TopicName);
             _rosTopicServers.Add(server);
 
             server.StartAsync(param).ContinueWith(
@@ -123,15 +124,14 @@ namespace RosSharp.Topic
                     {
                         _disposables.Add(d);
                     }
-                    var handler = OnConnected;
-                    if (handler != null)
-                    {
-                        handler();
-                    }
+                    _onConnectedSubject.OnNext(Unit.Default);
                 });
         }
 
-        public event Action OnConnected;
+        public IObservable<Unit> OnConnectedAsObservable()
+        {
+            return _onConnectedSubject;
+        }
 
         internal event Action Disposing;
     }

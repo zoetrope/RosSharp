@@ -33,6 +33,8 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
+using System.Reactive;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Common.Logging;
 using RosSharp.Message;
@@ -47,6 +49,7 @@ namespace RosSharp.Topic
         where TMessage : IMessage, new()
     {
         private ILog _logger = LogManager.GetCurrentClassLogger();
+        private ReplaySubject<Unit> _onConnectedSubject = new ReplaySubject<Unit>();
         private List<RosTopicClient<TMessage>> _rosTopicClients = new List<RosTopicClient<TMessage>>();
 
         internal Publisher(string topicName, string nodeId)
@@ -90,7 +93,14 @@ namespace RosSharp.Topic
         {
             lock (_rosTopicClients) //ロック範囲が広い？
             {
-                Parallel.ForEach(_rosTopicClients, client => { client.SendTaskAsync(value).ContinueWith(task => { _logger.Error("Send Error", task.Exception.InnerException); }, TaskContinuationOptions.OnlyOnFaulted); });
+                Parallel.ForEach(_rosTopicClients, client =>
+                {
+                    client.SendTaskAsync(value)
+                        .ContinueWith(task =>
+                        {
+                            _logger.Error("Send Error", task.Exception.InnerException);
+                        }, TaskContinuationOptions.OnlyOnFaulted);
+                });
             }
         }
 
@@ -114,23 +124,24 @@ namespace RosSharp.Topic
 
         #endregion
 
-        public event Action OnConnected;
+        public IObservable<Unit> OnConnectedAsObservable()
+        {
+            return _onConnectedSubject;
+        }
 
         internal Task AddTopic(Socket socket)
         {
-            var rosTopicClient = new RosTopicClient<TMessage>(TopicName, NodeId);
+            _logger.Debug(m => m("AddTopic: {0}", socket.RemoteEndPoint.ToString()));
+            var rosTopicClient = new RosTopicClient<TMessage>(NodeId, TopicName);
             return rosTopicClient.StartAsync(socket)
                 .ContinueWith(task =>
                 {
+                    _logger.Debug("AddTopic: Started");
                     lock (_rosTopicClients)
                     {
                         _rosTopicClients.Add(rosTopicClient);
                     }
-                    var handler = OnConnected;
-                    if (handler != null)
-                    {
-                        handler();
-                    }
+                    _onConnectedSubject.OnNext(Unit.Default);
                 }, TaskContinuationOptions.OnlyOnRanToCompletion);
         }
 

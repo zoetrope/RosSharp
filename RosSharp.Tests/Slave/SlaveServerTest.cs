@@ -24,7 +24,7 @@ namespace RosSharp.Tests.Slave
             topicContainer.AddPublisher(new Publisher<std_msgs.String>("/test_topic", "test"));
 
             var tcpListener = new TcpRosListener(0);
-            _slaveServer = new SlaveServer(0, topicContainer, tcpListener);
+            _slaveServer = new SlaveServer("test", 0, topicContainer, tcpListener);
         }
 
         [TestMethod]

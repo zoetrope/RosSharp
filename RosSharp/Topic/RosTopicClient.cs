@@ -101,6 +101,8 @@ namespace RosSharp.Topic
 
         private Unit OnReceivedHeader(byte[] data)
         {
+            _logger.Debug("OnReceivedHeader");
+
             var dummy = new TMessage();
             dynamic reqHeader = TcpRosHeaderSerializer.Deserialize(new MemoryStream(data));
 
@@ -133,8 +135,11 @@ namespace RosSharp.Topic
             var ms = new MemoryStream();
             TcpRosHeaderSerializer.Serialize(ms, resHeader);
 
+            _logger.Debug("OnReceivedHeader Sending...");
+
             _client.SendTaskAsync(ms.ToArray()).Wait();
 
+            _logger.Debug("OnReceivedHeader Sent");
             Connected = true;
 
             return Unit.Default;

@@ -73,6 +73,7 @@ namespace RosSharp.Topic
             _client.ConnectTaskAsync(param.HostName, param.PortNumber)
                 .ContinueWith(t1 =>
                 {
+                    _logger.Debug("StartAsync Connected");
                     if (t1.IsFaulted) tcs.SetException(t1.Exception.InnerException);
                     else if (t1.IsCanceled) tcs.SetCanceled();
                     else
@@ -123,6 +124,7 @@ namespace RosSharp.Topic
             _client.SendTaskAsync(stream.ToArray())
                 .ContinueWith(task =>
                 {
+                    _logger.Debug("OnConnected Sent");
                     if (task.IsFaulted) tcs.SetException(task.Exception.InnerException);
                     else if (task.IsCanceled) tcs.SetCanceled();
                     else
@@ -150,6 +152,7 @@ namespace RosSharp.Topic
 
         private IObservable<TMessage> OnReceivedHeader(dynamic header)
         {
+            _logger.Debug("OnReceivedHeader");
             var dummy = new TMessage();
 
             if (header.topic != TopicName)

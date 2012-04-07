@@ -37,3 +37,4 @@ using System.Runtime.InteropServices;
 
 [assembly: InternalsVisibleTo("RosSharp.Moles")]
 [assembly: InternalsVisibleTo("RosSharp.Tests")]
+[assembly: InternalsVisibleTo("RosSharp.IntegrationTests")]

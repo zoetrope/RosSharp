@@ -75,7 +75,7 @@ namespace RosSharp.Node
 
             _topicContainer = new TopicContainer();
             _tcpRosListener = new TcpRosListener(0);
-            _slaveServer = new SlaveServer(0, _topicContainer, _tcpRosListener);
+            _slaveServer = new SlaveServer(NodeId, 0, _topicContainer, _tcpRosListener);
 
             _slaveServer.ParameterUpdated += SlaveServerOnParameterUpdated;
         }
@@ -95,9 +95,11 @@ namespace RosSharp.Node
 
         public void Dispose()
         {
-            // すべてを終了させる。
+            //TODO: すべてを終了させる。
 
             //終了待ち
+
+            _slaveServer.Dispose();
         }
 
         public Task<Subscriber<TMessage>> CreateSubscriberAsync<TMessage>(string topicName)
@@ -115,6 +117,7 @@ namespace RosSharp.Node
                 .ContinueWith(_ => subscriber);
         }
 
+        //TODO: Remove系はpublicじゃなくてもいいか？Subscriber.Disposeで十分？
         public Task RemoveSubscriberAsync(string topicName)
         {
             return _masterClient
@@ -140,6 +143,7 @@ namespace RosSharp.Node
                 .ContinueWith(_ => publisher); //TODO: 例外起きたときは？
         }
 
+        //TODO: Remove系はpublicじゃなくてもいいか？Subscriber.Disposeで十分？
         public Task RemovePublisherAsync(string topicName)
         {
             return _masterClient
@@ -171,6 +175,7 @@ namespace RosSharp.Node
                 .RegisterServiceAsync(NodeId, serviceName, serviceUri, _slaveServer.SlaveUri);
         }
 
+        //TODO: Remove系はpublicじゃなくてもいいか？Subscriber.Disposeで十分？
         public Task RemoveServiceAsync(string serviceName)
         {
             return _masterClient
