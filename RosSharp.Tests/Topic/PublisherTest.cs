@@ -54,7 +54,7 @@ namespace RosSharp.Tests.Topic
         {
             MRosTopicClient<std_msgs.String>.AllInstances.StartAsyncSocket =
                 (t1, t2) => Task.Factory.StartNew(() => { });
-            MRosTopicClient<std_msgs.String>.AllInstances.SendTaskAsyncTDataType =
+            MRosTopicClient<std_msgs.String>.AllInstances.SendTaskAsyncTMessage =
                 (t1, t2) => Task.Factory.StartNew(() => t2.SerializeLength);
 
             var sock1 = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -75,7 +75,7 @@ namespace RosSharp.Tests.Topic
         {
             MRosTopicClient<std_msgs.String>.AllInstances.StartAsyncSocket = 
                 (t1, t2) => Task.Factory.StartNew(() => { });
-            MRosTopicClient<std_msgs.String>.AllInstances.SendTaskAsyncTDataType =
+            MRosTopicClient<std_msgs.String>.AllInstances.SendTaskAsyncTMessage =
                 (t1, t2) => Task.Factory.StartNew(() => t2.SerializeLength);
 
             var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);

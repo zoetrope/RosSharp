@@ -18,9 +18,9 @@ namespace Server
 
             var node = ROS.CreateNode("Server");
 
-            node.RegisterService("/add_two_ints", new AddTwoInts(add_two_ints)).Wait();
+            node.RegisterServiceAsync("/add_two_ints", new AddTwoInts(add_two_ints)).Wait();
 
-            node.RegisterService("/add_two_ints",new AddTwoInts(req => new AddTwoInts.Response {sum = req.a + req.b})).Wait();
+            node.RegisterServiceAsync("/add_two_ints",new AddTwoInts(req => new AddTwoInts.Response {sum = req.a + req.b})).Wait();
             
             Console.WriteLine("Press Any Key.");
             Console.ReadKey();

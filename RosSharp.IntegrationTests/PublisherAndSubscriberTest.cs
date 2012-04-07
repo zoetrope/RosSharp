@@ -52,8 +52,8 @@ namespace RosSharp.IntegrationTests
 
             var node = ROS.CreateNode("test");
 
-            var publisher = node.CreatePublisher<std_msgs.String>("test_topic").Result;
-            var subscriber = node.CreateSubscriber<std_msgs.String>("test_topic").Result;
+            var publisher = node.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
+            var subscriber = node.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
 
             Thread.Sleep(TimeSpan.FromSeconds(3));//TODO: Sleepなくしたい
 
@@ -86,8 +86,8 @@ namespace RosSharp.IntegrationTests
 
             var node = ROS.CreateNode("test");
 
-            var subscriber = node.CreateSubscriber<std_msgs.String>("test_topic").Result;
-            var publisher = node.CreatePublisher<std_msgs.String>("test_topic").Result;
+            var subscriber = node.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
+            var publisher = node.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
 
             Thread.Sleep(TimeSpan.FromSeconds(3));//TODO: Sleepなくしたい
 
