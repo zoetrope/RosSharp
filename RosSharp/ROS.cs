@@ -33,10 +33,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Net;
-using System.Reactive.Linq;
-using System.Text;
 using Common.Logging;
 using Common.Logging.Simple;
 using RosSharp.Node;
@@ -75,12 +72,8 @@ namespace RosSharp
 
         public static void Dispose()
         {
-            lock (_nodes)
-            {
-                //TODO:RosNode.Disposeをユーザが呼んだときの処理を実装すること
-                //_nodes.Values.ToList().ForEach(node => node.Dispose());
-                _nodes.Clear();
-            }
+            var nodes = GetNodes();
+            nodes.ForEach(node => node.Dispose());
         }
 
         private static Uri ReadMasterUri()
@@ -179,8 +172,30 @@ namespace RosSharp
             lock (_nodes)
             {
                 var node = new RosNode(nodeName);
+                node.Disposing += NodeOnDisposing;
                 _nodes.Add(nodeName, node);
                 return node;
+            }
+        }
+
+        public static List<INode> GetNodes()
+        {
+            List<INode> nodes;
+            lock (_nodes)
+            {
+                nodes = new List<INode>(_nodes.Values);
+            }
+            return nodes;
+        }
+
+        private static void NodeOnDisposing(RosNode rosNode)
+        {
+            lock (_nodes)
+            {
+                if (_nodes.ContainsKey(rosNode.NodeId))
+                {
+                    _nodes.Remove(rosNode.NodeId);
+                }
             }
         }
     }

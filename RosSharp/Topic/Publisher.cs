@@ -48,9 +48,9 @@ namespace RosSharp.Topic
     public sealed class Publisher<TMessage> : IPublisher, IObserver<TMessage>, IDisposable
         where TMessage : IMessage, new()
     {
-        private ILog _logger = LogManager.GetCurrentClassLogger();
-        private ReplaySubject<Unit> _onConnectedSubject = new ReplaySubject<Unit>();
-        private List<RosTopicClient<TMessage>> _rosTopicClients = new List<RosTopicClient<TMessage>>();
+        private readonly ILog _logger = LogManager.GetCurrentClassLogger();
+        private readonly ReplaySubject<Unit> _onConnectedSubject = new ReplaySubject<Unit>();
+        private readonly List<RosTopicClient<TMessage>> _rosTopicClients = new List<RosTopicClient<TMessage>>();
 
         internal Publisher(string topicName, string nodeId)
         {
@@ -71,7 +71,7 @@ namespace RosSharp.Topic
             var handler = Disposing;
             if (handler != null)
             {
-                handler();
+                handler(this);
             }
             Disposing = null;
 
@@ -150,6 +150,6 @@ namespace RosSharp.Topic
             //TODO: 不要では？
         }
 
-        internal event Action Disposing;
+        internal event Action<IPublisher> Disposing;
     }
 }

@@ -65,7 +65,9 @@ namespace RosSharp.Transport
 
         public void Dispose()
         {
+            _logger.Debug(m => m("Close Socket[{0}]", _socket.LocalEndPoint));
             _socket.Close();
+            _socket = null;
         }
 
         #endregion

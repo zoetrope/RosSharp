@@ -49,10 +49,10 @@ namespace RosSharp.Topic
     public sealed class Subscriber<TMessage> : ISubscriber, IObservable<TMessage>, IDisposable
         where TMessage : IMessage, new()
     {
-        private Subject<TMessage> _aggregateSubject = new Subject<TMessage>();
-        private CompositeDisposable _disposables = new CompositeDisposable();
-        private ReplaySubject<Unit> _onConnectedSubject = new ReplaySubject<Unit>();
-        private List<RosTopicServer<TMessage>> _rosTopicServers = new List<RosTopicServer<TMessage>>();
+        private readonly Subject<TMessage> _aggregateSubject = new Subject<TMessage>();
+        private readonly CompositeDisposable _disposables = new CompositeDisposable();
+        private readonly ReplaySubject<Unit> _onConnectedSubject = new ReplaySubject<Unit>();
+        private readonly List<RosTopicServer<TMessage>> _rosTopicServers = new List<RosTopicServer<TMessage>>();
 
         internal Subscriber(string topicName, string nodeId)
         {
@@ -72,8 +72,9 @@ namespace RosSharp.Topic
             var handler = Disposing;
             if (handler != null)
             {
-                handler();
+                handler(this);
             }
+            Disposing = null;
 
             lock (_disposables)
             {
@@ -133,6 +134,6 @@ namespace RosSharp.Topic
             return _onConnectedSubject;
         }
 
-        internal event Action Disposing;
+        internal event Action<ISubscriber> Disposing;
     }
 }

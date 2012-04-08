@@ -34,12 +34,14 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Reactive.Linq;
+using Common.Logging;
 
 namespace RosSharp.Transport
 {
     internal sealed class TcpRosListener : IDisposable
     {
         private Socket _socket;
+        private ILog _logger = LogManager.GetCurrentClassLogger();
 
         public TcpRosListener(int portNumber)
         {
@@ -65,7 +67,9 @@ namespace RosSharp.Transport
 
         public void Dispose()
         {
+            _logger.Debug(m => m("Close Socket[{0}]", _socket.LocalEndPoint));
             _socket.Close();
+            _socket = null;
         }
 
         #endregion
@@ -73,9 +77,12 @@ namespace RosSharp.Transport
         public IObservable<Socket> AcceptAsync()
         {
             return Observable.Create<Socket>(
-                observer => _socket
-                                .AcceptAsObservable(_socket.LocalEndPoint)
-                                .Subscribe(observer));
+                observer =>
+                {
+                    
+                        return _socket.AcceptAsObservable(_socket.LocalEndPoint).Subscribe(observer);
+                    
+                });
         }
     }
 }

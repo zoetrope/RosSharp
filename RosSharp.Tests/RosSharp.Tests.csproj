@@ -67,6 +67,7 @@
     <Compile Include="Parameter\ParameterServerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Master\MasterClientTest.cs" />
+    <Compile Include="ROSTest.cs" />
     <Compile Include="SandBoxTest.cs" />
     <Compile Include="Service\ProxyFactoryTest.cs" />
     <Compile Include="Service\ServiceServerTest.cs" />

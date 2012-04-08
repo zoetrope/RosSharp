@@ -37,6 +37,7 @@ using System.Reactive.Linq;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Http;
+using System.Threading.Tasks;
 using Common.Logging;
 using CookComputing.XmlRpc;
 using RosSharp.Parameter;
@@ -52,9 +53,9 @@ namespace RosSharp.Master
         private readonly HttpServerChannel _channel;
         private readonly RegistrationContainer _registrationContainer = new RegistrationContainer();
 
-        private ILog _logger = LogManager.GetCurrentClassLogger();
+        private readonly ILog _logger = LogManager.GetCurrentClassLogger();
 
-        private ParameterServer _parameterServer;
+        private readonly ParameterServer _parameterServer;
 
         public MasterServer(int portNumber)
         {
@@ -66,6 +67,8 @@ namespace RosSharp.Master
 
             ChannelServices.RegisterChannel(_channel, false);
             RemotingServices.Marshal(this, "/");
+
+            _logger.Info(m => m("MasterServer launched {0}", MasterUri.ToString()));
 
             _parameterServer = new ParameterServer(MasterUri);
         }
@@ -103,7 +106,8 @@ namespace RosSharp.Master
 
             if (string.IsNullOrEmpty(service))
             {
-                return new object[3]
+                _logger.Error(m => m("ERROR: parameter [{0}] must be a non-empty string", service));
+                return new object[]
                 {
                     StatusCode.Error,
                     "ERROR: parameter [" + service + "] must be a non-empty string",
@@ -116,7 +120,7 @@ namespace RosSharp.Master
                 {
                     _registrationContainer.RegisterService(service, new Uri(serviceApi), new Uri(callerApi));
                 }
-                return new object[3]
+                return new object[]
                 {
                     StatusCode.Success,
                     "Regisered [" + callerId + "] as provider of [" + service + "]",
@@ -125,7 +129,8 @@ namespace RosSharp.Master
             }
             catch (UriFormatException ex)
             {
-                return new object[3]
+                _logger.Error(m => m("ERROR: parameter [{0}] is not an XMLRPC URI", serviceApi), ex);
+                return new object[]
                 {
                     StatusCode.Error,
                     "ERROR: parameter [" + serviceApi + "] is not an XMLRPC URI",
@@ -152,7 +157,8 @@ namespace RosSharp.Master
 
             if (string.IsNullOrEmpty(service))
             {
-                return new object[3]
+                _logger.Error(m => m("ERROR: parameter [{0}] must be a non-empty string", service));
+                return new object[]
                 {
                     StatusCode.Error,
                     "ERROR: parameter [" + service + "] must be a non-empty string",
@@ -168,7 +174,7 @@ namespace RosSharp.Master
                 }
                 if (success)
                 {
-                    return new object[3]
+                    return new object[]
                     {
                         StatusCode.Success,
                         "Unregistered [" + callerId + "] as provider of [" + service + "]",
@@ -177,7 +183,8 @@ namespace RosSharp.Master
                 }
                 else
                 {
-                    return new object[3]
+                    _logger.Error(m => m("[{0}] is not a registered node", service));
+                    return new object[]
                     {
                         StatusCode.Success,
                         "[" + service + "] is not a registered node",
@@ -187,7 +194,8 @@ namespace RosSharp.Master
             }
             catch (UriFormatException ex)
             {
-                return new object[3]
+                _logger.Error(m => m("ERROR: parameter [{0}] is not an XMLRPC URI", serviceApi), ex);
+                return new object[]
                 {
                     StatusCode.Error,
                     "ERROR: parameter [" + serviceApi + "] is not an XMLRPC URI",
@@ -216,7 +224,8 @@ namespace RosSharp.Master
 
             if (string.IsNullOrEmpty(topic))
             {
-                return new object[3]
+                _logger.Error(m => m("ERROR: parameter [{0}] must be a non-empty string", topic));
+                return new object[]
                 {
                     StatusCode.Error,
                     "ERROR: parameter [" + topic + "] must be a non-empty string",
@@ -225,7 +234,8 @@ namespace RosSharp.Master
             }
             if (string.IsNullOrEmpty(topicType))
             {
-                return new object[3]
+                _logger.Error(m => m("ERROR: parameter [{0}] must be a non-empty string", topicType));
+                return new object[]
                 {
                     StatusCode.Error,
                     "ERROR: parameter [" + topicType + "] must be a non-empty string",
@@ -240,7 +250,7 @@ namespace RosSharp.Master
                 {
                     uris = _registrationContainer.RegsiterSubscriber(topic, topicType, new Uri(callerApi));
                 }
-                return new object[3]
+                return new object[]
                 {
                     StatusCode.Success,
                     "Subscribed to [" + topic + "]",
@@ -249,7 +259,8 @@ namespace RosSharp.Master
             }
             catch (UriFormatException ex)
             {
-                return new object[3]
+                _logger.Error(m => m("ERROR: parameter [{0}] is not an XMLRPC URI", callerApi), ex);
+                return new object[]
                 {
                     StatusCode.Error,
                     "ERROR: parameter [" + callerApi + "] is not an XMLRPC URI",
@@ -276,7 +287,8 @@ namespace RosSharp.Master
 
             if (string.IsNullOrEmpty(topic))
             {
-                return new object[3]
+                _logger.Error(m => m("ERROR: parameter [{0}] must be a non-empty string", topic));
+                return new object[]
                 {
                     StatusCode.Error,
                     "ERROR: parameter [" + topic + "] must be a non-empty string",
@@ -293,7 +305,7 @@ namespace RosSharp.Master
                 }
                 if (success)
                 {
-                    return new object[3]
+                    return new object[]
                     {
                         StatusCode.Success,
                         "Unregistered [" + callerId + "] as topic of [" + topic + "]",
@@ -302,7 +314,8 @@ namespace RosSharp.Master
                 }
                 else
                 {
-                    return new object[3]
+                    _logger.Error(m => m("[{0}] is not a registered node", topic));
+                    return new object[]
                     {
                         StatusCode.Success,
                         "[" + topic + "] is not a registered node",
@@ -312,7 +325,8 @@ namespace RosSharp.Master
             }
             catch (UriFormatException ex)
             {
-                return new object[3]
+                _logger.Error(m => m("ERROR: parameter [{0}] is not an XMLRPC URI", callerApi), ex);
+                return new object[]
                 {
                     StatusCode.Error,
                     "ERROR: parameter [" + callerApi + "] is not an XMLRPC URI",
@@ -340,7 +354,8 @@ namespace RosSharp.Master
 
             if (string.IsNullOrEmpty(topic))
             {
-                return new object[3]
+                _logger.Error(m => m("ERROR: parameter [{0}] must be a non-empty string", topic));
+                return new object[]
                 {
                     StatusCode.Error,
                     "ERROR: parameter [" + topic + "] must be a non-empty string",
@@ -349,7 +364,8 @@ namespace RosSharp.Master
             }
             if (string.IsNullOrEmpty(topicType))
             {
-                return new object[3]
+                _logger.Error(m => m("ERROR: parameter [{0}] must be a non-empty string", topicType));
+                return new object[]
                 {
                     StatusCode.Error,
                     "ERROR: parameter [" + topicType + "] must be a non-empty string",
@@ -363,18 +379,19 @@ namespace RosSharp.Master
                 lock (_registrationContainer)
                 {
                     info = _registrationContainer.RegisterPublisher(topic, topicType, new Uri(callerApi));
-                    UpdatePublisher(info);
+                    UpdatePublisher(callerId, info);
                 }
-                return new object[3]
+                return new object[]
                 {
-                    1,
+                    StatusCode.Success,
                     "Registered [" + callerId + "] as publisher of [" + topic + "]",
                     info.SubscriberUris.Select(x => x.ToString()).ToArray()
                 };
             }
             catch (UriFormatException ex)
             {
-                return new object[3]
+                _logger.Error(m => m("ERROR: parameter [{0}] is not an XMLRPC URI", callerApi), ex);
+                return new object[]
                 {
                     StatusCode.Error,
                     "ERROR: parameter [" + callerApi + "] is not an XMLRPC URI",
@@ -401,7 +418,8 @@ namespace RosSharp.Master
 
             if (string.IsNullOrEmpty(topic))
             {
-                return new object[3]
+                _logger.Error(m => m("ERROR: parameter [{0}] must be a non-empty string", topic));
+                return new object[]
                 {
                     StatusCode.Error,
                     "ERROR: parameter [" + topic + "] must be a non-empty string",
@@ -418,7 +436,7 @@ namespace RosSharp.Master
                 }
                 if (success)
                 {
-                    return new object[3]
+                    return new object[]
                     {
                         StatusCode.Success,
                         "Unregistered [" + callerId + "] as topic of [" + topic + "]",
@@ -427,7 +445,8 @@ namespace RosSharp.Master
                 }
                 else
                 {
-                    return new object[3]
+                    _logger.Error(m => m("[{0}] is not a registered node", topic));
+                    return new object[]
                     {
                         StatusCode.Success,
                         "[" + topic + "] is not a registered node",
@@ -437,7 +456,8 @@ namespace RosSharp.Master
             }
             catch (UriFormatException ex)
             {
-                return new object[3]
+                _logger.Error(m => m("ERROR: parameter [{0}] is not an XMLRPC URI", callerApi), ex);
+                return new object[]
                 {
                     StatusCode.Error,
                     "ERROR: parameter [" + callerApi + "] is not an XMLRPC URI",
@@ -463,7 +483,8 @@ namespace RosSharp.Master
 
             if (string.IsNullOrEmpty(nodeName))
             {
-                return new object[3]
+                _logger.Error(m => m("ERROR: parameter [{0}] must be a non-empty string", nodeName));
+                return new object[]
                 {
                     StatusCode.Error,
                     "ERROR: parameter [" + nodeName + "] must be a non-empty string",
@@ -478,7 +499,7 @@ namespace RosSharp.Master
 
             if (uri != null)
             {
-                return new object[3]
+                return new object[]
                 {
                     StatusCode.Success,
                     "node api: [" + uri + "]",
@@ -487,7 +508,8 @@ namespace RosSharp.Master
             }
             else
             {
-                return new object[3]
+                _logger.Error(m => m("unknown node [{0}]", nodeName));
+                return new object[]
                 {
                     StatusCode.Error,
                     "unknown node [" + nodeName + "]",
@@ -544,7 +566,7 @@ namespace RosSharp.Master
         {
             _logger.Debug(m => m("GetUri(callerId={0})", callerId));
 
-            return new object[3]
+            return new object[]
             {
                 StatusCode.Success,
                 "",
@@ -572,24 +594,23 @@ namespace RosSharp.Master
                 uri = _registrationContainer.LookUpService(service);
             }
 
-            if (uri != null)
+            if (uri == null)
             {
-                return new object[3]
-                {
-                    StatusCode.Success,
-                    "rosrpc URI: [" + uri + "]",
-                    uri.ToString()
-                };
-            }
-            else
-            {
-                return new object[3]
+                _logger.Error("no provider");
+                return new object[]
                 {
                     StatusCode.Error,
                     "no provider",
                     ""
                 };
             }
+
+            return new object[]
+            {
+                StatusCode.Success,
+                "rosrpc URI: [" + uri + "]",
+                uri.ToString()
+            };
         }
 
         #endregion
@@ -643,7 +664,7 @@ namespace RosSharp.Master
             return null;
         }
 
-        private void UpdatePublisher(TopicRegistrationInfo info)
+        private void UpdatePublisher(string callerId, TopicRegistrationInfo info)
         {
             var slaves = info.SubscriberUris.Select(uri => new SlaveClient(uri));
 
@@ -651,8 +672,13 @@ namespace RosSharp.Master
 
             _logger.Debug(m => m("UpdatePublisher: slaves={0}, publishers={1}", slaves.Count(), publishers.Length));
 
-            //TODO: Waitはだめ？Serverの中なのでどうすべきか。Java版では接続せずに帰ってきてる感じ。
-            slaves.ToList().ForEach(s => s.PublisherUpdateAsync("", info.TopicName, publishers).Wait());
+            Parallel.ForEach(
+                slaves,
+                slave => slave.PublisherUpdateAsync(callerId, info.TopicName, publishers)
+                             .ContinueWith(task =>
+                             {
+                                 _logger.Error("UpdatePublisher: Failure", task.Exception.InnerException);
+                             }, TaskContinuationOptions.OnlyOnFaulted));
         }
     }
 }

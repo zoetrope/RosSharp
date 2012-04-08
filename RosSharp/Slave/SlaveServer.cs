@@ -33,7 +33,6 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Net.Sockets;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Http;
@@ -55,7 +54,7 @@ namespace RosSharp.Slave
         private readonly TopicContainer _topicContainer;
         private string _nodeId;
 
-        private ILog _logger = LogManager.GetCurrentClassLogger();
+        private readonly ILog _logger = LogManager.GetCurrentClassLogger();
 
         internal SlaveServer(string nodeId, int portNumber, TopicContainer topicContainer, TcpRosListener listener)
         {
@@ -141,7 +140,7 @@ namespace RosSharp.Slave
         public object[] GetMasterUri(string callerId)
         {
             _logger.Debug(m => m("GetMasterUri(callerId={0})", callerId));
-            return new object[3]
+            return new object[]
             {
                 StatusCode.Success,
                 "",
@@ -177,7 +176,7 @@ namespace RosSharp.Slave
         public object[] GetPid(string callerId)
         {
             _logger.Debug(m => m("GetPid(callerId={0})", callerId));
-            return new object[3]
+            return new object[]
             {
                 StatusCode.Success,
                 "",
@@ -282,7 +281,7 @@ namespace RosSharp.Slave
                 subs.UpdatePublishers(publishers.Select(x => new Uri(x)).ToList());
             }
 
-            return new object[3]
+            return new object[]
             {
                 StatusCode.Success,
                 "Publisher update received.",
@@ -332,11 +331,11 @@ namespace RosSharp.Slave
 
                 var address = _tcpRosListener.EndPoint;
 
-                return new object[3]
+                return new object[]
                 {
                     1,
-                    "Protocol<" + protocolName + ", AdvertiseAddress<" + address.ToString() + ">>",
-                    new object[3]
+                    "Protocol<" + protocolName + ", AdvertiseAddress<" + address + ">>",
+                    new object[]
                     {
                         protocolName,
                         ROS.HostName,

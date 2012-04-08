@@ -71,9 +71,14 @@ namespace RosSharp.Transport
                     .Where(args => args.LastOperation == SocketAsyncOperation.Receive)
                     .Do(x =>
                     {
+                        if(socket == null)
+                        {
+                            _logger.Error("!!!!!!!!");
+                        }
                         _logger.Debug(m => m("Received: Code={0}", x.SocketError));
                         if (x.SocketError != SocketError.Success)
                         {
+                            _logger.Debug(m => m("Close Socket[{0}]", socket.LocalEndPoint));
                             socket.Close();
                             throw new Exception();
                         }

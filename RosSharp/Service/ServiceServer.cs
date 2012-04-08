@@ -43,11 +43,11 @@ using RosSharp.Transport;
 
 namespace RosSharp.Service
 {
-    internal sealed class ServiceServer<TService>
+    internal sealed class ServiceServer<TService> : IDisposable
         where TService : IService, new()
     {
         private TcpRosListener _listener;
-        private string _nodeId;
+        private readonly string _nodeId;
 
         public ServiceServer(string nodeId)
         {
@@ -59,7 +59,7 @@ namespace RosSharp.Service
             get { return _listener.EndPoint; }
         }
 
-        public IDisposable RegisterService(string serviceName, IService service)
+        public IDisposable StartService(string serviceName, IService service)
         {
             _listener = new TcpRosListener(0);
             var disp = _listener.AcceptAsync()
@@ -67,6 +67,11 @@ namespace RosSharp.Service
                 .Subscribe(client => client.Initialize(serviceName));
 
             return disp; //TODO: サービス登録を解除するためのDisposableを返す。もしくはIObservable？
+        }
+
+        public void Dispose()
+        {
+            _listener.Dispose();
         }
     }
 }

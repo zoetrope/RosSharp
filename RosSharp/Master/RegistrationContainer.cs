@@ -53,7 +53,7 @@ namespace RosSharp.Master
 
         public bool UnregisterService(string service, Uri serviceUri)
         {
-            throw new NotImplementedException();
+            return _serviceUris.Remove(service);
         }
 
         public Uri LookUpService(string service)
@@ -96,7 +96,17 @@ namespace RosSharp.Master
 
         public bool UnregisterSubscriber(string topic, Uri uri)
         {
-            throw new NotImplementedException();
+            if(_topics.ContainsKey(topic))
+            {
+                _topics[topic].SubscriberUris.Remove(uri);
+
+                if (_topics[topic].SubscriberUris.Count == 0 && _topics[topic].PublisherUris.Count == 0)
+                {
+                    _topics.Remove(topic);
+                }
+            }
+
+            return true;
         }
 
         public TopicRegistrationInfo RegisterPublisher(string topic, string topicType, Uri slaveUri)
@@ -126,7 +136,17 @@ namespace RosSharp.Master
 
         public bool UnregisterPublisher(string topic, Uri uri)
         {
-            throw new NotImplementedException();
+            if (_topics.ContainsKey(topic))
+            {
+                _topics[topic].PublisherUris.Remove(uri);
+
+                if (_topics[topic].SubscriberUris.Count == 0 && _topics[topic].PublisherUris.Count == 0)
+                {
+                    _topics.Remove(topic);
+                }
+            }
+
+            return true;
         }
 
 

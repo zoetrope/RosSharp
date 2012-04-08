@@ -107,9 +107,9 @@ namespace RosSharp.Parameter
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
-            result = null;
             if(!_xmlRpcStruct.ContainsKey(binder.Name))
             {
+                result = null;
                 return false;
             }
 

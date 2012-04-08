@@ -122,7 +122,6 @@ namespace RosSharp.Parameter
         {
             if (_parameterSubject == null)
             {
-                //TODO: ここで初期化してよい？Subscribeが呼ばれるするまでSubscribeParamを実行せずにすむので効率的？
                 _parameterSubject = new Subject<T>();
                 var disposable = _parameterSubject.Subscribe(observer);
                 _parameterServerClient.SubscribeParamAsync(NodeId, _slaveUri, Name)

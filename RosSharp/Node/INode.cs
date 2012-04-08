@@ -50,7 +50,7 @@ namespace RosSharp.Node
         Task<TService> CreateProxyAsync<TService>(string serviceName)
             where TService : IService, new();
 
-        Task RegisterServiceAsync<TService>(string serviceName, TService service)
+        Task<IDisposable> RegisterServiceAsync<TService>(string serviceName, TService service)
             where TService : IService, new();
         
         Task<Parameter<T>> CreateParameterAsync<T>(string paramName);
