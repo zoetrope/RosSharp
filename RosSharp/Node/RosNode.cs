@@ -45,6 +45,9 @@ using RosSharp.Transport;
 
 namespace RosSharp.Node
 {
+    /// <summary>
+    /// ROS Node
+    /// </summary>
     public class RosNode : INode
     {
         private bool _disposed;
@@ -65,8 +68,8 @@ namespace RosSharp.Node
 
             NodeId = nodeId;
 
-            _masterClient = new MasterClient(ROS.MasterUri);
-            _parameterServerClient = new ParameterServerClient(ROS.MasterUri);
+            _masterClient = new MasterClient(RosManager.MasterUri);
+            _parameterServerClient = new ParameterServerClient(RosManager.MasterUri);
 
             _serviceProxyFactory = new ServiceProxyFactory(NodeId);
 
@@ -241,7 +244,7 @@ namespace RosSharp.Node
 
             var cd = new CompositeDisposable(serviceServer, disposable);
 
-            var serviceUri = new Uri("rosrpc://" + ROS.HostName + ":" + serviceServer.EndPoint.Port);
+            var serviceUri = new Uri("rosrpc://" + RosManager.HostName + ":" + serviceServer.EndPoint.Port);
 
             return _masterClient
                 .RegisterServiceAsync(NodeId, serviceName, serviceUri, _slaveServer.SlaveUri)

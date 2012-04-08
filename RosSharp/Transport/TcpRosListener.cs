@@ -41,7 +41,7 @@ namespace RosSharp.Transport
     internal sealed class TcpRosListener : IDisposable
     {
         private Socket _socket;
-        private ILog _logger = LogManager.GetCurrentClassLogger();
+        private readonly ILog _logger = LogManager.GetCurrentClassLogger();
 
         public TcpRosListener(int portNumber)
         {
@@ -77,12 +77,7 @@ namespace RosSharp.Transport
         public IObservable<Socket> AcceptAsync()
         {
             return Observable.Create<Socket>(
-                observer =>
-                {
-                    
-                        return _socket.AcceptAsObservable(_socket.LocalEndPoint).Subscribe(observer);
-                    
-                });
+                observer => _socket.AcceptAsObservable(_socket.LocalEndPoint).Subscribe(observer));
         }
     }
 }

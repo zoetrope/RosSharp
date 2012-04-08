@@ -34,15 +34,41 @@ using System.IO;
 
 namespace RosSharp.Message
 {
+    /// <summary>
+    ///   Defines interface for Topic Message
+    /// </summary>
     public interface IMessage
     {
+        /// <summary>
+        /// Message Type Name
+        /// </summary>
         string MessageType { get; }
+
+        /// <summary>
+        /// MD5 Sum of this Message
+        /// </summary>
         string Md5Sum { get; }
+
+        /// <summary>
+        /// Raw Message Definition
+        /// </summary>
         string MessageDefinition { get; }
 
+        /// <summary>
+        /// Message Length for Serialize
+        /// </summary>
         int SerializeLength { get; }
 
+        /// <summary>
+        /// Serialize Message
+        /// </summary>
+        /// <param name="stream">Serialized Binary Data</param>
         void Serialize(BinaryWriter stream);
+
+        /// <summary>
+        /// Deserialize Message
+        /// </summary>
+        /// <param name="stream">Binary Data for Desirialize</param>
         void Deserialize(BinaryReader stream);
     }
 }

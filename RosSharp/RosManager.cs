@@ -41,15 +41,41 @@ using RosSharp.Node;
 namespace RosSharp
 {
     /// <summary>
+    ///   ROS Manager
     /// </summary>
-    public static class ROS
+    public static class RosManager
     {
         private static readonly Dictionary<string, INode> _nodes = new Dictionary<string, INode>();
+
+        /// <summary>
+        ///   XML-RPC URI of the Master
+        /// </summary>
+        /// <example>
+        ///   http://192.168.1.10:11311/
+        /// </example>
         public static Uri MasterUri { get; set; }
+
+        /// <summary>
+        ///   local network address of a ROS Node
+        /// </summary>
+        /// <example>
+        ///   192.168.1.10
+        /// </example>
         public static string HostName { get; set; }
+
+        /// <summary>
+        ///   Timeout in milliseconds on a XML-RPC proxy method call
+        /// </summary>
         public static int XmlRpcTimeout { get; set; }
+
+        /// <summary>
+        ///   Timeout in milliseconds on a socket send
+        /// </summary>
         public static int TopicTimeout { get; set; }
 
+        /// <summary>
+        ///   Initialize Setting
+        /// </summary>
         public static void Initialize()
         {
             MasterUri = ReadMasterUri();
@@ -70,6 +96,9 @@ namespace RosSharp
             Console.CancelKeyPress += (sender, args) => Dispose();
         }
 
+        /// <summary>
+        ///   Dispose all nodes
+        /// </summary>
         public static void Dispose()
         {
             var nodes = GetNodes();
@@ -167,17 +196,26 @@ namespace RosSharp
             return 1000;
         }
 
+        /// <summary>
+        ///   Create a ROS Node
+        /// </summary>
+        /// <param name="nodeName"> ROS Node name </param>
+        /// <returns> created Node </returns>
         public static INode CreateNode(string nodeName)
         {
             lock (_nodes)
             {
                 var node = new RosNode(nodeName);
-                node.Disposing += NodeOnDisposing;
+                node.Disposing += DisposeNode;
                 _nodes.Add(nodeName, node);
                 return node;
             }
         }
 
+        /// <summary>
+        ///   Get all nodes
+        /// </summary>
+        /// <returns> all nodes </returns>
         public static List<INode> GetNodes()
         {
             List<INode> nodes;
@@ -188,7 +226,7 @@ namespace RosSharp
             return nodes;
         }
 
-        private static void NodeOnDisposing(RosNode rosNode)
+        private static void DisposeNode(RosNode rosNode)
         {
             lock (_nodes)
             {

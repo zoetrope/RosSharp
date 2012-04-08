@@ -35,7 +35,7 @@ using System.Runtime.Serialization;
 
 namespace RosSharp.Topic
 {
-    public class RosTopicException : Exception
+    public sealed class RosTopicException : Exception
     {
         public RosTopicException()
         {

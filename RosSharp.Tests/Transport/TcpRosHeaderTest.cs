@@ -11,7 +11,7 @@ namespace RosSharp.Tests.Transport
         [TestInitialize]
         public void Initialize()
         {
-            ROS.Initialize();
+            RosManager.Initialize();
         }
 
         [TestMethod]

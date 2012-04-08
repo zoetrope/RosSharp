@@ -39,20 +39,54 @@ using RosSharp.Parameter;
 
 namespace RosSharp.Node
 {
+    /// <summary>
+    ///   Defines interface for ROS NODE
+    /// </summary>
     public interface INode : IDisposable
     {
+        /// <summary>
+        /// Create a ROS Topic Subscriber
+        /// </summary>
+        /// <typeparam name="TMessage">Topic Message Type</typeparam>
+        /// <param name="topicName">Topic Name</param>
+        /// <returns>Subscriber</returns>
         Task<Subscriber<TMessage>> CreateSubscriberAsync<TMessage>(string topicName)
             where TMessage : IMessage, new();
 
+        /// <summary>
+        /// Create a ROS Topic Publisher
+        /// </summary>
+        /// <typeparam name="TMessage">Topic Message Type</typeparam>
+        /// <param name="topicName">Topic Name</param>
+        /// <returns>Publisher</returns>
         Task<Publisher<TMessage>> CreatePublisherAsync<TMessage>(string topicName)
             where TMessage : IMessage, new();
 
+        /// <summary>
+        /// Create a Proxy Object for ROS Service 
+        /// </summary>
+        /// <typeparam name="TService">Service Type</typeparam>
+        /// <param name="serviceName">Service Name</param>
+        /// <returns>Proxy Object</returns>
         Task<TService> CreateProxyAsync<TService>(string serviceName)
             where TService : IService, new();
 
+        /// <summary>
+        /// Register a ROS Service
+        /// </summary>
+        /// <typeparam name="TService">Service Type</typeparam>
+        /// <param name="serviceName">Service Name</param>
+        /// <param name="service">Service Instance</param>
+        /// <returns>object that dispose a service</returns>
         Task<IDisposable> RegisterServiceAsync<TService>(string serviceName, TService service)
             where TService : IService, new();
         
-        Task<Parameter<T>> CreateParameterAsync<T>(string paramName);
+        /// <summary>
+        /// Create a ROS Parameter
+        /// </summary>
+        /// <typeparam name="TParameter">Parameter Type</typeparam>
+        /// <param name="paramName">Parameter Name</param>
+        /// <returns>Parameter</returns>
+        Task<Parameter<TParameter>> CreateParameterAsync<TParameter>(string paramName);
     }
 }

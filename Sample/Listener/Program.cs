@@ -6,11 +6,11 @@ namespace RosSharp.Sample
     {
         static void Main(string[] args)
         {
-            ROS.Initialize();
-            ROS.MasterUri = new Uri("http://192.168.11.5:11311/");
-            ROS.HostName = "192.168.11.3";
+            RosManager.Initialize();
+            RosManager.MasterUri = new Uri("http://192.168.11.5:11311/");
+            RosManager.HostName = "192.168.11.3";
 
-            var node = ROS.CreateNode("Listener");
+            var node = RosManager.CreateNode("Listener");
 
             var subscriber = node.CreateSubscriberAsync<RosSharp.std_msgs.String>("/chatter").Result;
 

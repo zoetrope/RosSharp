@@ -7,11 +7,11 @@ namespace RosSharp.Sample
     {
         static void Main(string[] args)
         {
-            ROS.Initialize();
-            ROS.MasterUri = new Uri("http://192.168.11.5:11311/");
-            ROS.HostName = "192.168.11.3";
+            RosManager.Initialize();
+            RosManager.MasterUri = new Uri("http://192.168.11.5:11311/");
+            RosManager.HostName = "192.168.11.3";
 
-            var node = ROS.CreateNode("Client");
+            var node = RosManager.CreateNode("Client");
 
             var proxy = node.CreateProxyAsync<AddTwoInts>("/add_two_ints").Result;
             

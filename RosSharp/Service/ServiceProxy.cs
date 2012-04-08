@@ -44,8 +44,8 @@ namespace RosSharp.Service
     internal class ServiceProxy<TService>
         where TService : IService, new()
     {
-        private TcpRosClient _client;
-        private TService _service;
+        private readonly TcpRosClient _client;
+        private readonly TService _service;
 
         public ServiceProxy(TService service, TcpRosClient client)
         {

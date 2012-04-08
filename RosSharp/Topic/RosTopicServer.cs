@@ -131,7 +131,7 @@ namespace RosSharp.Topic
                     {
                         try
                         {
-                            var recvHeader = last.Timeout(TimeSpan.FromMilliseconds(ROS.TopicTimeout)).First();
+                            var recvHeader = last.Timeout(TimeSpan.FromMilliseconds(RosManager.TopicTimeout)).First();
                             tcs.SetResult(OnReceivedHeader(recvHeader));
                         }
                         catch (RosTopicException ex)

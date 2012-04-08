@@ -12,37 +12,37 @@ namespace RosSharp.Tests
         [TestMethod]
         public void Dispose()
         {
-            ROS.Initialize();
+            RosManager.Initialize();
 
-            ROS.GetNodes().Count.Is(0);
+            RosManager.GetNodes().Count.Is(0);
 
-            var node = ROS.CreateNode("test");
+            var node = RosManager.CreateNode("test");
 
-            ROS.GetNodes().Count.Is(1);
+            RosManager.GetNodes().Count.Is(1);
 
-            ROS.Dispose();
+            RosManager.Dispose();
 
-            ROS.GetNodes().Count.Is(0);
+            RosManager.GetNodes().Count.Is(0);
         }
 
         [TestMethod]
         public void DisposeByNode()
         {
-            ROS.Initialize();
+            RosManager.Initialize();
 
-            ROS.GetNodes().Count.Is(0);
+            RosManager.GetNodes().Count.Is(0);
 
-            var node = ROS.CreateNode("test");
+            var node = RosManager.CreateNode("test");
 
-            ROS.GetNodes().Count.Is(1);
+            RosManager.GetNodes().Count.Is(1);
 
             node.Dispose();
 
-            ROS.GetNodes().Count.Is(0);
+            RosManager.GetNodes().Count.Is(0);
 
-            ROS.Dispose();
+            RosManager.Dispose();
 
-            ROS.GetNodes().Count.Is(0);
+            RosManager.GetNodes().Count.Is(0);
         }
     }
 }

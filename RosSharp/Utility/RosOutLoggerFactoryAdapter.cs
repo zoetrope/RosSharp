@@ -40,11 +40,15 @@ using Common.Logging.Simple;
 
 namespace RosSharp
 {
+    /// <summary>
+    /// LoggerFactoryAdapter for use of the RosOutLogger
+    /// </summary>
     public sealed class RosOutLoggerFactoryAdapter : AbstractSimpleLoggerFactoryAdapter
     {
         public RosOutLoggerFactoryAdapter()
             : base(null)
         {
+            
         }
 
         public RosOutLoggerFactoryAdapter(NameValueCollection properties)

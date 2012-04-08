@@ -16,11 +16,11 @@ namespace RosSharp.IntegrationTests
         [TestInitialize]
         public void Initialize()
         {
-            ROS.Initialize();
-            ROS.MasterUri = new Uri("http://localhost:11311/");
-            ROS.HostName = "localhost";
-            ROS.TopicTimeout = 3000;
-            ROS.XmlRpcTimeout = 3000;
+            RosManager.Initialize();
+            RosManager.MasterUri = new Uri("http://localhost:11311/");
+            RosManager.HostName = "localhost";
+            RosManager.TopicTimeout = 3000;
+            RosManager.XmlRpcTimeout = 3000;
 
             _masterServer = new MasterServer(11311);
         }
@@ -29,7 +29,7 @@ namespace RosSharp.IntegrationTests
         public void Cleanup()
         {
             _masterServer.Dispose();
-            ROS.Dispose();
+            RosManager.Dispose();
         }
 
         [TestMethod]
@@ -45,7 +45,7 @@ namespace RosSharp.IntegrationTests
                 OnNext(30, new std_msgs.String() {data = "hijklmn"})
                 );
 
-            var node = ROS.CreateNode("test");
+            var node = RosManager.CreateNode("test");
 
             var publisher = node.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
             var subscriber = node.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
@@ -86,7 +86,7 @@ namespace RosSharp.IntegrationTests
                 OnNext(30, new std_msgs.String() { data = "hijklmn" })
                 );
 
-            var node = ROS.CreateNode("test");
+            var node = RosManager.CreateNode("test");
 
             var subscriber = node.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
             var publisher = node.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
@@ -128,9 +128,9 @@ namespace RosSharp.IntegrationTests
                 OnNext(30, new std_msgs.String() { data = "hijklmn" })
                 );
 
-            var node1 = ROS.CreateNode("test1");
-            var node2 = ROS.CreateNode("test2");
-            var node3 = ROS.CreateNode("test3");
+            var node1 = RosManager.CreateNode("test1");
+            var node2 = RosManager.CreateNode("test2");
+            var node3 = RosManager.CreateNode("test3");
 
             var subscriber1 = node1.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
             var subscriber2 = node2.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
@@ -196,9 +196,9 @@ namespace RosSharp.IntegrationTests
                 OnNext(330, new std_msgs.String() { data = "hijklmn3" })
                 );
 
-            var node1 = ROS.CreateNode("test1");
-            var node2 = ROS.CreateNode("test2");
-            var node3 = ROS.CreateNode("test3");
+            var node1 = RosManager.CreateNode("test1");
+            var node2 = RosManager.CreateNode("test2");
+            var node3 = RosManager.CreateNode("test3");
 
             var publisher1 = node1.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
             var publisher2 = node2.CreatePublisherAsync<std_msgs.String>("test_topic").Result;

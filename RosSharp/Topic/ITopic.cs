@@ -32,9 +32,19 @@
 
 namespace RosSharp.Topic
 {
+    /// <summary>
+    ///   Defines interface for ROS Topic
+    /// </summary>
     public interface ITopic
     {
+        /// <summary>
+        /// ROS Topic Name
+        /// </summary>
         string TopicName { get; }
+
+        /// <summary>
+        /// ROS Topic Message Type
+        /// </summary>
         string MessageType { get; }
     }
 }

@@ -41,32 +41,32 @@ using RosSharp.Transport;
 
 namespace RosSharp.Service
 {
-    public class ServiceInstance<TService>
+    internal sealed class ServiceInstance<TService>
         where TService : IService, new()
     {
-        private string _nodeId;
-        private IService _service;
-        private TcpRosClient client;
+        private readonly string _nodeId;
+        private readonly IService _service;
+        private readonly TcpRosClient _client;
 
         public ServiceInstance(string nodeId, IService service, Socket s)
         {
             _nodeId = nodeId;
             _service = service;
 
-            client = new TcpRosClient(s);
+            _client = new TcpRosClient(s);
         }
 
         internal void Initialize(string serviceName) //TODO: 非同期に。
         {
-            client.ReceiveAsync()
+            _client.ReceiveAsync()
                 .Take(1)
                 .Select(b => TcpRosHeaderSerializer.Deserialize(new MemoryStream(b)))
-                .SelectMany(client.ReceiveAsync())
+                .SelectMany(_client.ReceiveAsync())
                 .Subscribe(b =>
                 {
                     var res = Invoke(new MemoryStream(b));
                     var array = res.ToArray();
-                    client.SendTaskAsync(array).Wait(); //TODO: Waitしても意味なくね？Subscribe自体の終了を待たねば。
+                    _client.SendTaskAsync(array).Wait(); //TODO: Waitしても意味なくね？Subscribe自体の終了を待たねば。
                 });
 
             var dummy = new TService();
@@ -80,7 +80,7 @@ namespace RosSharp.Service
 
             var ms = new MemoryStream();
             TcpRosHeaderSerializer.Serialize(ms, header);
-            client.SendTaskAsync(ms.ToArray()).Wait();
+            _client.SendTaskAsync(ms.ToArray()).Wait();
         }
 
         private MemoryStream Invoke(Stream stream)

@@ -40,9 +40,12 @@ using Common.Logging.Simple;
 
 namespace RosSharp
 {
-    public class RosOutLogger : AbstractSimpleLogger
+    /// <summary>
+    /// Logging to RosOut
+    /// </summary>
+    internal class RosOutLogger : AbstractSimpleLogger
     {
-        public RosOutLogger(string logName, LogLevel logLevel, bool showLevel, bool showDateTime, bool showLogName,
+        internal RosOutLogger(string logName, LogLevel logLevel, bool showLevel, bool showDateTime, bool showLogName,
                             string dateTimeFormat)
             : base(logName, logLevel, showLevel, showDateTime, showLogName, dateTimeFormat)
         {

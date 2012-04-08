@@ -54,7 +54,7 @@ namespace RosSharp.Slave
 
             _proxy = new SlaveProxy();
             _proxy.Url = uri.ToString();
-            _proxy.Timeout = ROS.XmlRpcTimeout;
+            _proxy.Timeout = RosManager.XmlRpcTimeout;
         }
 
         /// <summary>

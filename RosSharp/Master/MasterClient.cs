@@ -48,7 +48,7 @@ namespace RosSharp.Master
         {
             _proxy = new MasterProxy();
             _proxy.Url = uri.ToString();
-            _proxy.Timeout = ROS.XmlRpcTimeout;
+            _proxy.Timeout = RosManager.XmlRpcTimeout;
         }
 
         /// <summary>

@@ -36,23 +36,71 @@ using RosSharp.Message;
 
 namespace RosSharp.Service
 {
+    /// <summary>
+    ///   Defines interface for ROS Service
+    /// </summary>
     public interface IService
     {
+        /// <summary>
+        /// Service Type Name
+        /// </summary>
         string ServiceType { get; }
+
+        /// <summary>
+        /// MD5 Sum of this Service
+        /// </summary>
         string Md5Sum { get; }
+
+        /// <summary>
+        /// Raw Service Definition
+        /// </summary>
         string ServiceDefinition { get; }
 
+        /// <summary>
+        /// Create default Request instance
+        /// </summary>
+        /// <returns></returns>
         IMessage CreateRequest();
+
+        /// <summary>
+        /// Create default Response instance
+        /// </summary>
+        /// <returns></returns>
         IMessage CreateResponse();
+
+        /// <summary>
+        /// Invoke Service
+        /// </summary>
+        /// <param name="req">Request</param>
+        /// <returns>Response</returns>
         IMessage Invoke(IMessage req);
+
+        /// <summary>
+        /// Set Service Action
+        /// </summary>
+        /// <param name="action">Service Action</param>
         void SetAction(Func<IMessage, IMessage> action);
     }
 
+    /// <summary>
+    ///   Defines strong typed interface for ROS Service
+    /// </summary>
     public interface ITypedService<in TRequest, TResponse> : IService
         where TRequest : IMessage, new()
         where TResponse : IMessage, new()
     {
+        /// <summary>
+        /// Invoke Service
+        /// </summary>
+        /// <param name="req">Request</param>
+        /// <returns>Response</returns>
         TResponse Invoke(TRequest req);
+
+        /// <summary>
+        /// Asynchronous invoke Service
+        /// </summary>
+        /// <param name="req">Request</param>
+        /// <returns>Response</returns>
         Task<TResponse> InvokeTaskAsync(TRequest req);
     }
 }

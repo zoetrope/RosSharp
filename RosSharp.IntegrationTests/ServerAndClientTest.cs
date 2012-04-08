@@ -17,11 +17,11 @@ namespace RosSharp.IntegrationTests
         [TestInitialize]
         public void Initialize()
         {
-            ROS.Initialize();
-            ROS.MasterUri = new Uri("http://localhost:11311/");
-            ROS.HostName = "localhost";
-            ROS.TopicTimeout = 3000;
-            ROS.XmlRpcTimeout = 3000;
+            RosManager.Initialize();
+            RosManager.MasterUri = new Uri("http://localhost:11311/");
+            RosManager.HostName = "localhost";
+            RosManager.TopicTimeout = 3000;
+            RosManager.XmlRpcTimeout = 3000;
 
             _masterServer = new MasterServer(11311);
         }
@@ -36,7 +36,7 @@ namespace RosSharp.IntegrationTests
         [TestMethod]
         public void ServerAndProxy()
         {
-            var node = ROS.CreateNode("test");
+            var node = RosManager.CreateNode("test");
             node.RegisterServiceAsync("/add_two_ints", new AddTwoInts(add_two_ints)).Wait();
 
             var proxy = node.CreateProxyAsync<AddTwoInts>("/add_two_ints").Result;

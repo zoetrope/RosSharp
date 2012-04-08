@@ -38,11 +38,14 @@ using RosSharp.core;
 
 namespace RosSharp
 {
+    /// <summary>
+    /// Logging ROS Node
+    /// </summary>
     public sealed class RosOut
     {
         public void Start()
         {
-            var node = ROS.CreateNode("/rosout");
+            var node = RosManager.CreateNode("/rosout");
 
             var publisher = node.CreatePublisherAsync<Log>("/rosout_agg").Result;
             var subscriber = node.CreateSubscriberAsync<Log>("/rosout").Result;

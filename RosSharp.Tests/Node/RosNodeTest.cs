@@ -17,11 +17,11 @@ namespace RosSharp.Tests.Node
         [TestInitialize]
         public void Initialize()
         {
-            ROS.Initialize();
-            ROS.MasterUri = new Uri("http://localhost:11311/");
-            ROS.HostName = "localhost";
-            ROS.TopicTimeout = 3000;
-            ROS.XmlRpcTimeout = 3000;
+            RosManager.Initialize();
+            RosManager.MasterUri = new Uri("http://localhost:11311/");
+            RosManager.HostName = "localhost";
+            RosManager.TopicTimeout = 3000;
+            RosManager.XmlRpcTimeout = 3000;
 
             _masterServer = new MasterServer(11311);
         }
@@ -30,30 +30,30 @@ namespace RosSharp.Tests.Node
         public void Cleanup()
         {
             _masterServer.Dispose();
-            ROS.Dispose();
+            RosManager.Dispose();
         }
 
 
         [TestMethod]
         public void CreateSubscriber_Error()
         {
-            ROS.MasterUri = new Uri("http://localhost:9999/");
-            var node = ROS.CreateNode("test");
+            RosManager.MasterUri = new Uri("http://localhost:9999/");
+            var node = RosManager.CreateNode("test");
             var sub = node.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
         }
 
         [TestMethod]
         public void CreatePublisher_Error()
         {
-            ROS.MasterUri = new Uri("http://localhost:9999/");
-            var node = ROS.CreateNode("test");
+            RosManager.MasterUri = new Uri("http://localhost:9999/");
+            var node = RosManager.CreateNode("test");
             var pub = node.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
         }
 
         [TestMethod]
         public void Dispose()
         {
-            var node = ROS.CreateNode("test");
+            var node = RosManager.CreateNode("test");
 
             var pub = node.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
             var sub = node.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
@@ -63,14 +63,14 @@ namespace RosSharp.Tests.Node
 
             node.Dispose();
 
-            ROS.GetNodes().Count.Is(0);
+            RosManager.GetNodes().Count.Is(0);
        }
 
 
         [TestMethod]
         public void DisposePublisher()
         {
-            var node = ROS.CreateNode("test");
+            var node = RosManager.CreateNode("test");
 
             var pub = node.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
             var sub = node.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
@@ -84,7 +84,7 @@ namespace RosSharp.Tests.Node
         [TestMethod]
         public void DisposeSubscriber()
         {
-            var node = ROS.CreateNode("test");
+            var node = RosManager.CreateNode("test");
 
             var pub = node.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
             var sub = node.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
@@ -101,7 +101,7 @@ namespace RosSharp.Tests.Node
         [TestMethod]
         public void DisposeService()
         {
-            var node = ROS.CreateNode("test");
+            var node = RosManager.CreateNode("test");
 
             var service = node.RegisterServiceAsync(
                 "myservice", new AddTwoInts(req => new AddTwoInts.Response() {sum = req.a + req.b})).Result;
@@ -112,7 +112,7 @@ namespace RosSharp.Tests.Node
         [TestMethod]
         public void DisposeParameter()
         {
-            var node = ROS.CreateNode("test");
+            var node = RosManager.CreateNode("test");
 
             var param = node.CreateParameterAsync<int>("param").Result;
 
