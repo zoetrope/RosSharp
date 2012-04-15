@@ -8,10 +8,11 @@ RosSharp is C# client library for ROS.
 `ROS <http://ros.org/>`_ is Robot Operating System developed by `Willow Garage <http://www.willowgarage.com/>`_.
 
 * Author: `zoetrope <https://twitter.com/#!/zoetro>`_
-* Source: https://github.com/zoetrope/RosSharp
 * License: `BSD License <https://github.com/zoetrope/RosSharp/blob/master/License.txt>`_
+* Source: https://github.com/zoetrope/RosSharp
+* NuGet Package: http://nuget.org/packages/RosSharp
 
-Features:
+Features
 ==================================================
 
 * RosSharp is implemented based on Reactive Extensions
@@ -25,7 +26,7 @@ Features:
 * RosCore (Master Server & Parameter Server & RosOut Node)
 * GenMsg (Code generation tool from .msg/.srv files)
 
-The following features are not supported:
+The following features are not supported
 ==================================================
 
 * Remapping Arguments
@@ -50,44 +51,42 @@ Installation
 use NuGet
 ==================================================
 
-To install RosSharp, run the following command in the NuGet Package Manager Console (To be prepared) ::
+To install RosSharp, run the following command in the NuGet Package Manager Console ::
 
-  PM> Install-Package RosSharp
-
-http://nuget.org/packages/RosSharp
+  PM> Install-Package RosSharp -Pre
 
 Binary Package
 ==================================================
 
-Downloads 
+* Download a file through the following link.
 
-https://github.com/zoetrope/RosSharp/downloads
+  * https://github.com/zoetrope/RosSharp/downloads
+
+* Start Visual Studio and create new project.
+* Add reference to downloaded dll files.
 
 Settings
 ***************************************************
 
-
-
-Initialization
+Network Setting
 ==================================================
 
-Configuring in your code
+Setting in a code
 -------------------------------------------------
 
 .. code-block:: csharp
 
-   ROS.HostName = "192.168.1.11";
-   ROS.MasterUri = new Uri("http://192.168.1.10:11311");
-   ROS.TopicTimeout = 3000;
-   ROS.XmlRpcTimeout = 3000;
+   // local network address of a ROS Node
+   RosManager.HostName = "192.168.1.11";
+   // XML-RPC URI of the Master
+   RosManager.MasterUri = new Uri("http://192.168.1.10:11311");
+   // Timeout in milliseconds on a ROS TOPIC
+   RosManager.TopicTimeout = 3000;
+   // Timeout in milliseconds on a XML-RPC proxy method call
+   RosManager.XmlRpcTimeout = 3000;
 
-
-
-
-app.config
+Setting by a app.config
 -------------------------------------------------
-
-configuration can be done in your app.config
 
 .. code-block:: xml
 
@@ -97,16 +96,14 @@ configuration can be done in your app.config
         <section name="rossharp" type="RosSharp.ConfigurationSection, RosSharp"/>
       </configSections>
       <rossharp>
-        <ROS_MASTER_URI value="http://localhost:11311"/>
-        <ROS_HOSTNAME value="localhost"/>
-        <ROS_TOPIC_TIMEOUT value="1000"/>
-        <ROS_XMLRPC_TIMEOUT value="1000"/>
+        <ROS_MASTER_URI value="http://192.168.1.10:11311"/>
+        <ROS_HOSTNAME value="192.168.1.11"/>
+        <ROS_TOPIC_TIMEOUT value="3000"/>
+        <ROS_XMLRPC_TIMEOUT value="3000"/>
       </rossharp>
     </configuration>
 
-
-
-Environment Variable
+Setting by Environment Variable
 -------------------------------------------------
 
 * ROS_MASTER_URI
@@ -114,26 +111,23 @@ Environment Variable
 * ROS_TOPIC_TIMEOUT
 * ROS_XMLRPC_TIMEOUT
 
-
-
-Logging
+Logging Setting
 ==================================================
 
-
-Configuring in your code
+Setting in a code
 -------------------------------------------------
 
 .. code-block:: csharp
 
+   var properties = new NameValueCollection();
+   properties["level"] = "DEBUG";
+   properties["showLogName"] = "true";
+   properties["showDataTime"] = "true";
+   properties["dateTimeFormat"] = "yyyy/MM/dd HH:mm:ss:fff";
    LogManager.Adapter = new RosOutLoggerFactoryAdapter(properties);
 
-
-
-
-app.config
+Setting by a app.config
 -------------------------------------------------
-see the Common.Logging Documentation
-
 
 .. code-block:: xml
 
@@ -157,17 +151,19 @@ see the Common.Logging Documentation
       </common>
     </configuration>
 
+See the `Common.Logging Documentation <http://netcommon.sourceforge.net/docs/2.0.0/reference/html/index.html>`_
 
 Programming
 ***************************************************
 
-using derective
+using directive
 ==================================================
+
+Add the following Using directive to the your code.
 
 .. code-block:: csharp
 
   using RosSharp;
-
 
 Create Node
 ==================================================
@@ -176,56 +172,49 @@ Create Node
 
   var node = RosManager.CreateNode("Test");
 
-
-Create Subscriber
+Subscriber
 ==================================================
 
 .. code-block:: csharp
 
-  var subscriber = node.CreateSubscriber<RosSharp.std_msgs.String>("/chatter");
+  var subscriber = node.CreateSubscriberAsync<RosSharp.std_msgs.String>("/chatter").Result;
   subscriber.Subscribe(x => Console.WriteLine(x.data));
 
 
-Create Publisher
+Publisher
 ==================================================
 
 .. code-block:: csharp
 
-  var publisher = node.CreatePublisher<RosSharp.std_msgs.String>("/chatter");
-  publisher.OnNext(new RosSharp.std_msgs.String {data = "test"});
+  var publisher = node.CreatePublisherAsync<RosSharp.std_msgs.String>("/chatter").Result;
+  publisher.OnNext(new RosSharp.std_msgs.String() {data = "test message"};);
 
-Create Service
+Register Service
 ==================================================
-
 
 .. code-block:: csharp
 
-  node.RegisterService("/add_two_ints",new AddTwoInts(req => new AddTwoInts.Response {c = req.a + req.b})).Wait();
-
+  node.RegisterServiceAsync("/add_two_ints",
+    new AddTwoInts(req => new AddTwoInts.Response {sum = req.a + req.b})).Wait();
 
 Use Service
 ==================================================
 
-
 .. code-block:: csharp
 
-  var proxy = node.CreateProxy<AddTwoInts>("/add_two_ints").Result;
+  var proxy = node.CreateProxyAsync<AddTwoInts>("/add_two_ints").Result;
   var res = proxy.Invoke(new AddTwoInts.Request() {a = 1, b = 2});
-  Console.WriteLine(res.c);
-
+  Console.WriteLine(res.sum);
 
 ParameterServer
 ==================================================
 
-
 .. code-block:: csharp
 
-  var param = node.GetParameter<string>("rosversion");
+  var param = node.CreateParameterAsync<string>("rosversion").Result;
   Console.WriteLine(param.Value);
   param.Value = "test";
   param.Subscribe(x => Console.WriteLine(x));
-
-
 
 Application
 ***************************************************

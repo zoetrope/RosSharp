@@ -8,10 +8,11 @@ RosSharpは、ROSのC#クライアントライブラリです。
 `ROS <http://ros.org/>`_ は `Willow Garage <http://www.willowgarage.com/>`_ の開発するRobot Operating Systemです。
 
 * Author: `zoetrope <https://twitter.com/#!/zoetro>`_
-* Source: https://github.com/zoetrope/RosSharp
 * License: `BSD License <https://github.com/zoetrope/RosSharp/blob/master/License.txt>`_
+* Source: https://github.com/zoetrope/RosSharp
+* NuGet Package: http://nuget.org/packages/RosSharp
 
-特徴: 
+特徴
 ==================================================
 
 * RosSharp is implemented based on Reactive Extensions
@@ -25,7 +26,7 @@ RosSharpは、ROSのC#クライアントライブラリです。
 * RosCore (Master Server & Parameter Server & RosOut Node)
 * GenMsg (Code generation tool from .msg/.srv files)
 
-未実装機能:
+未実装機能
 ==================================================
 
 * Remapping Arguments
@@ -47,40 +48,44 @@ RosSharpは、ROSのC#クライアントライブラリです。
 インストール方法
 ***************************************************
 
-NuGet
+NuGetの利用
 ==================================================
 
-RosSharpをインストールするには、NuGet Package Manager Consoleから下記のコマンドを実行してください。（準備中） ::
+RosSharpをインストールするには、NuGet Package Manager Consoleから下記のコマンドを実行してください。 ::
 
-  PM> Install-Package RosSharp
+  PM> Install-Package RosSharp -Pre
 
 バイナリパッケージ
 ==================================================
 
-https://github.com/zoetrope/RosSharp/downloads
+* 下記のリンクからバイナリパッケージをダウンロードします。
 
+  * https://github.com/zoetrope/RosSharp/downloads
 
+* Visual Studioを起動します。
+* ダウンロードしたdllを参照に追加します。
 
 設定
 ***************************************************
 
-
-初期化
+ネットワーク設定
 ==================================================
 
-
-プログラムで
+コードでの設定
 -------------------------------------------------
 
 .. code-block:: csharp
 
-   ROS.HostName = "192.168.1.11";
-   ROS.MasterUri = new Uri("http://192.168.1.10:11311");
-   ROS.TopicTimeout = 3000;
-   ROS.XmlRpcTimeout = 3000;
+   // ローカルネットワークのホスト名またはIPアドレス
+   RosManager.HostName = "192.168.1.11";
+   // Masterへの接続URI
+   RosManager.MasterUri = new Uri("http://192.168.1.10:11311");
+   // ROS TOPICのタイムアウト時間[msec]
+   RosManager.TopicTimeout = 3000;
+   // XML-RPCのメソッド呼び出しのタイムアウト時間[msec]
+   RosManager.XmlRpcTimeout = 3000;
 
-
-設定ファイル
+app.configでの設定
 -------------------------------------------------
 
 .. code-block:: xml
@@ -91,16 +96,14 @@ https://github.com/zoetrope/RosSharp/downloads
         <section name="rossharp" type="RosSharp.ConfigurationSection, RosSharp"/>
       </configSections>
       <rossharp>
-        <ROS_MASTER_URI value="http://localhost:11311"/>
-        <ROS_HOSTNAME value="localhost"/>
-        <ROS_TOPIC_TIMEOUT value="1000"/>
-        <ROS_XMLRPC_TIMEOUT value="1000"/>
+        <ROS_MASTER_URI value="http://192.168.1.10:11311"/>
+        <ROS_HOSTNAME value="192.168.1.11"/>
+        <ROS_TOPIC_TIMEOUT value="3000"/>
+        <ROS_XMLRPC_TIMEOUT value="3000"/>
       </rossharp>
     </configuration>
 
-
-
-環境変数
+環境変数での設定
 -------------------------------------------------
 
 * ROS_MASTER_URI
@@ -108,23 +111,23 @@ https://github.com/zoetrope/RosSharp/downloads
 * ROS_TOPIC_TIMEOUT
 * ROS_XMLRPC_TIMEOUT
 
-
-ログ
+ログ設定
 ==================================================
 
-プログラム
+コードでの設定
 -------------------------------------------------
 
 .. code-block:: csharp
 
+   var properties = new NameValueCollection();
+   properties["level"] = "DEBUG";
+   properties["showLogName"] = "true";
+   properties["showDataTime"] = "true";
+   properties["dateTimeFormat"] = "yyyy/MM/dd HH:mm:ss:fff";
    LogManager.Adapter = new RosOutLoggerFactoryAdapter(properties);
 
-
-設定ファイル
+app.configでの設定
 -------------------------------------------------
-
-
-see the Common.Logging Documentation
 
 .. code-block:: xml
 
@@ -148,77 +151,70 @@ see the Common.Logging Documentation
       </common>
     </configuration>
 
+詳細については `Common.Logging Documentation <http://netcommon.sourceforge.net/docs/2.0.0/reference/html/index.html>`_ を参照してください。
 
 プログラミング
 ***************************************************
 
-using derective
+using directive
 ==================================================
+
+ソースコードに下記のusing句を追加します。
 
 .. code-block:: csharp
 
   using RosSharp;
-  
-  ROS.Initialize();
 
-
-
-Create Node
+ノードの作成
 ==================================================
 
 .. code-block:: csharp
 
   var node = ROS.CreateNode("Test");
 
-
-Create Subscriber
+Subscriber
 ==================================================
 
 .. code-block:: csharp
 
-  var subscriber = node.CreateSubscriber<RosSharp.std_msgs.String>("/chatter");
+  var subscriber = node.CreateSubscriberAsync<RosSharp.std_msgs.String>("/chatter").Result;
   subscriber.Subscribe(x => Console.WriteLine(x.data));
 
 
-Create Publisher
+Publisher
 ==================================================
 
 .. code-block:: csharp
 
-  var publisher = node.CreatePublisher<RosSharp.std_msgs.String>("/chatter");
-  publisher.OnNext(new RosSharp.std_msgs.String {data = "test"});
+  var publisher = node.CreatePublisherAsync<RosSharp.std_msgs.String>("/chatter").Result;
+  publisher.OnNext(new RosSharp.std_msgs.String() {data = "test message"};);
 
-Create Service
+Register Service
 ==================================================
-
 
 .. code-block:: csharp
 
-  node.RegisterService("/add_two_ints",new AddTwoInts(req => new AddTwoInts.Response {c = req.a + req.b})).Wait();
-
+  node.RegisterServiceAsync("/add_two_ints",
+    new AddTwoInts(req => new AddTwoInts.Response {sum = req.a + req.b})).Wait();
 
 Use Service
 ==================================================
 
-
 .. code-block:: csharp
 
-  var proxy = node.CreateProxy<AddTwoInts>("/add_two_ints").Result;
+  var proxy = node.CreateProxyAsync<AddTwoInts>("/add_two_ints").Result;
   var res = proxy.Invoke(new AddTwoInts.Request() {a = 1, b = 2});
-  Console.WriteLine(res.c);
-
+  Console.WriteLine(res.sum);
 
 ParameterServer
 ==================================================
 
 .. code-block:: csharp
 
-  var param = node.GetParameter<string>("rosversion");
+  var param = node.CreateParameterAsync<string>("rosversion").Result;
   Console.WriteLine(param.Value);
   param.Value = "test";
   param.Subscribe(x => Console.WriteLine(x));
-
-
 
 アプリケーション
 ***************************************************
