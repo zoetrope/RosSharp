@@ -18,7 +18,6 @@ namespace RosSharp.Tests.Parameter
         [TestInitialize]
         public void Initialize()
         {
-            RosManager.Initialize();
             RosManager.HostName = "localhost";
         }
 

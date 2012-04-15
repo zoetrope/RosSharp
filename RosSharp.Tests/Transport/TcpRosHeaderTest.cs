@@ -8,11 +8,6 @@ namespace RosSharp.Tests.Transport
     [TestClass]
     public class TcpRosHeaderTest
     {
-        [TestInitialize]
-        public void Initialize()
-        {
-            RosManager.Initialize();
-        }
 
         [TestMethod]
         public void SerializeSubscriberHeader_Success()

@@ -8,7 +8,6 @@ namespace RosSharp.RosCore
     {
         static void Main(string[] args)
         {
-            RosManager.Initialize();
 
             int portNumber = 11311;
 

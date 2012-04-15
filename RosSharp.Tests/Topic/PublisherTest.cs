@@ -16,7 +16,6 @@ namespace RosSharp.Tests.Topic
         [TestInitialize]
         public void Initialize()
         {
-            RosManager.Initialize();
             RosManager.TopicTimeout = 3000;
             RosManager.XmlRpcTimeout = 3000;
         }

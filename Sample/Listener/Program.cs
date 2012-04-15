@@ -6,7 +6,6 @@ namespace RosSharp.Sample
     {
         static void Main(string[] args)
         {
-            RosManager.Initialize();
             RosManager.MasterUri = new Uri("http://192.168.11.5:11311/");
             RosManager.HostName = "192.168.11.3";
 

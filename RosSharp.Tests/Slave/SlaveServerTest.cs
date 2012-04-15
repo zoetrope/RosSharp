@@ -19,7 +19,6 @@ namespace RosSharp.Tests.Slave
         [TestInitialize]
         public void Initialize()
         {
-            RosManager.Initialize();
             var topicContainer = new TopicContainer();
             topicContainer.AddPublisher(new Publisher<std_msgs.String>("/test_topic", "test"));
 

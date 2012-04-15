@@ -3,18 +3,19 @@ RosSharp Documentation
 
 Overview
 ***************************************************
-RosSharp is C# client library for ROS (Robot Operating System).
+RosSharp is C# client library for ROS.
 
-Copyright (c) 2012 zoetrope. All Rights Reserved. 
+`ROS <http://ros.org/>`_ is Robot Operating System developed by `Willow Garage <http://www.willowgarage.com/>`_.
 
-Licensed undear the BSD License
-
-Source: https://github.com/zoetrope/RosSharp
+* Author: `zoetrope <https://twitter.com/#!/zoetro>`_
+* Source: https://github.com/zoetrope/RosSharp
+* License: `BSD License <https://github.com/zoetrope/RosSharp/blob/master/License.txt>`_
 
 Features:
+==================================================
 
 * RosSharp is implemented based on Reactive Extensions
-* NuGet installation support
+* `NuGet <http://nuget.codeplex.com/>`_  installation support
 * Create ROS Node
 * Master/Slave/ParameterServer API XML-RPC Client
 * Master/Slave/ParameterServer API XML-RPC Server
@@ -25,28 +26,23 @@ Features:
 * GenMsg (Code generation tool from .msg/.srv files)
 
 The following features are not supported:
+==================================================
 
 * Remapping Arguments
 * Graph Resource Names (supports only the global name)
 * Clock Node
 * roslang
 
-
-
-Requirements
+System Requirements
 ***************************************************
 
 * .NET Framework 4
-
 * Reactive Extensions
 * Common.Logging
 * XML-RPC.NET
 * NDesk.Options
-
 * F# Runtime 2.0 (for GenMsg)
 * FParsec (for GenMsg)
-
-
 
 Installation
 ***************************************************
@@ -57,6 +53,8 @@ use NuGet
 To install RosSharp, run the following command in the NuGet Package Manager Console (To be prepared) ::
 
   PM> Install-Package RosSharp
+
+http://nuget.org/packages/RosSharp
 
 Binary Package
 ==================================================
@@ -78,7 +76,6 @@ Configuring in your code
 
 .. code-block:: csharp
 
-   ROS.Initialize();
    ROS.HostName = "192.168.1.11";
    ROS.MasterUri = new Uri("http://192.168.1.10:11311");
    ROS.TopicTimeout = 3000;
@@ -177,7 +174,7 @@ Create Node
 
 .. code-block:: csharp
 
-  var node = ROS.CreateNode("Test");
+  var node = RosManager.CreateNode("Test");
 
 
 Create Subscriber

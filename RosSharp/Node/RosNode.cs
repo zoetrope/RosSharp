@@ -97,9 +97,27 @@ namespace RosSharp.Node
             var param = new Parameter<T>(NodeId, paramName, _slaveServer.SlaveUri, _parameterServerClient);
 
             _parameters.Add(paramName, param);
-            //TODO:  HasParamでチェックして、あればGetParam,なければSetParam。戻り値もTaskに。
-            return Task.Factory.StartNew(() => param);
 
+            var tcs = new TaskCompletionSource<Parameter<T>>();
+
+            param.InitializeAsync().ContinueWith(task =>
+            {
+                if (task.IsFaulted)
+                {
+                    tcs.SetException(task.Exception.InnerException);
+                    _logger.Error("Initialize Parameter: Failure", task.Exception.InnerException);
+                }
+                else if (task.IsCanceled)
+                {
+                    tcs.SetCanceled();
+                }
+                else
+                {
+                    tcs.SetResult(param);
+                }
+            });
+
+            return tcs.Task;
         }
 
         public void Dispose()

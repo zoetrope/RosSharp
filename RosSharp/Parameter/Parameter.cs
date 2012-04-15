@@ -76,8 +76,9 @@ namespace RosSharp.Parameter
             }
         }
 
-        internal Task Initialize()
+        internal Task InitializeAsync()
         {
+            //TODO: tcs? 失敗したときの処理がない。
             return _parameterServerClient.HasParamAsync(NodeId, Name)
                 .ContinueWith(task =>
                 {

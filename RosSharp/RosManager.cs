@@ -76,7 +76,7 @@ namespace RosSharp
         /// <summary>
         ///   Initialize Setting
         /// </summary>
-        public static void Initialize()
+        static RosManager()
         {
             MasterUri = ReadMasterUri();
             HostName = ReadHostName();

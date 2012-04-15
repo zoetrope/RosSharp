@@ -19,7 +19,6 @@ namespace RosSharp.IntegrationTests
         [TestInitialize]
         public void Initialize()
         {
-            RosManager.Initialize();
             RosManager.MasterUri = new Uri("http://localhost:11311/");
             RosManager.HostName = "localhost";
             RosManager.TopicTimeout = 3000;

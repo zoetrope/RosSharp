@@ -3,18 +3,19 @@ RosSharpドキュメント
 
 概要
 ***************************************************
-RosSharpは、ROS (Robot Operating System)のC#クライアントライブラリです。
+RosSharpは、ROSのC#クライアントライブラリです。
 
-Copyright (c) 2012 zoetrope. All Rights Reserved.
+`ROS <http://ros.org/>`_ は `Willow Garage <http://www.willowgarage.com/>`_ の開発するRobot Operating Systemです。
 
-Licensed undear the BSD License
-
-ソースコード: https://github.com/zoetrope/RosSharp
+* Author: `zoetrope <https://twitter.com/#!/zoetro>`_
+* Source: https://github.com/zoetrope/RosSharp
+* License: `BSD License <https://github.com/zoetrope/RosSharp/blob/master/License.txt>`_
 
 特徴: 
+==================================================
 
-* RosSharpは、Reactive Extensionsをベースにして実装しています。
-* NuGetでのインストールをサポートしています。
+* RosSharp is implemented based on Reactive Extensions
+* `NuGet <http://nuget.codeplex.com/>`_  installation support
 * Create ROS Node
 * Master/Slave/ParameterServer API XML-RPC Client
 * Master/Slave/ParameterServer API XML-RPC Server
@@ -25,28 +26,23 @@ Licensed undear the BSD License
 * GenMsg (Code generation tool from .msg/.srv files)
 
 未実装機能:
+==================================================
 
 * Remapping Arguments
 * Graph Resource Names (supports only the global name)
 * Clock Node
 * roslang
 
-
-
-環境
+システム要件
 ***************************************************
 
 * .NET Framework 4
-
 * Reactive Extensions
 * Common.Logging
 * XML-RPC.NET
 * NDesk.Options
-
 * F# Runtime 2.0 (for GenMsg)
 * FParsec (for GenMsg)
-
-
 
 インストール方法
 ***************************************************
@@ -78,7 +74,6 @@ https://github.com/zoetrope/RosSharp/downloads
 
 .. code-block:: csharp
 
-   ROS.Initialize();
    ROS.HostName = "192.168.1.11";
    ROS.MasterUri = new Uri("http://192.168.1.10:11311");
    ROS.TopicTimeout = 3000;

@@ -12,8 +12,6 @@ namespace RosSharp.Tests
         [TestMethod]
         public void Dispose()
         {
-            RosManager.Initialize();
-
             RosManager.GetNodes().Count.Is(0);
 
             var node = RosManager.CreateNode("test");
@@ -28,8 +26,6 @@ namespace RosSharp.Tests
         [TestMethod]
         public void DisposeByNode()
         {
-            RosManager.Initialize();
-
             RosManager.GetNodes().Count.Is(0);
 
             var node = RosManager.CreateNode("test");
