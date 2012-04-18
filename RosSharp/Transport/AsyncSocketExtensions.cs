@@ -76,7 +76,8 @@ namespace RosSharp.Transport
                         {
                             _logger.Debug(m => m("Close Socket[{0}]", socket.LocalEndPoint));
                             socket.Close();
-                            throw new Exception();
+                            observer.OnError(new Exception(x.SocketError.ToString()));
+                            observer.OnCompleted();
                         }
                         if (socket.Connected)
                         {

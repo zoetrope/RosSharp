@@ -35,6 +35,7 @@ using System.IO;
 using System.Net.Sockets;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using Common.Logging;
 using RosSharp.Message;
@@ -91,12 +92,10 @@ namespace RosSharp.Topic
         {
             _client = new TcpRosClient(socket);
 
-            return Task.Factory.StartNew(
-                () =>
-                _client.ReceiveAsync()
-                    .Take(1)
-                    .Timeout(TimeSpan.FromMilliseconds(RosManager.TopicTimeout))
-                    .Select(OnReceivedHeader).First());
+            return _client.ReceiveAsync()
+                .Take(1)
+                .Timeout(TimeSpan.FromMilliseconds(RosManager.TopicTimeout))
+                .Select(OnReceivedHeader).ToTask();
         }
 
         private Unit OnReceivedHeader(byte[] data)

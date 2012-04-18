@@ -277,7 +277,6 @@ namespace RosSharp.Slave
                 //TODO: TryGet?
                 var subs = _topicContainer.GetSubscribers().First(s => s.TopicName == topic);
 
-                //TODO: 非同期に
                 subs.UpdatePublishers(publishers.Select(x => new Uri(x)).ToList());
             }
 

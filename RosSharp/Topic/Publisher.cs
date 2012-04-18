@@ -38,6 +38,7 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Common.Logging;
 using RosSharp.Message;
+using System.Linq;
 
 namespace RosSharp.Topic
 {
@@ -93,14 +94,16 @@ namespace RosSharp.Topic
         {
             lock (_rosTopicClients) //ロック範囲が広い？
             {
-                Parallel.ForEach(_rosTopicClients, client =>
+                try
                 {
-                    client.SendTaskAsync(value)
-                        .ContinueWith(task =>
-                        {
-                            _logger.Error("Send Error", task.Exception.InnerException);
-                        }, TaskContinuationOptions.OnlyOnFaulted);
-                });
+                    //TODO: 送信でエラーが起きると次のやつに送信しない。SendTaskAsync自体が例外をはいている。
+                    Task.WaitAll(_rosTopicClients.Select(client => client.SendTaskAsync(value)).ToArray());
+                }
+                catch (Exception)
+                {
+                    _logger.Error("SendError");
+                }
+                
             }
         }
 

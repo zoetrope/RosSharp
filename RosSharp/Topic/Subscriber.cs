@@ -35,8 +35,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
+using Common.Logging;
 using RosSharp.Message;
 using RosSharp.Slave;
 
@@ -49,6 +51,7 @@ namespace RosSharp.Topic
     public sealed class Subscriber<TMessage> : ISubscriber, IObservable<TMessage>, IDisposable
         where TMessage : IMessage, new()
     {
+        private readonly ILog _logger = LogManager.GetCurrentClassLogger();
         private readonly Subject<TMessage> _aggregateSubject = new Subject<TMessage>();
         private readonly CompositeDisposable _disposables = new CompositeDisposable();
         private readonly ReplaySubject<Unit> _onConnectedSubject = new ReplaySubject<Unit>();
@@ -100,9 +103,23 @@ namespace RosSharp.Topic
             //TODO: 同じPublisherに対する処理
             var slaves = publishers.Select(x => new SlaveClient(x));
 
-            Parallel.ForEach(slaves,
-                             slave => slave.RequestTopicAsync(NodeId, TopicName, new List<ProtocolInfo> {new ProtocolInfo(ProtocolType.TCPROS)})
-                                          .ContinueWith(task => ConnectServer(task.Result), TaskContinuationOptions.OnlyOnRanToCompletion));
+            foreach (var slaveClient in slaves)
+            {
+                var uri = slaveClient.SlaveUri;
+                var task = slaveClient.RequestTopicAsync(NodeId, TopicName, new List<ProtocolInfo> {new ProtocolInfo(ProtocolType.TCPROS)});
+                task.ContinueWith(t =>
+                {
+                    switch (t.Status)
+                    {
+                        case TaskStatus.RanToCompletion:
+                            ConnectServer(t.Result);
+                            break;
+                        default:
+                            _logger.Error(m => m("RequestTopicAsync Failure :{0}", uri));
+                            break;
+                    }
+                });
+            }
         }
 
         public string TopicName { get; private set; }

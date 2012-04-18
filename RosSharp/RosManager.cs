@@ -69,7 +69,7 @@ namespace RosSharp
         public static int XmlRpcTimeout { get; set; }
 
         /// <summary>
-        ///   Timeout in milliseconds on a socket send
+        ///   Timeout in milliseconds on a ROS TOPIC
         /// </summary>
         public static int TopicTimeout { get; set; }
 
