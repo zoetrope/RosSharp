@@ -19,6 +19,8 @@ namespace RosSharp.Sample
 
             Console.WriteLine("Press Any Key.");
             Console.ReadKey();
+
+            RosManager.Dispose();
         }
     }
 }

@@ -27,7 +27,7 @@ namespace RosSharp.Sample
                 
             }
 
-            
+            //RosManager.Dispose();
         }
     }
 }

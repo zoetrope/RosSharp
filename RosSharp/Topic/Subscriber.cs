@@ -130,14 +130,19 @@ namespace RosSharp.Topic
 
         private void ConnectServer(TopicParam param)
         {
-            //TODO: serverを複数持てるようにする。保持しておく。ロックも必要。
             var server = new RosTopicServer<TMessage>(NodeId, TopicName);
-            _rosTopicServers.Add(server);
+            _rosTopicServers.Add(server); //TODO: DisconnectServerはない？ロックは不要？
 
+            //TODO: StartAsyncが失敗したとき
             server.StartAsync(param).ContinueWith(
                 task =>
                 {
-                    var d = task.Result.Subscribe(_aggregateSubject);
+                    var d = task.Result.Subscribe(
+                        x => _aggregateSubject.OnNext(x),
+                        ex => { },
+                        () => { }
+                        );
+
                     lock (_disposables)
                     {
                         _disposables.Add(d);

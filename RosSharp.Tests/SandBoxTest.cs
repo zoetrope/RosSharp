@@ -160,5 +160,67 @@ namespace RosSharp.Tests
             Thread.Sleep(TimeSpan.FromSeconds(3));
         }
 
+        [TestMethod]
+        public void Subject_test()
+        {
+            var source1 = new Subject<int>();
+            var aggregateSubject = new Subject<int>();
+            source1.Subscribe(aggregateSubject);
+
+            aggregateSubject.Subscribe(Console.WriteLine);
+            source1.OnNext(123);
+
+            // source1をOnCompletedすると、aggregateのSubscriberも完了する
+            source1.OnCompleted();
+            
+
+            var source2 = new Subject<int>();
+            source2.Subscribe(aggregateSubject);
+            source2.OnNext(456);
+
+            Thread.Sleep(TimeSpan.FromSeconds(3));
+        }
+
+        [TestMethod]
+        public void Subject_merge()
+        {
+            var source1 = new Subject<int>();
+            var source2 = new Subject<int>();
+
+            var aggregateSubject = source1.Merge(source2);
+
+            aggregateSubject.Subscribe(Console.WriteLine);
+            
+            source1.OnNext(123);
+            source2.OnNext(456);
+
+            source1.OnCompleted();
+
+            source1.OnNext(999);
+            source2.OnNext(789);
+
+            Thread.Sleep(TimeSpan.FromSeconds(3));
+        }
+
+        [TestMethod]
+        public void Subject_merge2()
+        {
+            var source1 = new Subject<int>();
+            var source2 = new Subject<int>();
+
+            var aggregateSubject = source1.Merge(source2);
+
+            aggregateSubject.Subscribe(Console.WriteLine);
+
+            source1.OnNext(123);
+            source2.OnNext(456);
+
+            source1.OnCompleted();
+
+            source1.OnNext(999);
+            source2.OnNext(789);
+
+            Thread.Sleep(TimeSpan.FromSeconds(3));
+        }
     }
 }
