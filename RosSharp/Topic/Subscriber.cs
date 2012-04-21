@@ -107,18 +107,12 @@ namespace RosSharp.Topic
             {
                 var uri = slaveClient.SlaveUri;
                 var task = slaveClient.RequestTopicAsync(NodeId, TopicName, new List<ProtocolInfo> {new ProtocolInfo(ProtocolType.TCPROS)});
+                task.ContinueWith(t => ConnectServer(t.Result),TaskContinuationOptions.OnlyOnRanToCompletion);
+
                 task.ContinueWith(t =>
                 {
-                    switch (t.Status)
-                    {
-                        case TaskStatus.RanToCompletion:
-                            ConnectServer(t.Result);
-                            break;
-                        default:
-                            _logger.Error(m => m("RequestTopicAsync Failure :{0}", uri));
-                            break;
-                    }
-                });
+                    _logger.Error(m => m("RequestTopicAsync Failure :{0}", uri), t.Exception.InnerException);
+                }, TaskContinuationOptions.OnlyOnFaulted);
             }
         }
 
