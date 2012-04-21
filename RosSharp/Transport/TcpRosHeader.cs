@@ -134,15 +134,19 @@ namespace RosSharp.Transport
                 stream.Read(dataBuf, 0, len);
 
                 var data = Encoding.UTF8.GetString(dataBuf, 0, dataBuf.Length);
-                var items = data.Split('=');
+                
+                var index = data.IndexOf('=');
 
-                if (items.Count() != 2)
+                if (index < 0)
                 {
                     _logger.Error("Header does not contain '='");
                     throw new RosTopicException("Header does not contain '='");
                 }
 
-                map.Add(items[0], items[1]);
+                var first = data.Substring(0, index);
+                var last = data.Substring(index + 1, data.Length - (index + 1));
+
+                map.Add(first, last);
             }
 
             return new TcpRosHeader(map);

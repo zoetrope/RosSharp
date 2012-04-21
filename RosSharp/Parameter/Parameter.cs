@@ -91,12 +91,7 @@ namespace RosSharp.Parameter
                         return _parameterServerClient.SetParamAsync(NodeId, Name, new XmlRpcStruct());
                     }
                 })
-                .Unwrap()
-                .ContinueWith(task =>
-                {
-
-                });
-
+                .Unwrap();
         }
 
         public string NodeId { get; private set; }

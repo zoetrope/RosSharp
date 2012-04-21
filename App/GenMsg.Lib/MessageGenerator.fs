@@ -119,7 +119,7 @@ let rec getDeserialize t v =
     | Duration -> v + " = br.ReadTimeSpan();"
     | FixedArray (x, size) -> "for(int i=0; i<" + size.ToString() + "; i++) { " + v + "[i] = " + getDeserialize x (v + "[i]") + "}"
     | VariableArray (x) -> v + " = new List<" + getTypeName x + ">(br.ReadInt32()); " + "for(int i=0; i<" + v + ".Count; i++) { " + getDeserialize x (v + "[i]") + "}"
-    | UserDefinition (names) -> v + " = new " + String.Join(".", names) + "();"
+    | UserDefinition (names) -> v + " = new " + String.Join(".", names) + "(br);"
 
 let rec getSerializeLength t v =
     match t with
@@ -140,7 +140,7 @@ let rec getSerializeLength t v =
     | Time -> "8"
     | Duration -> "8"
     | FixedArray (x, size) -> v + ".Sum(x => " + getSerializeLength x "x" + ")"
-    | VariableArray (x) -> v + ".Sum(x => " + getSerializeLength x "x" + ")"
+    | VariableArray (x) -> "4 + " + v + ".Sum(x => " + getSerializeLength x "x" + ")"
     | UserDefinition (names) -> v + ".SerializeLength"
 
     

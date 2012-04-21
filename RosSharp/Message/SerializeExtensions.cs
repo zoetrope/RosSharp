@@ -52,9 +52,16 @@ namespace RosSharp.Message
         public static string ReadUtf8String(this BinaryReader br)
         {
             var len = br.ReadInt32();
-            var dataBuf = new byte[len];
-            br.Read(dataBuf, 0, len);
-            return Encoding.UTF8.GetString(dataBuf, 0, dataBuf.Length);
+            if (len != 0)
+            {
+                var dataBuf = new byte[len];
+                br.Read(dataBuf, 0, len);
+                return Encoding.UTF8.GetString(dataBuf, 0, dataBuf.Length);
+            }
+            else
+            {
+                return "";
+            }
         }
 
         public static void WriteDateTime(this BinaryWriter bw, DateTime data)

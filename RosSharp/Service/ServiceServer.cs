@@ -66,7 +66,7 @@ namespace RosSharp.Service
                 .Select(s => new ServiceInstance<TService>(_nodeId, service, s))
                 .Subscribe(client => client.Initialize(serviceName));
 
-            return disp; //TODO: サービス登録を解除するためのDisposableを返す。もしくはIObservable？
+            return disp;
         }
 
         public void Dispose()

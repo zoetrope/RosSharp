@@ -144,7 +144,7 @@ namespace RosSharp.Slave
             {
                 StatusCode.Success,
                 "",
-                RosManager.MasterUri //TODO: この実装でよい？
+                RosManager.MasterUri
             };
         }
 
@@ -248,7 +248,6 @@ namespace RosSharp.Slave
                                   , TaskContinuationOptions.OnlyOnFaulted);
             }
 
-            //TODO:戻り値を調べる
             return new object[]
             {
                 StatusCode.Success,
@@ -323,7 +322,7 @@ namespace RosSharp.Slave
             {
                 string protocolName = protocol[0];
 
-                if (protocolName != "TCPROS") //TODO: ほかのプロトコルにも対応できるように
+                if (protocolName != "TCPROS")
                 {
                     continue;
                 }

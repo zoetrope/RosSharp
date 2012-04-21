@@ -115,7 +115,7 @@ namespace RosSharp.Transport
                                ex =>
                                {
                                    Console.WriteLine("ReceiveAsync Error = {0}", ex.Message);
-                                   observer.OnError(new Exception());
+                                   observer.OnError(new Exception("ReceiveAsync Error"));
                                    observer.OnCompleted();
                                });
 

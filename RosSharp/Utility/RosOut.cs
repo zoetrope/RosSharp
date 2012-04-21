@@ -33,6 +33,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using RosSharp.core;
 
@@ -50,7 +51,9 @@ namespace RosSharp
             var publisher = node.CreatePublisherAsync<Log>("/rosout_agg").Result;
             var subscriber = node.CreateSubscriberAsync<Log>("/rosout").Result;
 
-            subscriber.Subscribe(publisher);
+            subscriber
+                .Do(x => Console.WriteLine(x.msg))
+                .Subscribe(publisher);
 
             node.RegisterServiceAsync("/rosout/get_loggers", new GetLoggers(GetLoggers)).Wait();
             node.RegisterServiceAsync("/rosout/set_logger_level", new SetLoggerLevel(SetLoggerLevel)).Wait();

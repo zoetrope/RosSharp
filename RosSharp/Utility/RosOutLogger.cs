@@ -37,18 +37,32 @@ using System.Linq;
 using System.Text;
 using Common.Logging;
 using Common.Logging.Simple;
+using RosSharp.Node;
+using RosSharp.Topic;
 
 namespace RosSharp
 {
     /// <summary>
     /// Logging to RosOut
     /// </summary>
-    internal class RosOutLogger : AbstractSimpleLogger
+    internal sealed class RosOutLogger : AbstractSimpleLogger
     {
+        private static Publisher<Log> _publisher;
+        
         internal RosOutLogger(string logName, LogLevel logLevel, bool showLevel, bool showDateTime, bool showLogName,
                             string dateTimeFormat)
             : base(logName, logLevel, showLevel, showDateTime, showLogName, dateTimeFormat)
         {
+            var adapter = LogManager.Adapter;
+            LogManager.Adapter = new CapturingLoggerFactoryAdapter();
+
+            if (_publisher == null)
+            {
+                var node = RosManager.CreateNode("/rosout_logger");
+                _publisher = node.CreatePublisherAsync<Log>("/rosout").Result;
+            }
+
+            LogManager.Adapter = adapter;
         }
 
         protected override void WriteInternal(LogLevel level, object message, Exception e)
@@ -56,8 +70,7 @@ namespace RosSharp
             var sb = new StringBuilder();
             FormatOutput(sb, level, message, e);
 
-            //TODO: RosOutに出力するように。
-            Console.Out.WriteLine(sb.ToString());
+            _publisher.OnNext(new Log() {msg = message.ToString()});
         }
     }
 }

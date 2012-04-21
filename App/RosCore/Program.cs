@@ -20,6 +20,9 @@ namespace RosSharp.RosCore
             
             var masterServer = new MasterServer(portNumber);
 
+            var rosout = new RosOut();
+            rosout.Start();
+
             Console.WriteLine("ROS_MASTER_URI={0}", masterServer.MasterUri);
             Console.ReadKey();
         }
