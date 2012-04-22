@@ -32,9 +32,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -58,7 +60,7 @@ namespace RosSharp.Transport
                 socket.EndSend, null);
         }
 
-        public static IObservable<SocketAsyncEventArgs> ReceiveAsObservable(this Socket socket)
+        public static IObservable<SocketAsyncEventArgs> ReceiveAsObservable(this Socket socket, IScheduler scheduler)
         {
             var arg = new SocketAsyncEventArgs();
             arg.SetBuffer(new byte[1024], 0, 1024);
@@ -69,12 +71,13 @@ namespace RosSharp.Transport
                     ev => arg.Completed += ev, ev => arg.Completed -= ev)
                     .Select(e => e.EventArgs)
                     .Where(args => args.LastOperation == SocketAsyncOperation.Receive)
+                    .ObserveOn(scheduler)
                     .Do(x =>
                     {
-                        _logger.Debug(m => m("Received: Code={0}", x.SocketError));
+                        //_logger.Debug(m => m("Received: Code={0}", x.SocketError));
                         if (x.SocketError != SocketError.Success)
                         {
-                            _logger.Debug(m => m("Close Socket[{0}]", socket.LocalEndPoint));
+                            //_logger.Debug(m => m("Close Socket[{0}]", socket.LocalEndPoint));
                             socket.Close();
                             observer.OnError(new Exception(x.SocketError.ToString()));
                             observer.OnCompleted();

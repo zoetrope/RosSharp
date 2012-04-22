@@ -28,7 +28,7 @@ namespace RosSharp.Tests.Topic
             MSlaveClient.ConstructorUri = (t1, t2) => { };
             MSlaveClient.AllInstances.RequestTopicAsyncStringStringListOfProtocolInfo =
                 (t1, t2, t3, t4) => Task.Factory.StartNew(() => new TopicParam() {HostName = "localhost", PortNumber = 12345, ProtocolName = "TCPROS"});
-            MRosTopicServer<std_msgs.String>.ConstructorStringString = (t1, t2, t3) => { };
+            MRosTopicServer<std_msgs.String>.ConstructorStringStringUri = (t1, t2, t3, t4) => { };
             MRosTopicServer<std_msgs.String>.AllInstances.StartAsyncTopicParam =
                 (t1, t2) => Task.Factory.StartNew(() => (IObservable<std_msgs.String>)publisher);
 

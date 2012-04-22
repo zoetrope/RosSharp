@@ -45,12 +45,15 @@ namespace RosSharp.Topic
         where TMessage : IMessage, new()
     {
         private TcpRosClient _client;
-        private ILog _logger = LogManager.GetCurrentClassLogger();
+        public Uri SlaveUri { get; private set; }
+        private readonly ILog _logger = LogManager.GetCurrentClassLogger();
+        
 
-        public RosTopicServer(string nodeId, string topicName)
+        public RosTopicServer(string nodeId, string topicName, Uri slaveUri)
         {
             NodeId = nodeId;
             TopicName = topicName;
+            SlaveUri = slaveUri;
         }
 
         public string NodeId { get; private set; }

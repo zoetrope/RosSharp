@@ -18,8 +18,8 @@ namespace RosSharp.IntegrationTests
         {
             RosManager.MasterUri = new Uri("http://localhost:11311/");
             RosManager.HostName = "localhost";
-            RosManager.TopicTimeout = 3000;
-            RosManager.XmlRpcTimeout = 3000;
+            RosManager.TopicTimeout = 10000;
+            RosManager.XmlRpcTimeout = 10000;
 
             _masterServer = new MasterServer(11311);
         }

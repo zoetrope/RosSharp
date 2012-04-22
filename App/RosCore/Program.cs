@@ -1,4 +1,6 @@
 ﻿using System;
+using Common.Logging;
+using Common.Logging.Simple;
 using NDesk.Options;
 using RosSharp.Master;
 
@@ -17,7 +19,9 @@ namespace RosSharp.RosCore
             };
 
             optionSet.Parse(args);
-            
+
+            LogManager.Adapter = new ConsoleOutLoggerFactoryAdapter();
+
             var masterServer = new MasterServer(portNumber);
 
             var rosout = new RosOut();

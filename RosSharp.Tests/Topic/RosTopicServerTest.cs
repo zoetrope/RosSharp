@@ -62,7 +62,7 @@ namespace RosSharp.Tests.Topic
 
             MTcpRosClient.AllInstances.SendTaskAsyncByteArray = (t1, t2) => Task<int>.Factory.StartNew(() => t2.Length);
 
-            var server = new RosTopicServer<std_msgs.String>("mynode", "mytopic");
+            var server = new RosTopicServer<std_msgs.String>("mynode", "mytopic", new Uri("http://localhost"));
 
             var task = server.StartAsync(new TopicParam() { HostName = "test", PortNumber = 1234, ProtocolName = "TCPROS" });
 
@@ -76,7 +76,7 @@ namespace RosSharp.Tests.Topic
         [HostType("Moles")]
         public void StartAsync_ConnectionError()
         {
-            var server = new RosTopicServer<std_msgs.String>("mynode", "mytopic");
+            var server = new RosTopicServer<std_msgs.String>("mynode", "mytopic", new Uri("http://localhost"));
 
             var task = server.StartAsync(new TopicParam() {HostName = "test", PortNumber = 1234, ProtocolName = "TCPROS"});
 
@@ -92,7 +92,7 @@ namespace RosSharp.Tests.Topic
             MTcpRosClient.AllInstances.ConnectTaskAsyncStringInt32 = (t1, t2, t3) => Task.Factory.StartNew(() => { });
             MTcpRosClient.AllInstances.ReceiveAsyncInt32 = (t1, t2) => Observable.Return(new byte[0]);
 
-            var server = new RosTopicServer<std_msgs.String>("mynode", "mytopic");
+            var server = new RosTopicServer<std_msgs.String>("mynode", "mytopic", new Uri("http://localhost"));
 
             var task = server.StartAsync(new TopicParam() { HostName = "test", PortNumber = 1234, ProtocolName = "TCPROS" });
 
@@ -108,7 +108,7 @@ namespace RosSharp.Tests.Topic
             MTcpRosClient.AllInstances.ReceiveAsyncInt32 = (t1, t2) => Observable.Return(new byte[0]);
             MTcpRosClient.AllInstances.SendTaskAsyncByteArray = (t1, t2) => Task<int>.Factory.StartNew(() => { throw new InvalidOperationException("Send Error"); });
 
-            var server = new RosTopicServer<std_msgs.String>("mynode", "mytopic");
+            var server = new RosTopicServer<std_msgs.String>("mynode", "mytopic", new Uri("http://localhost"));
 
             var task = server.StartAsync(new TopicParam() { HostName = "test", PortNumber = 1234, ProtocolName = "TCPROS" });
 
@@ -126,7 +126,7 @@ namespace RosSharp.Tests.Topic
             MTcpRosClient.AllInstances.ReceiveAsyncInt32 = (t1, t2) => Observable.Return(new byte[0]);
             MTcpRosClient.AllInstances.SendTaskAsyncByteArray = (t1, t2) => Task<int>.Factory.StartNew(() => t2.Length);
 
-            var server = new RosTopicServer<std_msgs.String>("mynode", "mytopic");
+            var server = new RosTopicServer<std_msgs.String>("mynode", "mytopic", new Uri("http://localhost"));
 
             var task = server.StartAsync(new TopicParam() { HostName = "test", PortNumber = 1234, ProtocolName = "TCPROS" });
 
@@ -145,7 +145,7 @@ namespace RosSharp.Tests.Topic
             MTcpRosClient.AllInstances.ReceiveAsyncInt32 = (t1, t2) => Observable.Return(new byte[0]).Delay(TimeSpan.FromSeconds(3));
             MTcpRosClient.AllInstances.SendTaskAsyncByteArray = (t1, t2) => Task<int>.Factory.StartNew(() => t2.Length);
 
-            var server = new RosTopicServer<std_msgs.String>("mynode", "mytopic");
+            var server = new RosTopicServer<std_msgs.String>("mynode", "mytopic", new Uri("http://localhost"));
 
             var task = server.StartAsync(new TopicParam() {HostName = "test", PortNumber = 1234, ProtocolName = "TCPROS"});
 
@@ -174,7 +174,7 @@ namespace RosSharp.Tests.Topic
             MTcpRosClient.AllInstances.ReceiveAsyncInt32 = (t1, t2) => Observable.Return(stream.ToArray());
             MTcpRosClient.AllInstances.SendTaskAsyncByteArray = (t1, t2) => Task<int>.Factory.StartNew(() => t2.Length);
 
-            var server = new RosTopicServer<std_msgs.String>("mynode", "mytopic");
+            var server = new RosTopicServer<std_msgs.String>("mynode", "mytopic", new Uri("http://localhost"));
 
             var task = server.StartAsync(new TopicParam() { HostName = "test", PortNumber = 1234, ProtocolName = "TCPROS" });
 

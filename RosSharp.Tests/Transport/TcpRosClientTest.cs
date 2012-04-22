@@ -53,8 +53,8 @@ namespace RosSharp.Tests.Transport
 
             var scheduler = new TestScheduler();
 
-            MAsyncSocketExtensions.ReceiveAsObservableSocket =
-                t1 => scheduler.CreateHotObservable(OnNext(10, (SocketAsyncEventArgs)arg));
+            MAsyncSocketExtensions.ReceiveAsObservableSocketIScheduler =
+                (t1, t2) => scheduler.CreateHotObservable(OnNext(10, (SocketAsyncEventArgs) arg));
 
 
             var observer = scheduler.CreateObserver<TcpRosHeader>();

@@ -53,6 +53,7 @@ namespace RosSharp
                             string dateTimeFormat)
             : base(logName, logLevel, showLevel, showDateTime, showLogName, dateTimeFormat)
         {
+            /*
             var adapter = LogManager.Adapter;
             LogManager.Adapter = new CapturingLoggerFactoryAdapter();
 
@@ -63,6 +64,7 @@ namespace RosSharp
             }
 
             LogManager.Adapter = adapter;
+            */
         }
 
         protected override void WriteInternal(LogLevel level, object message, Exception e)
@@ -70,7 +72,7 @@ namespace RosSharp
             var sb = new StringBuilder();
             FormatOutput(sb, level, message, e);
 
-            _publisher.OnNext(new Log() {msg = message.ToString()});
+            //_publisher.OnNext(new Log() {msg = message.ToString()});
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace RosSharp.Sample
 {
@@ -17,8 +18,13 @@ namespace RosSharp.Sample
                 x => Console.WriteLine(x.data),
                 () => Console.WriteLine("OnCompleted!!"));
 
-            Console.WriteLine("Press Any Key.");
-            Console.ReadKey();
+            //Console.WriteLine("Press Any Key.");
+            //Console.ReadKey();
+
+            while (true)
+            {
+                Thread.Sleep(TimeSpan.FromSeconds(10));
+            }
 
             RosManager.Dispose();
         }

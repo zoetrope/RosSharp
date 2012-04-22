@@ -31,9 +31,12 @@
 #endregion
 
 using System;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Mime;
 using System.Net.Sockets;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
@@ -44,6 +47,7 @@ namespace RosSharp.Transport
     internal sealed class TcpRosClient : IDisposable
     {
         private Socket _socket;
+        private IScheduler _scheduler = new EventLoopScheduler();
         private OneLineCacheSubject<SocketAsyncEventArgs> _oneLineCacheSubject;
         private ILog _logger = LogManager.GetCurrentClassLogger();
 
@@ -65,7 +69,7 @@ namespace RosSharp.Transport
 
         public void Dispose()
         {
-            _logger.Debug(m => m("Close Socket[{0}]", _socket.LocalEndPoint));
+            //_logger.Debug(m => m("Close Socket[{0}]", _socket.LocalEndPoint));
             _socket.Close();
             _socket = null;
         }
@@ -91,7 +95,7 @@ namespace RosSharp.Transport
             if(_oneLineCacheSubject ==null)
             {
                 _oneLineCacheSubject = new OneLineCacheSubject<SocketAsyncEventArgs>();
-                _socket.ReceiveAsObservable().Subscribe(_oneLineCacheSubject);
+                _socket.ReceiveAsObservable(_scheduler).Subscribe(_oneLineCacheSubject);
             }
             return Observable.Create<byte[]>(observer =>
             {
@@ -105,7 +109,6 @@ namespace RosSharp.Transport
                         byte[] current;
                         if (CompleteMessage(offset, out current, ref rest))
                         {
-                            _logger.Debug(m => m("OnNext = {0}", current.Dump()));
                             observer.OnNext(current);
                         }
 
@@ -114,7 +117,6 @@ namespace RosSharp.Transport
                     .Subscribe(_ => { },
                                ex =>
                                {
-                                   Console.WriteLine("ReceiveAsync Error = {0}", ex.Message);
                                    observer.OnError(new Exception("ReceiveAsync Error"));
                                    observer.OnCompleted();
                                });

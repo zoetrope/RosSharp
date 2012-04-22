@@ -100,14 +100,15 @@ namespace RosSharp.Topic
 
         void ISubscriber.UpdatePublishers(List<Uri> publishers)
         {
-            //TODO: 同じPublisherに対する処理
-            var slaves = publishers.Select(x => new SlaveClient(x));
+            var slaves = publishers
+                .Except(_rosTopicServers.Select(server => server.SlaveUri))
+                .Select(x => new SlaveClient(x));
 
             foreach (var slaveClient in slaves)
             {
                 var uri = slaveClient.SlaveUri;
                 var task = slaveClient.RequestTopicAsync(NodeId, TopicName, new List<ProtocolInfo> {new ProtocolInfo(ProtocolType.TCPROS)});
-                task.ContinueWith(t => ConnectServer(t.Result),TaskContinuationOptions.OnlyOnRanToCompletion);
+                task.ContinueWith(t => ConnectServer(t.Result, uri), TaskContinuationOptions.OnlyOnRanToCompletion);
 
                 task.ContinueWith(t =>
                 {
@@ -122,9 +123,9 @@ namespace RosSharp.Topic
 
         #endregion
 
-        private void ConnectServer(TopicParam param)
+        private void ConnectServer(TopicParam param, Uri slaveUri)
         {
-            var server = new RosTopicServer<TMessage>(NodeId, TopicName);
+            var server = new RosTopicServer<TMessage>(NodeId, TopicName, slaveUri);
             _rosTopicServers.Add(server); //TODO: DisconnectServerはない？ロックは不要？
 
             //TODO: StartAsyncが失敗したとき

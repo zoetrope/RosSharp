@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Linq;
 using System.Threading;
 
 namespace RosSharp.Sample
@@ -13,6 +14,8 @@ namespace RosSharp.Sample
             var node = RosManager.CreateNode("Talker");
 
             var publisher = node.CreatePublisherAsync<RosSharp.std_msgs.String>("/chatter").Result;
+
+            publisher.OnConnectedAsObservable().First();
 
             Console.WriteLine("Press Any Key. Start Send.");
             Console.ReadKey();
