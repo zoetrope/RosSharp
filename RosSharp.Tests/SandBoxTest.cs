@@ -20,17 +20,17 @@ namespace RosSharp.Tests
         {
             //Taskの動き確認
 
-            //以下のようにすると、RunもFailも表示されない。
+            //RunもFailも表示されない。
             Task.Factory.StartNew(() => { throw new Exception(); })
                 .ContinueWith(task => Console.WriteLine("[1]Run"), TaskContinuationOptions.OnlyOnRanToCompletion)
                 .ContinueWith(task => Console.WriteLine("[1]Fail"), TaskContinuationOptions.OnlyOnFaulted);
 
-            //以下のようにすると、失敗したときにRunだけ呼ばれてしまう。
+            //失敗したときにRunだけ呼ばれてしまう。
             Task.Factory.StartNew(() => { throw new Exception(); })
                 .ContinueWith(task => Console.WriteLine("[2]Run"))
                 .ContinueWith(task => Console.WriteLine("[2]Fail"), TaskContinuationOptions.OnlyOnFaulted);
 
-            //以下のようにすると、失敗したときにRunとFailが両方呼ばれてしまう。
+            //失敗したときにRunとFailが両方呼ばれてしまう。
             Task.Factory.StartNew(() => { throw new Exception(); })
                 .ContinueWith(task =>
                 {
@@ -39,6 +39,18 @@ namespace RosSharp.Tests
                 })
                 .Unwrap()
                 .ContinueWith(task => Console.WriteLine("[3]Fail"), TaskContinuationOptions.OnlyOnFaulted);
+
+            //RunとFailが両方呼ばれる。
+            Task.Factory.StartNew(() => { throw new Exception(); })
+                .ContinueWith(task =>
+                {
+                    Console.WriteLine("[4]Run");
+                    if(task.IsFaulted)
+                    {
+                        throw task.Exception.InnerException;
+                    }
+                })
+                .ContinueWith(task => Console.WriteLine("[4]Fail"), TaskContinuationOptions.OnlyOnFaulted);
 
             Thread.Sleep(TimeSpan.FromSeconds(5));
         }

@@ -73,6 +73,8 @@ namespace RosSharp
             FormatOutput(sb, level, message, e);
 
             //_publisher.OnNext(new Log() {msg = message.ToString()});
+
+            Console.WriteLine(sb.ToString());
         }
     }
 }

@@ -37,6 +37,7 @@ using System.Reactive.Linq;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Common.Logging;
 using CookComputing.XmlRpc;
@@ -71,6 +72,7 @@ namespace RosSharp.Master
             _logger.Info(m => m("MasterServer launched {0}", MasterUri.ToString()));
 
             _parameterServer = new ParameterServer(MasterUri);
+
         }
 
         public Uri MasterUri { get; private set; }
@@ -381,6 +383,8 @@ namespace RosSharp.Master
                     info = _registrationContainer.RegisterPublisher(topic, topicType, new Uri(callerApi));
                     UpdatePublisher(callerId, info);
                 }
+
+                _logger.Debug("Registered Publisher");
                 return new object[]
                 {
                     StatusCode.Success,
@@ -672,13 +676,14 @@ namespace RosSharp.Master
 
             _logger.Debug(m => m("UpdatePublisher: slaves={0}, publishers={1}", slaves.Count(), publishers.Length));
 
-            Parallel.ForEach(
-                slaves,
-                slave => slave.PublisherUpdateAsync(callerId, info.TopicName, publishers)
-                             .ContinueWith(task =>
-                             {
-                                 _logger.Error("UpdatePublisher: Failure", task.Exception.InnerException);
-                             }, TaskContinuationOptions.OnlyOnFaulted));
+            foreach (var slave in slaves)
+            {
+                slave.PublisherUpdateAsync(callerId, info.TopicName, publishers)
+                    .ContinueWith(task =>
+                    {
+                        _logger.Error("UpdatePublisher: Failure", task.Exception.InnerException);
+                    }, TaskContinuationOptions.OnlyOnFaulted);
+            }
         }
     }
 }

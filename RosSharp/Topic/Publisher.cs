@@ -141,16 +141,25 @@ namespace RosSharp.Topic
         {
             _logger.Debug(m => m("AddTopic: {0}", socket.RemoteEndPoint.ToString()));
             var rosTopicClient = new RosTopicClient<TMessage>(NodeId, TopicName);
+
             return rosTopicClient.StartAsync(socket)
                 .ContinueWith(task =>
                 {
-                    _logger.Debug("AddTopic: Started");
-                    lock (_rosTopicClients)
+                    if (task.IsFaulted)
                     {
-                        _rosTopicClients.Add(rosTopicClient);
+                        _logger.Error("AddTopic: Failure", task.Exception.InnerException);
                     }
-                    _onConnectedSubject.OnNext(Unit.Default);
-                }, TaskContinuationOptions.OnlyOnRanToCompletion);
+                    else
+                    {
+                        _logger.Debug("AddTopic: Started");
+                        lock (_rosTopicClients)
+                        {
+                            _rosTopicClients.Add(rosTopicClient);
+                        }
+                        _logger.Debug("OnConnected");
+                        _onConnectedSubject.OnNext(Unit.Default);
+                    }
+                });
         }
 
         internal void UpdateSubscribers(List<Uri> subscribers)

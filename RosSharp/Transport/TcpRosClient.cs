@@ -109,6 +109,7 @@ namespace RosSharp.Transport
                         byte[] current;
                         if (CompleteMessage(offset, out current, ref rest))
                         {
+                            //_logger.Debug(m => m("Receive Data = {0}", current.Dump()));
                             observer.OnNext(current);
                         }
 
@@ -171,7 +172,7 @@ namespace RosSharp.Transport
 
             var restLen = rest.Length - offset - length;
             var temp = new byte[restLen];
-            Buffer.BlockCopy(rest, length, rest, 0, restLen);
+            Buffer.BlockCopy(rest, length, temp, 0, restLen);
             rest = temp;
 
             return true;

@@ -100,6 +100,8 @@ namespace RosSharp.Topic
 
         void ISubscriber.UpdatePublishers(List<Uri> publishers)
         {
+            _logger.Debug("UpdatePublishers");
+
             var slaves = publishers
                 .Except(_rosTopicServers.Select(server => server.SlaveUri))
                 .Select(x => new SlaveClient(x));
@@ -125,6 +127,7 @@ namespace RosSharp.Topic
 
         private void ConnectServer(TopicParam param, Uri slaveUri)
         {
+            _logger.Debug("ConnectServer");
             var server = new RosTopicServer<TMessage>(NodeId, TopicName, slaveUri);
             _rosTopicServers.Add(server); //TODO: DisconnectServerはない？ロックは不要？
 
@@ -132,6 +135,8 @@ namespace RosSharp.Topic
             server.StartAsync(param).ContinueWith(
                 task =>
                 {
+                    _logger.Debug("ConnectServer Started");
+                    //TODO: これでいい？
                     var d = task.Result.Subscribe(
                         x => _aggregateSubject.OnNext(x),
                         ex => { },
@@ -142,6 +147,7 @@ namespace RosSharp.Topic
                     {
                         _disposables.Add(d);
                     }
+                    _logger.Debug("ConnectServer OnConnected");
                     _onConnectedSubject.OnNext(Unit.Default);
                 });
         }

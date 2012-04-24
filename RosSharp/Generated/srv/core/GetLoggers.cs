@@ -28,7 +28,7 @@ namespace RosSharp.core
         }
         public override string Md5Sum
         {
-            get { return "97c560f3ceb4f0eb5828a731247d3b6f"; }
+            get { return "32e97e85527d4678a8f9279894bb64b0"; }
         }
         public override string ServiceDefinition
         {
@@ -105,7 +105,7 @@ namespace RosSharp.core
         }
         public string Md5Sum
         {
-            get { return "97c560f3ceb4f0eb5828a731247d3b6f"; }
+            get { return "32e97e85527d4678a8f9279894bb64b0"; }
         }
         public string MessageDefinition
         {

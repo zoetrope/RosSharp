@@ -36,6 +36,7 @@ using System.Linq;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Common.Logging;
 using CookComputing.XmlRpc;
@@ -62,15 +63,20 @@ namespace RosSharp.Slave
             _topicContainer = topicContainer;
             _tcpRosListener = listener;
 
-            string slaveName = nodeId + "_slave";
+            //string slaveName = nodeId + "_slave";
+            string slaveName = "slave";
 
             _channel = new HttpServerChannel(slaveName, portNumber, new XmlRpcServerFormatterSinkProvider());
             var tmp = new Uri(_channel.GetChannelUri());
 
-            SlaveUri = new Uri("http://" + RosManager.HostName + ":" + tmp.Port + "/" + slaveName);
+            SlaveUri = new Uri("http://" + RosManager.HostName + ":" + tmp.Port + "/");
+            //SlaveUri = new Uri("http://" + RosManager.HostName + ":" + tmp.Port + "/" + slaveName);
 
             ChannelServices.RegisterChannel(_channel, false);
-            RemotingServices.Marshal(this, slaveName);
+            RemotingServices.Marshal(this, "/");
+
+            Console.WriteLine("SlaveUri={0}", SlaveUri);
+
         }
 
         public Uri SlaveUri { get; private set; }
@@ -332,7 +338,7 @@ namespace RosSharp.Slave
                 return new object[]
                 {
                     1,
-                    "Protocol<" + protocolName + ", AdvertiseAddress<" + address + ">>",
+                    "Protocol<" + protocolName + ", AdvertiseAddress<" + RosManager.HostName + ", " + address.Port + ">>",
                     new object[]
                     {
                         protocolName,

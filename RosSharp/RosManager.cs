@@ -173,7 +173,7 @@ namespace RosSharp
                 return ConfigurationSection.Instance.XmlRpcTimeout.Value;
             }
 
-            return 1000;
+            return 5000;
         }
 
         private static int ReadTopicTimeout()
@@ -193,7 +193,7 @@ namespace RosSharp
                 return ConfigurationSection.Instance.TopicTimeout.Value;
             }
 
-            return 1000;
+            return 5000;
         }
 
         /// <summary>

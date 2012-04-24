@@ -43,7 +43,7 @@ namespace RosSharp
         public List<string> topics { get; set; }
         public string MessageType
         {
-            get { return "Log"; }
+            get { return "rosgraph_msgs/Log"; }
         }
         public string Md5Sum
         {

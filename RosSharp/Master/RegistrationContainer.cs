@@ -34,11 +34,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Common.Logging;
 
 namespace RosSharp.Master
 {
     internal sealed class RegistrationContainer
     {
+        private readonly ILog _logger = LogManager.GetCurrentClassLogger();
         private readonly Dictionary<string, Uri> _serviceUris
             = new Dictionary<string, Uri>();
 
@@ -48,7 +50,14 @@ namespace RosSharp.Master
 
         public void RegisterService(string service, Uri serviceUri, Uri slaveUri)
         {
-            _serviceUris.Add(service, serviceUri);
+            if (!_serviceUris.ContainsKey(service))
+            {
+                _serviceUris.Add(service, serviceUri);
+            }
+            else
+            {
+                _logger.Error(m => m("Already registered Service [{0}]", service));
+            }
         }
 
         public bool UnregisterService(string service, Uri serviceUri)

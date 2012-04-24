@@ -33,6 +33,8 @@
 using System;
 using System.Collections.Generic;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Common.Logging;
 using RosSharp.Master;
@@ -159,10 +161,12 @@ namespace RosSharp.Node
 
             var tcs = new TaskCompletionSource<Subscriber<TMessage>>();
 
+            _logger.Debug("RegisterSubscriber");
             _masterClient
                 .RegisterSubscriberAsync(NodeId, topicName, subscriber.MessageType, _slaveServer.SlaveUri)
                 .ContinueWith(task =>
                 {
+                    _logger.Debug("Registered Subscriber");
                     if (task.IsFaulted)
                     {
                         tcs.SetException(task.Exception.InnerException);
@@ -200,15 +204,19 @@ namespace RosSharp.Node
             publisher.Disposing += DisposePublisher;
 
             _tcpRosListener.AcceptAsync()
+                .Do(_=>_logger.Debug("Accepted for Publisher"))
                 .Subscribe(socket => publisher.AddTopic(socket),
                            ex => _logger.Error("Accept Error", ex));
-
+            
             var tcs = new TaskCompletionSource<Publisher<TMessage>>();
 
+            _logger.Debug("RegisterPublisher");
             _masterClient
                 .RegisterPublisherAsync(NodeId, topicName, publisher.MessageType, _slaveServer.SlaveUri)
                 .ContinueWith(task =>
                 {
+                    _logger.Debug("Registered Publisher");
+
                     if (task.IsFaulted)
                     {
                         tcs.SetException(task.Exception.InnerException);

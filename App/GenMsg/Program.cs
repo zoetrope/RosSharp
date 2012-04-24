@@ -33,16 +33,31 @@ namespace RosSharp.GenMsg
             {
                 files.ForEach(file =>
                 {
-                    var fileName = Generator.generateMessage(file, ns, outputDir, includeDirs);
-                    Console.WriteLine("Generated {0}", fileName);
+                    try
+                    {
+                        var fileName = Generator.generateMessage(file, ns, outputDir, includeDirs);
+                        Console.WriteLine("Generated {0}", fileName);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Fail {0}, {1}", file, ex.Message);
+                    }
+                    
                 });
             }
             else if(generateType == "srv")
             {
                 files.ForEach(file =>
                 {
-                    var fileName = Generator.generateService(file, ns, outputDir, includeDirs);
-                    Console.WriteLine("Generated {0}", fileName);
+                    try
+                    {
+                        var fileName = Generator.generateService(file, ns, outputDir, includeDirs);
+                        Console.WriteLine("Generated {0}", fileName);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Fail {0}, {1}", file, ex.Message);
+                    }
                 });
             }
 

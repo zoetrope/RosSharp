@@ -64,7 +64,10 @@ namespace RosSharp.Master
             return Task<object[]>.Factory.FromAsync((callback, o) =>
                                                     _proxy.BeginRegisterService(callerId, service, serviceApi.ToString(), callerApi.ToString(), callback, o),
                                                     _proxy.EndRegisterService, null)
-                .ContinueWith(task => { if ((StatusCode) task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string) task.Result[1]); });
+                .ContinueWith(task =>
+                {
+                    if ((StatusCode) task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string) task.Result[1]);
+                });
         }
 
         /// <summary>
