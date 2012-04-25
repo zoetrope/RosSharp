@@ -56,14 +56,15 @@ namespace RosSharp.Topic
         private readonly CompositeDisposable _disposables = new CompositeDisposable();
         private readonly ReplaySubject<Unit> _onConnectedSubject = new ReplaySubject<Unit>();
         private readonly List<RosTopicServer<TMessage>> _rosTopicServers = new List<RosTopicServer<TMessage>>();
+        private bool _nodelay;
 
-        internal Subscriber(string topicName, string nodeId)
+        internal Subscriber(string topicName, string nodeId, bool nodelay=true)
         {
             TopicName = topicName;
             var dummy = new TMessage();
             MessageType = dummy.MessageType;
-
             NodeId = nodeId;
+            _nodelay = nodelay;
         }
 
         public string NodeId { get; private set; }
@@ -132,7 +133,7 @@ namespace RosSharp.Topic
             _rosTopicServers.Add(server); //TODO: DisconnectServerはない？ロックは不要？
 
             //TODO: StartAsyncが失敗したとき
-            server.StartAsync(param).ContinueWith(
+            server.StartAsync(param, _nodelay).ContinueWith(
                 task =>
                 {
                     _logger.Debug("ConnectServer Started");

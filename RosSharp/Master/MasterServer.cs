@@ -61,7 +61,7 @@ namespace RosSharp.Master
         public MasterServer(int portNumber)
         {
             _channel = new HttpServerChannel("master", portNumber, new XmlRpcServerFormatterSinkProvider());
-
+            
             var tmp = new Uri(_channel.GetChannelUri());
 
             MasterUri = new Uri("http://" + RosManager.HostName + ":" + tmp.Port);

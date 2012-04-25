@@ -88,17 +88,18 @@ namespace RosSharp.Topic
         }
 
 
-        public Task StartAsync(Socket socket)
+        public Task StartAsync(Socket socket, bool latching = false)
         {
             _client = new TcpRosClient(socket);
 
             return _client.ReceiveAsync()
                 .Take(1)
                 .Timeout(TimeSpan.FromMilliseconds(RosManager.TopicTimeout))
-                .Select(OnReceivedHeader).ToTask();
+                .Select(x => OnReceivedHeader(x, latching))
+                .ToTask();
         }
 
-        private Unit OnReceivedHeader(byte[] data)
+        private Unit OnReceivedHeader(byte[] data, bool latching)
         {
             _logger.Debug("OnReceivedHeader");
 
@@ -121,10 +122,15 @@ namespace RosSharp.Topic
                 throw new RosTopicException("MD5Sum mismatch error");
             }
 
+            if (reqHeader.HasMember("tcp_nodelay"))
+            {
+                _client.SetNodelayOption(reqHeader.tcp_nodelay == "1");
+            }
+
             var resHeader = new
             {
                 callerid = NodeId,
-                latching = "0",
+                latching = latching ? "1":"0",
                 md5sum = dummy.Md5Sum,
                 message_definition = dummy.MessageDefinition,
                 topic = TopicName,

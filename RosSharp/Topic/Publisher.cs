@@ -52,15 +52,16 @@ namespace RosSharp.Topic
         private readonly ILog _logger = LogManager.GetCurrentClassLogger();
         private readonly ReplaySubject<Unit> _onConnectedSubject = new ReplaySubject<Unit>();
         private readonly List<RosTopicClient<TMessage>> _rosTopicClients = new List<RosTopicClient<TMessage>>();
+        private readonly bool _latching;
+        private TMessage _lastPublishedMessage;
 
-        internal Publisher(string topicName, string nodeId)
+        internal Publisher(string topicName, string nodeId, bool latching = false)
         {
             var dummy = new TMessage();
-
             TopicName = topicName;
             MessageType = dummy.MessageType;
-
             NodeId = nodeId;
+            _latching = latching;
         }
 
         public string NodeId { get; private set; }
@@ -108,7 +109,7 @@ namespace RosSharp.Topic
                         _logger.Error("SendError");
                     }
                 }
-
+                _lastPublishedMessage = value;
             }
         }
 
@@ -142,7 +143,7 @@ namespace RosSharp.Topic
             _logger.Debug(m => m("AddTopic: {0}", socket.RemoteEndPoint.ToString()));
             var rosTopicClient = new RosTopicClient<TMessage>(NodeId, TopicName);
 
-            return rosTopicClient.StartAsync(socket)
+            return rosTopicClient.StartAsync(socket, _latching)
                 .ContinueWith(task =>
                 {
                     if (task.IsFaulted)
@@ -156,6 +157,12 @@ namespace RosSharp.Topic
                         {
                             _rosTopicClients.Add(rosTopicClient);
                         }
+
+                        if(_latching && _lastPublishedMessage != null)
+                        {
+                            OnNext(_lastPublishedMessage);
+                        }
+
                         _logger.Debug("OnConnected");
                         _onConnectedSubject.OnNext(Unit.Default);
                     }

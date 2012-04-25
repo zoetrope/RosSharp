@@ -49,8 +49,9 @@ namespace RosSharp.Node
         /// </summary>
         /// <typeparam name="TMessage">Topic Message Type</typeparam>
         /// <param name="topicName">Topic Name</param>
+        /// <param name="nodelay">false: Socket uses the Nagle algorithm</param>
         /// <returns>Subscriber</returns>
-        Task<Subscriber<TMessage>> CreateSubscriberAsync<TMessage>(string topicName)
+        Task<Subscriber<TMessage>> CreateSubscriberAsync<TMessage>(string topicName, bool nodelay = true)
             where TMessage : IMessage, new();
 
         /// <summary>
@@ -58,8 +59,9 @@ namespace RosSharp.Node
         /// </summary>
         /// <typeparam name="TMessage">Topic Message Type</typeparam>
         /// <param name="topicName">Topic Name</param>
+        /// <param name="latching">true: send the latest published message when subscribed topic</param>
         /// <returns>Publisher</returns>
-        Task<Publisher<TMessage>> CreatePublisherAsync<TMessage>(string topicName)
+        Task<Publisher<TMessage>> CreatePublisherAsync<TMessage>(string topicName, bool latching = false)
             where TMessage : IMessage, new();
 
         /// <summary>

@@ -65,6 +65,11 @@ namespace RosSharp.Transport
             result = _members[binder.Name];
             return true;
         }
+
+        public bool HasMember(string name)
+        {
+            return _members.ContainsKey(name);
+        }
     }
 
     internal static class TcpRosHeaderSerializer

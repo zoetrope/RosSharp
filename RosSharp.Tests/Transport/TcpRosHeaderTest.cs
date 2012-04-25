@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RosSharp.Topic;
 using RosSharp.Transport;
@@ -135,6 +136,16 @@ namespace RosSharp.Tests.Transport
             var ms = new MemoryStream(msg);
             var ex = AssertEx.Throws<RosTopicException>(() => TcpRosHeaderSerializer.Deserialize(ms));
             ex.Message.Is("Header does not contain '='");
+        }
+        
+        [TestMethod]
+        public void TcpRosHeader_HasMember()
+        {
+            dynamic x = new TcpRosHeader(new Dictionary<string, string>() { { "tcp_nodelay", "true" }, { "md5sum", "0000" } });
+
+            Assert.AreEqual(x.HasMember("tcp_nodelay"), true);
+            Assert.AreEqual(x.HasMember("md5sum"), true);
+            Assert.AreEqual(x.HasMember("topic"), false);
         }
     }
 

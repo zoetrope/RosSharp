@@ -177,6 +177,11 @@ namespace RosSharp.Transport
 
             return true;
         }
+
+        public void SetNodelayOption(bool opt)
+        {
+            _socket.NoDelay = opt;
+        }
     }
 
 }

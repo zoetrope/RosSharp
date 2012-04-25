@@ -142,7 +142,7 @@ namespace RosSharp.Node
             _disposed = true;
         }
 
-        public Task<Subscriber<TMessage>> CreateSubscriberAsync<TMessage>(string topicName)
+        public Task<Subscriber<TMessage>> CreateSubscriberAsync<TMessage>(string topicName, bool nodelay = true)
             where TMessage : IMessage, new()
         {
             if (_disposed) throw new ObjectDisposedException("RosNode");
@@ -155,7 +155,7 @@ namespace RosSharp.Node
 
             _logger.InfoFormat("Create Subscriber: {0}", topicName);
 
-            var subscriber = new Subscriber<TMessage>(topicName, NodeId);
+            var subscriber = new Subscriber<TMessage>(topicName, NodeId, nodelay);
             _topicContainer.AddSubscriber(subscriber);
             subscriber.Disposing += DisposeSubscriber;
 
@@ -186,7 +186,7 @@ namespace RosSharp.Node
             return tcs.Task;
         }
 
-        public Task<Publisher<TMessage>> CreatePublisherAsync<TMessage>(string topicName)
+        public Task<Publisher<TMessage>> CreatePublisherAsync<TMessage>(string topicName, bool latching = false)
             where TMessage : IMessage, new()
         {
             if (_disposed) throw new ObjectDisposedException("RosNode");
@@ -199,7 +199,7 @@ namespace RosSharp.Node
 
             _logger.InfoFormat("Create Publisher: {0}", topicName);
 
-            var publisher = new Publisher<TMessage>(topicName, NodeId);
+            var publisher = new Publisher<TMessage>(topicName, NodeId, latching);
             _topicContainer.AddPublisher(publisher);
             publisher.Disposing += DisposePublisher;
 

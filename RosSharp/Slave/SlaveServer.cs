@@ -63,18 +63,16 @@ namespace RosSharp.Slave
             _topicContainer = topicContainer;
             _tcpRosListener = listener;
 
-            //string slaveName = nodeId + "_slave";
-            string slaveName = "slave";
+            string slaveName = nodeId + "_slave";
 
             _channel = new HttpServerChannel(slaveName, portNumber, new XmlRpcServerFormatterSinkProvider());
             var tmp = new Uri(_channel.GetChannelUri());
 
-            SlaveUri = new Uri("http://" + RosManager.HostName + ":" + tmp.Port + "/");
-            //SlaveUri = new Uri("http://" + RosManager.HostName + ":" + tmp.Port + "/" + slaveName);
+            SlaveUri = new Uri("http://" + RosManager.HostName + ":" + tmp.Port + "/" + slaveName);
 
             ChannelServices.RegisterChannel(_channel, false);
-            RemotingServices.Marshal(this, "/");
-
+            RemotingServices.Marshal(this, slaveName);
+            
             Console.WriteLine("SlaveUri={0}", SlaveUri);
 
         }

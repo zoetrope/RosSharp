@@ -68,7 +68,7 @@ namespace RosSharp.Topic
 
         #endregion
 
-        public Task<IObservable<TMessage>> StartAsync(TopicParam param)
+        public Task<IObservable<TMessage>> StartAsync(TopicParam param, bool nodelay = true)
         {
             _client = new TcpRosClient();
 
@@ -83,9 +83,9 @@ namespace RosSharp.Topic
                     {
                         try
                         {
-                            OnConnected().ContinueWith(t2 =>
+                            ConnectToPublisherAsync(nodelay).ContinueWith(t2 =>
                             {
-                                _logger.Debug("StartAsync OnConnected");
+                                _logger.Debug("StartAsync ConnectToPublisherAsync");
                                 if (t2.IsFaulted) tcs.SetException(t2.Exception.InnerException);
                                 else if (t2.IsCanceled) tcs.SetCanceled();
                                 else tcs.SetResult(t2.Result);
@@ -103,7 +103,7 @@ namespace RosSharp.Topic
         }
 
 
-        private Task<IObservable<TMessage>> OnConnected()
+        private Task<IObservable<TMessage>> ConnectToPublisherAsync(bool nodelay)
         {
             var last = _client.ReceiveAsync()
                 .Take(1)
@@ -118,8 +118,8 @@ namespace RosSharp.Topic
                 callerid = NodeId,
                 topic = TopicName,
                 md5sum = dummy.Md5Sum,
-                type = dummy.MessageType
-                //,latching = "1"
+                type = dummy.MessageType,
+                tcp_nodelay = nodelay ? "1" : "0"
             };
 
             var stream = new MemoryStream();
@@ -129,7 +129,7 @@ namespace RosSharp.Topic
             _client.SendTaskAsync(stream.ToArray())
                 .ContinueWith(task =>
                 {
-                    _logger.Debug("OnConnected Sent");
+                    _logger.Debug("ConnectToPublisherAsync Sent");
                     if (task.IsFaulted) tcs.SetException(task.Exception.InnerException);
                     else if (task.IsCanceled) tcs.SetCanceled();
                     else
@@ -137,10 +137,7 @@ namespace RosSharp.Topic
                         try
                         {
                             var recvHeader = last.Timeout(TimeSpan.FromMilliseconds(RosManager.TopicTimeout)).First();
-                            tcs.SetResult(OnReceivedHeader(recvHeader));
-
-                            //rosoutにつながらない。ヘッダのReceiveがタイムアウトする。
-                            //tcs.SetResult(_client.ReceiveAsync().Select(Deserialize));
+                            tcs.SetResult(CreateSubscriber(recvHeader));
                         }
                         catch (RosTopicException ex)
                         {
@@ -158,9 +155,9 @@ namespace RosSharp.Topic
             return tcs.Task;
         }
 
-        private IObservable<TMessage> OnReceivedHeader(dynamic header)
+        private IObservable<TMessage> CreateSubscriber(dynamic header)
         {
-            _logger.Debug("OnReceivedHeader");
+            _logger.Debug("CreateSubscriber");
             var dummy = new TMessage();
             
             /* roscppでは、topicがない。
