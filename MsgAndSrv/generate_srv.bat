@@ -15,4 +15,7 @@ for %%f in (.\srv\std_srvs\*.srv) do (
 )
 
 
+for %%f in (.\srv\roscpp\*.srv) do (
+    GenMsg.exe -t srv -n roscpp -o ..\RosSharp\Generated\srv\roscpp -i .\msg\roslib -i .\msg\std_msgs -i .\msg\roscpp %%f
+)
 pause

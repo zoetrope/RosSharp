@@ -33,7 +33,7 @@ let generateMd5 (input : string) =
    let hash = md5.ComputeHash(data)
    let str = BitConverter.ToString(hash)
    str.Replace("-","").ToLower()
-
+   
 let rec getMd5OriginalName t =
    match t with
    | Bool -> "bool"
@@ -53,6 +53,7 @@ let rec getMd5OriginalName t =
    | Time -> "time"
    | Duration -> "duration"
    | FixedArray (x, size) -> getMd5OriginalName x + "[" + size.ToString() + "]"
+   | VariableArray (UserDefinition(_) as x) -> getMd5OriginalName x
    | VariableArray (x) -> getMd5OriginalName x + "[]"
    | UserDefinition (names) -> searchMsgFile Md5GeneratorSetting.includeDirectories names 
                                 |> parseMessageFile 

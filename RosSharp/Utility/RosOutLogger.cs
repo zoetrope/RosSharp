@@ -39,6 +39,7 @@ using Common.Logging;
 using Common.Logging.Simple;
 using RosSharp.Node;
 using RosSharp.Topic;
+using RosSharp.rosgraph_msgs;
 
 namespace RosSharp
 {

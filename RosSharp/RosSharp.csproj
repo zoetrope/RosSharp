@@ -58,9 +58,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ConfigurationSectionDesigner.csd</DependentUpon>
     </Compile>
-    <Compile Include="Generated\msg\roslib\Header.cs" />
-    <Compile Include="Generated\msg\roslib\Log.cs" />
-    <Compile Include="Generated\msg\roslib\Time.cs" />
+    <Compile Include="Generated\msg\roscpp\Logger.cs" />
+    <Compile Include="Generated\msg\rosgraph_msgs\Log.cs" />
     <Compile Include="Generated\msg\std_msgs\Bool.cs" />
     <Compile Include="Generated\msg\std_msgs\Byte.cs" />
     <Compile Include="Generated\msg\std_msgs\ByteMultiArray.cs" />
@@ -72,6 +71,7 @@
     <Compile Include="Generated\msg\std_msgs\Float32MultiArray.cs" />
     <Compile Include="Generated\msg\std_msgs\Float64.cs" />
     <Compile Include="Generated\msg\std_msgs\Float64MultiArray.cs" />
+    <Compile Include="Generated\msg\std_msgs\Header.cs" />
     <Compile Include="Generated\msg\std_msgs\Int16.cs" />
     <Compile Include="Generated\msg\std_msgs\Int16MultiArray.cs" />
     <Compile Include="Generated\msg\std_msgs\Int32.cs" />
@@ -92,8 +92,9 @@
     <Compile Include="Generated\msg\std_msgs\UInt64MultiArray.cs" />
     <Compile Include="Generated\msg\std_msgs\UInt8.cs" />
     <Compile Include="Generated\msg\std_msgs\UInt8MultiArray.cs" />
-    <Compile Include="Generated\srv\core\GetLoggers.cs" />
-    <Compile Include="Generated\srv\core\SetLoggerLevel.cs" />
+    <Compile Include="Generated\srv\roscpp\Empty.cs" />
+    <Compile Include="Generated\srv\roscpp\GetLoggers.cs" />
+    <Compile Include="Generated\srv\roscpp\SetLoggerLevel.cs" />
     <Compile Include="Generated\srv\sample\AddTwoInts.cs" />
     <Compile Include="Generated\srv\std_srvs\Empty.cs" />
     <Compile Include="Parameter\IParameter.cs" />

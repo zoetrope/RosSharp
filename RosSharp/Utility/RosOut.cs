@@ -35,7 +35,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Text;
-using RosSharp.core;
+using RosSharp.roscpp;
+using RosSharp.rosgraph_msgs;
 
 namespace RosSharp
 {
@@ -70,7 +71,7 @@ namespace RosSharp
         private GetLoggers.Response GetLoggers(GetLoggers.Request request)
         {
 
-            return new GetLoggers.Response(){loggers = new List<string>()};
+            return new GetLoggers.Response() {loggers = new List<Logger>()};
         }
     }
 }
