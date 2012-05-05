@@ -7,11 +7,11 @@ namespace RosSharp.Sample
     {
         static void Main(string[] args)
         {
-            RosManager.MasterUri = new Uri("http://192.168.11.5:11311/");
-            RosManager.HostName = "192.168.11.2";
+            Ros.MasterUri = new Uri("http://192.168.11.4:11311/");
+            Ros.HostName = "192.168.11.2";
 
 
-            var node = RosManager.CreateNode("/Listener");
+            var node = Ros.CreateNode("/Listener");
 
             var subscriber = node.CreateSubscriberAsync<RosSharp.std_msgs.String>("/chatter").Result;
 
@@ -27,7 +27,7 @@ namespace RosSharp.Sample
                 Thread.Sleep(TimeSpan.FromSeconds(10));
             }
 
-            RosManager.Dispose();
+            Ros.Dispose();
         }
     }
 }

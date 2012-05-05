@@ -45,7 +45,7 @@ namespace RosSharp.Slave
     /// </summary>
     public sealed class SlaveClient
     {
-        private SlaveProxy _proxy;
+        private readonly SlaveProxy _proxy;
         public Uri SlaveUri { get; private set; }
 
         public SlaveClient(Uri uri)
@@ -54,7 +54,7 @@ namespace RosSharp.Slave
 
             _proxy = new SlaveProxy();
             _proxy.Url = uri.ToString();
-            _proxy.Timeout = RosManager.XmlRpcTimeout;
+            _proxy.Timeout = Ros.XmlRpcTimeout;
         }
 
         /// <summary>
@@ -62,13 +62,14 @@ namespace RosSharp.Slave
         /// </summary>
         /// <param name="callerId"> ROS caller ID. </param>
         /// <returns> stats </returns>
-        public Task<object[]> GetBusStatsAsync(string callerId)
+        public Task<BusStatistics> GetBusStatsAsync(string callerId)
         {
             return Task<object[]>.Factory.FromAsync(_proxy.BeginGetBusStats, _proxy.EndGetBusStats, callerId, null)
                 .ContinueWith(task =>
                 {
                     if ((StatusCode) task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string) task.Result[1]);
-                    return (object[]) task.Result[2];
+                    //TODO: 値をつめる。
+                    return (BusStatistics) task.Result[2];
                 });
         }
 
@@ -77,13 +78,14 @@ namespace RosSharp.Slave
         /// </summary>
         /// <param name="callerId"> ROS caller ID. </param>
         /// <returns> businfo </returns>
-        public Task<object[]> GetBusInfoAsync(string callerId)
+        public Task<BusInformation> GetBusInfoAsync(string callerId)
         {
             return Task<object[]>.Factory.FromAsync(_proxy.BeginGetBusInfo, _proxy.EndGetBusInfo, callerId, null)
                 .ContinueWith(task =>
                 {
                     if ((StatusCode) task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string) task.Result[1]);
-                    return (object[]) task.Result[2];
+                    //TODO: 値をつめる。
+                    return (BusInformation)task.Result[2];
                 });
         }
 
@@ -249,4 +251,65 @@ namespace RosSharp.Slave
         public ProtocolType Protocol { get; private set; }
         public List<string> ProtocolParams { get; private set; }
     }
+
+    public sealed class BusStatistics
+    {
+        public List<PublishStatistic> PublishStatistics { get; private set; }
+        public List<SubscirbeStatistic> SubscribeStatistics { get; private set; }
+        public List<ServiceStatistic> ServiceStatistics { get; private set; }
+
+        public BusStatistics()
+        {
+            PublishStatistics = new List<PublishStatistic>();
+            SubscribeStatistics = new List<SubscirbeStatistic>();
+            ServiceStatistics = new List<ServiceStatistic>();
+        }
+    }
+
+    public sealed class PublishStatistic
+    {
+        public string TopicName { get; set; }
+        public int MessageDataSent { get; set; }
+        public PublishConnectionData ConnectionData { get; set; }
+    }
+
+    public sealed class SubscirbeStatistic
+    {
+        public string TopicName { get; set; }
+        public SubscribeConnectionData ConnectionData { get; set; }
+    }
+    
+    public sealed class ServiceStatistic
+    {
+        public int NumRequests { get; set; }
+        public int BytesReceived { get; set; }
+        public int BytesSent { get; set; }
+    }
+
+    public sealed class PublishConnectionData
+    {
+        public string ConnectionId { get; set; }
+        public int BytesSent { get; set; }
+        public int NumSent { get; set; }
+        public int Connected { get; set; }
+    }
+    
+    public sealed class SubscribeConnectionData
+    {
+        public string ConnectionId { get; set; }
+        public int BytesReceived { get; set; }
+        public int DropEstimate { get; set; }
+        public int Connected { get; set; }
+    }
+
+    public sealed class BusInformation
+    {
+        public string ConnectionId { get; set; }
+        public string DestinationId { get; set; }
+        public string Direction { get; set; }
+        public string Transport { get; set; }
+        public string Topic { get; set; }
+        public string Connected { get; set; }
+    }
+
 }

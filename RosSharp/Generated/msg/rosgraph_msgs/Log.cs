@@ -11,6 +11,8 @@ using System.IO;
 using System.Linq;
 using RosSharp.Message;
 using RosSharp.Service;
+using RosSharp.std_msgs;
+
 namespace RosSharp.rosgraph_msgs
 {
     public class Log : IMessage

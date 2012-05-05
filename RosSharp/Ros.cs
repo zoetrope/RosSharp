@@ -43,7 +43,7 @@ namespace RosSharp
     /// <summary>
     ///   ROS Manager
     /// </summary>
-    public static class RosManager
+    public static class Ros
     {
         private static readonly Dictionary<string, INode> _nodes = new Dictionary<string, INode>();
 
@@ -76,7 +76,7 @@ namespace RosSharp
         /// <summary>
         ///   Initialize Setting
         /// </summary>
-        static RosManager()
+        static Ros()
         {
             MasterUri = ReadMasterUri();
             HostName = ReadHostName();

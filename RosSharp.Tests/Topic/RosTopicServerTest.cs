@@ -21,7 +21,7 @@ namespace RosSharp.Tests.Topic
         [TestInitialize]
         public void Initialize()
         {
-            RosManager.TopicTimeout = 2000;
+            Ros.TopicTimeout = 2000;
         }
 
         [TestMethod]
@@ -139,7 +139,7 @@ namespace RosSharp.Tests.Topic
         [HostType("Moles")]
         public void StartAsync_ReceiveHeaderTimeoutError()
         {
-            RosManager.TopicTimeout = 100;
+            Ros.TopicTimeout = 100;
 
             MTcpRosClient.AllInstances.ConnectTaskAsyncStringInt32 = (t1, t2, t3) => Task.Factory.StartNew(() => { });
             MTcpRosClient.AllInstances.ReceiveAsyncInt32 = (t1, t2) => Observable.Return(new byte[0]).Delay(TimeSpan.FromSeconds(3));

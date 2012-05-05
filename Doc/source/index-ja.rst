@@ -216,6 +216,19 @@ ParameterServer
   param.Value = "test";
   param.Subscribe(x => Console.WriteLine(x));
 
+
+互換性
+***************************************************
+
+rospy, rosjava
+
+roscpp
+
+* XmlRpc++は、XML-RPC.NETのレスポンスヘッダをパースすることができない。
+* roscppは、URIの一部を無視してしまう。
+
+
+
 アプリケーション
 ***************************************************
 

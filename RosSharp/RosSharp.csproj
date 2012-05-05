@@ -97,6 +97,7 @@
     <Compile Include="Generated\srv\roscpp\SetLoggerLevel.cs" />
     <Compile Include="Generated\srv\sample\AddTwoInts.cs" />
     <Compile Include="Generated\srv\std_srvs\Empty.cs" />
+    <Compile Include="Name.cs" />
     <Compile Include="Parameter\IParameter.cs" />
     <Compile Include="Parameter\Parameter.cs" />
     <Compile Include="Parameter\ParameterConverter.cs" />
@@ -128,7 +129,7 @@
     <Compile Include="Parameter\ParameterServer.cs" />
     <Compile Include="Parameter\ParameterServerClient.cs" />
     <Compile Include="Topic\Publisher.cs" />
-    <Compile Include="RosManager.cs" />
+    <Compile Include="Ros.cs" />
     <Compile Include="Node\RosNode.cs" />
     <Compile Include="Transport\OneLineCacheSubject.cs" />
     <Compile Include="Transport\TcpRosListener.cs" />

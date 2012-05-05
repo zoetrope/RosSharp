@@ -94,7 +94,7 @@ namespace RosSharp.Topic
 
             return _client.ReceiveAsync()
                 .Take(1)
-                .Timeout(TimeSpan.FromMilliseconds(RosManager.TopicTimeout))
+                .Timeout(TimeSpan.FromMilliseconds(Ros.TopicTimeout))
                 .Select(x => OnReceivedHeader(x, latching))
                 .ToTask();
         }

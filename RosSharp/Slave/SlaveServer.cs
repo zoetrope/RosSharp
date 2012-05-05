@@ -63,18 +63,16 @@ namespace RosSharp.Slave
             _topicContainer = topicContainer;
             _tcpRosListener = listener;
 
-            string slaveName = nodeId + "_slave";
+            var rand = new Random();
+            string slaveName = "slave" + rand.Next();//todo: randよりもguidがいいか？
 
             _channel = new HttpServerChannel(slaveName, portNumber, new XmlRpcServerFormatterSinkProvider());
             var tmp = new Uri(_channel.GetChannelUri());
 
-            SlaveUri = new Uri("http://" + RosManager.HostName + ":" + tmp.Port + "/" + slaveName);
+            SlaveUri = new Uri("http://" + Ros.HostName + ":" + tmp.Port + "/" + slaveName);
 
             ChannelServices.RegisterChannel(_channel, false);
-            RemotingServices.Marshal(this, slaveName);
-            
-            Console.WriteLine("SlaveUri={0}", SlaveUri);
-
+            RemotingServices.Marshal(this, slaveName); //Marshalするときの名前に/を入れるとだめ。
         }
 
         public Uri SlaveUri { get; private set; }
@@ -148,7 +146,7 @@ namespace RosSharp.Slave
             {
                 StatusCode.Success,
                 "",
-                RosManager.MasterUri
+                Ros.MasterUri
             };
         }
 
@@ -202,7 +200,7 @@ namespace RosSharp.Slave
             _logger.Debug(m => m("GetSubscriptions(callerId={0})", callerId));
             return new object[]
             {
-                1,
+                StatusCode.Success,
                 "Success",
                 _topicContainer.GetSubscribers().Select(x => new object[] {x.TopicName, x.MessageType}).ToArray()
             };
@@ -222,7 +220,7 @@ namespace RosSharp.Slave
             _logger.Debug(m => m("GetPublications(callerId={0})", callerId));
             return new object[]
             {
-                1,
+                StatusCode.Success,
                 "Success",
                 _topicContainer.GetPublishers().Select(x => new object[] {x.TopicName, x.MessageType}).ToArray()
             };
@@ -316,7 +314,7 @@ namespace RosSharp.Slave
                 _logger.Warn(m => m("No publishers for topic: ", topic));
                 return new object[]
                 {
-                    -1,
+                    StatusCode.Error,
                     "No publishers for topic: " + topic,
                     "null"
                 };
@@ -335,12 +333,12 @@ namespace RosSharp.Slave
 
                 return new object[]
                 {
-                    1,
-                    "Protocol<" + protocolName + ", AdvertiseAddress<" + RosManager.HostName + ", " + address.Port + ">>",
+                    StatusCode.Success,
+                    "Protocol<" + protocolName + ", AdvertiseAddress<" + Ros.HostName + ", " + address.Port + ">>",
                     new object[]
                     {
                         protocolName,
-                        RosManager.HostName,
+                        Ros.HostName,
                         address.Port
                     }
                 };
@@ -350,7 +348,7 @@ namespace RosSharp.Slave
 
             return new object[]
             {
-                -1,
+                StatusCode.Error,
                 "No supported protocols specified.",
                 "null"
             };

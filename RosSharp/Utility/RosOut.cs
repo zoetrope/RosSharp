@@ -47,7 +47,7 @@ namespace RosSharp
     {
         public void Start()
         {
-            var node = RosManager.CreateNode("/rosout");
+            var node = Ros.CreateNode("/rosout");
 
             var publisher = node.CreatePublisherAsync<Log>("/rosout_agg").Result;
             var subscriber = node.CreateSubscriberAsync<Log>("/rosout").Result;

@@ -50,7 +50,7 @@ namespace RosSharp.Parameter
         {
             _proxy = new ParameterServerProxy();
             _proxy.Url = uri.ToString();
-            _proxy.Timeout = RosManager.XmlRpcTimeout;
+            _proxy.Timeout = Ros.XmlRpcTimeout;
         }
 
         /// <summary>

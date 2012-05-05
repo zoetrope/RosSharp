@@ -64,7 +64,7 @@ namespace RosSharp.Master
             
             var tmp = new Uri(_channel.GetChannelUri());
 
-            MasterUri = new Uri("http://" + RosManager.HostName + ":" + tmp.Port);
+            MasterUri = new Uri("http://" + Ros.HostName + ":" + tmp.Port);
 
             ChannelServices.RegisterChannel(_channel, false);
             RemotingServices.Marshal(this, "/");
@@ -120,7 +120,7 @@ namespace RosSharp.Master
             {
                 lock (_registrationContainer)
                 {
-                    _registrationContainer.RegisterService(service, new Uri(serviceApi), new Uri(callerApi));
+                    _registrationContainer.RegisterService(callerId, service, new Uri(serviceApi), new Uri(callerApi));
                 }
                 return new object[]
                 {
@@ -247,16 +247,16 @@ namespace RosSharp.Master
 
             try
             {
-                List<Uri> uris;
+                List<RegistrationInfo> infos;
                 lock (_registrationContainer)
                 {
-                    uris = _registrationContainer.RegsiterSubscriber(topic, topicType, new Uri(callerApi));
+                    infos = _registrationContainer.RegsiterSubscriber(callerId, topic, topicType, new Uri(callerApi));
                 }
                 return new object[]
                 {
                     StatusCode.Success,
                     "Subscribed to [" + topic + "]",
-                    uris.Select(x => x.ToString()).ToArray()
+                    infos.Select(x => x.Uri.ToString()).ToArray()
                 };
             }
             catch (UriFormatException ex)
@@ -380,7 +380,7 @@ namespace RosSharp.Master
                 TopicRegistrationInfo info;
                 lock (_registrationContainer)
                 {
-                    info = _registrationContainer.RegisterPublisher(topic, topicType, new Uri(callerApi));
+                    info = _registrationContainer.RegisterPublisher(callerId, topic, topicType, new Uri(callerApi));
                     UpdatePublisher(callerId, info);
                 }
 
@@ -389,7 +389,7 @@ namespace RosSharp.Master
                 {
                     StatusCode.Success,
                     "Registered [" + callerId + "] as publisher of [" + topic + "]",
-                    info.SubscriberUris.Select(x => x.ToString()).ToArray()
+                    info.Subscribers.Select(x => x.Uri.ToString()).ToArray()
                 };
             }
             catch (UriFormatException ex)
@@ -536,7 +536,12 @@ namespace RosSharp.Master
         {
             _logger.Debug(m => m("GetPublisherTopics(callerId={0},subgraph={1})", callerId, subgraph));
 
-            throw new NotImplementedException();
+            return new object[]
+            {
+                StatusCode.Error,
+                "method \"getPublisherTopics\" is not supported",
+                ""
+            };
         }
 
         /// <summary>
@@ -554,7 +559,37 @@ namespace RosSharp.Master
         public object[] GetSystemState(string callerId)
         {
             _logger.Debug(m => m("GetSystemState(callerId={0})", callerId));
-            throw new NotImplementedException();
+
+            var pubs = _registrationContainer.GetPublishers();
+            var subs = _registrationContainer.GetSubscribers();
+            var srvs = _registrationContainer.GetServices();
+
+            var stats = new object[3];
+
+            stats[0] = pubs.Select(pub => new object[]
+            {
+                pub.TopicName,
+                pub.Publishers.Select(x => x.NodeId).ToArray()
+            }).ToArray();
+
+            stats[1] = subs.Select(sub => new object[]
+            {
+                sub.TopicName,
+                sub.Subscribers.Select(x => x.NodeId).ToArray()
+            }).ToArray();
+
+            stats[2] = srvs.Select(srv => new object[]
+            {
+                srv.ServiceName,
+                new string[] {srv.Service.NodeId}
+            }).ToArray();
+
+            return new object[]
+            {
+                StatusCode.Success,
+                "current system state",
+                stats
+            };
         }
 
         /// <summary>
@@ -592,13 +627,13 @@ namespace RosSharp.Master
         {
             _logger.Debug(m => m("LookupService(callerId={0},service={1})", callerId, service));
 
-            Uri uri;
+            ServiceRegistrationInfo info;
             lock (_registrationContainer)
             {
-                uri = _registrationContainer.LookUpService(service);
+                info = _registrationContainer.LookUpService(service);
             }
 
-            if (uri == null)
+            if (info == null)
             {
                 _logger.Error("no provider");
                 return new object[]
@@ -612,8 +647,8 @@ namespace RosSharp.Master
             return new object[]
             {
                 StatusCode.Success,
-                "rosrpc URI: [" + uri + "]",
-                uri.ToString()
+                "rosrpc URI: [" + info + "]",
+                info.Service.ToString()
             };
         }
 
@@ -670,9 +705,9 @@ namespace RosSharp.Master
 
         private void UpdatePublisher(string callerId, TopicRegistrationInfo info)
         {
-            var slaves = info.SubscriberUris.Select(uri => new SlaveClient(uri));
+            var slaves = info.Subscribers.Select(x => new SlaveClient(x.Uri));
 
-            var publishers = info.PublisherUris.Select(x => x.ToString()).ToArray();
+            var publishers = info.Publishers.Select(x => x.ToString()).ToArray();
 
             _logger.Debug(m => m("UpdatePublisher: slaves={0}, publishers={1}", slaves.Count(), publishers.Length));
 

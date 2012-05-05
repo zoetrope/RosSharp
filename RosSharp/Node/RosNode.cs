@@ -70,8 +70,8 @@ namespace RosSharp.Node
 
             NodeId = nodeId;
 
-            _masterClient = new MasterClient(RosManager.MasterUri);
-            _parameterServerClient = new ParameterServerClient(RosManager.MasterUri);
+            _masterClient = new MasterClient(Ros.MasterUri);
+            _parameterServerClient = new ParameterServerClient(Ros.MasterUri);
 
             _serviceProxyFactory = new ServiceProxyFactory(NodeId);
 
@@ -270,7 +270,7 @@ namespace RosSharp.Node
 
             var cd = new CompositeDisposable(serviceServer, disposable);
 
-            var serviceUri = new Uri("rosrpc://" + RosManager.HostName + ":" + serviceServer.EndPoint.Port);
+            var serviceUri = new Uri("rosrpc://" + Ros.HostName + ":" + serviceServer.EndPoint.Port);
 
             return _masterClient
                 .RegisterServiceAsync(NodeId, serviceName, serviceUri, _slaveServer.SlaveUri)

@@ -136,17 +136,18 @@ namespace RosSharp.Topic
                     {
                         try
                         {
-                            var recvHeader = last.Timeout(TimeSpan.FromMilliseconds(RosManager.TopicTimeout)).First();
+                            var recvHeader = last.Timeout(TimeSpan.FromMilliseconds(Ros.TopicTimeout)).First();
                             tcs.SetResult(CreateSubscriber(recvHeader));
-                        }
-                        catch (RosTopicException ex)
-                        {
-                            _logger.Error("Header Deserialize Error", ex);
-                            tcs.SetException(ex);
                         }
                         catch (TimeoutException ex)
                         {
                             _logger.Error("Receive Header Timeout Error", ex);
+                            //tcs.SetException(ex);
+                            tcs.SetResult(_client.ReceiveAsync().Select(Deserialize));
+                        }
+                        catch (RosTopicException ex)
+                        {
+                            _logger.Error("Header Deserialize Error", ex);
                             tcs.SetException(ex);
                         }
                     }

@@ -60,7 +60,7 @@ namespace RosSharp
 
             if (_publisher == null)
             {
-                var node = RosManager.CreateNode("/rosout_logger");
+                var node = Ros.CreateNode("/rosout_logger");
                 _publisher = node.CreatePublisherAsync<Log>("/rosout").Result;
             }
 

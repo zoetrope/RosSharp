@@ -10,7 +10,7 @@ namespace RosSharp.RosCore
     {
         static void Main(string[] args)
         {
-            RosManager.HostName = "192.168.11.2";
+            Ros.HostName = "192.168.11.2";
             int portNumber = 11311;
 
             var optionSet = new OptionSet()
@@ -24,8 +24,8 @@ namespace RosSharp.RosCore
 
             var masterServer = new MasterServer(portNumber);
 
-            //var rosout = new RosOut();
-            //rosout.Start();
+            var rosout = new RosOut();
+            rosout.Start();
 
             Console.WriteLine("ROS_MASTER_URI={0}", masterServer.MasterUri);
             Console.ReadKey();

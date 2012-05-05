@@ -41,18 +41,22 @@ namespace RosSharp.Master
     internal sealed class RegistrationContainer
     {
         private readonly ILog _logger = LogManager.GetCurrentClassLogger();
-        private readonly Dictionary<string, Uri> _serviceUris
-            = new Dictionary<string, Uri>();
+        private readonly Dictionary<string, ServiceRegistrationInfo> _serviceRegistrationInfos
+            = new Dictionary<string, ServiceRegistrationInfo>();
 
-        private readonly Dictionary<string, TopicRegistrationInfo> _topics
+        private readonly Dictionary<string, TopicRegistrationInfo> _topicRegistrationInfos
             = new Dictionary<string, TopicRegistrationInfo>();
 
 
-        public void RegisterService(string service, Uri serviceUri, Uri slaveUri)
+        public void RegisterService(string nodeId, string service, Uri serviceUri, Uri slaveUri)
         {
-            if (!_serviceUris.ContainsKey(service))
+            if (!_serviceRegistrationInfos.ContainsKey(service))
             {
-                _serviceUris.Add(service, serviceUri);
+                _serviceRegistrationInfos.Add(service, new ServiceRegistrationInfo()
+                {
+                    ServiceName = service,
+                    Service = new RegistrationInfo() {NodeId = nodeId, Uri = serviceUri}
+                });
             }
             else
             {
@@ -62,14 +66,14 @@ namespace RosSharp.Master
 
         public bool UnregisterService(string service, Uri serviceUri)
         {
-            return _serviceUris.Remove(service);
+            return _serviceRegistrationInfos.Remove(service);
         }
 
-        public Uri LookUpService(string service)
+        public ServiceRegistrationInfo LookUpService(string service)
         {
-            if (_serviceUris.ContainsKey(service))
+            if (_serviceRegistrationInfos.ContainsKey(service))
             {
-                return _serviceUris[service];
+                return _serviceRegistrationInfos[service];
             }
             else
             {
@@ -77,12 +81,12 @@ namespace RosSharp.Master
             }
         }
 
-        public List<Uri> RegsiterSubscriber(string topic, string topicType, Uri slaveUri)
+        public List<RegistrationInfo> RegsiterSubscriber(string nodeId, string topic, string topicType, Uri slaveUri)
         {
             TopicRegistrationInfo info;
-            if (_topics.ContainsKey(topic))
+            if (_topicRegistrationInfos.ContainsKey(topic))
             {
-                info = _topics[topic];
+                info = _topicRegistrationInfos[topic];
             }
             else
             {
@@ -91,39 +95,43 @@ namespace RosSharp.Master
                     TopicName = topic,
                     TopicType = topicType
                 };
-                _topics.Add(topic, info);
+                _topicRegistrationInfos.Add(topic, info);
             }
 
-            if (!info.SubscriberUris.Contains(slaveUri))
+            if (!info.Subscribers.Any(x=>x.NodeId == nodeId && x.Uri == slaveUri))
             {
-                info.SubscriberUris.Add(slaveUri);
+                info.Subscribers.Add(new RegistrationInfo() {NodeId = nodeId, Uri = slaveUri});
             }
 
-            return info.PublisherUris;
+            return info.Publishers;
         }
 
 
         public bool UnregisterSubscriber(string topic, Uri uri)
         {
-            if(_topics.ContainsKey(topic))
+            if(_topicRegistrationInfos.ContainsKey(topic))
             {
-                _topics[topic].SubscriberUris.Remove(uri);
-
-                if (_topics[topic].SubscriberUris.Count == 0 && _topics[topic].PublisherUris.Count == 0)
+                var index = _topicRegistrationInfos[topic].Subscribers.FindIndex(x => x.Uri == uri);
+                if (index != -1)
                 {
-                    _topics.Remove(topic);
+                    _topicRegistrationInfos[topic].Subscribers.RemoveAt(index);
+                }
+
+                if (_topicRegistrationInfos[topic].Subscribers.Count == 0 && _topicRegistrationInfos[topic].Publishers.Count == 0)
+                {
+                    _topicRegistrationInfos.Remove(topic);
                 }
             }
 
             return true;
         }
 
-        public TopicRegistrationInfo RegisterPublisher(string topic, string topicType, Uri slaveUri)
+        public TopicRegistrationInfo RegisterPublisher(string nodeId, string topic, string topicType, Uri slaveUri)
         {
             TopicRegistrationInfo info;
-            if (_topics.ContainsKey(topic))
+            if (_topicRegistrationInfos.ContainsKey(topic))
             {
-                info = _topics[topic];
+                info = _topicRegistrationInfos[topic];
             }
             else
             {
@@ -132,12 +140,12 @@ namespace RosSharp.Master
                     TopicName = topic,
                     TopicType = topicType
                 };
-                _topics.Add(topic, info);
+                _topicRegistrationInfos.Add(topic, info);
             }
 
-            if (!info.PublisherUris.Contains(slaveUri))
+            if (!info.Publishers.Any(x => x.NodeId == nodeId && x.Uri == slaveUri))
             {
-                info.PublisherUris.Add(slaveUri);
+                info.Publishers.Add(new RegistrationInfo() { NodeId = nodeId, Uri = slaveUri });
             }
 
             return info;
@@ -145,19 +153,42 @@ namespace RosSharp.Master
 
         public bool UnregisterPublisher(string topic, Uri uri)
         {
-            if (_topics.ContainsKey(topic))
+            if (_topicRegistrationInfos.ContainsKey(topic))
             {
-                _topics[topic].PublisherUris.Remove(uri);
-
-                if (_topics[topic].SubscriberUris.Count == 0 && _topics[topic].PublisherUris.Count == 0)
+                var index = _topicRegistrationInfos[topic].Publishers.FindIndex(x => x.Uri == uri);
+                if (index != -1)
                 {
-                    _topics.Remove(topic);
+                    _topicRegistrationInfos[topic].Publishers.RemoveAt(index);
+                }
+
+                if (_topicRegistrationInfos[topic].Subscribers.Count == 0 && _topicRegistrationInfos[topic].Publishers.Count == 0)
+                {
+                    _topicRegistrationInfos.Remove(topic);
                 }
             }
 
             return true;
         }
 
+        public List<TopicRegistrationInfo> GetPublishers()
+        {
+            return _topicRegistrationInfos.Values
+                .Where(topic => topic.Publishers.Count != 0)
+                .ToList();
+        }
+
+        public List<TopicRegistrationInfo> GetSubscribers()
+        {
+            return _topicRegistrationInfos.Values
+                .Where(topic => topic.Subscribers.Count != 0)
+                .ToList();
+        }
+
+        public List<ServiceRegistrationInfo> GetServices()
+        {
+            return _serviceRegistrationInfos.Values.ToList();
+        }
+        
 
         public Uri LookUpNode(string nodeName)
         {
@@ -165,19 +196,32 @@ namespace RosSharp.Master
         }
     }
 
+    internal class RegistrationInfo
+    {
+        public string NodeId { get; set; }
+        public Uri Uri { get; set; }
+    }
 
     internal class TopicRegistrationInfo
     {
         public TopicRegistrationInfo()
         {
-            SubscriberUris = new List<Uri>();
-            PublisherUris = new List<Uri>();
+            Subscribers = new List<RegistrationInfo>();
+            Publishers = new List<RegistrationInfo>();
         }
 
         public string TopicName { get; set; }
         public string TopicType { get; set; }
 
-        public List<Uri> SubscriberUris { get; private set; }
-        public List<Uri> PublisherUris { get; private set; }
+        public List<RegistrationInfo> Subscribers { get; private set; }
+        public List<RegistrationInfo> Publishers { get; private set; }
+    }
+
+    internal class ServiceRegistrationInfo
+    {
+        public string ServiceName { get; set; }
+        public string ServiceType { get; set; }
+
+        public RegistrationInfo Service { get; set; }
     }
 }

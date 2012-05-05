@@ -48,7 +48,7 @@ namespace RosSharp.Master
         {
             _proxy = new MasterProxy();
             _proxy.Url = uri.ToString();
-            _proxy.Timeout = RosManager.XmlRpcTimeout;
+            _proxy.Timeout = Ros.XmlRpcTimeout;
         }
 
         /// <summary>
@@ -208,27 +208,42 @@ namespace RosSharp.Master
                 .ContinueWith(task =>
                 {
                     if ((StatusCode) task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string) task.Result[1]);
-                    return new SystemState()
+
+                    var state = (object[]) task.Result[2];
+
+                    var ret = new SystemState();
+
+                    if (state[0] is object[])
                     {
-                        Publishers = ((object[][][]) task.Result[2])[0]
+                        ret.Publishers = ((object[]) state[0])
                             .Select(x => new PublisherSystemState()
                             {
-                                TopicName = (string) x[0],
-                                Publishers = ((object[]) x[1]).Cast<string>().ToList()
-                            }).ToList(),
-                        Subscribers = ((object[][][]) task.Result[2])[1]
+                                TopicName = (string) ((object[]) x)[0],
+                                Publishers = ((object[]) ((object[]) x)[1]).Cast<string>().ToList()
+                            }).ToList();
+                    }
+                    if (state[1] is object[])
+                    {
+
+                        ret.Subscribers = ((object[]) state[1])
                             .Select(x => new SubscriberSystemState()
                             {
-                                TopicName = (string) x[0],
-                                Subscribers = ((object[]) x[1]).Cast<string>().ToList()
-                            }).ToList(),
-                        Services = ((object[][][]) task.Result[2])[2]
+                                TopicName = (string) ((object[]) x)[0],
+                                Subscribers = ((object[]) ((object[]) x)[1]).Cast<string>().ToList()
+                            }).ToList();
+                    }
+                    if (state[2] is object[])
+                    {
+
+                        ret.Services = ((object[]) state[2])
                             .Select(x => new ServiceSystemState()
                             {
-                                ServiceName = (string) x[0],
-                                Services = ((object[]) x[1]).Cast<string>().ToList()
-                            }).ToList()
-                    };
+                                ServiceName = (string) ((object[]) x)[0],
+                                Services = ((object[]) ((object[]) x)[1]).Cast<string>().ToList()
+                            }).ToList();
+                    }
+
+                    return ret;
                 });
         }
 
