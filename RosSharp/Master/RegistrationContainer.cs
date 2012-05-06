@@ -222,6 +222,7 @@ namespace RosSharp.Master
         public string ServiceName { get; set; }
         public string ServiceType { get; set; }
 
+        //TODO: 同じ名前で複数のサービスを登録できるようにすべき？
         public RegistrationInfo Service { get; set; }
     }
 }

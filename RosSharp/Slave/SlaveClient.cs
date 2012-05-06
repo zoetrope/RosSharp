@@ -68,8 +68,56 @@ namespace RosSharp.Slave
                 .ContinueWith(task =>
                 {
                     if ((StatusCode) task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string) task.Result[1]);
-                    //TODO: 値をつめる。
-                    return (BusStatistics) task.Result[2];
+                    
+                    var statistics = (object[])task.Result[2];
+
+                    var ret = new BusStatistics();
+
+                    if (statistics[0] is object[])
+                    {
+                        ret.PublishStatistics = ((object[]) statistics[0])
+                            .Cast<object[]>()
+                            .Select(x => new PublishStatistic()
+                            {
+                                TopicName = (string) x[0],
+                                MessageDataSent = (int)x[1],
+                                ConnectionData = ((object[]) x[2])
+                                    .Cast<object[]>()
+                                    .Select(y=>new PublishConnectionData()
+                                    {
+                                        ConnectionId = (int)y[0],
+                                        BytesSent = (int)y[1],
+                                        NumSent = (int)y[2],
+                                        Connected = (bool)y[3]
+                                    })
+                                    .ToList(),
+                            }).ToList();
+                    }
+                    if (statistics[1] is object[])
+                    {
+                        ret.SubscribeStatistics = ((object[])statistics[1])
+                            .Cast<object[]>()
+                            .Select(x => new SubscirbeStatistic()
+                            {
+                                TopicName = (string) x[0],
+                                ConnectionData = ((object[])x[1])
+                                    .Cast<object[]>()
+                                    .Select(y=>new SubscribeConnectionData()
+                                    {
+                                        ConnectionId = (int)y[0],
+                                        BytesReceived = (int)y[1],
+                                        NumSent = (int)y[2],
+                                        DropEstimate = (int)y[3],
+                                        Connected = (bool)y[4]
+                                    })
+                                    .ToList(),
+                            }).ToList();
+                    }
+                    if (statistics[2] is object[])
+                    {
+                        //proposed...
+                    }
+                    return ret;
                 });
         }
 
@@ -84,8 +132,17 @@ namespace RosSharp.Slave
                 .ContinueWith(task =>
                 {
                     if ((StatusCode) task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string) task.Result[1]);
-                    //TODO: 値をつめる。
-                    return (BusInformation)task.Result[2];
+                    
+                    var info = (object[]) task.Result[2];
+                    return new BusInformation()
+                    {
+                        ConnectionId = (int)info[0],
+                        DestinationId = (string)info[1],
+                        Direction = (string)info[2],
+                        Transport = (string)info[3],
+                        Topic = (string)info[4],
+                        Connected = (bool)info[5]
+                    };
                 });
         }
 
@@ -254,9 +311,9 @@ namespace RosSharp.Slave
 
     public sealed class BusStatistics
     {
-        public List<PublishStatistic> PublishStatistics { get; private set; }
-        public List<SubscirbeStatistic> SubscribeStatistics { get; private set; }
-        public List<ServiceStatistic> ServiceStatistics { get; private set; }
+        public List<PublishStatistic> PublishStatistics { get; set; }
+        public List<SubscirbeStatistic> SubscribeStatistics { get; set; }
+        public List<ServiceStatistic> ServiceStatistics { get; set; }
 
         public BusStatistics()
         {
@@ -268,15 +325,23 @@ namespace RosSharp.Slave
 
     public sealed class PublishStatistic
     {
+        public PublishStatistic()
+        {
+            ConnectionData = new List<PublishConnectionData>();
+        }
         public string TopicName { get; set; }
         public int MessageDataSent { get; set; }
-        public PublishConnectionData ConnectionData { get; set; }
+        public List<PublishConnectionData> ConnectionData { get; set; }
     }
 
     public sealed class SubscirbeStatistic
     {
+        public SubscirbeStatistic()
+        {
+            ConnectionData = new List<SubscribeConnectionData>();
+        }
         public string TopicName { get; set; }
-        public SubscribeConnectionData ConnectionData { get; set; }
+        public List<SubscribeConnectionData> ConnectionData { get; set; }
     }
     
     public sealed class ServiceStatistic
@@ -288,28 +353,29 @@ namespace RosSharp.Slave
 
     public sealed class PublishConnectionData
     {
-        public string ConnectionId { get; set; }
+        public int ConnectionId { get; set; }
         public int BytesSent { get; set; }
         public int NumSent { get; set; }
-        public int Connected { get; set; }
+        public bool Connected { get; set; }
     }
     
     public sealed class SubscribeConnectionData
     {
-        public string ConnectionId { get; set; }
+        public int ConnectionId { get; set; }
         public int BytesReceived { get; set; }
+        public int NumSent { get; set; }
         public int DropEstimate { get; set; }
-        public int Connected { get; set; }
+        public bool Connected { get; set; }
     }
 
     public sealed class BusInformation
     {
-        public string ConnectionId { get; set; }
+        public int ConnectionId { get; set; }
         public string DestinationId { get; set; }
         public string Direction { get; set; }
         public string Transport { get; set; }
         public string Topic { get; set; }
-        public string Connected { get; set; }
+        public bool Connected { get; set; }
     }
 
 }

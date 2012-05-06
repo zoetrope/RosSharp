@@ -101,7 +101,7 @@ namespace RosSharp.Slave
         ///   subscribeStats: [[topicName, subConnectionData]...] <br />
         ///   serviceStats: (proposed) [numRequests, bytesReceived, bytesSent] <br />
         ///     pubConnectionData: [connectionId, bytesSent, numSent, connected]* <br />
-        ///     subConnectionData: [connectionId, bytesReceived, dropEstimate, connected]*
+        ///     subConnectionData: [connectionId, bytesReceived, numSent, dropEstimate, connected]*
         /// </returns>
         public object[] GetBusStats(string callerId)
         {
