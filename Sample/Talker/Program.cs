@@ -8,10 +8,11 @@ namespace RosSharp.Sample
     {
         static void Main(string[] args)
         {
-            Ros.MasterUri = new Uri("http://192.168.11.4:11311/");
+            Ros.MasterUri = new Uri("http://192.168.11.2:11311/");
             Ros.HostName = "192.168.11.2";
 
-            var node = Ros.CreateNode("/Talker");
+            var node = Ros.CreateNodeAsync("/Talker").Result;
+            Console.ReadKey();
 
             var publisher = node.CreatePublisherAsync<RosSharp.std_msgs.String>("/chatter").Result;
             

@@ -31,6 +31,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Remoting;
@@ -51,17 +52,17 @@ namespace RosSharp.Slave
     public sealed class SlaveServer : MarshalByRefObject, ISlave, IDisposable
     {
         private readonly HttpServerChannel _channel;
-        private readonly TcpRosListener _tcpRosListener;
+        private readonly Dictionary<string,TcpRosListener> _tcpRosListener;
         private readonly TopicContainer _topicContainer;
         private string _nodeId;
 
         private readonly ILog _logger = LogManager.GetCurrentClassLogger();
 
-        internal SlaveServer(string nodeId, int portNumber, TopicContainer topicContainer, TcpRosListener listener)
+        internal SlaveServer(string nodeId, int portNumber, TopicContainer topicContainer)
         {
             _nodeId = nodeId;
             _topicContainer = topicContainer;
-            _tcpRosListener = listener;
+            _tcpRosListener = new Dictionary<string, TcpRosListener>();
 
             var rand = new Random();
             string slaveName = "slave" + rand.Next();//todo: randよりもguidがいいか？
@@ -77,12 +78,24 @@ namespace RosSharp.Slave
 
         public Uri SlaveUri { get; private set; }
 
+        internal void AddListener(string topic, TcpRosListener listener)
+        {
+            if(_tcpRosListener.ContainsKey(topic))
+            {
+                throw new InvalidOperationException("Already registered listener.");
+            }
+
+            _tcpRosListener.Add(topic, listener);
+        }
+
         #region IDisposable Members
 
         public void Dispose()
         {
             ChannelServices.UnregisterChannel(_channel);
             RemotingServices.Disconnect(this);
+
+            _tcpRosListener.Values.ToList().ForEach(x => x.Dispose());
         }
 
         #endregion
@@ -329,7 +342,18 @@ namespace RosSharp.Slave
                     continue;
                 }
 
-                var address = _tcpRosListener.EndPoint;
+                if(!_tcpRosListener.ContainsKey(topic))
+                {
+                    _logger.Warn(m => m("No publishers for topic: ", topic));
+                    return new object[]
+                    {
+                        StatusCode.Error,
+                        "No publishers for topic: " + topic,
+                        "null"
+                    };
+                }
+                var listener = _tcpRosListener[topic];
+                var address = listener.EndPoint;
 
                 return new object[]
                 {

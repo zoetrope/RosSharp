@@ -34,6 +34,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Net;
+using System.Threading.Tasks;
 using Common.Logging;
 using Common.Logging.Simple;
 using RosSharp.Node;
@@ -201,14 +202,15 @@ namespace RosSharp
         /// </summary>
         /// <param name="nodeName"> ROS Node name </param>
         /// <returns> created Node </returns>
-        public static INode CreateNode(string nodeName)
+        public static Task<INode> CreateNodeAsync(string nodeName)
         {
             lock (_nodes)
             {
                 var node = new RosNode(nodeName);
                 node.Disposing += DisposeNode;
                 _nodes.Add(nodeName, node);
-                return node;
+
+                return node.Initialize().ContinueWith(t => (INode) node);
             }
         }
 

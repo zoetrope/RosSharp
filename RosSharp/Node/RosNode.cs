@@ -44,6 +44,8 @@ using RosSharp.Service;
 using RosSharp.Slave;
 using RosSharp.Topic;
 using RosSharp.Transport;
+using RosSharp.roscpp;
+using RosSharp.rosgraph_msgs;
 
 namespace RosSharp.Node
 {
@@ -60,7 +62,6 @@ namespace RosSharp.Node
         private readonly ServiceProxyFactory _serviceProxyFactory;
         private readonly Dictionary<string, IService> _services = new Dictionary<string, IService>();
         private readonly SlaveServer _slaveServer;
-        private readonly TcpRosListener _tcpRosListener;
         private readonly TopicContainer _topicContainer;
         internal event Action<RosNode> Disposing;
 
@@ -76,13 +77,38 @@ namespace RosSharp.Node
             _serviceProxyFactory = new ServiceProxyFactory(NodeId);
 
             _topicContainer = new TopicContainer();
-            _tcpRosListener = new TcpRosListener(0);
-            _slaveServer = new SlaveServer(NodeId, 0, _topicContainer, _tcpRosListener);
+            _slaveServer = new SlaveServer(NodeId, 0, _topicContainer);
 
             _slaveServer.ParameterUpdated += SlaveServerOnParameterUpdated;
         }
 
         public string NodeId { get; private set; }
+
+        internal Task Initialize()
+        {
+            Publisher<Log> logPublisher;
+            var t1 = CreatePublisherAsync<Log>("/rosout")
+                .ContinueWith(t => logPublisher = t.Result);
+            
+            var t2 = RegisterServiceAsync(NodeId + "/get_loggers", new GetLoggers(GetLoggers));
+            var t3 = RegisterServiceAsync(NodeId + "/set_logger_level", new SetLoggerLevel(SetLoggerLevel));
+
+            return Task.Factory.ContinueWhenAll(new Task[] {t1, t2, t3}, _ => { });
+        }
+
+        private SetLoggerLevel.Response SetLoggerLevel(SetLoggerLevel.Request request)
+        {
+            var level = request.level;
+            var logger = request.logger;
+
+            return new SetLoggerLevel.Response();
+        }
+
+        private GetLoggers.Response GetLoggers(GetLoggers.Request request)
+        {
+
+            return new GetLoggers.Response() { loggers = new List<Logger>() };
+        }
 
         #region INode Members
 
@@ -136,7 +162,6 @@ namespace RosSharp.Node
 
             //終了待ち
             
-            _tcpRosListener.Dispose();
             _slaveServer.Dispose();
 
             _disposed = true;
@@ -203,7 +228,10 @@ namespace RosSharp.Node
             _topicContainer.AddPublisher(publisher);
             publisher.Disposing += DisposePublisher;
 
-            _tcpRosListener.AcceptAsync()
+            var tcpRosListener = new TcpRosListener(0);
+            _slaveServer.AddListener(topicName, tcpRosListener);
+
+            tcpRosListener.AcceptAsync()
                 .Do(_=>_logger.Debug("Accepted for Publisher"))
                 .Subscribe(socket => publisher.AddTopic(socket),
                            ex => _logger.Error("Accept Error", ex));

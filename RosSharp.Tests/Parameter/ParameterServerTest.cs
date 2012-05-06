@@ -41,7 +41,7 @@ namespace RosSharp.Tests.Parameter
         {
             var server = new ParameterServer(new Uri("http://localhost"));
 
-            var slave = new SlaveServer("test", 0, new TopicContainer(), new TcpRosListener(0));
+            var slave = new SlaveServer("test", 0, new TopicContainer());
             var observer = new ReplaySubject<KeyValuePair<string, object>>();
 
             slave.ParameterUpdated += (key, value) => observer.OnNext(new KeyValuePair<string, object>(key, value));
@@ -61,7 +61,7 @@ namespace RosSharp.Tests.Parameter
         {
             var server = new ParameterServer(new Uri("http://localhost"));
 
-            var slave = new SlaveServer("test", 0, new TopicContainer(), new TcpRosListener(0));
+            var slave = new SlaveServer("test", 0, new TopicContainer());
             var observer = new ReplaySubject<KeyValuePair<string, object>>();
 
             slave.ParameterUpdated += (key, value) => observer.OnNext(new KeyValuePair<string, object>(key, value));
@@ -80,7 +80,7 @@ namespace RosSharp.Tests.Parameter
         {
             var server = new ParameterServer(new Uri("http://localhost"));
 
-            var slave = new SlaveServer("test", 0, new TopicContainer(), new TcpRosListener(0));
+            var slave = new SlaveServer("test", 0, new TopicContainer());
             var observer = new ReplaySubject<KeyValuePair<string, object>>();
 
             slave.ParameterUpdated += (key, value) => observer.OnNext(new KeyValuePair<string, object>(key, value));

@@ -28,7 +28,8 @@ namespace RosSharp.IntegrationTests
             _container = new TopicContainer();
             var listener = new TcpRosListener(0);
 
-            _slaveServer = new SlaveServer("test", 0, _container, listener);
+            _slaveServer = new SlaveServer("test", 0, _container);
+            _slaveServer.AddListener("test", listener);
 
             _slaveClient = new SlaveClient(_slaveServer.SlaveUri);
         }

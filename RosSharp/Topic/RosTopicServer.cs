@@ -143,6 +143,7 @@ namespace RosSharp.Topic
                         {
                             _logger.Error("Receive Header Timeout Error", ex);
                             //tcs.SetException(ex);
+                            //ヘッダーを受信できないことがたびたび発生する。
                             tcs.SetResult(_client.ReceiveAsync().Select(Deserialize));
                         }
                         catch (RosTopicException ex)

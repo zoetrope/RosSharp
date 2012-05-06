@@ -81,7 +81,7 @@ namespace RosSharp.Master
             }
         }
 
-        public List<RegistrationInfo> RegsiterSubscriber(string nodeId, string topic, string topicType, Uri slaveUri)
+        public List<RegistrationInfo> RegisterSubscriber(string nodeId, string topic, string topicType, Uri slaveUri)
         {
             TopicRegistrationInfo info;
             if (_topicRegistrationInfos.ContainsKey(topic))

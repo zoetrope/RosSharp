@@ -37,7 +37,7 @@ namespace RosSharp.IntegrationTests
         [TestMethod]
         public void IntParameter()
         {
-            var node = Ros.CreateNode("test");
+            var node = Ros.CreateNodeAsync("test").Result;
             
             var param = node.CreateParameterAsync<int>("test_param").Result;
 

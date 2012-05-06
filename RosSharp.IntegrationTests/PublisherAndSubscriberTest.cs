@@ -44,7 +44,7 @@ namespace RosSharp.IntegrationTests
                 OnNext(30, new std_msgs.String() {data = "hijklmn"})
                 );
 
-            var node = Ros.CreateNode("test");
+            var node = Ros.CreateNodeAsync("test").Result;
 
             var publisher = node.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
             var subscriber = node.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
@@ -85,7 +85,7 @@ namespace RosSharp.IntegrationTests
                 OnNext(30, new std_msgs.String() { data = "hijklmn" })
                 );
 
-            var node = Ros.CreateNode("test");
+            var node = Ros.CreateNodeAsync("test").Result;
 
             var subscriber = node.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
             var publisher = node.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
@@ -127,9 +127,9 @@ namespace RosSharp.IntegrationTests
                 OnNext(30, new std_msgs.String() { data = "hijklmn" })
                 );
 
-            var node1 = Ros.CreateNode("test1");
-            var node2 = Ros.CreateNode("test2");
-            var node3 = Ros.CreateNode("test3");
+            var node1 = Ros.CreateNodeAsync("test1").Result;
+            var node2 = Ros.CreateNodeAsync("test2").Result;
+            var node3 = Ros.CreateNodeAsync("test3").Result;
 
             var subscriber1 = node1.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
             var subscriber2 = node2.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
@@ -195,9 +195,9 @@ namespace RosSharp.IntegrationTests
                 OnNext(330, new std_msgs.String() { data = "hijklmn3" })
                 );
 
-            var node1 = Ros.CreateNode("test1");
-            var node2 = Ros.CreateNode("test2");
-            var node3 = Ros.CreateNode("test3");
+            var node1 = Ros.CreateNodeAsync("test1").Result;
+            var node2 = Ros.CreateNodeAsync("test2").Result;
+            var node3 = Ros.CreateNodeAsync("test3").Result;
 
             var publisher1 = node1.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
             var publisher2 = node2.CreatePublisherAsync<std_msgs.String>("test_topic").Result;

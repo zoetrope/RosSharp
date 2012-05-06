@@ -35,7 +35,7 @@ namespace RosSharp.IntegrationTests
         [TestMethod]
         public void ServerAndProxy()
         {
-            var node = Ros.CreateNode("test");
+            var node = Ros.CreateNodeAsync("test").Result;
             node.RegisterServiceAsync("/add_two_ints", new AddTwoInts(add_two_ints)).Wait();
 
             var proxy = node.CreateProxyAsync<AddTwoInts>("/add_two_ints").Result;

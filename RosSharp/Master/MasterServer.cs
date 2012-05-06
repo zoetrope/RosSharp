@@ -250,7 +250,7 @@ namespace RosSharp.Master
                 List<RegistrationInfo> infos;
                 lock (_registrationContainer)
                 {
-                    infos = _registrationContainer.RegsiterSubscriber(callerId, topic, topicType, new Uri(callerApi));
+                    infos = _registrationContainer.RegisterSubscriber(callerId, topic, topicType, new Uri(callerApi));
                 }
                 return new object[]
                 {
@@ -707,7 +707,7 @@ namespace RosSharp.Master
         {
             var slaves = info.Subscribers.Select(x => new SlaveClient(x.Uri));
 
-            var publishers = info.Publishers.Select(x => x.ToString()).ToArray();
+            var publishers = info.Publishers.Select(x => x.Uri.ToString()).ToArray();
 
             _logger.Debug(m => m("UpdatePublisher: slaves={0}, publishers={1}", slaves.Count(), publishers.Length));
 

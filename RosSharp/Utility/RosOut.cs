@@ -47,8 +47,9 @@ namespace RosSharp
     {
         public void Start()
         {
-            var node = Ros.CreateNode("/rosout");
+            var node = Ros.CreateNodeAsync("/rosout").Result;
 
+            /*
             var publisher = node.CreatePublisherAsync<Log>("/rosout_agg").Result;
             var subscriber = node.CreateSubscriberAsync<Log>("/rosout").Result;
 
@@ -58,6 +59,7 @@ namespace RosSharp
 
             node.RegisterServiceAsync("/rosout/get_loggers", new GetLoggers(GetLoggers)).Wait();
             node.RegisterServiceAsync("/rosout/set_logger_level", new SetLoggerLevel(SetLoggerLevel)).Wait();
+            */
         }
 
         private SetLoggerLevel.Response SetLoggerLevel(SetLoggerLevel.Request request)

@@ -37,7 +37,7 @@ namespace RosSharp.Tests.Node
         public void CreateSubscriber_Error()
         {
             Ros.MasterUri = new Uri("http://localhost:9999/");
-            var node = Ros.CreateNode("test");
+            var node = Ros.CreateNodeAsync("test").Result;
             var sub = node.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
         }
 
@@ -45,14 +45,14 @@ namespace RosSharp.Tests.Node
         public void CreatePublisher_Error()
         {
             Ros.MasterUri = new Uri("http://localhost:9999/");
-            var node = Ros.CreateNode("test");
+            var node = Ros.CreateNodeAsync("test").Result;
             var pub = node.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
         }
 
         [TestMethod]
         public void Dispose()
         {
-            var node = Ros.CreateNode("test");
+            var node = Ros.CreateNodeAsync("test").Result;
 
             var pub = node.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
             var sub = node.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
@@ -69,7 +69,7 @@ namespace RosSharp.Tests.Node
         [TestMethod]
         public void DisposePublisher()
         {
-            var node = Ros.CreateNode("test");
+            var node = Ros.CreateNodeAsync("test").Result;
 
             var pub = node.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
             var sub = node.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
@@ -83,7 +83,7 @@ namespace RosSharp.Tests.Node
         [TestMethod]
         public void DisposeSubscriber()
         {
-            var node = Ros.CreateNode("test");
+            var node = Ros.CreateNodeAsync("test").Result;
 
             var pub = node.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
             var sub = node.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
@@ -100,7 +100,7 @@ namespace RosSharp.Tests.Node
         [TestMethod]
         public void DisposeService()
         {
-            var node = Ros.CreateNode("test");
+            var node = Ros.CreateNodeAsync("test").Result;
 
             var service = node.RegisterServiceAsync(
                 "myservice", new AddTwoInts(req => new AddTwoInts.Response() {sum = req.a + req.b})).Result;
@@ -111,7 +111,7 @@ namespace RosSharp.Tests.Node
         [TestMethod]
         public void DisposeParameter()
         {
-            var node = Ros.CreateNode("test");
+            var node = Ros.CreateNodeAsync("test").Result;
 
             var param = node.CreateParameterAsync<int>("param").Result;
 

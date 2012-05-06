@@ -11,6 +11,8 @@ namespace RosSharp.RosCore
         static void Main(string[] args)
         {
             Ros.HostName = "192.168.11.2";
+            Ros.TopicTimeout = 10000;
+            Ros.XmlRpcTimeout = 10000;
             int portNumber = 11311;
 
             var optionSet = new OptionSet()

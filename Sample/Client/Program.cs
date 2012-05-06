@@ -10,7 +10,7 @@ namespace RosSharp.Sample
             Ros.MasterUri = new Uri("http://192.168.11.5:11311/");
             Ros.HostName = "192.168.11.3";
 
-            var node = Ros.CreateNode("Client");
+            var node = Ros.CreateNodeAsync("Client").Result;
 
             var proxy = node.CreateProxyAsync<AddTwoInts>("/add_two_ints").Result;
             
