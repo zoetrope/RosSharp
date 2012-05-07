@@ -160,6 +160,7 @@ let getInitialize (msg : RosMessage) =
 
 
 let createDefaultConstructor (name : string) (msgs : RosMessage list) =
+    "        ///<exclude/>\r\n" +
     "        public " + name + "()\r\n" +
     "        {\r\n" + 
     (msgs |> Seq.map(fun msg -> getInitialize msg) 
@@ -169,6 +170,7 @@ let createDefaultConstructor (name : string) (msgs : RosMessage list) =
     "        }\r\n"
 
 let createProperty (msg : RosMessage) = 
+    "        ///<exclude/>\r\n" +
     match msg with
     | Leaf (t, Variable(name)) -> "        public " + getTypeName t + " " + name + " { get; set; }\r\n"
     | Leaf (t, Constant(name, value)) -> "        public const " + getTypeName t + " " + name + " = " + getConstValue value + ";\r\n"
@@ -180,19 +182,31 @@ let getFullName ns name =
         ns + "/" + name
 
 let createMessageType ns name =
+    "        ///<exclude/>\r\n" +
     "        public string MessageType\r\n" +
     "        {\r\n" +
     "            get { return \"" + (getFullName ns name) + "\"; }\r\n" +
     "        }\r\n"
 
+let hasHeader (msgs : RosMessage list) =
+    msgs |> Seq.exists (fun x -> match x with | Leaf(UserDefinition(["Header";]),_) -> true | _ -> false)
+         |> fun x -> if x then "true" else "false"
+
 let createMessageMember msgs =
+    "        ///<exclude/>\r\n" +
     "        public string Md5Sum\r\n" +
     "        {\r\n" +
     "            get { return \"" + getMessageMd5 msgs + "\"; }\r\n" +
     "        }\r\n" +
+    "        ///<exclude/>\r\n" +
     "        public string MessageDefinition\r\n" +
     "        {\r\n" +
     "            get { return \"" + getMessageDefinition msgs + "\"; }\r\n" +
+    "        }\r\n" + 
+    "        ///<exclude/>\r\n" +
+    "        public bool HasHeader\r\n" +
+    "        {\r\n" + 
+    "            get { return " + hasHeader msgs + "; }\r\n" +
     "        }\r\n"
 
 let createSerialize (msg : RosMessage) = 
@@ -202,6 +216,7 @@ let createSerialize (msg : RosMessage) =
     
     
 let createSerializeMethod (msgs : RosMessage list) =
+    "        ///<exclude/>\r\n" +
     "        public void Serialize(BinaryWriter bw)\r\n" +
     "        {\r\n" + 
     (msgs |> Seq.map(fun msg -> createSerialize msg)
@@ -216,6 +231,7 @@ let createSerializeLength (msg : RosMessage) =
     | Leaf (_, Constant(_, _)) -> ""
 
 let createSerializeLengthProperty (msgs : RosMessage list) =
+    "        ///<exclude/>\r\n" +
     "        public int SerializeLength\r\n" +
     "        {\r\n" + 
     "            get { return " + 
@@ -227,6 +243,7 @@ let createSerializeLengthProperty (msgs : RosMessage list) =
     + "        }\r\n"
     
 let createConstructor (name : string) (msgs : RosMessage list) =
+    "        ///<exclude/>\r\n" +
     "        public " + name + "(BinaryReader br)\r\n" +
     "        {\r\n" + 
     "            Deserialize(br);\r\n" + 
@@ -238,6 +255,7 @@ let createDeserialize (msg : RosMessage) =
     | Leaf (_, Constant(_, _)) -> ""
    
 let createDeserializeMethod (msgs : RosMessage list) =
+    "        ///<exclude/>\r\n" +
     "        public void Deserialize(BinaryReader br)\r\n" +
     "        {\r\n" + 
     (msgs |> Seq.map(fun msg -> createDeserialize msg)
@@ -260,6 +278,7 @@ let getEquals (msg : RosMessage) =
     
 
 let createEqualityMethods (name : string) (msgs : RosMessage list) =
+    "        ///<exclude/>\r\n" +
     "        public bool Equals(" + name + " other)\r\n" +
     "        {\r\n" + 
     "            if (ReferenceEquals(null, other)) return false;\r\n" + 
@@ -271,6 +290,7 @@ let createEqualityMethods (name : string) (msgs : RosMessage list) =
                                                         |> Seq.filter(fun x -> x <> "")) + ";\r\n"
     + "        }\r\n" + 
     
+    "        ///<exclude/>\r\n" +
     "        public override bool Equals(object obj)\r\n" +
     "        {\r\n" + 
     "            if (ReferenceEquals(null, obj)) return false;\r\n" + 
@@ -278,7 +298,8 @@ let createEqualityMethods (name : string) (msgs : RosMessage list) =
     "            if (obj.GetType() != typeof(" + name + ")) return false;\r\n" + 
     "            return Equals((" + name + ")obj);\r\n" + 
     "        }\r\n" + 
-
+    
+    "        ///<exclude/>\r\n" +
     "        public override int GetHashCode()\r\n" +
     "        {\r\n" + 
     "            unchecked\r\n" + 
@@ -312,6 +333,7 @@ let createNamespace (ns : string) =
     "{\r\n"
 
 let createHeader (name : string) =
+    "    ///<exclude/>\r\n" +
     "    public class " + name + " : IMessage\r\n" +
     "    {\r\n"
 

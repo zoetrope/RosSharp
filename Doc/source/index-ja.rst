@@ -77,13 +77,13 @@ RosSharpをインストールするには、NuGet Package Manager Consoleから�
 .. code-block:: csharp
 
    // ローカルネットワークのホスト名またはIPアドレス
-   RosManager.HostName = "192.168.1.11";
+   Ros.HostName = "192.168.1.11";
    // Masterへの接続URI
-   RosManager.MasterUri = new Uri("http://192.168.1.10:11311");
+   Ros.MasterUri = new Uri("http://192.168.1.10:11311");
    // ROS TOPICのタイムアウト時間[msec]
-   RosManager.TopicTimeout = 3000;
+   Ros.TopicTimeout = 3000;
    // XML-RPCのメソッド呼び出しのタイムアウト時間[msec]
-   RosManager.XmlRpcTimeout = 3000;
+   Ros.XmlRpcTimeout = 3000;
 
 app.configでの設定
 -------------------------------------------------
@@ -216,6 +216,51 @@ ParameterServer
   param.Value = "test";
   param.Subscribe(x => Console.WriteLine(x));
 
+
+Asynchronous Programming with async/await
+async/awaitによる非同期プログラミング
+==================================================
+
+Visual Studio 11を利用すると
+
+.. code-block:: csharp
+
+  using System;
+  using System.Collections.Generic;
+  using System.Linq;
+  using System.Text;
+  using System.Threading.Tasks;
+  using RosSharp;
+
+  namespace RosSample1
+  {
+      class Program
+      {
+          static void Main(string[] args)
+          {
+              SampleSubscriber();
+
+              Console.WriteLine("Press Any Key.");
+              Console.ReadKey();
+          }
+
+          static async void SampleSubscriber()
+          {
+              try
+              {
+                  var node = await Ros.CreateNodeAsync("test");
+
+                  var subscriber = await node.CreateSubscriberAsync<RosSharp.std_msgs.String>("/chatter");
+
+                  subscriber.Subscribe(x => Console.WriteLine(x.data));
+              }
+              catch(Exception ex)
+              {
+                  Console.WriteLine(ex.Message);
+              }
+          }
+      }
+  }
 
 互換性
 ***************************************************

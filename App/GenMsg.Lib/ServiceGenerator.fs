@@ -8,27 +8,33 @@ open System
 open System.Text
 
 let createServiceHeader (name : string) =
+    "    ///<exclude/>\r\n" +
     "    public class " + name + " : ServiceBase<" + name + ".Request," + name + ".Response>\r\n" +
     "    {\r\n"
 
 let createServiceConstructor (name : string) =
+    "        ///<exclude/>\r\n" +
     "        public " + name + "()\r\n" +
     "        {\r\n" + 
     "        }\r\n" +
+    "        ///<exclude/>\r\n" +
     "        public " + name + "(Func<Request,Response> action)\r\n" +
     "            :base(action)\r\n" +
     "        {\r\n" + 
     "        }\r\n"
     
 let createServiceMember ns name msgs =
+    "        ///<exclude/>\r\n" +
     "        public override string ServiceType\r\n" +
     "        {\r\n" +
     "            get { return \"" + (getFullName ns name) + "\"; }\r\n" +
     "        }\r\n" +
+    "        ///<exclude/>\r\n" +
     "        public override string Md5Sum\r\n" +
     "        {\r\n" +
     "            get { return \"" + getServiceMd5 msgs + "\"; }\r\n" +
     "        }\r\n" +
+    "        ///<exclude/>\r\n" +
     "        public override string ServiceDefinition\r\n" +
     "        {\r\n" +
     "            get { return \"" + getServiceDefinition msgs + "\"; }\r\n" +

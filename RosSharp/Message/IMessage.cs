@@ -55,6 +55,11 @@ namespace RosSharp.Message
         string MessageDefinition { get; }
 
         /// <summary>
+        /// Has Header
+        /// </summary>
+        bool HasHeader { get; }
+
+        /// <summary>
         /// Message Length for Serialize
         /// </summary>
         int SerializeLength { get; }
