@@ -84,16 +84,23 @@ namespace RosSharp.Node
 
         public string NodeId { get; private set; }
 
-        internal Task Initialize()
+        internal Task Initialize(bool enableLogger)
         {
-            Publisher<Log> logPublisher;
-            var t1 = CreatePublisherAsync<Log>("/rosout")
-                .ContinueWith(t => logPublisher = t.Result);
-            
-            var t2 = RegisterServiceAsync(NodeId + "/get_loggers", new GetLoggers(GetLoggers));
-            var t3 = RegisterServiceAsync(NodeId + "/set_logger_level", new SetLoggerLevel(SetLoggerLevel));
+            if (enableLogger)
+            {
+                Publisher<Log> logPublisher;
+                var t1 = CreatePublisherAsync<Log>("/rosout")
+                    .ContinueWith(t => logPublisher = t.Result);
 
-            return Task.Factory.ContinueWhenAll(new Task[] {t1, t2, t3}, _ => { });
+                var t2 = RegisterServiceAsync(NodeId + "/get_loggers", new GetLoggers(GetLoggers));
+                var t3 = RegisterServiceAsync(NodeId + "/set_logger_level", new SetLoggerLevel(SetLoggerLevel));
+
+                return Task.Factory.ContinueWhenAll(new Task[] {t1, t2, t3}, _ => { });
+            }
+            else
+            {
+                return Task.Factory.StartNew(() => { });
+            }
         }
 
         private SetLoggerLevel.Response SetLoggerLevel(SetLoggerLevel.Request request)

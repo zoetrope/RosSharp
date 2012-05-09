@@ -201,8 +201,9 @@ namespace RosSharp
         ///   Create a ROS Node
         /// </summary>
         /// <param name="nodeName"> ROS Node name </param>
+        /// <param name="enableLogger"> if true, enable RosOut Logger </param>
         /// <returns> created Node </returns>
-        public static Task<INode> CreateNodeAsync(string nodeName)
+        public static Task<INode> CreateNodeAsync(string nodeName, bool enableLogger = true)
         {
             lock (_nodes)
             {
@@ -210,7 +211,7 @@ namespace RosSharp
                 node.Disposing += DisposeNode;
                 _nodes.Add(nodeName, node);
 
-                return node.Initialize().ContinueWith(t => (INode) node);
+                return node.Initialize(enableLogger).ContinueWith(t => (INode) node);
             }
         }
 

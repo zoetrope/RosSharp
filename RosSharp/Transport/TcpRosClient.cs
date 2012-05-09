@@ -39,6 +39,7 @@ using System.Net.Sockets;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Text;
 using System.Threading.Tasks;
 using Common.Logging;
 
@@ -48,7 +49,7 @@ namespace RosSharp.Transport
     {
         private Socket _socket;
         private IScheduler _scheduler = new EventLoopScheduler();
-        private OneLineCacheSubject<SocketAsyncEventArgs> _oneLineCacheSubject;
+        private OneLineCacheSubject<byte[]> _oneLineCacheSubject;
         private ILog _logger = LogManager.GetCurrentClassLogger();
 
         public TcpRosClient()
@@ -94,22 +95,25 @@ namespace RosSharp.Transport
         {
             if(_oneLineCacheSubject ==null)
             {
-                _oneLineCacheSubject = new OneLineCacheSubject<SocketAsyncEventArgs>();
+                _oneLineCacheSubject = new OneLineCacheSubject<byte[]>();
                 _socket.ReceiveAsObservable(_scheduler).Subscribe(_oneLineCacheSubject);
             }
             return Observable.Create<byte[]>(observer =>
             {
                 var disposable = _oneLineCacheSubject
                     .Where(x => x != null)
-                    .Select(OnReceive)
                     .Scan(new byte[] {}, (abs, bs) =>
                     {
                         var rest = AppendData(abs, bs);
 
+                        _logger.Debug(m => m("■■■■■■■■■■■■■Receive Data Size = {0}", bs.Length));
+                        //_logger.Debug(m => m("■■■■■■■■■■■■■Receive Data = {0}", Encoding.ASCII.GetString(bs)));
+                        
                         byte[] current;
                         if (CompleteMessage(offset, out current, ref rest))
                         {
-                            //_logger.Debug(m => m("Receive Data = {0}", current.Dump()));
+                            //_logger.Debug(m => m("■■■■■■■■■■■■■■■■■■■■■OnNext Data = {0}", current.Dump()));
+                            _logger.Debug(m => m("■■■■■■■■■■■■■■■■■■■■■OnNext Data Size= {0}", current.Length));
                             observer.OnNext(current);
                         }
 
@@ -126,15 +130,6 @@ namespace RosSharp.Transport
             });
         }
 
-
-        private byte[] OnReceive(SocketAsyncEventArgs args)
-        {
-            var ret = new byte[args.BytesTransferred];
-            Buffer.BlockCopy(args.Buffer, 0, ret, 0, args.BytesTransferred);
-
-            //_logger.Debug(m => m("rest = {0}", ret.Dump()));
-            return ret;
-        }
 
         private byte[] AppendData(byte[] bs1, byte[] bs2)
         {

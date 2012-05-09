@@ -60,12 +60,31 @@ namespace RosSharp.Transport
                 socket.EndSend, null);
         }
 
-        public static IObservable<SocketAsyncEventArgs> ReceiveAsObservable(this Socket socket, IScheduler scheduler)
+        public static IObservable<byte[]> ReceiveAsObservable(this Socket socket, IScheduler scheduler)
         {
             var arg = new SocketAsyncEventArgs();
-            arg.SetBuffer(new byte[1024], 0, 1024);
+            arg.SetBuffer(new byte[2048], 0, 2048);
 
-            return Observable.Create<SocketAsyncEventArgs>(observer =>
+
+            return Observable.Defer(
+                () => Observable.Create<byte[]>(observer =>
+                {
+                    var read = Observable.FromAsyncPattern<byte[], int, int, SocketFlags, int>(socket.BeginReceive, socket.EndReceive);
+                    var buffer = new byte[1024];
+                    IDisposable disposable = read(buffer, 0, 1024, SocketFlags.None)
+                        .Select(x =>
+                        {
+                            var ret = new byte[x];
+                            Buffer.BlockCopy(buffer, 0, ret, 0, x);
+                            return ret;
+                        })
+                        .Subscribe(observer);
+                    return disposable;
+                }))
+                .Repeat();
+
+            /*
+            return Observable.Create<byte[]>(observer =>
             {
                 var disposable = Observable.FromEventPattern<SocketAsyncEventArgs>(
                     ev => arg.Completed += ev, ev => arg.Completed -= ev)
@@ -87,7 +106,9 @@ namespace RosSharp.Transport
                             socket.ReceiveAsync(arg);
                         }
                     })
+                    .Select(OnReceive)
                     .Subscribe(observer);
+
 
                 if (socket.Connected)
                 {
@@ -96,6 +117,19 @@ namespace RosSharp.Transport
 
                 return disposable;
             });
+            */
+        }
+
+        private static byte[] OnReceive(SocketAsyncEventArgs args)
+        {
+            var ret = new byte[args.BytesTransferred];
+            Buffer.BlockCopy(args.Buffer, 0, ret, 0, args.BytesTransferred);
+
+            //Array.Clear(args.Buffer, 0, args.Buffer.Length);
+            //args.SetBuffer(new byte[2048], 0, 2048);
+            
+            //_logger.Debug(m => m("rest = {0}", ret.Dump()));
+            return ret;
         }
 
         public static IObservable<Socket> AcceptAsObservable(this Socket socket, EndPoint endpoint)

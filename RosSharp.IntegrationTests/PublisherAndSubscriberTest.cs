@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RosSharp.Master;
 using RosSharp.Transport;
+using RosSharp.std_msgs;
 
 namespace RosSharp.IntegrationTests
 {
@@ -11,15 +14,15 @@ namespace RosSharp.IntegrationTests
     public class PublisherAndSubscriberTest : ReactiveTest
     {
         private MasterServer _masterServer;
-        private static TimeSpan TestTimeout = TimeSpan.FromSeconds(3);
+        private static TimeSpan TestTimeout = TimeSpan.FromSeconds(15);
 
         [TestInitialize]
         public void Initialize()
         {
             Ros.MasterUri = new Uri("http://localhost:11311/");
             Ros.HostName = "localhost";
-            Ros.TopicTimeout = 10000;
-            Ros.XmlRpcTimeout = 10000;
+            Ros.TopicTimeout = 1000;
+            Ros.XmlRpcTimeout = 1000;
 
             _masterServer = new MasterServer(11311);
         }
@@ -31,6 +34,32 @@ namespace RosSharp.IntegrationTests
             Ros.Dispose();
         }
 
+        [TestMethod]
+        public void LargeData()
+        {
+            var observer = new OneLineCacheSubject<std_msgs.ByteMultiArray>();
+
+            var node = Ros.CreateNodeAsync("test").Result;
+
+            var publisher = node.CreatePublisherAsync<std_msgs.ByteMultiArray>("test_topic").Result;
+            var subscriber = node.CreateSubscriberAsync<std_msgs.ByteMultiArray>("test_topic").Result;
+
+            publisher.OnConnectedAsObservable().Timeout(TestTimeout).First();
+            subscriber.OnConnectedAsObservable().Timeout(TestTimeout).First();
+
+            subscriber.Subscribe(observer);
+
+            publisher.OnNext(new ByteMultiArray() { data = Enumerable.Range(0, 5000).Select(x => (byte)(x % 256)).ToList() });
+
+            var data = observer.Timeout(TestTimeout).First();
+
+            data.data.Count.Is(5000);
+
+            subscriber.Dispose();
+            publisher.Dispose();
+
+            node.Dispose();
+        }
         [TestMethod]
         public void PublishAndSubscribe()
         {

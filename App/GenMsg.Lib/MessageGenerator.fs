@@ -118,7 +118,7 @@ let rec getDeserialize t v =
     | Time -> v + " = br.ReadDateTime();"
     | Duration -> v + " = br.ReadTimeSpan();"
     | FixedArray (x, size) -> "for(int i=0; i<" + size.ToString() + "; i++) { " + v + "[i] = " + getDeserialize x (v + "[i]") + "}"
-    | VariableArray (x) -> v + " = new List<" + getTypeName x + ">(br.ReadInt32()); " + "for(int i=0; i<" + v + ".Count; i++) { " + getDeserialize x (v + "[i]") + "}"
+    | VariableArray (x) -> v + " = new List<" + getTypeName x + ">(br.ReadInt32()); " + "for(int i=0; i<" + v + ".Capacity; i++) { " + getDeserialize x "var x" + v + ".Add(x);" + "}"
     | UserDefinition (names) -> v + " = new " + String.Join(".", names) + "(br);"
 
 let rec getSerializeLength t v =
@@ -189,7 +189,8 @@ let createMessageType ns name =
     "        }\r\n"
 
 let hasHeader (msgs : RosMessage list) =
-    msgs |> Seq.exists (fun x -> match x with | Leaf(UserDefinition(["Header";]),_) -> true | _ -> false)
+    msgs |> Seq.head
+         |> fun x -> match x with | Leaf(UserDefinition(["Header";]),_) -> true | _ -> false
          |> fun x -> if x then "true" else "false"
 
 let createMessageMember msgs =

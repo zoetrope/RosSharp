@@ -71,7 +71,7 @@ namespace RosSharp.Topic
         public Task<IObservable<TMessage>> StartAsync(TopicParam param, bool nodelay = true)
         {
             _client = new TcpRosClient();
-
+            
             var tcs = new TaskCompletionSource<IObservable<TMessage>>();
             _client.ConnectTaskAsync(param.HostName, param.PortNumber)
                 .ContinueWith(t1 =>
@@ -83,13 +83,23 @@ namespace RosSharp.Topic
                     {
                         try
                         {
-                            ConnectToPublisherAsync(nodelay).ContinueWith(t2 =>
+                            /*
+                            var dummy = new TMessage();
+                            if(dummy.HasHeader)
                             {
-                                _logger.Debug("StartAsync ConnectToPublisherAsync");
-                                if (t2.IsFaulted) tcs.SetException(t2.Exception.InnerException);
-                                else if (t2.IsCanceled) tcs.SetCanceled();
-                                else tcs.SetResult(t2.Result);
-                            });
+                                tcs.SetResult(_client.ReceiveAsync().Select(Deserialize));
+                            }
+                            else
+                            */
+                            {
+                                ConnectToPublisherAsync(nodelay).ContinueWith(t2 =>
+                                {
+                                    _logger.Debug("StartAsync ConnectToPublisherAsync");
+                                    if (t2.IsFaulted) tcs.SetException(t2.Exception.InnerException);
+                                    else if (t2.IsCanceled) tcs.SetCanceled();
+                                    else tcs.SetResult(t2.Result);
+                                });
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -124,7 +134,7 @@ namespace RosSharp.Topic
 
             var stream = new MemoryStream();
             TcpRosHeaderSerializer.Serialize(stream, sendHeader);
-
+            
             var tcs = new TaskCompletionSource<IObservable<TMessage>>();
             _client.SendTaskAsync(stream.ToArray())
                 .ContinueWith(task =>
@@ -142,9 +152,7 @@ namespace RosSharp.Topic
                         catch (TimeoutException ex)
                         {
                             _logger.Error("Receive Header Timeout Error", ex);
-                            //tcs.SetException(ex);
-                            //ヘッダーを受信できないことがたびたび発生する。
-                            tcs.SetResult(_client.ReceiveAsync().Select(Deserialize));
+                            tcs.SetException(ex);
                         }
                         catch (RosTopicException ex)
                         {

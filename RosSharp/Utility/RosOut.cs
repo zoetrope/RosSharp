@@ -49,31 +49,16 @@ namespace RosSharp
         {
             var node = Ros.CreateNodeAsync("/rosout").Result;
 
-            /*
             var publisher = node.CreatePublisherAsync<Log>("/rosout_agg").Result;
             var subscriber = node.CreateSubscriberAsync<Log>("/rosout").Result;
 
             subscriber
                 .Do(x => Console.WriteLine(x.msg))
                 .Subscribe(publisher);
+//
+//            node.RegisterServiceAsync("/rosout/get_loggers", new GetLoggers(GetLoggers)).Wait();
+//            node.RegisterServiceAsync("/rosout/set_logger_level", new SetLoggerLevel(SetLoggerLevel)).Wait();
 
-            node.RegisterServiceAsync("/rosout/get_loggers", new GetLoggers(GetLoggers)).Wait();
-            node.RegisterServiceAsync("/rosout/set_logger_level", new SetLoggerLevel(SetLoggerLevel)).Wait();
-            */
-        }
-
-        private SetLoggerLevel.Response SetLoggerLevel(SetLoggerLevel.Request request)
-        {
-            var level = request.level;
-            var logger = request.logger;
-            
-            return new SetLoggerLevel.Response();
-        }
-
-        private GetLoggers.Response GetLoggers(GetLoggers.Request request)
-        {
-
-            return new GetLoggers.Response() {loggers = new List<Logger>()};
         }
     }
 }
