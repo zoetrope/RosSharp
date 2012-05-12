@@ -35,7 +35,6 @@ namespace RosSharp.Tests.Transport
         [HostType("Moles")]
         public void ReceiveAsObservable_Success()
         {
-            var arg = new MSocketAsyncEventArgs();
 
             var data = new byte[] { 179, 0, 0, 0, 40, 0, 0, 0, 99, 97, 108, 108, 101, 114, 105, 100, 
                 61, 47, 114, 111, 115, 106, 97, 118, 97, 95, 116, 117, 116, 111, 114, 105, 97, 108, 
@@ -48,13 +47,10 @@ namespace RosSharp.Tests.Transport
                 105, 110, 105, 116, 105, 111, 110, 61, 115, 116, 114, 105, 110, 103, 32, 100, 97, 116,
                 97, 10, 10, 10, 0, 0, 0, 108, 97, 116, 99, 104, 105, 110, 103, 61, 48 };
 
-            arg.BufferGet = () => data;
-            arg.BytesTransferredGet = () => data.Length;
-
             var scheduler = new TestScheduler();
 
             MAsyncSocketExtensions.ReceiveAsObservableSocketIScheduler =
-                (t1, t2) => scheduler.CreateHotObservable(OnNext(10, (SocketAsyncEventArgs) arg));
+                (t1, t2) => scheduler.CreateHotObservable(OnNext(10, data));
 
 
             var observer = scheduler.CreateObserver<TcpRosHeader>();

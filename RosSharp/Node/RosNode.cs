@@ -44,6 +44,7 @@ using RosSharp.Service;
 using RosSharp.Slave;
 using RosSharp.Topic;
 using RosSharp.Transport;
+using RosSharp.Utility;
 using RosSharp.roscpp;
 using RosSharp.rosgraph_msgs;
 
@@ -64,9 +65,12 @@ namespace RosSharp.Node
         private readonly SlaveServer _slaveServer;
         private readonly TopicContainer _topicContainer;
         internal event Action<RosNode> Disposing;
+        internal byte LogLevel { get; private set; }
 
         public RosNode(string nodeId)
         {
+            LogLevel = Log.INFO;
+
             _logger.InfoFormat("Create Node: {0}", nodeId);
 
             NodeId = nodeId;
@@ -84,13 +88,15 @@ namespace RosSharp.Node
 
         public string NodeId { get; private set; }
 
+        internal Publisher<Log> LogPubliser { get; private set; }
+
         internal Task Initialize(bool enableLogger)
         {
             if (enableLogger)
             {
-                Publisher<Log> logPublisher;
+
                 var t1 = CreatePublisherAsync<Log>("/rosout")
-                    .ContinueWith(t => logPublisher = t.Result);
+                    .ContinueWith(t => LogPubliser = t.Result);
 
                 var t2 = RegisterServiceAsync(NodeId + "/get_loggers", new GetLoggers(GetLoggers));
                 var t3 = RegisterServiceAsync(NodeId + "/set_logger_level", new SetLoggerLevel(SetLoggerLevel));
@@ -101,20 +107,33 @@ namespace RosSharp.Node
             {
                 return Task.Factory.StartNew(() => { });
             }
+            
         }
 
-        private SetLoggerLevel.Response SetLoggerLevel(SetLoggerLevel.Request request)
+
+        internal SetLoggerLevel.Response SetLoggerLevel(SetLoggerLevel.Request request)
         {
-            var level = request.level;
-            var logger = request.logger;
+            if (request.logger == "RosSharp")
+            {
+                byte level;
+                if(LogLevelExtensions.TryParse(request.level, out level))
+                {
+                    LogLevel = level;
+                }
+            }
 
             return new SetLoggerLevel.Response();
         }
 
-        private GetLoggers.Response GetLoggers(GetLoggers.Request request)
+        internal GetLoggers.Response GetLoggers(GetLoggers.Request request)
         {
-
-            return new GetLoggers.Response() { loggers = new List<Logger>() };
+            return new GetLoggers.Response()
+            {
+                loggers = new List<Logger>()
+                {
+                    new Logger() {name = "RosSharp", level = LogLevel.ToString()}
+                }
+            };
         }
 
         #region INode Members

@@ -48,9 +48,9 @@ namespace RosSharp.Transport
     internal sealed class TcpRosClient : IDisposable
     {
         private Socket _socket;
-        private IScheduler _scheduler = new EventLoopScheduler();
+        private readonly IScheduler _scheduler = new EventLoopScheduler();
         private OneLineCacheSubject<byte[]> _oneLineCacheSubject;
-        private ILog _logger = LogManager.GetCurrentClassLogger();
+        private readonly ILog _logger = LogManager.GetCurrentClassLogger();
 
         public TcpRosClient()
         {
@@ -106,14 +106,14 @@ namespace RosSharp.Transport
                     {
                         var rest = AppendData(abs, bs);
 
-                        _logger.Debug(m => m("■■■■■■■■■■■■■Receive Data Size = {0}", bs.Length));
-                        //_logger.Debug(m => m("■■■■■■■■■■■■■Receive Data = {0}", Encoding.ASCII.GetString(bs)));
-                        
+                        //_logger.Debug(m => m("Receive Data Size = {0}", bs.Length));
+                        //_logger.Debug(m => m("Receive Data = {0}", Encoding.ASCII.GetString(bs)));
+
                         byte[] current;
                         if (CompleteMessage(offset, out current, ref rest))
                         {
-                            //_logger.Debug(m => m("■■■■■■■■■■■■■■■■■■■■■OnNext Data = {0}", current.Dump()));
-                            _logger.Debug(m => m("■■■■■■■■■■■■■■■■■■■■■OnNext Data Size= {0}", current.Length));
+                            //_logger.Debug(m => m("OnNext Data = {0}", current.Dump()));
+                            //_logger.Debug(m => m("OnNext Data Size= {0}", current.Length));
                             observer.OnNext(current);
                         }
 
@@ -122,7 +122,7 @@ namespace RosSharp.Transport
                     .Subscribe(_ => { },
                                ex =>
                                {
-                                   observer.OnError(new Exception("ReceiveAsync Error"));
+                                   observer.OnError(ex);
                                    observer.OnCompleted();
                                });
 
@@ -152,7 +152,6 @@ namespace RosSharp.Transport
                 current = new byte[0];
                 return false;
             }
-
 
             var length = BitConverter.ToInt32(rest, offset) + 4;
 

@@ -47,7 +47,7 @@ namespace RosSharp.Transport
 {
     internal sealed class TcpRosHeader : DynamicObject
     {
-        private Dictionary<string, string> _members;
+        private readonly Dictionary<string, string> _members;
 
         public TcpRosHeader(Dictionary<string, string> members)
         {
@@ -74,7 +74,7 @@ namespace RosSharp.Transport
 
     internal static class TcpRosHeaderSerializer
     {
-        private static ILog _logger = LogManager.GetCurrentClassLogger();
+        private static readonly ILog _logger = LogManager.GetCurrentClassLogger();
 
         public static void Serialize(Stream stream, object data)
         {

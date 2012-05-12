@@ -277,6 +277,38 @@ namespace RosSharp.Master
                     return new Uri((string) task.Result[2]);
                 });
         }
+
+
+        ///////////////////////////////////////////////////////////////
+        // External API
+        ///////////////////////////////////////////////////////////////
+
+        /// <summary>
+        ///   Stop this server.
+        /// </summary>
+        /// <param name="callerId"> ROS caller ID. </param>
+        /// <param name="msg"> A message describing why the node is being shutdown. </param>
+        /// <returns> ignore </returns>
+        public Task ShutdownAsync(string callerId, string msg)
+        {
+            return Task<object[]>.Factory.FromAsync(_proxy.BeginShutdown, _proxy.EndShutdown, callerId, msg, null)
+                .ContinueWith(task => { if ((StatusCode)task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string)task.Result[1]); });
+        }
+
+        /// <summary>
+        ///   Get the PID of this server.
+        /// </summary>
+        /// <param name="callerId"> ROS caller ID. </param>
+        /// <returns> server process pid </returns>
+        public Task<int> GetPidAsync(string callerId)
+        {
+            return Task<object[]>.Factory.FromAsync(_proxy.BeginGetPid, _proxy.EndGetPid, callerId, null)
+                .ContinueWith(task =>
+                {
+                    if ((StatusCode)task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string)task.Result[1]);
+                    return (int)task.Result[2];
+                });
+        }
     }
 
     public sealed class TopicInfo

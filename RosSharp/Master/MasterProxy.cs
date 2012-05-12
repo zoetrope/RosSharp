@@ -173,5 +173,33 @@ namespace RosSharp.Master
         {
             return (object[]) EndInvoke(result);
         }
+
+        ///////////////////////////////////////////////////////////////
+        // External API
+        ///////////////////////////////////////////////////////////////
+
+        [XmlRpcBegin("shutdown")]
+        public IAsyncResult BeginShutdown(string callerId, string msg, AsyncCallback callback, object state)
+        {
+            return BeginInvoke(MethodBase.GetCurrentMethod(), new object[] { callerId, msg }, callback, state);
+        }
+
+        [XmlRpcEnd]
+        public object[] EndShutdown(IAsyncResult result)
+        {
+            return (object[])EndInvoke(result);
+        }
+
+        [XmlRpcBegin("getPid")]
+        public IAsyncResult BeginGetPid(string callerId, AsyncCallback callback, object state)
+        {
+            return BeginInvoke(MethodBase.GetCurrentMethod(), new object[] { callerId }, callback, state);
+        }
+
+        [XmlRpcEnd]
+        public object[] EndGetPid(IAsyncResult result)
+        {
+            return (object[])EndInvoke(result);
+        }
     }
 }

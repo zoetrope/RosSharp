@@ -45,6 +45,11 @@ namespace RosSharp.Node
     public interface INode : IDisposable
     {
         /// <summary>
+        /// Node ID
+        /// </summary>
+        string NodeId { get; }
+
+        /// <summary>
         /// Create a ROS Topic Subscriber
         /// </summary>
         /// <typeparam name="TMessage">Topic Message Type</typeparam>

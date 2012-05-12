@@ -197,5 +197,34 @@ namespace RosSharp.Master
         /// </returns>
         [XmlRpcMethod("lookupService")]
         object[] LookupService(string callerId, string service);
+
+        ///////////////////////////////////////////////////////////////
+        // External API
+        ///////////////////////////////////////////////////////////////
+
+        /// <summary>
+        ///   Stop this server.
+        /// </summary>
+        /// <param name="callerId"> ROS caller ID. </param>
+        /// <param name="msg"> A message describing why the node is being shutdown. </param>
+        /// <returns>
+        /// [0] = int: code <br/>
+        /// [1] = str: status message <br/>
+        /// [2] = int: ignore
+        /// </returns>
+        [XmlRpcMethod("shutdown")]
+        object[] Shutdown(string callerId, string msg);
+
+        /// <summary>
+        ///   Get the PID of this server.
+        /// </summary>
+        /// <param name="callerId"> ROS caller ID. </param>
+        /// <returns>
+        /// [0] = int: code <br/>
+        /// [1] = str: status message <br/>
+        /// [2] = int: server process pid
+        /// </returns>
+        [XmlRpcMethod("getPid")]
+        object[] GetPid(string callerId);
     }
 }

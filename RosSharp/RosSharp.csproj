@@ -147,6 +147,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Transport\TcpRosClient.cs" />
     <Compile Include="Transport\TcpRosHeader.cs" />
+    <Compile Include="Utility\LogLevelExtensions.cs" />
     <Compile Include="Utility\RosOut.cs" />
     <Compile Include="Utility\RosOutLogger.cs" />
     <Compile Include="Utility\RosOutLoggerFactoryAdapter.cs" />

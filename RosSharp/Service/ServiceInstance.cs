@@ -37,6 +37,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Reactive.Linq;
 using System.Text;
+using Common.Logging;
 using RosSharp.Transport;
 
 namespace RosSharp.Service
@@ -47,6 +48,7 @@ namespace RosSharp.Service
         private readonly string _nodeId;
         private readonly IService _service;
         private readonly TcpRosClient _client;
+        private readonly ILog _logger = LogManager.GetCurrentClassLogger();
 
         public ServiceInstance(string nodeId, IService service, Socket s)
         {
@@ -66,7 +68,16 @@ namespace RosSharp.Service
                 {
                     var res = Invoke(new MemoryStream(b));
                     var array = res.ToArray();
-                    _client.SendTaskAsync(array).Wait(); //TODO: Waitしても意味なくね？Subscribe自体の終了を待たねば。
+                    try
+                    {
+                        _client.SendTaskAsync(array).Wait(); //TODO: Waitしても意味なくね？Subscribe自体の終了を待たねば。
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Error("Send Error", ex);
+                        //throw;
+                    }
+                    
                 });
 
             var dummy = new TService();

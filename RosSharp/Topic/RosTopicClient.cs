@@ -92,22 +92,11 @@ namespace RosSharp.Topic
         {
             _client = new TcpRosClient(socket);
 
-            /*
-            var dummy = new TMessage();
-            if (dummy.HasHeader)
-            {
-                Connected = true;
-                return Task.Factory.StartNew(() => { });
-            }
-            else
-            */
-            {
-                return _client.ReceiveAsync()
-                    .Take(1)
-                    .Timeout(TimeSpan.FromMilliseconds(Ros.TopicTimeout))
-                    .Select(x => OnReceivedHeader(x, latching))
-                    .ToTask();
-            }
+            return _client.ReceiveAsync()
+                .Take(1)
+                .Timeout(TimeSpan.FromMilliseconds(Ros.TopicTimeout))
+                .Select(x => OnReceivedHeader(x, latching))
+                .ToTask();
         }
 
         private Unit OnReceivedHeader(byte[] data, bool latching)
@@ -151,11 +140,8 @@ namespace RosSharp.Topic
             var ms = new MemoryStream();
             TcpRosHeaderSerializer.Serialize(ms, resHeader);
 
-            _logger.Debug("OnReceivedHeader Sending...");
-
             _client.SendTaskAsync(ms.ToArray()).Wait();
 
-            _logger.Debug("OnReceivedHeader Sent");
             Connected = true;
 
             return Unit.Default;

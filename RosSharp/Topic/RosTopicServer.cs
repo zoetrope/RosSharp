@@ -83,23 +83,13 @@ namespace RosSharp.Topic
                     {
                         try
                         {
-                            /*
-                            var dummy = new TMessage();
-                            if(dummy.HasHeader)
+                            ConnectToPublisherAsync(nodelay).ContinueWith(t2 =>
                             {
-                                tcs.SetResult(_client.ReceiveAsync().Select(Deserialize));
-                            }
-                            else
-                            */
-                            {
-                                ConnectToPublisherAsync(nodelay).ContinueWith(t2 =>
-                                {
-                                    _logger.Debug("StartAsync ConnectToPublisherAsync");
-                                    if (t2.IsFaulted) tcs.SetException(t2.Exception.InnerException);
-                                    else if (t2.IsCanceled) tcs.SetCanceled();
-                                    else tcs.SetResult(t2.Result);
-                                });
-                            }
+                                _logger.Debug("StartAsync ConnectToPublisherAsync");
+                                if (t2.IsFaulted) tcs.SetException(t2.Exception.InnerException);
+                                else if (t2.IsCanceled) tcs.SetCanceled();
+                                else tcs.SetResult(t2.Result);
+                            });
                         }
                         catch (Exception ex)
                         {
@@ -169,14 +159,13 @@ namespace RosSharp.Topic
         {
             _logger.Debug("CreateSubscriber");
             var dummy = new TMessage();
-            
-            /* roscppでは、topicがない。
-            if (header.topic != TopicName)
+
+            /* roscpp don't have a topic member */
+            if (header.HasMember("topic") && header.topic != TopicName)
             {
                 _logger.Error(m => m("TopicName mismatch error, expected={0} actual={1}", TopicName, header.topic));
                 throw new RosTopicException("TopicName mismatch error");
             }
-             */
             if (header.type != dummy.MessageType)
             {
                 _logger.Error(m => m("TopicType mismatch error, expected={0} actual={1}", dummy.MessageType, header.type));

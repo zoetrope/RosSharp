@@ -39,6 +39,7 @@ using Common.Logging;
 using Common.Logging.Simple;
 using RosSharp.Node;
 using RosSharp.Topic;
+using RosSharp.Utility;
 using RosSharp.rosgraph_msgs;
 
 namespace RosSharp
@@ -48,32 +49,43 @@ namespace RosSharp
     /// </summary>
     internal sealed class RosOutLogger : AbstractSimpleLogger
     {
-        private static Publisher<Log> _publisher;
+        private readonly RosNode _node;
+        private readonly Publisher<Log> _publisher;
         
         internal RosOutLogger(string logName, LogLevel logLevel, bool showLevel, bool showDateTime, bool showLogName,
                             string dateTimeFormat)
             : base(logName, logLevel, showLevel, showDateTime, showLogName, dateTimeFormat)
         {
-            /*
-            var adapter = LogManager.Adapter;
-            LogManager.Adapter = new CapturingLoggerFactoryAdapter();
 
-            if (_publisher == null)
+            _node = Ros.GetNodes().OfType<RosNode>().FirstOrDefault(x => x.NodeId == logName);
+
+            if (_node != null)
             {
-                var node = Ros.CreateNode("/rosout_logger");
-                _publisher = node.CreatePublisherAsync<Log>("/rosout").Result;
+                _publisher = _node.LogPubliser;
             }
 
-            LogManager.Adapter = adapter;
-            */
+            
         }
 
-        protected override void WriteInternal(LogLevel level, object message, Exception e)
+        protected override void WriteInternal(LogLevel targetLevel, object message, Exception e)
         {
             var sb = new StringBuilder();
-            FormatOutput(sb, level, message, e);
+            FormatOutput(sb, targetLevel, message, e);
+            LogLevel currentLevel = LogLevel.Info;
 
-            //_publisher.OnNext(new Log() {msg = message.ToString()});
+            if (_node != null)
+            {
+                currentLevel = _node.LogLevel.ToLogLevel();
+                //_node.
+            }
+
+            if (_publisher != null)
+            {
+                if (targetLevel >= currentLevel)
+                {
+                    _publisher.OnNext(new Log() {msg = message.ToString()});
+                }
+            }
 
             Console.WriteLine(sb.ToString());
         }

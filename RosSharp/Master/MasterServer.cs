@@ -32,6 +32,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Runtime.Remoting;
@@ -648,7 +649,47 @@ namespace RosSharp.Master
             {
                 StatusCode.Success,
                 "rosrpc URI: [" + info + "]",
-                info.Service.ToString()
+                info.Service.Uri.ToString()
+            };
+        }
+
+        ///////////////////////////////////////////////////////////////
+        // External API
+        ///////////////////////////////////////////////////////////////
+
+        /// <summary>
+        ///   Stop this server.
+        /// </summary>
+        /// <param name="callerId"> ROS caller ID. </param>
+        /// <param name="msg"> A message describing why the node is being shutdown. </param>
+        /// <returns>
+        /// [0] = int: code <br/>
+        /// [1] = str: status message <br/>
+        /// [2] = int: ignore
+        /// </returns>
+        public object[] Shutdown(string callerId, string msg)
+        {
+            _logger.Debug(m => m("Shutdown(callerId={0},msg={1})", callerId, msg));
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        ///   Get the PID of this server.
+        /// </summary>
+        /// <param name="callerId"> ROS caller ID. </param>
+        /// <returns>
+        /// [0] = int: code <br/>
+        /// [1] = str: status message <br/>
+        /// [2] = int: server process pid
+        /// </returns>
+        public object[] GetPid(string callerId)
+        {
+            //_logger.Debug(m => m("GetPid(callerId={0})", callerId));
+            return new object[]
+            {
+                StatusCode.Success,
+                "get pid", //空文字にするとroscppからの呼び出しが失敗する。
+                Process.GetCurrentProcess().Id
             };
         }
 

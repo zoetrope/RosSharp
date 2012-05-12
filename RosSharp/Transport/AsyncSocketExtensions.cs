@@ -41,6 +41,7 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Common.Logging;
+using RosSharp.Topic;
 
 namespace RosSharp.Transport
 {
@@ -74,62 +75,23 @@ namespace RosSharp.Transport
                     IDisposable disposable = read(buffer, 0, 1024, SocketFlags.None)
                         .Select(x =>
                         {
-                            var ret = new byte[x];
-                            Buffer.BlockCopy(buffer, 0, ret, 0, x);
-                            return ret;
+                            if (x == 0)
+                            {
+                                socket.Close();
+                                throw new RosTopicException("Close Socket");
+                            }
+                            else
+                            {
+                                var ret = new byte[x];
+                                Buffer.BlockCopy(buffer, 0, ret, 0, x);
+                                return ret;
+                            }
                         })
                         .Subscribe(observer);
                     return disposable;
                 }))
                 .Repeat();
 
-            /*
-            return Observable.Create<byte[]>(observer =>
-            {
-                var disposable = Observable.FromEventPattern<SocketAsyncEventArgs>(
-                    ev => arg.Completed += ev, ev => arg.Completed -= ev)
-                    .Select(e => e.EventArgs)
-                    .Where(args => args.LastOperation == SocketAsyncOperation.Receive)
-                    .ObserveOn(scheduler)
-                    .Do(x =>
-                    {
-                        //_logger.Debug(m => m("Received: Code={0}", x.SocketError));
-                        if (x.SocketError != SocketError.Success)
-                        {
-                            //_logger.Debug(m => m("Close Socket[{0}]", socket.LocalEndPoint));
-                            socket.Close();
-                            observer.OnError(new Exception(x.SocketError.ToString()));
-                            observer.OnCompleted();
-                        }
-                        if (socket.Connected)
-                        {
-                            socket.ReceiveAsync(arg);
-                        }
-                    })
-                    .Select(OnReceive)
-                    .Subscribe(observer);
-
-
-                if (socket.Connected)
-                {
-                    socket.ReceiveAsync(arg);
-                }
-
-                return disposable;
-            });
-            */
-        }
-
-        private static byte[] OnReceive(SocketAsyncEventArgs args)
-        {
-            var ret = new byte[args.BytesTransferred];
-            Buffer.BlockCopy(args.Buffer, 0, ret, 0, args.BytesTransferred);
-
-            //Array.Clear(args.Buffer, 0, args.Buffer.Length);
-            //args.SetBuffer(new byte[2048], 0, 2048);
-            
-            //_logger.Debug(m => m("rest = {0}", ret.Dump()));
-            return ret;
         }
 
         public static IObservable<Socket> AcceptAsObservable(this Socket socket, EndPoint endpoint)
