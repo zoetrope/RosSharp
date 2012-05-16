@@ -7,8 +7,8 @@ namespace RosSharp.Sample
     {
         static void Main(string[] args)
         {
-            Ros.MasterUri = new Uri("http://192.168.11.5:11311/");
-            Ros.HostName = "192.168.11.3";
+            Ros.MasterUri = new Uri("http://192.168.11.2:11311/");
+            Ros.HostName = "192.168.11.2";
 
             var node = Ros.CreateNodeAsync("Client").Result;
 

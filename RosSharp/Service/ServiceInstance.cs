@@ -37,6 +37,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Reactive.Linq;
 using System.Text;
+using System.Threading;
 using Common.Logging;
 using RosSharp.Transport;
 
@@ -60,25 +61,13 @@ namespace RosSharp.Service
 
         internal void Initialize(string serviceName) //TODO: 非同期に。
         {
-            _client.ReceiveAsync()
+            _logger.Info("Initialize");
+            var last = _client.ReceiveAsync()
                 .Take(1)
                 .Select(b => TcpRosHeaderSerializer.Deserialize(new MemoryStream(b)))
-                .SelectMany(_client.ReceiveAsync())
-                .Subscribe(b =>
-                {
-                    var res = Invoke(new MemoryStream(b));
-                    var array = res.ToArray();
-                    try
-                    {
-                        _client.SendTaskAsync(array).Wait(); //TODO: Waitしても意味なくね？Subscribe自体の終了を待たねば。
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.Error("Send Error", ex);
-                        //throw;
-                    }
-                    
-                });
+                .PublishLast();
+
+            last.Connect();
 
             var dummy = new TService();
             var header = new
@@ -91,11 +80,47 @@ namespace RosSharp.Service
 
             var ms = new MemoryStream();
             TcpRosHeaderSerializer.Serialize(ms, header);
-            _client.SendTaskAsync(ms.ToArray()).Wait();
+
+
+            _client.SendTaskAsync(ms.ToArray())
+                .ContinueWith(task =>
+                {
+                    _logger.Info("SendTaskAsync ContinueWith");
+
+                    var h = last.Timeout(TimeSpan.FromSeconds(Ros.TopicTimeout)).First();
+
+                    _logger.Info(m => m("Receive Header {0}", h.ToString()));
+
+                    _client.ReceiveAsync()
+                        .Subscribe(b =>
+                        {
+                            var res = Invoke(new MemoryStream(b));
+                            var array = res.ToArray();
+                            try
+                            {
+                                _logger.Info("Send!");
+                                _client.SendTaskAsync(array).Wait(); //TODO: Waitしても意味なくね？Subscribe自体の終了を待たねば。
+                                _logger.Info("Sent!");
+                            }
+                            catch (Exception ex)
+                            {
+                                _logger.Error("Send Error", ex);
+                                //throw;
+                            }
+
+                        }, ex =>
+                        {
+                            _logger.Error("Receive Error", ex);
+                        });
+
+                });
+
         }
 
         private MemoryStream Invoke(Stream stream)
         {
+            _logger.Info("Invoke!");
+
             var dummy = new TService();
             var req = dummy.CreateRequest();
 

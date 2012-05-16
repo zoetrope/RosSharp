@@ -70,6 +70,18 @@ namespace RosSharp.Transport
         {
             return _members.ContainsKey(name);
         }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+
+            foreach (var member in _members)
+            {
+                sb.Append(member.Key + " = " + member.Value + "\r\n");
+            }
+
+            return sb.ToString();
+        }
     }
 
     internal static class TcpRosHeaderSerializer

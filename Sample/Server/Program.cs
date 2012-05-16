@@ -1,4 +1,5 @@
 ﻿using System;
+using RosSharp.Master;
 
 namespace RosSharp.Sample
 {
@@ -6,14 +7,16 @@ namespace RosSharp.Sample
     {
         static void Main(string[] args)
         {
-            Ros.MasterUri = new Uri("http://192.168.11.5:11311/");
-            Ros.HostName = "192.168.11.3";
+            Ros.MasterUri = new Uri("http://192.168.11.2:11311/");
+            Ros.HostName = "192.168.11.2";
+
+            var masterServer = new MasterServer(11311);
 
             var node = Ros.CreateNodeAsync("Server").Result;
 
             node.RegisterServiceAsync("/add_two_ints", new AddTwoInts(add_two_ints)).Wait();
 
-            node.RegisterServiceAsync("/add_two_ints",new AddTwoInts(req => new AddTwoInts.Response {sum = req.a + req.b})).Wait();
+            //node.RegisterServiceAsync("/add_two_ints",new AddTwoInts(req => new AddTwoInts.Response {sum = req.a + req.b})).Wait();
             
             Console.WriteLine("Press Any Key.");
             Console.ReadKey();

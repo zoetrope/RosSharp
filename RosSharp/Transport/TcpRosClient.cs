@@ -88,6 +88,7 @@ namespace RosSharp.Transport
 
         public Task<int> SendTaskAsync(byte[] data)
         {
+            _logger.Debug(m => m("Send Data = {0}", data.Dump()));
             return _socket.SendTaskAsync(data);
         }
 
@@ -108,6 +109,7 @@ namespace RosSharp.Transport
 
                         //_logger.Debug(m => m("Receive Data Size = {0}", bs.Length));
                         //_logger.Debug(m => m("Receive Data = {0}", Encoding.ASCII.GetString(bs)));
+                        //_logger.Debug(m => m("Receive Data = {0}", bs.Dump()));
 
                         byte[] current;
                         if (CompleteMessage(offset, out current, ref rest))

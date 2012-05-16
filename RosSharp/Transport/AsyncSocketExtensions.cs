@@ -63,35 +63,67 @@ namespace RosSharp.Transport
 
         public static IObservable<byte[]> ReceiveAsObservable(this Socket socket, IScheduler scheduler)
         {
-            var arg = new SocketAsyncEventArgs();
-            arg.SetBuffer(new byte[2048], 0, 2048);
+            return Observable.Create<byte[]>(observer =>
+            {
+                return Observable.Defer(() =>
+                {
+                    var recv = Observable.FromAsyncPattern<byte[], int, int, SocketFlags, int>(socket.BeginReceive, socket.EndReceive);
+                    var buffer = new byte[1024];
+                    _logger.Info(m => m("receive!!"));
+                    return recv(buffer, 0, 1024, SocketFlags.None)
+                        .Select(x=>
+                        {
+                            var ret = new byte[x];
+                            Buffer.BlockCopy(buffer, 0, ret, 0, x);
+                            return ret;
+                        });
+                }).Repeat()
+                    .Subscribe(x =>
+                    {
+                        //_logger.Info(m => m("read: {0}", x.Dump()));
+                        if (x.Length == 0)
+                        {
+                            _logger.Info("Close Socket");
+                            socket.Close();
+                            observer.OnCompleted();
+                        }
+                        else
+                        {
+                            _logger.Info(m => m("OnNext: {0}", x.Dump()));
+                            observer.OnNext(x);
+                        }
+                    });
+            });
 
-
+            /*
             return Observable.Defer(
                 () => Observable.Create<byte[]>(observer =>
                 {
-                    var read = Observable.FromAsyncPattern<byte[], int, int, SocketFlags, int>(socket.BeginReceive, socket.EndReceive);
+                    var recv = Observable.FromAsyncPattern<byte[], int, int, SocketFlags, int>(socket.BeginReceive, socket.EndReceive);
                     var buffer = new byte[1024];
-                    IDisposable disposable = read(buffer, 0, 1024, SocketFlags.None)
-                        .Select(x =>
+                    _logger.Info(m => m("receive!!"));
+                    IDisposable disposable = recv(buffer, 0, 1024, SocketFlags.None)
+                        .Subscribe(x =>
                         {
+                            _logger.Info(m => m("read: {0}", x));
                             if (x == 0)
                             {
+                                _logger.Info("Close Socket");
                                 socket.Close();
-                                throw new RosTopicException("Close Socket");
+                                observer.OnCompleted();
                             }
                             else
                             {
                                 var ret = new byte[x];
                                 Buffer.BlockCopy(buffer, 0, ret, 0, x);
-                                return ret;
+                                observer.OnNext(ret);
                             }
-                        })
-                        .Subscribe(observer);
+                        });
+                        
                     return disposable;
                 }))
                 .Repeat();
-
+            */
         }
 
         public static IObservable<Socket> AcceptAsObservable(this Socket socket, EndPoint endpoint)

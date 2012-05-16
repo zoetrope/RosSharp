@@ -36,11 +36,13 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Subjects;
+using Common.Logging;
 
 namespace RosSharp.Transport
 {
     internal sealed class OneLineCacheSubject<T> : ISubject<T>, IDisposable
     {
+        private readonly ILog _logger = LogManager.GetCurrentClassLogger();
         private bool _disposed = false;
         private readonly object _lockObject = new object();
         private readonly List<Notification<T>> _notifications = new List<Notification<T>>();
@@ -59,6 +61,7 @@ namespace RosSharp.Transport
 
         public void OnNext(T value)
         {
+            _logger.Info("OnNext");
             if (_disposed) throw new ObjectDisposedException("OneLineCacheSubject");
 
             var next = Notification.CreateOnNext(value);
@@ -67,6 +70,7 @@ namespace RosSharp.Transport
             {
                 if (_observers.Count == 0)
                 {
+                    _logger.Info("Notify");
                     _notifications.Add(next);
                 }
             }
@@ -75,6 +79,7 @@ namespace RosSharp.Transport
 
         public void OnError(Exception error)
         {
+            _logger.Info("OnError");
             if (_disposed) throw new ObjectDisposedException("OneLineCacheSubject");
 
             var err = Notification.CreateOnError<T>(error);
@@ -91,6 +96,7 @@ namespace RosSharp.Transport
 
         public void OnCompleted()
         {
+            _logger.Info("OnCompleted");
             if (_disposed) throw new ObjectDisposedException("OneLineCacheSubject");
 
             var completed = Notification.CreateOnCompleted<T>();
@@ -107,11 +113,13 @@ namespace RosSharp.Transport
 
         public IDisposable Subscribe(IObserver<T> observer)
         {
+            _logger.Info("Subscribe");
             _observers.Add(observer);
             lock (_lockObject)
             {
                 if (_notifications.Any())
                 {
+                    _logger.Info("Subscribe Notify!");
                     _notifications.ForEach(n => n.Accept(observer));
                     _notifications.Clear();
                 }

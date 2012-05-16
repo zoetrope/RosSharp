@@ -38,6 +38,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Reactive.Linq;
 using System.Text;
+using Common.Logging;
 using RosSharp.Message;
 using RosSharp.Transport;
 
@@ -48,6 +49,7 @@ namespace RosSharp.Service
     {
         private TcpRosListener _listener;
         private readonly string _nodeId;
+        private readonly ILog _logger = LogManager.GetCurrentClassLogger();
 
         public ServiceServer(string nodeId)
         {
@@ -64,7 +66,13 @@ namespace RosSharp.Service
             _listener = new TcpRosListener(0);
             var disp = _listener.AcceptAsync()
                 .Select(s => new ServiceInstance<TService>(_nodeId, service, s))
-                .Subscribe(client => client.Initialize(serviceName));
+                .Subscribe(
+                    client => client.Initialize(serviceName),
+                    ex =>
+                    {
+                        //TODO:
+                        _logger.Error("Start Service Error", ex);
+                    });
 
             return disp;
         }
