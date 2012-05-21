@@ -67,7 +67,7 @@ namespace RosSharp.Service
             var disp = _listener.AcceptAsync()
                 .Select(s => new ServiceInstance<TService>(_nodeId, service, s))
                 .Subscribe(
-                    client => client.Initialize(serviceName),
+                    client => client.StartAsync(serviceName),
                     ex =>
                     {
                         //TODO:

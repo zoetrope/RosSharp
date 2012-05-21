@@ -131,7 +131,7 @@ namespace RosSharp.Node
             {
                 loggers = new List<Logger>()
                 {
-                    new Logger() {name = "RosSharp", level = LogLevel.ToString()}
+                    new Logger() {name = "RosSharp", level = LogLevel.ToLogLevelString()}
                 }
             };
         }

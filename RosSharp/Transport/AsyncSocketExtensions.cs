@@ -47,7 +47,7 @@ namespace RosSharp.Transport
 {
     internal static class AsyncSocketExtensions
     {
-        private static ILog _logger = LogManager.GetCurrentClassLogger();
+        private static readonly ILog _logger = LogManager.GetCurrentClassLogger();
 
         public static Task ConnectTaskAsync(this Socket socket, EndPoint endpoint)
         {
@@ -57,8 +57,7 @@ namespace RosSharp.Transport
         public static Task<int> SendTaskAsync(this Socket socket, byte[] data)
         {
             return Task<int>.Factory.FromAsync(
-                (callback, o) => socket.BeginSend(data, 0, data.Length, SocketFlags.None, callback, o),
-                socket.EndSend, null);
+                (callback, o) => socket.BeginSend(data, 0, data.Length, SocketFlags.None, callback, o), socket.EndSend, null);
         }
 
         public static IObservable<byte[]> ReceiveAsObservable(this Socket socket, IScheduler scheduler)
@@ -69,12 +68,13 @@ namespace RosSharp.Transport
                 {
                     var recv = Observable.FromAsyncPattern<byte[], int, int, SocketFlags, int>(socket.BeginReceive, socket.EndReceive);
                     var buffer = new byte[1024];
-                    _logger.Info(m => m("receive!!"));
+                    _logger.Info(m => m("receiving..."));
                     return recv(buffer, 0, 1024, SocketFlags.None)
-                        .Select(x=>
+                        .Select(length =>
                         {
-                            var ret = new byte[x];
-                            Buffer.BlockCopy(buffer, 0, ret, 0, x);
+                            _logger.Info(m => m("received!!"));
+                            var ret = new byte[length];
+                            Buffer.BlockCopy(buffer, 0, ret, 0, length);
                             return ret;
                         });
                 }).Repeat()
@@ -92,38 +92,9 @@ namespace RosSharp.Transport
                             _logger.Info(m => m("OnNext: {0}", x.Dump()));
                             observer.OnNext(x);
                         }
-                    });
+                    },observer.OnError);
             });
 
-            /*
-            return Observable.Defer(
-                () => Observable.Create<byte[]>(observer =>
-                {
-                    var recv = Observable.FromAsyncPattern<byte[], int, int, SocketFlags, int>(socket.BeginReceive, socket.EndReceive);
-                    var buffer = new byte[1024];
-                    _logger.Info(m => m("receive!!"));
-                    IDisposable disposable = recv(buffer, 0, 1024, SocketFlags.None)
-                        .Subscribe(x =>
-                        {
-                            _logger.Info(m => m("read: {0}", x));
-                            if (x == 0)
-                            {
-                                _logger.Info("Close Socket");
-                                socket.Close();
-                                observer.OnCompleted();
-                            }
-                            else
-                            {
-                                var ret = new byte[x];
-                                Buffer.BlockCopy(buffer, 0, ret, 0, x);
-                                observer.OnNext(ret);
-                            }
-                        });
-                        
-                    return disposable;
-                }))
-                .Repeat();
-            */
         }
 
         public static IObservable<Socket> AcceptAsObservable(this Socket socket, EndPoint endpoint)

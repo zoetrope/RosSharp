@@ -86,5 +86,32 @@ namespace RosSharp.Utility
             }
             return ret;
         }
+
+
+        public static string ToLogLevelString(this byte level)
+        {
+            string ret;
+            switch (level)
+            {
+                case Log.DEBUG:
+                    ret = "DEBUG";
+                    break;
+                case Log.INFO:
+                    ret = "INFO";
+                    break;
+                case Log.WARN:
+                    ret = "WARN";
+                    break;
+                case Log.ERROR:
+                    ret = "ERROR";
+                    break;
+                case Log.FATAL:
+                    ret = "FATAL";
+                    break;
+                default:
+                    throw new ArgumentException();
+            }
+            return ret;
+        }
     }
 }

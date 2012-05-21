@@ -59,13 +59,13 @@ namespace RosSharp.Service
             _client = new TcpRosClient(s);
         }
 
-        internal void Initialize(string serviceName) //TODO: 非同期に。
+        internal void StartAsync(string serviceName) //TODO: 非同期に。
         {
             _logger.Info("Initialize");
             var last = _client.ReceiveAsync()
                 .Take(1)
-                .Select(b => TcpRosHeaderSerializer.Deserialize(new MemoryStream(b)))
-                .PublishLast();
+                .Select(b => TcpRosHeaderSerializer.Deserialize(new MemoryStream(b)))//TODO: ヘッダのチェック
+                .PublishLast(); 
 
             last.Connect();
 
@@ -81,15 +81,16 @@ namespace RosSharp.Service
             var ms = new MemoryStream();
             TcpRosHeaderSerializer.Serialize(ms, header);
 
+            //TODO: 非同期にする
+            var h = last.Timeout(TimeSpan.FromSeconds(Ros.TopicTimeout)).First();
+            _logger.Info(m => m("Receive Header {0}", h.ToString()));
 
+            try
+            {
             _client.SendTaskAsync(ms.ToArray())
                 .ContinueWith(task =>
                 {
                     _logger.Info("SendTaskAsync ContinueWith");
-
-                    var h = last.Timeout(TimeSpan.FromSeconds(Ros.TopicTimeout)).First();
-
-                    _logger.Info(m => m("Receive Header {0}", h.ToString()));
 
                     _client.ReceiveAsync()
                         .Subscribe(b =>
@@ -115,6 +116,12 @@ namespace RosSharp.Service
 
                 });
 
+
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Send Error", ex);
+            }
         }
 
         private MemoryStream Invoke(Stream stream)
