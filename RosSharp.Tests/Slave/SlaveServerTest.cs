@@ -19,12 +19,22 @@ namespace RosSharp.Tests.Slave
         [TestInitialize]
         public void Initialize()
         {
+            Ros.MasterUri = new Uri("http://localhost:11311/");
+            Ros.HostName = "localhost";
+
             var topicContainer = new TopicContainer();
             topicContainer.AddPublisher(new Publisher<std_msgs.String>("/test_topic", "test"));
 
             var tcpListener = new TcpRosListener(0);
             _slaveServer = new SlaveServer("test", 0, topicContainer);
             _slaveServer.AddListener("/test_topic", tcpListener);
+        }
+
+        [TestCleanup]
+        public void Cleanup()
+        {
+            _slaveServer.Dispose();
+            Ros.Dispose();
         }
 
         [TestMethod]
@@ -38,8 +48,8 @@ namespace RosSharp.Tests.Slave
         {
             var ret = _slaveServer.GetMasterUri("/test");
             ret.Length.Is(3);
-            ret[0].Is(1);
-            ret[2].Is(new Uri("http://192.168.11.4:11311/"));
+            ret[0].Is(StatusCode.Success);
+            ret[2].Is(new Uri("http://localhost:11311/"));
         }
 
         [TestMethod]
@@ -47,7 +57,7 @@ namespace RosSharp.Tests.Slave
         {
             var ret = _slaveServer.GetPid("/test");
             ret.Length.Is(3);
-            ret[0].Is(1);
+            ret[0].Is(StatusCode.Success);
             ret[2].Is(Process.GetCurrentProcess().Id);
         }
         
@@ -57,7 +67,7 @@ namespace RosSharp.Tests.Slave
             var ret = _slaveServer.RequestTopic("/test", "/test_topic", new object[1] { new string[1] { "TCPROS" } });
 
             ret.Length.Is(3);
-            ret[0].Is(1);
+            ret[0].Is(StatusCode.Success);
         }
 
         [TestMethod]
@@ -66,7 +76,7 @@ namespace RosSharp.Tests.Slave
             var ret = _slaveServer.RequestTopic("/test", "/test_topic", new object[1] {new string[1] {"UDPROS"}});
 
             ret.Length.Is(3);
-            ret[0].Is(-1);
+            ret[0].Is(StatusCode.Error);
             ret[1].Is("No supported protocols specified.");
         }
         
@@ -76,7 +86,7 @@ namespace RosSharp.Tests.Slave
             var ret = _slaveServer.RequestTopic("/test", "/hoge", new object[1] {new string[1] {"TCPROS"}});
             
             ret.Length.Is(3);
-            ret[0].Is(-1);
+            ret[0].Is(StatusCode.Error);
             ret[1].Is("No publishers for topic: /hoge");
         }
     }

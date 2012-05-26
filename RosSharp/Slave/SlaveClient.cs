@@ -199,9 +199,8 @@ namespace RosSharp.Slave
                 .ContinueWith(task =>
                 {
                     if ((StatusCode) task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string) task.Result[1]);
-                    //TODO: 空リストのとき
-                    return ((string[][]) task.Result[2])
-                        .Select(x => new TopicInfo() {TopicName = (string) x[0], MessageType = (string) x[1]}).ToList();
+                    return ((object[]) task.Result[2])
+                        .Select(x => new TopicInfo() {TopicName = ((string[]) x)[0], MessageType = ((string[]) x)[1]}).ToList();
                 });
         }
 

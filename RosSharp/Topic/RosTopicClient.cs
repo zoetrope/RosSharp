@@ -72,7 +72,7 @@ namespace RosSharp.Topic
 
         #endregion
 
-        public Task<int> SendTaskAsync(TMessage data)
+        public Task<int> SendAsync(TMessage data)
         {
             if (!Connected)
             {
@@ -84,7 +84,7 @@ namespace RosSharp.Topic
             var bw = new BinaryWriter(ms);
             bw.Write(data.SerializeLength);
             data.Serialize(bw);
-            return _client.SendTaskAsync(ms.ToArray());
+            return _client.SendAsync(ms.ToArray());
         }
 
 
@@ -140,7 +140,7 @@ namespace RosSharp.Topic
             var ms = new MemoryStream();
             TcpRosHeaderSerializer.Serialize(ms, resHeader);
 
-            _client.SendTaskAsync(ms.ToArray()).Wait();
+            _client.SendAsync(ms.ToArray()).Wait();
 
             Connected = true;
 

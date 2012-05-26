@@ -101,6 +101,6 @@ namespace RosSharp.Service
         /// </summary>
         /// <param name="req">Request</param>
         /// <returns>Response</returns>
-        Task<TResponse> InvokeTaskAsync(TRequest req);
+        Task<TResponse> InvokeAsync(TRequest req);
     }
 }

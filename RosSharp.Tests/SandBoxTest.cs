@@ -55,6 +55,45 @@ namespace RosSharp.Tests
             Thread.Sleep(TimeSpan.FromSeconds(5));
         }
 
+
+        [TestMethod]
+        public void Task_ContinueWhenAll()
+        {
+            {//両方成功ならもちろんSuccess
+                var t1 = Task.Factory.StartNew(() => { });
+                var t2 = Task.Factory.StartNew(() => { });
+
+                var agg = Task.Factory.ContinueWhenAll(new Task[] {t1, t2}, _ => { });
+
+
+                agg.ContinueWith(t => Console.WriteLine("Success"), TaskContinuationOptions.OnlyOnRanToCompletion);
+                agg.ContinueWith(t => Console.WriteLine("Failure"), TaskContinuationOptions.OnlyOnFaulted);
+            }
+
+            {//t1が失敗してもSuccessが表示される！？
+                var t1 = Task.Factory.StartNew(() => { throw new Exception("error"); });
+                var t2 = Task.Factory.StartNew(() => { });
+
+                var agg = Task.Factory.ContinueWhenAll(new Task[] { t1, t2 }, _ => { });
+
+
+                agg.ContinueWith(t => Console.WriteLine("Success"), TaskContinuationOptions.OnlyOnRanToCompletion);
+                agg.ContinueWith(t => Console.WriteLine("Failure"), TaskContinuationOptions.OnlyOnFaulted);
+            }
+
+            {//WaitAllを使うべき？
+                var t1 = Task.Factory.StartNew(() => { throw new Exception("error"); });
+                var t2 = Task.Factory.StartNew(() => { });
+
+                var agg = Task.Factory.StartNew(() => Task.WaitAll(new Task[] {t1, t2}));
+
+                agg.ContinueWith(t => Console.WriteLine("Success"), TaskContinuationOptions.OnlyOnRanToCompletion);
+                agg.ContinueWith(t => Console.WriteLine("Failure"), TaskContinuationOptions.OnlyOnFaulted);
+            }
+        }
+
+
+
         [TestMethod]
         public void Rx_PublishLastException()
         {

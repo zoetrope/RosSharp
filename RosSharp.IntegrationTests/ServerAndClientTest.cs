@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +40,12 @@ namespace RosSharp.IntegrationTests
             node.RegisterServiceAsync("/add_two_ints", new AddTwoInts(add_two_ints)).Wait();
 
             var proxy = node.CreateProxyAsync<AddTwoInts>("/add_two_ints").Result;
-            var res = proxy.Invoke(new AddTwoInts.Request() {a = 1, b = 2});
+            
+            var res = proxy.InvokeAsync(new AddTwoInts.Request() {a = 1, b = 2})
+                .ToObservable()
+                .Timeout(TimeSpan.FromSeconds(3))
+                .First();
+
             res.sum.Is(3);
         }
 

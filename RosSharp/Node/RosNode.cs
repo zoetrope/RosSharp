@@ -90,24 +90,22 @@ namespace RosSharp.Node
 
         internal Publisher<Log> LogPubliser { get; private set; }
 
-        internal Task Initialize(bool enableLogger)
+        internal Task InitializeAsync(bool enableLogger)
         {
             if (enableLogger)
             {
-
-                var t1 = CreatePublisherAsync<Log>("/rosout")
-                    .ContinueWith(t => LogPubliser = t.Result);
+                var t1 = CreatePublisherAsync<Log>("/rosout").ContinueWith(t => LogPubliser = t.Result);
 
                 var t2 = RegisterServiceAsync(NodeId + "/get_loggers", new GetLoggers(GetLoggers));
                 var t3 = RegisterServiceAsync(NodeId + "/set_logger_level", new SetLoggerLevel(SetLoggerLevel));
 
-                return Task.Factory.ContinueWhenAll(new Task[] {t1, t2, t3}, _ => { });
+                return Task.Factory.StartNew(() => Task.WaitAll(new Task[] {t1, t2, t3}));
             }
             else
             {
                 return Task.Factory.StartNew(() => { });
             }
-            
+
         }
 
 
@@ -116,7 +114,7 @@ namespace RosSharp.Node
             if (request.logger == "RosSharp")
             {
                 byte level;
-                if(LogLevelExtensions.TryParse(request.level, out level))
+                if (LogLevelExtensions.TryParse(request.level, out level))
                 {
                     LogLevel = level;
                 }
@@ -178,7 +176,7 @@ namespace RosSharp.Node
         {
             if (_disposed) throw new ObjectDisposedException("RosNode");
             //TODO: すべてを終了させる。
-            
+
             var handler = Disposing;
             if (handler != null)
             {
@@ -187,7 +185,7 @@ namespace RosSharp.Node
             Disposing = null;
 
             //終了待ち
-            
+
             _slaveServer.Dispose();
 
             _disposed = true;
@@ -258,10 +256,10 @@ namespace RosSharp.Node
             _slaveServer.AddListener(topicName, tcpRosListener);
 
             tcpRosListener.AcceptAsync()
-                .Do(_=>_logger.Debug("Accepted for Publisher"))
+                .Do(_ => _logger.Debug("Accepted for Publisher"))
                 .Subscribe(socket => publisher.AddTopic(socket),
                            ex => _logger.Error("Accept Error", ex));
-            
+
             var tcs = new TaskCompletionSource<Publisher<TMessage>>();
 
             _logger.Debug("RegisterPublisher");
@@ -302,8 +300,37 @@ namespace RosSharp.Node
 
             _logger.InfoFormat("Create ServiceProxy: {0}", serviceName);
 
-            return _masterClient.LookupServiceAsync(NodeId, serviceName)
-                .ContinueWith(task => _serviceProxyFactory.Create<TService>(serviceName, task.Result));
+            var tcs = new TaskCompletionSource<TService>();
+
+            _masterClient
+                .LookupServiceAsync(NodeId, serviceName)
+                .ContinueWith(lookupTask =>
+                {
+                    _logger.Debug("Registered Subscriber");
+
+                    if (lookupTask.Status == TaskStatus.RanToCompletion)
+                    {
+                        _serviceProxyFactory.CreateAsync<TService>(serviceName, lookupTask.Result)
+                            .ContinueWith(createTask =>
+                            {
+                                if (createTask.Status == TaskStatus.RanToCompletion)
+                                {
+                                    tcs.SetResult(createTask.Result.Service);
+                                }
+                                else if (createTask.Status == TaskStatus.Faulted)
+                                {
+                                    tcs.SetException(createTask.Exception.InnerException);
+                                }
+                            });
+                    }
+                    else if (lookupTask.Status == TaskStatus.Faulted)
+                    {
+                        tcs.SetException(lookupTask.Exception.InnerException);
+                        _logger.Error("RegisterSubscriber: Failure", lookupTask.Exception.InnerException);
+                    }
+                });
+
+            return tcs.Task;
         }
 
         public Task<IDisposable> RegisterServiceAsync<TService>(string serviceName, TService service)
@@ -326,9 +353,22 @@ namespace RosSharp.Node
 
             var serviceUri = new Uri("rosrpc://" + Ros.HostName + ":" + serviceServer.EndPoint.Port);
 
-            return _masterClient
+            var tcs = new TaskCompletionSource<IDisposable>();
+
+            _masterClient
                 .RegisterServiceAsync(NodeId, serviceName, serviceUri, _slaveServer.SlaveUri)
-                .ContinueWith(task => (IDisposable) cd);
+                .ContinueWith(registerTask =>
+                {
+                    if (registerTask.Status == TaskStatus.RanToCompletion)
+                    {
+                        tcs.SetResult(cd);
+                    }
+                    else if (registerTask.Status == TaskStatus.Faulted)
+                    {
+                        tcs.SetException(registerTask.Exception.InnerException);
+                    }
+                });
+            return tcs.Task;
         }
 
         #endregion

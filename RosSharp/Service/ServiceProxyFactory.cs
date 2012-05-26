@@ -31,19 +31,19 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reactive.Linq;
-using System.Text;
-using RosSharp.Master;
-using RosSharp.Message;
+using System.Threading.Tasks;
+using Common.Logging;
+using RosSharp.Topic;
 using RosSharp.Transport;
 
 namespace RosSharp.Service
 {
     internal sealed class ServiceProxyFactory
     {
+        private readonly ILog _logger = LogManager.GetCurrentClassLogger();
+
         public ServiceProxyFactory(string nodeId)
         {
             NodeId = nodeId;
@@ -51,41 +51,101 @@ namespace RosSharp.Service
 
         public string NodeId { get; private set; }
 
-        public TService Create<TService>(string serviceName, Uri uri) //TODO: 非同期にしなくては。
+        public Task<ServiceProxy<TService>> CreateAsync<TService>(string serviceName, Uri uri)
             where TService : IService, new()
         {
             var tcpClient = new TcpRosClient();
-            tcpClient.ConnectTaskAsync(uri.Host, uri.Port).Wait(); //TODO: waitではなくcontinueWith
 
-            var rec = tcpClient.ReceiveAsync()
+            var tcs = new TaskCompletionSource<ServiceProxy<TService>>();
+
+            tcpClient.ConnectAsync(uri.Host, uri.Port)
+                .ContinueWith(connectTask =>
+                {
+                    if (connectTask.Status == TaskStatus.RanToCompletion)
+                    {
+                        ConnectToServiceServer<TService>(serviceName, tcpClient)
+                            .ContinueWith(serviceTask =>
+                            {
+                                if (serviceTask.Status == TaskStatus.RanToCompletion)
+                                {
+                                    tcs.SetResult(serviceTask.Result);
+                                }
+                                else if (serviceTask.Status == TaskStatus.Faulted)
+                                {
+                                    tcs.SetException(serviceTask.Exception.InnerException);
+                                }
+                            });
+                    }
+                    else if(connectTask.Status == TaskStatus.Faulted)
+                    {
+                        tcs.SetException(connectTask.Exception.InnerException);
+                    }
+                });
+
+            return tcs.Task;
+        }
+
+        private Task<ServiceProxy<TService>> ConnectToServiceServer<TService>(string serviceName, TcpRosClient tcpClient)
+            where TService : IService, new()
+        {
+            var tcs = new TaskCompletionSource<ServiceProxy<TService>>();
+
+            var receiveHeaderObs = tcpClient.ReceiveAsync()
                 .Select(x => TcpRosHeaderSerializer.Deserialize(new MemoryStream(x)))
                 .Take(1)
                 .PublishLast();
 
-            rec.Connect();
+            receiveHeaderObs.Connect();
 
             var service = new TService();
 
-            var header = new
+            var sendHeader = new
             {
                 callerid = NodeId,
                 md5sum = service.Md5Sum,
                 service = serviceName
             };
 
-            var stream = new MemoryStream();
+            var sendHeaderStream = new MemoryStream();
 
-            TcpRosHeaderSerializer.Serialize(stream, header);
-            var data = stream.ToArray();
+            TcpRosHeaderSerializer.Serialize(sendHeaderStream, sendHeader);
 
-            tcpClient.SendTaskAsync(data).Wait();
+            tcpClient.SendAsync(sendHeaderStream.ToArray())
+                .ContinueWith(sendTask =>
+                {
+                    if (sendTask.Status == TaskStatus.RanToCompletion)
+                    {
+                        try
+                        {
+                            var dummy = new TService();
+                            dynamic recvHeader = receiveHeaderObs.Timeout(TimeSpan.FromMilliseconds(Ros.TopicTimeout)).First();
 
-            var test = rec.First();
+                            if (recvHeader.service != serviceName)
+                            {
+                                _logger.Error(m => m("ServiceName mismatch error, expected={0} actual={1}", serviceName, recvHeader.topic));
+                                throw new RosTopicException("ServiceName mismatch error");
+                            }
+                            if (recvHeader.md5sum != "*" && recvHeader.md5sum != dummy.Md5Sum)
+                            {
+                                _logger.Error(m => m("MD5Sum mismatch error, expected={0} actual={1}", dummy.Md5Sum, recvHeader.md5sum));
+                                throw new RosTopicException("MD5Sum mismatch error");
+                            }
 
-            //TODO: proxyは返さない？どっかに持っておかなくてよい？
-            var proxy = new ServiceProxy<TService>(service, tcpClient);
-
-            return service;
+                            var proxy = new ServiceProxy<TService>(service, tcpClient);
+                            tcs.SetResult(proxy);
+                        }
+                        catch (Exception ex)
+                        {
+                            tcs.SetException(ex);
+                        }
+                    }
+                    else if (sendTask.Status == TaskStatus.Faulted)
+                    {
+                        tcs.SetException(sendTask.Exception.InnerException);
+                    }
+                });
+            return tcs.Task;
         }
+
     }
 }

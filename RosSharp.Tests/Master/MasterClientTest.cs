@@ -48,8 +48,8 @@ namespace RosSharp.Tests.Master
 
             var client = new MasterClient(new Uri("http://localhost"));
 
-            var ex = AssertEx.Throws<InvalidOperationException>(() => client.RegisterServiceAsync("/test", "/myservice", new Uri("http://localhost"), new Uri("http://localhost")).Wait());
-            ex.Message.Is("ERROR: parameter [service_api] is not an XMLRPC URI");
+            var ex = AssertEx.Throws<AggregateException>(() => client.RegisterServiceAsync("/test", "/myservice", new Uri("http://localhost"), new Uri("http://localhost")).Wait());
+            ex.InnerException.Message.Is("ERROR: parameter [service_api] is not an XMLRPC URI");
         }
 
         [TestMethod]
@@ -109,8 +109,8 @@ namespace RosSharp.Tests.Master
 
             var client = new MasterClient(new Uri("http://localhost"));
 
-            var ex = AssertEx.Throws<InvalidOperationException>(() => client.UnregisterServiceAsync("/test", "/myservice", new Uri("http://localhost")).Wait());
-            ex.Message.Is("ERROR: parameter [service] must be a non-empty string");
+            var ex = AssertEx.Throws<AggregateException>(() => client.UnregisterServiceAsync("/test", "/myservice", new Uri("http://localhost")).Wait());
+            ex.InnerException.Message.Is("ERROR: parameter [service] must be a non-empty string");
         }
 
         [TestMethod]
@@ -150,8 +150,8 @@ namespace RosSharp.Tests.Master
 
             var client = new MasterClient(new Uri("http://localhost"));
 
-            var ex = AssertEx.Throws<InvalidOperationException>(() => client.RegisterSubscriberAsync("/test", "topic1", "topicType", new Uri("http://192.168.11.2:11112")).Wait());
-            ex.Message.Is("ERROR: parameter [topic_type] is not a valid package resource name");
+            var ex = AssertEx.Throws<AggregateException>(() => client.RegisterSubscriberAsync("/test", "topic1", "topicType", new Uri("http://192.168.11.2:11112")).Wait());
+            ex.InnerException.Message.Is("ERROR: parameter [topic_type] is not a valid package resource name");
         }
 
         [TestMethod]
@@ -212,8 +212,8 @@ namespace RosSharp.Tests.Master
 
             var client = new MasterClient(new Uri("http://localhost"));
 
-            var ex = AssertEx.Throws<InvalidOperationException>(() => client.LookupNodeAsync("/test", "/hogehoge").Wait());
-            ex.Message.Is("unknown node [/hogehoge]");
+            var ex = AssertEx.Throws<AggregateException>(() => client.LookupNodeAsync("/test", "/hogehoge").Wait());
+            ex.InnerException.Message.Is("unknown node [/hogehoge]");
         }
 
         [TestMethod]
@@ -233,8 +233,8 @@ namespace RosSharp.Tests.Master
 
             var client = new MasterClient(new Uri("http://localhost"));
 
-            var ex = AssertEx.Throws<InvalidOperationException>(() => client.LookupNodeAsync("/test", null).Wait());
-            ex.Message.Is("ERROR: parameter [node] must be a non-empty string");
+            var ex = AssertEx.Throws<AggregateException>(() => client.LookupNodeAsync("/test", null).Wait());
+            ex.InnerException.Message.Is("ERROR: parameter [node] must be a non-empty string");
         }
 
         [TestMethod]
@@ -325,8 +325,8 @@ namespace RosSharp.Tests.Master
             MMasterProxy.AllInstances.EndGetSystemStateIAsyncResult = (t1, t2) => result;
 
             var client = new MasterClient(new Uri("http://localhost"));
-            var ex = AssertEx.Throws<InvalidOperationException>(() => client.GetSystemStateAsync(null).Wait());
-            ex.Message.Is("caller_id must be a string");
+            var ex = AssertEx.Throws<AggregateException>(() => client.GetSystemStateAsync(null).Wait());
+            ex.InnerException.Message.Is("caller_id must be a string");
         }
 
 
@@ -367,8 +367,8 @@ namespace RosSharp.Tests.Master
 
             var client = new MasterClient(new Uri("http://localhost"));
 
-            var ex = AssertEx.Throws<InvalidOperationException>(() => client.GetUriAsync(null).Wait());
-            ex.Message.Is("caller_id must be a string");
+            var ex = AssertEx.Throws<AggregateException>(() => client.GetUriAsync(null).Wait());
+            ex.InnerException.Message.Is("caller_id must be a string");
 
         }
 
@@ -410,8 +410,8 @@ namespace RosSharp.Tests.Master
 
             var client = new MasterClient(new Uri("http://localhost"));
 
-            var ex = AssertEx.Throws<InvalidOperationException>(() => client.LookupServiceAsync("/test", "/service_test").Wait());
-            ex.Message.Is("no provider");
+            var ex = AssertEx.Throws<AggregateException>(() => client.LookupServiceAsync("/test", "/service_test").Wait());
+            ex.InnerException.Message.Is("no provider");
         }
     }
 }

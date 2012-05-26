@@ -36,9 +36,12 @@ using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Common.Logging;
+using RosSharp.Topic;
 using RosSharp.Transport;
 
 namespace RosSharp.Service
@@ -50,6 +53,7 @@ namespace RosSharp.Service
         private readonly IService _service;
         private readonly TcpRosClient _client;
         private readonly ILog _logger = LogManager.GetCurrentClassLogger();
+        private string _serviceName;
 
         public ServiceInstance(string nodeId, IService service, Socket s)
         {
@@ -59,35 +63,45 @@ namespace RosSharp.Service
             _client = new TcpRosClient(s);
         }
 
-        internal void StartAsync(string serviceName) //TODO: 非同期に。
+        internal Task StartAsync(string serviceName)
         {
-            _logger.Info("Initialize");
-            var last = _client.ReceiveAsync()
+            _serviceName = serviceName;
+
+            return _client.ReceiveAsync()
                 .Take(1)
-                .Select(b => TcpRosHeaderSerializer.Deserialize(new MemoryStream(b)))//TODO: ヘッダのチェック
-                .PublishLast(); 
+                .Select(b => TcpRosHeaderSerializer.Deserialize(new MemoryStream(b)))
+                .Select(x => ConnectToService(x))
+                .ToTask();
+        }
 
-            last.Connect();
-
+        private Task ConnectToService(dynamic header)
+        {
             var dummy = new TService();
-            var header = new
+            _logger.Info(m => m("Receive Header {0}", header.ToString()));
+
+            if (header.service != _serviceName)
+            {
+                _logger.Error(m => m("ServiceName mismatch error, expected={0} actual={1}", _serviceName, header.topic));
+                throw new RosTopicException("ServiceName mismatch error");
+            }
+            if (header.md5sum != "*" && header.md5sum != dummy.Md5Sum)
+            {
+                _logger.Error(m => m("MD5Sum mismatch error, expected={0} actual={1}", dummy.Md5Sum, header.md5sum));
+                throw new RosTopicException("MD5Sum mismatch error");
+            }
+
+            var sendHeader = new
             {
                 callerid = _nodeId,
                 md5sum = dummy.Md5Sum,
-                service = serviceName,
+                service = _serviceName,
                 type = dummy.ServiceType
             };
 
             var ms = new MemoryStream();
-            TcpRosHeaderSerializer.Serialize(ms, header);
+            TcpRosHeaderSerializer.Serialize(ms, sendHeader);
 
-            //TODO: 非同期にする
-            var h = last.Timeout(TimeSpan.FromSeconds(Ros.TopicTimeout)).First();
-            _logger.Info(m => m("Receive Header {0}", h.ToString()));
-
-            try
-            {
-            _client.SendTaskAsync(ms.ToArray())
+            return _client.SendAsync(ms.ToArray())
                 .ContinueWith(task =>
                 {
                     _logger.Info("SendTaskAsync ContinueWith");
@@ -99,14 +113,11 @@ namespace RosSharp.Service
                             var array = res.ToArray();
                             try
                             {
-                                _logger.Info("Send!");
-                                _client.SendTaskAsync(array).Wait(); //TODO: Waitしても意味なくね？Subscribe自体の終了を待たねば。
-                                _logger.Info("Sent!");
+                                _client.SendAsync(array).Wait();
                             }
                             catch (Exception ex)
                             {
                                 _logger.Error("Send Error", ex);
-                                //throw;
                             }
 
                         }, ex =>
@@ -115,13 +126,6 @@ namespace RosSharp.Service
                         });
 
                 });
-
-
-            }
-            catch (Exception ex)
-            {
-                _logger.Error("Send Error", ex);
-            }
         }
 
         private MemoryStream Invoke(Stream stream)

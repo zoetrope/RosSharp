@@ -26,7 +26,7 @@ namespace RosSharp.Tests.Transport
             
             var client = new TcpRosClient();
 
-            client.ConnectTaskAsync("127.0.0.1", 50000).ContinueWith(t => { });
+            client.ConnectAsync("127.0.0.1", 50000).ContinueWith(t => { });
 
             task.Start();
         }

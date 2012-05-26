@@ -95,18 +95,15 @@ namespace RosSharp.Topic
         {
             lock (_rosTopicClients) //ロック範囲が広い？
             {
-                //TODO: 送信でエラーが起きると次のやつに送信しない。SendTaskAsync自体が例外をはいている。
-                //Task.WaitAll(_rosTopicClients.Select(client => client.SendTaskAsync(value)).ToArray());
-
                 foreach (var client in _rosTopicClients)
                 {
                     try
                     {
-                        client.SendTaskAsync(value).Wait();
+                        client.SendAsync(value).Wait();
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
-                        _logger.Error("SendError");
+                        _logger.Error("SendError", ex);
                     }
                 }
                 _lastPublishedMessage = value;

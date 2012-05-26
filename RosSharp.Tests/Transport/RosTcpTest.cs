@@ -34,16 +34,16 @@ namespace RosSharp.Tests.Transport
 
             var client3 = new TcpRosClient();
 
-            client3.ConnectTaskAsync("localhost", port).Wait();
+            client3.ConnectAsync("localhost", port).Wait();
 
             var sendData = new byte[] { 1, 0, 0, 0, 1 };
-            client3.SendTaskAsync(sendData).Wait();
+            client3.SendAsync(sendData).Wait();
 
             Thread.Sleep(TimeSpan.FromSeconds(5));
 
             try
             {
-                client3.SendTaskAsync(sendData).Wait();
+                client3.SendAsync(sendData).Wait();
             }
             catch (Exception ex)
             {
@@ -68,10 +68,10 @@ namespace RosSharp.Tests.Transport
 
             var client3 = new TcpRosClient();
 
-            client3.ConnectTaskAsync("localhost", port).Wait();
+            client3.ConnectAsync("localhost", port).Wait();
 
             var sendData = new byte[] { 1, 0, 0, 0, 1 };
-            client3.SendTaskAsync(sendData).Wait();
+            client3.SendAsync(sendData).Wait();
         }
 
         [TestMethod]
@@ -85,13 +85,13 @@ namespace RosSharp.Tests.Transport
 
             int port = listener.EndPoint.Port;
             var client1 = new TcpRosClient();
-            client1.ConnectTaskAsync("localhost", port)
+            client1.ConnectAsync("localhost", port)
                 .ContinueWith(t => Console.WriteLine("task.ex={0}", t.Exception));
             var client2 = new TcpRosClient();
-            client2.ConnectTaskAsync("localhost", port)
+            client2.ConnectAsync("localhost", port)
                 .ContinueWith(t => Console.WriteLine("task.ex={0}", t.Exception));
             var client3 = new TcpRosClient();
-            client3.ConnectTaskAsync("localhost", port)
+            client3.ConnectAsync("localhost", port)
                 .ContinueWith(t => Console.WriteLine("task.ex={0}", t.Exception));
         }
 
@@ -116,7 +116,7 @@ namespace RosSharp.Tests.Transport
 
             try
             {
-                client3.ConnectTaskAsync("localhost", port).Wait();
+                client3.ConnectAsync("localhost", port).Wait();
             }
             catch (AggregateException ex)
             {

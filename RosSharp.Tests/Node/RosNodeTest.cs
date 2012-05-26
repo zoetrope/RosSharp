@@ -12,7 +12,6 @@ namespace RosSharp.Tests.Node
     public class RosNodeTest
     {
         private MasterServer _masterServer;
-        private static TimeSpan TestTimeout = TimeSpan.FromSeconds(3);
 
         [TestInitialize]
         public void Initialize()
@@ -34,23 +33,47 @@ namespace RosSharp.Tests.Node
 
 
         [TestMethod]
+        public void CreateNode_Error()
+        {
+            Ros.MasterUri = new Uri("http://localhost:9999/");
+
+            AssertEx.Throws<AggregateException>(() => Ros.CreateNodeAsync("test").Wait());
+        }
+
+        [TestMethod]
         public void CreateSubscriber_Error()
         {
             Ros.MasterUri = new Uri("http://localhost:9999/");
-            var node = Ros.CreateNodeAsync("test").Result;
-            var sub = node.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
+            var node = Ros.CreateNodeAsync("test",enableLogger:false).Result;
+            AssertEx.Throws<AggregateException>(() => node.CreateSubscriberAsync<std_msgs.String>("test_topic").Wait());
         }
 
         [TestMethod]
         public void CreatePublisher_Error()
         {
             Ros.MasterUri = new Uri("http://localhost:9999/");
-            var node = Ros.CreateNodeAsync("test").Result;
-            var pub = node.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
+            var node = Ros.CreateNodeAsync("test", enableLogger: false).Result;
+            AssertEx.Throws<AggregateException>(() => node.CreatePublisherAsync<std_msgs.String>("test_topic").Wait());
         }
 
         [TestMethod]
-        public void Dispose()
+        public void RegisterService_Error()
+        {
+            Ros.MasterUri = new Uri("http://localhost:9999/");
+            var node = Ros.CreateNodeAsync("test", enableLogger: false).Result;
+            AssertEx.Throws<AggregateException>(() => node.RegisterServiceAsync("/chatter", new AddTwoInts(_ => new AddTwoInts.Response())).Wait());
+        }
+
+        [TestMethod]
+        public void CreateProxy_Error()
+        {
+            Ros.MasterUri = new Uri("http://localhost:9999/");
+            var node = Ros.CreateNodeAsync("test", enableLogger: false).Result;
+            AssertEx.Throws<AggregateException>(() => node.CreateProxyAsync<AddTwoInts>("/chatter").Wait());
+        }
+
+        [TestMethod]
+        public void DisposeNode()
         {
             var node = Ros.CreateNodeAsync("test").Result;
 

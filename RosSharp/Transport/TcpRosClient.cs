@@ -77,7 +77,7 @@ namespace RosSharp.Transport
 
         #endregion
 
-        public Task ConnectTaskAsync(string hostName, int portNumber)
+        public Task ConnectAsync(string hostName, int portNumber)
         {
             var hostEntry = new DnsEndPoint(hostName, portNumber);
 
@@ -86,7 +86,7 @@ namespace RosSharp.Transport
             return _socket.ConnectTaskAsync(hostEntry);
         }
 
-        public Task<int> SendTaskAsync(byte[] data)
+        public Task<int> SendAsync(byte[] data)
         {
             _logger.Debug(m => m("Send Data = {0}", data.Dump()));
             return _socket.SendTaskAsync(data);

@@ -73,7 +73,7 @@ namespace RosSharp.Topic
             _client = new TcpRosClient();
             
             var tcs = new TaskCompletionSource<IObservable<TMessage>>();
-            _client.ConnectTaskAsync(param.HostName, param.PortNumber)
+            _client.ConnectAsync(param.HostName, param.PortNumber)
                 .ContinueWith(t1 =>
                 {
                     _logger.Debug("StartAsync Connected");
@@ -126,7 +126,7 @@ namespace RosSharp.Topic
             TcpRosHeaderSerializer.Serialize(stream, sendHeader);
             
             var tcs = new TaskCompletionSource<IObservable<TMessage>>();
-            _client.SendTaskAsync(stream.ToArray())
+            _client.SendAsync(stream.ToArray())
                 .ContinueWith(task =>
                 {
                     _logger.Debug("ConnectToPublisherAsync Sent");
@@ -171,7 +171,7 @@ namespace RosSharp.Topic
                 _logger.Error(m => m("TopicType mismatch error, expected={0} actual={1}", dummy.MessageType, header.type));
                 throw new RosTopicException("TopicType mismatch error");
             }
-            if (header.md5sum != dummy.Md5Sum)
+            if (header.md5sum != "*" && header.md5sum != dummy.Md5Sum)
             {
                 _logger.Error(m => m("MD5Sum mismatch error, expected={0} actual={1}", dummy.Md5Sum, header.md5sum));
                 throw new RosTopicException("MD5Sum mismatch error");

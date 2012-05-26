@@ -208,10 +208,23 @@ namespace RosSharp
             lock (_nodes)
             {
                 var node = new RosNode(nodeName);
-                node.Disposing += DisposeNode;
-                _nodes.Add(nodeName, node);
 
-                return node.Initialize(enableLogger).ContinueWith(t => (INode) node);
+                var tcs = new TaskCompletionSource<INode>();
+
+                var initTask = node.InitializeAsync(enableLogger);
+
+                initTask.ContinueWith(t =>
+                {
+                    tcs.TrySetResult(node);
+                    node.Disposing += DisposeNode;
+                    _nodes.Add(nodeName, node);
+
+                }, TaskContinuationOptions.OnlyOnRanToCompletion);
+
+                initTask.ContinueWith(t => tcs.TrySetException(t.Exception.InnerException),
+                                      TaskContinuationOptions.OnlyOnFaulted);
+
+                return tcs.Task;
             }
         }
 

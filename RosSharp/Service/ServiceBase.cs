@@ -62,7 +62,7 @@ namespace RosSharp.Service
             return _action(req);
         }
 
-        public Task<TResponse> InvokeTaskAsync(TRequest req)
+        public Task<TResponse> InvokeAsync(TRequest req)
         {
             return Task<TResponse>.Factory.FromAsync(_action.BeginInvoke, _action.EndInvoke, req, null);
         }

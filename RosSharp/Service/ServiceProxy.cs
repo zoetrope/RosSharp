@@ -35,6 +35,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
 using System.Text;
 using RosSharp.Message;
 using RosSharp.Transport;
@@ -45,22 +46,21 @@ namespace RosSharp.Service
         where TService : IService, new()
     {
         private readonly TcpRosClient _client;
-        private readonly TService _service;
+        public TService Service { get; private set; }
 
         public ServiceProxy(TService service, TcpRosClient client)
         {
             _client = client;
-            _service = service;
-            _service.SetAction(Invoke);
+            Service = service;
+            Service.SetAction(Invoke);
         }
 
-        internal IMessage Invoke(IMessage request) //TODO: 非同期にできそうだけど・・・
+        internal IMessage Invoke(IMessage request)
         {
             var response = _client.ReceiveAsync(offset: 1)
                 .Select(x =>
                 {
-                    //TODO: エラー処理
-                    var res = _service.CreateResponse();
+                    var res = Service.CreateResponse();
                     var br = new BinaryReader(new MemoryStream(x));
                     br.ReadInt32();
                     res.Deserialize(br);
@@ -76,9 +76,9 @@ namespace RosSharp.Service
             bw.Write(request.SerializeLength);
             request.Serialize(bw);
             var senddata = ms.ToArray();
-            _client.SendTaskAsync(senddata).Wait();
+            _client.SendAsync(senddata).ToObservable().Timeout(TimeSpan.FromMilliseconds(Ros.TopicTimeout)).First();
 
-            return response.First();
+            return response.Timeout(TimeSpan.FromMilliseconds(Ros.TopicTimeout)).First();
         }
     }
 }

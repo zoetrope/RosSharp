@@ -78,7 +78,6 @@ namespace RosSharp.Parameter
 
         internal Task InitializeAsync()
         {
-            //TODO: tcs? 失敗したときの処理がない。
             return _parameterServerClient.HasParamAsync(NodeId, Name)
                 .ContinueWith(task =>
                 {
@@ -101,13 +100,11 @@ namespace RosSharp.Parameter
         {
             get
             {
-                //TODO: エラー処理は？
                 var result = _parameterServerClient.GetParamAsync(NodeId, Name).Result;
                 return _converter.ConvertTo(result);
             }
             set
             {
-                //TODO: エラー処理は？
                 _parameterServerClient.SetParamAsync(NodeId, Name, _converter.ConvertFrom(value)).Wait();
             }
         }

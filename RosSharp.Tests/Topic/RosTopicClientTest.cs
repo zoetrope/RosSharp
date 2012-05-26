@@ -170,7 +170,7 @@ namespace RosSharp.Tests.Topic
             var topic = new RosTopicClient<std_msgs.String>("mynode", "mytopic");
 
             topic.StartAsync(sock).Wait();
-            topic.SendTaskAsync(new std_msgs.String() {data = "test"}).Result.Is(12);
+            topic.SendAsync(new std_msgs.String() {data = "test"}).Result.Is(12);
         }
 
 
@@ -179,7 +179,7 @@ namespace RosSharp.Tests.Topic
         public void SendTaskAsync_NotConnectedError()
         {
             var topic = new RosTopicClient<std_msgs.String>("mynode", "mytopic");
-            var ex = AssertEx.Throws<InvalidOperationException>(() => topic.SendTaskAsync(new std_msgs.String() { data = "test" }).Wait());
+            var ex = AssertEx.Throws<InvalidOperationException>(() => topic.SendAsync(new std_msgs.String() { data = "test" }).Wait());
             ex.Message.Is("Not Connected");
         }
     }

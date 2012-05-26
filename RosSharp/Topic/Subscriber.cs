@@ -56,7 +56,7 @@ namespace RosSharp.Topic
         private readonly CompositeDisposable _disposables = new CompositeDisposable();
         private readonly ReplaySubject<Unit> _onConnectedSubject = new ReplaySubject<Unit>();
         private readonly List<RosTopicServer<TMessage>> _rosTopicServers = new List<RosTopicServer<TMessage>>();
-        private bool _nodelay;
+        private readonly bool _nodelay;
 
         internal Subscriber(string topicName, string nodeId, bool nodelay=true)
         {
@@ -110,10 +110,10 @@ namespace RosSharp.Topic
             foreach (var slaveClient in slaves)
             {
                 var uri = slaveClient.SlaveUri;
-                var task = slaveClient.RequestTopicAsync(NodeId, TopicName, new List<ProtocolInfo> {new ProtocolInfo(ProtocolType.TCPROS)});
-                task.ContinueWith(t => ConnectServer(t.Result, uri), TaskContinuationOptions.OnlyOnRanToCompletion);
+                var requestTask = slaveClient.RequestTopicAsync(NodeId, TopicName, new List<ProtocolInfo> {new ProtocolInfo(ProtocolType.TCPROS)});
+                requestTask.ContinueWith(t => ConnectServer(t.Result, uri), TaskContinuationOptions.OnlyOnRanToCompletion);
 
-                task.ContinueWith(t =>
+                requestTask.ContinueWith(t =>
                 {
                     _logger.Error(m => m("RequestTopicAsync Failure :{0}", uri), t.Exception.InnerException);
                 }, TaskContinuationOptions.OnlyOnFaulted);
@@ -132,24 +132,32 @@ namespace RosSharp.Topic
             var server = new RosTopicServer<TMessage>(NodeId, TopicName, slaveUri);
             _rosTopicServers.Add(server); //TODO: DisconnectServerはない？ロックは不要？
 
-            //TODO: StartAsyncが失敗したとき
             server.StartAsync(param, _nodelay).ContinueWith(
-                task =>
+                startTask =>
                 {
-                    _logger.Debug("ConnectServer Started");
-                    //TODO: これでいい？
-                    var d = task.Result.Subscribe(
-                        x => _aggregateSubject.OnNext(x),
-                        ex => { },
-                        () => { }
-                        );
-
-                    lock (_disposables)
+                    if (startTask.Status == TaskStatus.RanToCompletion)
                     {
-                        _disposables.Add(d);
+                        _logger.Debug("ConnectServer Started");
+                        //TODO: これでいい？
+                        var d = startTask.Result.Subscribe(
+                            x => _aggregateSubject.OnNext(x),
+                            ex =>
+                            {
+                                
+                            }
+                            );
+
+                        lock (_disposables)
+                        {
+                            _disposables.Add(d);
+                        }
+                        _logger.Debug("ConnectServer OnConnected");
+                        _onConnectedSubject.OnNext(Unit.Default);
                     }
-                    _logger.Debug("ConnectServer OnConnected");
-                    _onConnectedSubject.OnNext(Unit.Default);
+                    else if(startTask.Status == TaskStatus.Faulted)
+                    {
+                        _logger.Error("ConnectServer Error", startTask.Exception.InnerException);
+                    }
                 });
         }
 

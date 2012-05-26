@@ -31,15 +31,10 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net;
-using System.Net.Sockets;
 using System.Reactive.Linq;
-using System.Text;
+using System.Reactive.Threading.Tasks;
 using Common.Logging;
-using RosSharp.Message;
 using RosSharp.Transport;
 
 namespace RosSharp.Service
@@ -64,17 +59,10 @@ namespace RosSharp.Service
         public IDisposable StartService(string serviceName, IService service)
         {
             _listener = new TcpRosListener(0);
-            var disp = _listener.AcceptAsync()
-                .Select(s => new ServiceInstance<TService>(_nodeId, service, s))
-                .Subscribe(
-                    client => client.StartAsync(serviceName),
-                    ex =>
-                    {
-                        //TODO:
-                        _logger.Error("Start Service Error", ex);
-                    });
-
-            return disp;
+            return _listener.AcceptAsync()
+                .Select(socket => new ServiceInstance<TService>(_nodeId, service, socket))
+                .SelectMany(instance => instance.StartAsync(serviceName).ToObservable())
+                .Subscribe(_ => { }, ex => _logger.Error("Start Service Error", ex));
         }
 
         public void Dispose()
