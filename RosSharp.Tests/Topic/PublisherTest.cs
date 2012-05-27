@@ -41,7 +41,6 @@ namespace RosSharp.Tests.Topic
 
             var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             var pub = new Publisher<std_msgs.String>("test", "testnode");
-
             var ex = AssertEx.Throws<AggregateException>(() => pub.AddTopic(sock).Wait());
             //ex.InnerException.GetType().Is(typeof(InvalidOperationException));
 
@@ -53,7 +52,7 @@ namespace RosSharp.Tests.Topic
         {
             MRosTopicClient<std_msgs.String>.AllInstances.StartAsyncSocketBoolean =
                 (t1, t2, t3) => Task.Factory.StartNew(() => { });
-            MRosTopicClient<std_msgs.String>.AllInstances.SendTaskAsyncTMessage =
+            MRosTopicClient<std_msgs.String>.AllInstances.SendAsyncTMessage =
                 (t1, t2) => Task.Factory.StartNew(() => t2.SerializeLength);
 
             var sock1 = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -74,7 +73,7 @@ namespace RosSharp.Tests.Topic
         {
             MRosTopicClient<std_msgs.String>.AllInstances.StartAsyncSocketBoolean = 
                 (t1, t2, t3) => Task.Factory.StartNew(() => { });
-            MRosTopicClient<std_msgs.String>.AllInstances.SendTaskAsyncTMessage =
+            MRosTopicClient<std_msgs.String>.AllInstances.SendAsyncTMessage =
                 (t1, t2) => Task.Factory.StartNew(() => t2.SerializeLength);
 
             var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);

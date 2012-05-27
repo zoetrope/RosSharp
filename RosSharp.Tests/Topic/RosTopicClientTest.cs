@@ -36,7 +36,7 @@ namespace RosSharp.Tests.Topic
             TcpRosHeaderSerializer.Serialize(stream,header);
 
             MTcpRosClient.AllInstances.ReceiveAsyncInt32 = (t1, t2) => Observable.Return(stream.ToArray());
-            MTcpRosClient.AllInstances.SendTaskAsyncByteArray = (t1, t2) => Task.Factory.StartNew(() => t2.Length);
+            MTcpRosClient.AllInstances.SendAsyncByteArray = (t1, t2) => Task.Factory.StartNew(() => t2.Length);
 
             var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             var topic = new RosTopicClient<std_msgs.String>("mynode","mytopic");
@@ -55,9 +55,9 @@ namespace RosSharp.Tests.Topic
             var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             var topic = new RosTopicClient<std_msgs.String>("mynode", "mytopic");
 
-            var ex = AssertEx.Throws<AggregateException>(() => topic.StartAsync(sock).Wait());
-            ex.InnerException.GetType().Is(typeof(InvalidOperationException));
-            ex.InnerException.Message.Is("Receive Error");
+            var ex = AssertEx.Throws<InvalidOperationException>(() => topic.StartAsync(sock).Wait());
+            //ex.InnerException.GetType().Is(typeof(InvalidOperationException));
+            ex.Message.Is("Receive Error");
         }
 
         [TestMethod]
@@ -138,7 +138,7 @@ namespace RosSharp.Tests.Topic
             TcpRosHeaderSerializer.Serialize(stream, header);
 
             MTcpRosClient.AllInstances.ReceiveAsyncInt32 = (t1, t2) => Observable.Return(stream.ToArray());
-            MTcpRosClient.AllInstances.SendTaskAsyncByteArray = (t1, t2) =>{throw new InvalidOperationException("Send Error");};
+            MTcpRosClient.AllInstances.SendAsyncByteArray = (t1, t2) =>{throw new InvalidOperationException("Send Error");};
 
             var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             var topic = new RosTopicClient<std_msgs.String>("mynode", "mytopic");
@@ -164,7 +164,7 @@ namespace RosSharp.Tests.Topic
             TcpRosHeaderSerializer.Serialize(stream, header);
 
             MTcpRosClient.AllInstances.ReceiveAsyncInt32 = (t1, t2) => Observable.Return(stream.ToArray());
-            MTcpRosClient.AllInstances.SendTaskAsyncByteArray = (t1, t2) => Task.Factory.StartNew(() => t2.Length);
+            MTcpRosClient.AllInstances.SendAsyncByteArray = (t1, t2) => Task.Factory.StartNew(() => t2.Length);
 
             var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             var topic = new RosTopicClient<std_msgs.String>("mynode", "mytopic");

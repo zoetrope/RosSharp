@@ -44,7 +44,7 @@ namespace RosSharp.Tests.Topic
             bw.Write(str.SerializeLength);
             str.Serialize(bw);
 
-            MTcpRosClient.AllInstances.ConnectTaskAsyncStringInt32 = (t1, t2, t3) => Task.Factory.StartNew(() => { });
+            MTcpRosClient.AllInstances.ConnectAsyncStringInt32 = (t1, t2, t3) => Task.Factory.StartNew(() => { });
             
             // 1.Receive Header, 2.Receive Data(std_msgs.String)
             int count = 0;
@@ -60,7 +60,7 @@ namespace RosSharp.Tests.Topic
                 }
             };
 
-            MTcpRosClient.AllInstances.SendTaskAsyncByteArray = (t1, t2) => Task<int>.Factory.StartNew(() => t2.Length);
+            MTcpRosClient.AllInstances.SendAsyncByteArray = (t1, t2) => Task<int>.Factory.StartNew(() => t2.Length);
 
             var server = new RosTopicServer<std_msgs.String>("mynode", "mytopic", new Uri("http://localhost"));
 
@@ -89,7 +89,7 @@ namespace RosSharp.Tests.Topic
         [HostType("Moles")]
         public void StartAsync_SendAsyncError()
         {
-            MTcpRosClient.AllInstances.ConnectTaskAsyncStringInt32 = (t1, t2, t3) => Task.Factory.StartNew(() => { });
+            MTcpRosClient.AllInstances.ConnectAsyncStringInt32 = (t1, t2, t3) => Task.Factory.StartNew(() => { });
             MTcpRosClient.AllInstances.ReceiveAsyncInt32 = (t1, t2) => Observable.Return(new byte[0]);
 
             var server = new RosTopicServer<std_msgs.String>("mynode", "mytopic", new Uri("http://localhost"));
@@ -104,9 +104,9 @@ namespace RosSharp.Tests.Topic
         [HostType("Moles")]
         public void StartAsync_SendError()
         {
-            MTcpRosClient.AllInstances.ConnectTaskAsyncStringInt32 = (t1, t2, t3) => Task.Factory.StartNew(() => { });
+            MTcpRosClient.AllInstances.ConnectAsyncStringInt32 = (t1, t2, t3) => Task.Factory.StartNew(() => { });
             MTcpRosClient.AllInstances.ReceiveAsyncInt32 = (t1, t2) => Observable.Return(new byte[0]);
-            MTcpRosClient.AllInstances.SendTaskAsyncByteArray = (t1, t2) => Task<int>.Factory.StartNew(() => { throw new InvalidOperationException("Send Error"); });
+            MTcpRosClient.AllInstances.SendAsyncByteArray = (t1, t2) => Task<int>.Factory.StartNew(() => { throw new InvalidOperationException("Send Error"); });
 
             var server = new RosTopicServer<std_msgs.String>("mynode", "mytopic", new Uri("http://localhost"));
 
@@ -122,9 +122,9 @@ namespace RosSharp.Tests.Topic
         [HostType("Moles")]
         public void StartAsync_HeaderDeserializeError()
         {
-            MTcpRosClient.AllInstances.ConnectTaskAsyncStringInt32 = (t1, t2, t3) => Task.Factory.StartNew(() => { });
+            MTcpRosClient.AllInstances.ConnectAsyncStringInt32 = (t1, t2, t3) => Task.Factory.StartNew(() => { });
             MTcpRosClient.AllInstances.ReceiveAsyncInt32 = (t1, t2) => Observable.Return(new byte[0]);
-            MTcpRosClient.AllInstances.SendTaskAsyncByteArray = (t1, t2) => Task<int>.Factory.StartNew(() => t2.Length);
+            MTcpRosClient.AllInstances.SendAsyncByteArray = (t1, t2) => Task<int>.Factory.StartNew(() => t2.Length);
 
             var server = new RosTopicServer<std_msgs.String>("mynode", "mytopic", new Uri("http://localhost"));
 
@@ -141,9 +141,9 @@ namespace RosSharp.Tests.Topic
         {
             Ros.TopicTimeout = 100;
 
-            MTcpRosClient.AllInstances.ConnectTaskAsyncStringInt32 = (t1, t2, t3) => Task.Factory.StartNew(() => { });
+            MTcpRosClient.AllInstances.ConnectAsyncStringInt32 = (t1, t2, t3) => Task.Factory.StartNew(() => { });
             MTcpRosClient.AllInstances.ReceiveAsyncInt32 = (t1, t2) => Observable.Return(new byte[0]).Delay(TimeSpan.FromSeconds(3));
-            MTcpRosClient.AllInstances.SendTaskAsyncByteArray = (t1, t2) => Task<int>.Factory.StartNew(() => t2.Length);
+            MTcpRosClient.AllInstances.SendAsyncByteArray = (t1, t2) => Task<int>.Factory.StartNew(() => t2.Length);
 
             var server = new RosTopicServer<std_msgs.String>("mynode", "mytopic", new Uri("http://localhost"));
 
@@ -170,9 +170,9 @@ namespace RosSharp.Tests.Topic
             TcpRosHeaderSerializer.Serialize(stream, header);
 
 
-            MTcpRosClient.AllInstances.ConnectTaskAsyncStringInt32 = (t1, t2, t3) => Task.Factory.StartNew(() => { });
+            MTcpRosClient.AllInstances.ConnectAsyncStringInt32 = (t1, t2, t3) => Task.Factory.StartNew(() => { });
             MTcpRosClient.AllInstances.ReceiveAsyncInt32 = (t1, t2) => Observable.Return(stream.ToArray());
-            MTcpRosClient.AllInstances.SendTaskAsyncByteArray = (t1, t2) => Task<int>.Factory.StartNew(() => t2.Length);
+            MTcpRosClient.AllInstances.SendAsyncByteArray = (t1, t2) => Task<int>.Factory.StartNew(() => t2.Length);
 
             var server = new RosTopicServer<std_msgs.String>("mynode", "mytopic", new Uri("http://localhost"));
 

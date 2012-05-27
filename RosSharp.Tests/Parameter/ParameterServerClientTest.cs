@@ -51,9 +51,9 @@ namespace RosSharp.Tests.Parameter
 
             var client = new ParameterServerClient(new Uri("http://localhost"));
 
-            var ex = AssertEx.Throws<InvalidOperationException>(
+            var ex = AssertEx.Throws<AggregateException>(
                 () => client.DeleteParamAsync("test", "aaa").Wait());
-            ex.Message.Is("parameter [/aaa] is not set");
+            ex.InnerException.Message.Is("parameter [/aaa] is not set");
         }
 
 
@@ -118,7 +118,10 @@ namespace RosSharp.Tests.Parameter
             MParameterServerProxy.AllInstances.EndGetParamIAsyncResult = (t1, t2) => result;
 
             var client = new ParameterServerClient(new Uri("http://localhost"));
-            client.GetParamAsync("test", "foo").Result.Is(new object[3] { "1", 1, 1.0 });
+            var ret = client.GetParamAsync("test", "foo").Result as object[];
+            ret[0].Is("1");
+            ret[1].Is(1);
+            ret[2].Is(1.0);
         }
         
         [TestMethod]
@@ -166,9 +169,9 @@ namespace RosSharp.Tests.Parameter
 
             var client = new ParameterServerClient(new Uri("http://localhost"));
             
-            var ex = AssertEx.Throws<InvalidOperationException>(
+            var ex = AssertEx.Throws<AggregateException>(
                 () => client.GetParamAsync("test", "aaa").Wait());
-            ex.Message.Is("Parameter [/aaa] is not set");
+            ex.InnerException.Message.Is("Parameter [/aaa] is not set");
         }
 
 
@@ -189,9 +192,9 @@ namespace RosSharp.Tests.Parameter
 
             var client = new ParameterServerClient(new Uri("http://localhost"));
             
-            var ex = AssertEx.Throws<InvalidOperationException>(
+            var ex = AssertEx.Throws<AggregateException>(
                 () => client.SearchParamAsync("test", "rosversion").Wait());
-            ex.Message.Is("Internal failure: namespace must be global");
+            ex.InnerException.Message.Is("Internal failure: namespace must be global");
         }
 
         [TestMethod]

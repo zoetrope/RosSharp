@@ -137,17 +137,12 @@ namespace RosSharp.Topic
 
         internal Task AddTopic(Socket socket)
         {
-            _logger.Debug(m => m("AddTopic: {0}", socket.RemoteEndPoint.ToString()));
             var rosTopicClient = new RosTopicClient<TMessage>(NodeId, TopicName);
 
             return rosTopicClient.StartAsync(socket, _latching)
-                .ContinueWith(task =>
+                .ContinueWith(startTask =>
                 {
-                    if (task.IsFaulted)
-                    {
-                        _logger.Error("AddTopic: Failure", task.Exception.InnerException);
-                    }
-                    else
+                    if(startTask.Status == TaskStatus.RanToCompletion)
                     {
                         _logger.Debug("AddTopic: Started");
                         lock (_rosTopicClients)
@@ -162,6 +157,11 @@ namespace RosSharp.Topic
 
                         _logger.Debug("OnConnected");
                         _onConnectedSubject.OnNext(Unit.Default);
+                    }
+                    else if (startTask.Status == TaskStatus.Faulted)
+                    {
+                        _logger.Error("AddTopic: Failure", startTask.Exception.InnerException);
+                        throw startTask.Exception.InnerException;
                     }
                 });
         }
