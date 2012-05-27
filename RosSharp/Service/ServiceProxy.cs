@@ -42,7 +42,12 @@ using RosSharp.Transport;
 
 namespace RosSharp.Service
 {
-    internal class ServiceProxy<TService>
+    internal interface IServiceProxy
+    {
+        IMessage Invoke(IMessage request);
+    }
+
+    internal class ServiceProxy<TService> : IServiceProxy
         where TService : IService, new()
     {
         private readonly TcpRosClient _client;
@@ -55,7 +60,7 @@ namespace RosSharp.Service
             Service.SetAction(Invoke);
         }
 
-        internal IMessage Invoke(IMessage request)
+        public IMessage Invoke(IMessage request)
         {
             var response = _client.ReceiveAsync(offset: 1)
                 .Select(x =>

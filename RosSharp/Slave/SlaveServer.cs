@@ -64,8 +64,7 @@ namespace RosSharp.Slave
             _topicContainer = topicContainer;
             _tcpRosListener = new Dictionary<string, TcpRosListener>();
 
-            var rand = new Random();
-            string slaveName = "slave" + rand.Next();//todo: randよりもguidがいいか？
+            string slaveName = "slave" + Guid.NewGuid().ToString("N");
 
             _channel = new HttpServerChannel(slaveName, portNumber, new XmlRpcServerFormatterSinkProvider());
             var tmp = new Uri(_channel.GetChannelUri());

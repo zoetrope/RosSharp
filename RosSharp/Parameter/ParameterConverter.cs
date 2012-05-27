@@ -68,6 +68,7 @@ namespace RosSharp.Parameter
 
         public T ConvertTo(object value)
         {
+            //TODO:
             throw new NotImplementedException();
         }
 
@@ -85,6 +86,7 @@ namespace RosSharp.Parameter
 
         public T ConvertTo(object value)
         {
+            //TODO:
             throw new NotImplementedException();
         }
 
@@ -121,6 +123,18 @@ namespace RosSharp.Parameter
         {
             _xmlRpcStruct[binder.Name] = value;
             return true;
+        }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+
+            foreach (var key in _xmlRpcStruct.Keys)
+            {
+                sb.Append(key + " = " + _xmlRpcStruct[key] + "\r\n");
+            }
+
+            return sb.ToString();
         }
     }
 }

@@ -128,30 +128,23 @@ namespace RosSharp.Topic
 
         private void ConnectServer(TopicParam param, Uri slaveUri)
         {
-            _logger.Debug("ConnectServer");
             var server = new RosTopicServer<TMessage>(NodeId, TopicName, slaveUri);
-            _rosTopicServers.Add(server); //TODO: DisconnectServerはない？ロックは不要？
+            _rosTopicServers.Add(server);
 
             server.StartAsync(param, _nodelay).ContinueWith(
                 startTask =>
                 {
                     if (startTask.Status == TaskStatus.RanToCompletion)
                     {
-                        _logger.Debug("ConnectServer Started");
-                        //TODO: これでいい？
                         var d = startTask.Result.Subscribe(
                             x => _aggregateSubject.OnNext(x),
-                            ex =>
-                            {
-                                
-                            }
-                            );
+                            ex => _logger.Error("Subscriber OnError",ex));
 
                         lock (_disposables)
                         {
                             _disposables.Add(d);
                         }
-                        _logger.Debug("ConnectServer OnConnected");
+                        
                         _onConnectedSubject.OnNext(Unit.Default);
                     }
                     else if(startTask.Status == TaskStatus.Faulted)

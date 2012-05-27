@@ -33,6 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Reactive.Testing">
       <HintPath>..\packages\Rx-Testing.1.0.11226\lib\Net4-Full\Microsoft.Reactive.Testing.dll</HintPath>
     </Reference>

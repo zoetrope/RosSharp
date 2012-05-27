@@ -117,15 +117,36 @@ namespace RosSharp.Parameter
             {
                 _parameterSubject = new Subject<T>();
                 var disposable = _parameterSubject.Subscribe(observer);
-                _parameterServerClient.SubscribeParamAsync(NodeId, _slaveUri, Name)
-                    .ContinueWith(
-                        task =>
+                
+                var subsTask = _parameterServerClient.SubscribeParamAsync(NodeId, _slaveUri, Name);
+                
+                subsTask.ContinueWith(
+                    t =>
+                    {
+                        try
                         {
-                            //TODO: SetParamしてないのにSubscribeするとおかしなデータが来る
-                            //TODO: Convertが失敗したときの処理
-                            var val = _converter.ConvertTo(task.Result);
+                            if(t.Result is XmlRpcStruct && ((XmlRpcStruct)t.Result).Keys.Count == 0)
+                            {
+                                // if subscribe to parameter that are not set, receive an empty XmlRpcStruct.
+                                return;
+                            }
+
+                            var val = _converter.ConvertTo(t.Result);
                             _parameterSubject.OnNext(val);
-                        }); //TODO: SubscribeParamAsyncがエラーの時は？
+                        }
+                        catch (Exception ex)
+                        {
+                            _parameterSubject.OnError(ex);
+                            _parameterSubject.OnCompleted();
+                        }
+                    }, TaskContinuationOptions.OnlyOnRanToCompletion);
+                
+                subsTask.ContinueWith(
+                    t =>
+                    {
+                        _parameterSubject.OnError(t.Exception.InnerException);
+                        _parameterSubject.OnCompleted();
+                    }, TaskContinuationOptions.OnlyOnFaulted);
                 
                 return disposable;
             }
@@ -142,9 +163,16 @@ namespace RosSharp.Parameter
 
         void IParameter.Update(object value)
         {
-            //TODO: Convertが失敗したときの処理
-            var data = _converter.ConvertTo(value);
-            _parameterSubject.OnNext(data);
+            try
+            {
+                var data = _converter.ConvertTo(value);
+                _parameterSubject.OnNext(data);
+            }
+            catch (Exception ex)
+            {
+                _parameterSubject.OnError(ex);
+                _parameterSubject.OnCompleted();
+            }
         }
 
         public void Dispose()

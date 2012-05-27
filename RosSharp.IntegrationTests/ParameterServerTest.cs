@@ -14,7 +14,6 @@ namespace RosSharp.IntegrationTests
     public class ParameterServerTest
     {
         private MasterServer _masterServer;
-        private static TimeSpan TestTimeout = TimeSpan.FromSeconds(3);
 
         [TestInitialize]
         public void Initialize()
@@ -41,14 +40,79 @@ namespace RosSharp.IntegrationTests
             
             var param = node.CreateParameterAsync<int>("test_param").Result;
 
-            param.Subscribe(x => Console.WriteLine("param = {0}", x));
+            param.Subscribe(x => Console.WriteLine("param = {0}", x), ex => Console.WriteLine(ex));
 
             for(int i=0;i<10;i++)
             {
                 param.Value = i;
                 Thread.Sleep(TimeSpan.FromSeconds(1));
             }
+        }
+        
+        [TestMethod]
+        public void DoubleParameter()
+        {
+            var node = Ros.CreateNodeAsync("test").Result;
 
+            var param = node.CreateParameterAsync<double>("test_param").Result;
+
+            param.Subscribe(x => Console.WriteLine("param = {0}", x), ex => Console.WriteLine(ex));
+
+            for (double i = 0.0; i < 10.0; i+=1.1)
+            {
+                param.Value = i;
+                Thread.Sleep(TimeSpan.FromSeconds(1));
+            }
+        }
+
+        [TestMethod]
+        public void StringParameter()
+        {
+            var node = Ros.CreateNodeAsync("test").Result;
+
+            var param = node.CreateParameterAsync<string>("test_param").Result;
+
+            param.Subscribe(x => Console.WriteLine("param = {0}", x), ex => Console.WriteLine(ex));
+
+            for (int i = 0; i < 10; i++)
+            {
+                param.Value = i.ToString();
+                Thread.Sleep(TimeSpan.FromSeconds(1));
+            }
+        }
+        
+        [TestMethod]
+        public void ListParameter()
+        {
+            var node = Ros.CreateNodeAsync("test").Result;
+
+            var param = node.CreateParameterAsync<List<int>>("test_param").Result;
+
+            param.Subscribe(xs => Console.WriteLine("param = {0}", string.Join(",", xs)), ex => Console.WriteLine(ex));
+
+            for (int i = 0; i < 10; i++)
+            {
+                param.Value = new List<int>() {i, i + 1, i + 2, i + 3};
+                Thread.Sleep(TimeSpan.FromSeconds(1));
+            }
+        }
+        [TestMethod]
+        public void DictionaryParameter()
+        {
+            var node = Ros.CreateNodeAsync("test").Result;
+
+            var param = node.CreateParameterAsync<DictionaryParameter>("test_param").Result;
+
+            param.Subscribe(x => Console.WriteLine("param = {0}", x), ex => Console.WriteLine(ex));
+
+            for (int i = 0; i < 10; i++)
+            {
+                dynamic val = param.Value;
+                val.IntValue = i;
+                val.StringValue = i.ToString();
+
+                Thread.Sleep(TimeSpan.FromSeconds(1));
+            }
         }
     }
 }

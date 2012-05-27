@@ -61,7 +61,9 @@ namespace RosSharp.Node
         private readonly ParameterServerClient _parameterServerClient;
         private readonly Dictionary<string, IParameter> _parameters = new Dictionary<string, IParameter>();
         private readonly ServiceProxyFactory _serviceProxyFactory;
-        private readonly Dictionary<string, IService> _services = new Dictionary<string, IService>();
+        private readonly Dictionary<string, IService> _serviceServers = new Dictionary<string, IService>();
+        private readonly Dictionary<string, IServiceProxy> _serviceProxies = new Dictionary<string, IServiceProxy>();
+
         private readonly SlaveServer _slaveServer;
         private readonly TopicContainer _topicContainer;
         internal event Action<RosNode> Disposing;
@@ -142,8 +144,7 @@ namespace RosSharp.Node
 
             if (_parameters.ContainsKey(paramName))
             {
-                //TODO:
-                //throw
+                throw new InvalidOperationException(paramName + " is already created.");
             }
 
             var param = new Parameter<T>(NodeId, paramName, _slaveServer.SlaveUri, _parameterServerClient);
@@ -154,18 +155,14 @@ namespace RosSharp.Node
 
             param.InitializeAsync().ContinueWith(task =>
             {
-                if (task.IsFaulted)
+                if(task.Status == TaskStatus.RanToCompletion)
+                {
+                    tcs.SetResult(param);
+                }
+                else if (task.Status == TaskStatus.Faulted)
                 {
                     tcs.SetException(task.Exception.InnerException);
                     _logger.Error("Initialize Parameter: Failure", task.Exception.InnerException);
-                }
-                else if (task.IsCanceled)
-                {
-                    tcs.SetCanceled();
-                }
-                else
-                {
-                    tcs.SetResult(param);
                 }
             });
 
@@ -175,7 +172,7 @@ namespace RosSharp.Node
         public void Dispose()
         {
             if (_disposed) throw new ObjectDisposedException("RosNode");
-            //TODO: すべてを終了させる。
+            //TODO: すべてを終了させる。ロックが必要？
 
             var handler = Disposing;
             if (handler != null)
@@ -198,8 +195,7 @@ namespace RosSharp.Node
 
             if (_topicContainer.HasSubscriber(topicName))
             {
-                //TODO:
-                //throw
+                throw new InvalidOperationException(topicName + " is already created.");
             }
 
             _logger.InfoFormat("Create Subscriber: {0}", topicName);
@@ -242,8 +238,7 @@ namespace RosSharp.Node
 
             if (_topicContainer.HasPublisher(topicName))
             {
-                //TODO:
-                //throw
+                throw new InvalidOperationException(topicName + " is already created.");
             }
 
             _logger.InfoFormat("Create Publisher: {0}", topicName);
@@ -292,10 +287,9 @@ namespace RosSharp.Node
             where TService : IService, new()
         {
             if (_disposed) throw new ObjectDisposedException("RosNode");
-            //if (_serviceProxyFactory.(serviceName))
+            if (_serviceProxies.ContainsKey(serviceName))
             {
-                //TODO:
-                //throw
+                throw new InvalidOperationException(serviceName + " is already created.");
             }
 
             _logger.InfoFormat("Create ServiceProxy: {0}", serviceName);
@@ -315,7 +309,9 @@ namespace RosSharp.Node
                             {
                                 if (createTask.Status == TaskStatus.RanToCompletion)
                                 {
-                                    tcs.SetResult(createTask.Result.Service);
+                                    var proxy = createTask.Result;
+                                    _serviceProxies.Add(serviceName, proxy);
+                                    tcs.SetResult(proxy.Service);
                                 }
                                 else if (createTask.Status == TaskStatus.Faulted)
                                 {
@@ -337,17 +333,16 @@ namespace RosSharp.Node
             where TService : IService, new()
         {
             if (_disposed) throw new ObjectDisposedException("RosNode");
-            if (_services.ContainsKey(serviceName))
+            if (_serviceServers.ContainsKey(serviceName))
             {
-                //TODO:
-                //throw
+                throw new InvalidOperationException(serviceName + " is already registered.");
             }
 
             _logger.InfoFormat("Create ServiceServer: {0}", serviceName);
 
             var serviceServer = new ServiceServer<TService>(NodeId);
             var disposable = serviceServer.StartService(serviceName, service);
-            _services.Add(serviceName, service);
+            _serviceServers.Add(serviceName, service);
 
             var cd = new CompositeDisposable(serviceServer, disposable);
 
@@ -413,7 +408,7 @@ namespace RosSharp.Node
         {
             return _masterClient
                 .UnregisterServiceAsync(NodeId, serviceName, _slaveServer.SlaveUri)
-                .ContinueWith(_ => _services.Remove(serviceName));
+                .ContinueWith(_ => _serviceServers.Remove(serviceName));
         }
 
         private void SlaveServerOnParameterUpdated(string key, object value)
