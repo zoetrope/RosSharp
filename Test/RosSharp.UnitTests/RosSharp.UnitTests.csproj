@@ -6,11 +6,11 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{C810FB6F-B9FD-4E03-8D12-96B35BF60975}</ProjectGuid>
+    <ProjectGuid>{E9C21C7C-D36E-416A-81EB-5EE719ACFDA1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RosSharp.IntegrationTests</RootNamespace>
-    <AssemblyName>RosSharp.IntegrationTests</AssemblyName>
+    <RootNamespace>RosSharp.UnitTests</RootNamespace>
+    <AssemblyName>RosSharp.UnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -33,15 +33,23 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CookComputing.XmlRpcV2">
+      <HintPath>..\packages\xmlrpcnet.3.0.0.266\lib\net20\CookComputing.XmlRpcV2.dll</HintPath>
+    </Reference>
+    <Reference Include="CookComputing.XmlRpcV2.Moles, Version=3.0.0.0, Culture=neutral, PublicKeyToken=0ae41878053f6703, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Reactive.Testing">
+    <Reference Include="Microsoft.Moles.Framework, Version=0.94.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Reactive.Testing, Version=1.0.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Rx-Testing.1.0.11226\lib\Net4-Full\Microsoft.Reactive.Testing.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="RosSharp.Moles, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="System" />
+    <Reference Include="System.Behaviors, Version=0.94.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Moles, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0ae41878053f6703, processorArchitecture=MSIL" />
     <Reference Include="System.Reactive, Version=1.0.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Rx-Main.1.0.11226\lib\Net4\System.Reactive.dll</HintPath>
     </Reference>
@@ -53,23 +61,40 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChainingAssertion.MSTest.cs" />
-    <Compile Include="MasterTest.cs" />
-    <Compile Include="ParameterServerTest.cs" />
+    <Compile Include="Master\RegistrationContainerTest.cs" />
+    <Compile Include="Node\RosNodeTest.cs" />
+    <Compile Include="Parameter\ParameterServerClientTest.cs" />
+    <Compile Include="Parameter\ParameterServerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PublisherAndSubscriberTest.cs" />
-    <Compile Include="RosCoreTest.cs" />
-    <Compile Include="ServerAndClientTest.cs" />
-    <Compile Include="SlaveTest.cs" />
+    <Compile Include="Master\MasterClientTest.cs" />
+    <Compile Include="ROSTest.cs" />
+    <Compile Include="SandBoxTest.cs" />
+    <Compile Include="Service\ProxyFactoryTest.cs" />
+    <Compile Include="Service\ServiceServerTest.cs" />
+    <Compile Include="Slave\SlaveServerTest.cs" />
+    <Compile Include="Topic\PublisherTest.cs" />
+    <Compile Include="Topic\RosTopicClientTest.cs" />
+    <Compile Include="Topic\RosTopicServerTest.cs" />
+    <Compile Include="Topic\SubscriberTest.cs" />
+    <Compile Include="Topic\TopicContainerTest.cs" />
+    <Compile Include="Transport\OneLineCacheSubjectTest.cs" />
+    <Compile Include="Transport\TcpRosClientTest.cs" />
+    <Compile Include="Slave\SlaveClientTest.cs" />
+    <Compile Include="Transport\TcpRosListenerTest.cs" />
+    <Compile Include="Transport\RosTcpTest.cs" />
+    <Compile Include="Transport\TcpRosHeaderTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RosSharp\RosSharp.csproj">
+    <Moles Include="CookComputing.XmlRpcV2.moles" />
+    <None Include="packages.config" />
+    <Moles Include="System.moles" />
+    <Moles Include="RosSharp.moles" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\RosSharp\RosSharp.csproj">
       <Project>{417B1A0A-5FF8-4423-9F62-FE61AA299239}</Project>
       <Name>RosSharp</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

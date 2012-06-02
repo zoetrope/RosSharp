@@ -8,20 +8,20 @@ namespace RosSharp.Sample
     {
         static void Main(string[] args)
         {
-            Ros.MasterUri = new Uri("http://192.168.11.2:11311/");
-            Ros.HostName = "192.168.11.2";
+            Ros.MasterUri = new Uri("http://192.168.11.4:11311/");
+            Ros.HostName = "192.168.11.3";
 
             var node = Ros.CreateNodeAsync("/Talker").Result;
-            Console.ReadKey();
+            //Console.ReadKey();
 
             var publisher = node.CreatePublisherAsync<RosSharp.std_msgs.String>("/chatter").Result;
             
-            //publisher.OnConnectedAsObservable().First();
+            publisher.OnConnectedAsObservable().First();
 
             Console.WriteLine("Start Send");
 
-            Console.WriteLine("Press Any Key. Start Send.");
-            Console.ReadKey();
+            //Console.WriteLine("Press Any Key. Start Send.");
+            //Console.ReadKey();
 
             int i = 0;
             while (true)
