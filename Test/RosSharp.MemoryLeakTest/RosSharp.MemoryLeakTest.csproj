@@ -47,8 +47,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ITest.cs" />
+    <Compile Include="NodeTest.cs" />
+    <Compile Include="ParameterTest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PublisherTest.cs" />
+    <Compile Include="ServiceProxyTest.cs" />
+    <Compile Include="ServiceServerTest.cs" />
+    <Compile Include="SubscriberTest.cs" />
+    <Compile Include="TestRunner.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

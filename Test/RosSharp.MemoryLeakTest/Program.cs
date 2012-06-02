@@ -17,34 +17,22 @@ namespace RosSharp.MemoryLeakTest
 
             var masterServer = new MasterServer(11311);
 
+            var runner = new TestRunner() {TestCount = 1000, PrintCount = 100};
 
-            GC.Collect();
-            Console.WriteLine("First Memory = {0}", GC.GetTotalMemory(false));
+            runner.Run(new NodeTest());
+            runner.Run(new PublisherTest());
+            runner.Run(new SubscriberTest());
+            runner.Run(new ServiceServerTest());
+            runner.Run(new ServiceProxyTest());
+            runner.Run(new ParameterTest());
 
-            for(int i=0; i<1000; i++)
-            {
-                NodeTest(i);
+            masterServer.Dispose();
+            Ros.Dispose();
 
-                if (i % 100 == 0)
-                {
-                    GC.Collect();
-                    Console.WriteLine("Total Memory = {0}", GC.GetTotalMemory(false));
-                }
-            }
-
-            GC.Collect();
-            Console.WriteLine("Last Memory = {0}", GC.GetTotalMemory(false));
-
+            Console.WriteLine("Finished All Memory Leak Test.");
+            Console.WriteLine("Press Any Key.");
             Console.ReadKey();
         }
 
-        static void NodeTest(int index)
-        {
-            var nodeName = "test" + index;
-
-            var node = Ros.CreateNodeAsync(nodeName, enableLogger: false).Result;
-
-            node.Dispose();
-        }
     }
 }
