@@ -34,11 +34,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace RosSharp.Topic
 {
-    internal interface ISubscriber : ITopic
+    internal interface ISubscriber : ITopic, IDisposable
     {
+        Task DisposeAsync();
+
         void UpdatePublishers(List<Uri> publishers);
     }
 }

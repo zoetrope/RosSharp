@@ -50,6 +50,12 @@ namespace RosSharp.Node
         string NodeId { get; }
 
         /// <summary>
+        /// Asynchronous Dispose
+        /// </summary>
+        /// <returns>task object for asynchronous operation</returns>
+        Task DisposeAsync();
+
+        /// <summary>
         /// Create a ROS Topic Subscriber
         /// </summary>
         /// <typeparam name="TMessage">Topic Message Type</typeparam>
@@ -85,7 +91,7 @@ namespace RosSharp.Node
         /// <param name="serviceName">Service Name</param>
         /// <param name="service">Service Instance</param>
         /// <returns>object that dispose a service</returns>
-        Task<IDisposable> RegisterServiceAsync<TService>(string serviceName, TService service)
+        Task<IServiceServer> RegisterServiceAsync<TService>(string serviceName, TService service)
             where TService : IService, new();
         
         /// <summary>

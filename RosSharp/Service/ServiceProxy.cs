@@ -37,13 +37,15 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Text;
+using System.Threading.Tasks;
 using RosSharp.Message;
 using RosSharp.Transport;
 
 namespace RosSharp.Service
 {
-    internal interface IServiceProxy
+    internal interface IServiceProxy : IDisposable
     {
+        Task DisposeAsync();
         IMessage Invoke(IMessage request);
     }
 
@@ -52,12 +54,27 @@ namespace RosSharp.Service
     {
         private readonly TcpRosClient _client;
         public TService Service { get; private set; }
+        public string ServiceName { get; private set; }
+        public event Func<string, Task> Disposing = _ => Task.Factory.StartNew(() => { });
 
-        public ServiceProxy(TService service, TcpRosClient client)
+        public ServiceProxy(string serviceName, TService service, TcpRosClient client)
         {
-            _client = client;
+            ServiceName = serviceName;
             Service = service;
+            _client = client;
+
             Service.SetAction(Invoke);
+        }
+
+        public void Dispose()
+        {
+            DisposeAsync().Wait();
+        }
+
+        public Task DisposeAsync()
+        {
+            _client.Dispose();
+            return Disposing(ServiceName);
         }
 
         public IMessage Invoke(IMessage request)
@@ -85,5 +102,6 @@ namespace RosSharp.Service
 
             return response.Timeout(TimeSpan.FromMilliseconds(Ros.TopicTimeout)).First();
         }
+
     }
 }

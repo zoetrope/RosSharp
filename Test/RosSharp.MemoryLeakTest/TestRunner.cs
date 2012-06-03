@@ -24,7 +24,7 @@ namespace RosSharp.MemoryLeakTest
             {
                 test.Do(i);
 
-                if (i % 100 == 0)
+                if (i % PrintCount == 0)
                 {
                     PrintMemorySize("do(" + i + ")");
                 }

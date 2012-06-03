@@ -32,6 +32,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading;
@@ -51,23 +52,21 @@ using RosSharp.rosgraph_msgs;
 namespace RosSharp.Node
 {
     /// <summary>
-    /// ROS Node
+    ///   ROS Node
     /// </summary>
     public class RosNode : INode
     {
-        private bool _disposed;
         private readonly ILog _logger = LogManager.GetCurrentClassLogger();
         private readonly MasterClient _masterClient;
         private readonly ParameterServerClient _parameterServerClient;
         private readonly Dictionary<string, IParameter> _parameters = new Dictionary<string, IParameter>();
+        private readonly Dictionary<string, IServiceProxy> _serviceProxies = new Dictionary<string, IServiceProxy>();
         private readonly ServiceProxyFactory _serviceProxyFactory;
         private readonly Dictionary<string, IService> _serviceServers = new Dictionary<string, IService>();
-        private readonly Dictionary<string, IServiceProxy> _serviceProxies = new Dictionary<string, IServiceProxy>();
 
         private readonly SlaveServer _slaveServer;
         private readonly TopicContainer _topicContainer;
-        internal event Action<RosNode> Disposing;
-        internal byte LogLevel { get; private set; }
+        private bool _disposed;
 
         public RosNode(string nodeId)
         {
@@ -88,55 +87,13 @@ namespace RosSharp.Node
             _slaveServer.ParameterUpdated += SlaveServerOnParameterUpdated;
         }
 
-        public string NodeId { get; private set; }
+        internal byte LogLevel { get; private set; }
 
         internal Publisher<Log> LogPubliser { get; private set; }
 
-        internal Task InitializeAsync(bool enableLogger)
-        {
-            if (enableLogger)
-            {
-                var t1 = CreatePublisherAsync<Log>("/rosout").ContinueWith(t => LogPubliser = t.Result);
-
-                var t2 = RegisterServiceAsync(NodeId + "/get_loggers", new GetLoggers(GetLoggers));
-                var t3 = RegisterServiceAsync(NodeId + "/set_logger_level", new SetLoggerLevel(SetLoggerLevel));
-
-                return Task.Factory.StartNew(() => Task.WaitAll(new Task[] {t1, t2, t3}));
-            }
-            else
-            {
-                return Task.Factory.StartNew(() => { });
-            }
-
-        }
-
-
-        internal SetLoggerLevel.Response SetLoggerLevel(SetLoggerLevel.Request request)
-        {
-            if (request.logger == "RosSharp")
-            {
-                byte level;
-                if (LogLevelExtensions.TryParse(request.level, out level))
-                {
-                    LogLevel = level;
-                }
-            }
-
-            return new SetLoggerLevel.Response();
-        }
-
-        internal GetLoggers.Response GetLoggers(GetLoggers.Request request)
-        {
-            return new GetLoggers.Response()
-            {
-                loggers = new List<Logger>()
-                {
-                    new Logger() {name = "RosSharp", level = LogLevel.ToLogLevelString()}
-                }
-            };
-        }
-
         #region INode Members
+
+        public string NodeId { get; private set; }
 
         public Task<Parameter<T>> CreateParameterAsync<T>(string paramName)
         {
@@ -155,14 +112,14 @@ namespace RosSharp.Node
 
             param.InitializeAsync().ContinueWith(task =>
             {
-                if(task.Status == TaskStatus.RanToCompletion)
+                if (task.Status == TaskStatus.RanToCompletion)
                 {
                     tcs.SetResult(param);
                 }
                 else if (task.Status == TaskStatus.Faulted)
                 {
-                    tcs.SetException(task.Exception.InnerException);
                     _logger.Error("Initialize Parameter: Failure", task.Exception.InnerException);
+                    tcs.SetException(task.Exception.InnerException);
                 }
             });
 
@@ -171,22 +128,9 @@ namespace RosSharp.Node
 
         public void Dispose()
         {
-            if (_disposed) throw new ObjectDisposedException("RosNode");
-            //TODO: すべてを終了させる。ロックが必要？
-
-            var handler = Disposing;
-            if (handler != null)
-            {
-                handler(this);
-            }
-            Disposing = null;
-
-            //終了待ち
-
-            _slaveServer.Dispose();
-
-            _disposed = true;
+            DisposeAsync().Wait();
         }
+
 
         public Task<Subscriber<TMessage>> CreateSubscriberAsync<TMessage>(string topicName, bool nodelay = true)
             where TMessage : IMessage, new()
@@ -202,7 +146,7 @@ namespace RosSharp.Node
 
             var subscriber = new Subscriber<TMessage>(topicName, NodeId, nodelay);
             _topicContainer.AddSubscriber(subscriber);
-            subscriber.Disposing += DisposeSubscriber;
+            subscriber.Disposing += DisposeSubscriberAsync;
 
             var tcs = new TaskCompletionSource<Subscriber<TMessage>>();
 
@@ -212,20 +156,18 @@ namespace RosSharp.Node
                 .ContinueWith(task =>
                 {
                     _logger.Debug("Registered Subscriber");
-                    if (task.IsFaulted)
-                    {
-                        tcs.SetException(task.Exception.InnerException);
-                        _logger.Error("RegisterSubscriber: Failure", task.Exception.InnerException);
-                    }
-                    else if (task.IsCanceled)
-                    {
-                        tcs.SetCanceled();
-                    }
-                    else
+                    
+                    if(task.Status == TaskStatus.RanToCompletion)
                     {
                         ((ISubscriber) subscriber).UpdatePublishers(task.Result);
                         tcs.SetResult(subscriber);
                     }
+                    else if (task.Status == TaskStatus.Faulted)
+                    {
+                        tcs.SetException(task.Exception.InnerException);
+                        _logger.Error("RegisterSubscriber: Failure", task.Exception.InnerException);
+                    }
+                    
                 });
 
             return tcs.Task;
@@ -245,7 +187,7 @@ namespace RosSharp.Node
 
             var publisher = new Publisher<TMessage>(topicName, NodeId, latching);
             _topicContainer.AddPublisher(publisher);
-            publisher.Disposing += DisposePublisher;
+            publisher.Disposing += DisposePublisherAsync;
 
             var tcpRosListener = new TcpRosListener(0);
             _slaveServer.AddListener(topicName, tcpRosListener);
@@ -264,20 +206,17 @@ namespace RosSharp.Node
                 {
                     _logger.Debug("Registered Publisher");
 
-                    if (task.IsFaulted)
-                    {
-                        tcs.SetException(task.Exception.InnerException);
-                        _logger.Error("RegisterPublisher: Failure", task.Exception.InnerException);
-                    }
-                    else if (task.IsCanceled)
-                    {
-                        tcs.SetCanceled();
-                    }
-                    else
+                    if(task.Status == TaskStatus.RanToCompletion)
                     {
                         publisher.UpdateSubscribers(task.Result);
                         tcs.SetResult(publisher);
                     }
+                    else if (task.Status == TaskStatus.Faulted)
+                    {
+                        _logger.Error("RegisterPublisher: Failure", task.Exception.InnerException);
+                        tcs.SetException(task.Exception.InnerException);
+                    }
+                    
                 });
 
             return tcs.Task;
@@ -310,6 +249,7 @@ namespace RosSharp.Node
                                 if (createTask.Status == TaskStatus.RanToCompletion)
                                 {
                                     var proxy = createTask.Result;
+                                    proxy.Disposing += DisposeProxyAsync;
                                     _serviceProxies.Add(serviceName, proxy);
                                     tcs.SetResult(proxy.Service);
                                 }
@@ -329,7 +269,7 @@ namespace RosSharp.Node
             return tcs.Task;
         }
 
-        public Task<IDisposable> RegisterServiceAsync<TService>(string serviceName, TService service)
+        public Task<IServiceServer> RegisterServiceAsync<TService>(string serviceName, TService service)
             where TService : IService, new()
         {
             if (_disposed) throw new ObjectDisposedException("RosNode");
@@ -341,14 +281,14 @@ namespace RosSharp.Node
             _logger.InfoFormat("Create ServiceServer: {0}", serviceName);
 
             var serviceServer = new ServiceServer<TService>(NodeId);
-            var disposable = serviceServer.StartService(serviceName, service);
-            _serviceServers.Add(serviceName, service);
+            serviceServer.StartService(serviceName, service);
+            serviceServer.Disposing += DisposeServiceAsync;
 
-            var cd = new CompositeDisposable(serviceServer, disposable);
+            _serviceServers.Add(serviceName, service);
 
             var serviceUri = new Uri("rosrpc://" + Ros.HostName + ":" + serviceServer.EndPoint.Port);
 
-            var tcs = new TaskCompletionSource<IDisposable>();
+            var tcs = new TaskCompletionSource<IServiceServer>();
 
             _masterClient
                 .RegisterServiceAsync(NodeId, serviceName, serviceUri, _slaveServer.SlaveUri)
@@ -356,7 +296,7 @@ namespace RosSharp.Node
                 {
                     if (registerTask.Status == TaskStatus.RanToCompletion)
                     {
-                        tcs.SetResult(cd);
+                        tcs.SetResult(serviceServer);
                     }
                     else if (registerTask.Status == TaskStatus.Faulted)
                     {
@@ -366,18 +306,95 @@ namespace RosSharp.Node
             return tcs.Task;
         }
 
+        public Task DisposeAsync()
+        {
+            if (_disposed) throw new ObjectDisposedException("RosNode");
+            
+            //TODO: すべてを終了させる。ロックが必要？
+            var tasks = new List<Task>();
+            
+            tasks.AddRange(_topicContainer.GetPublishers().Select(pub => pub.DisposeAsync()));
+            tasks.AddRange(_topicContainer.GetSubscribers().Select(sub => sub.DisposeAsync()));
+
+            tasks.AddRange(_serviceProxies.Values.Select(proxy => proxy.DisposeAsync()));
+            tasks.AddRange(_serviceServers.Values.Select(service => service.DisposeAsync()));
+
+            tasks.AddRange(_parameters.Values.Select(param => param.DisposeAsync()));
+            //終了待ち
+
+
+            return Task.Factory.StartNew(() =>
+            {
+                Task.WaitAll(tasks.ToArray());
+                var handler = Disposing;
+                Disposing = null;
+
+                if (handler != null)
+                {
+                    handler(this);
+                }
+
+                _slaveServer.Dispose();
+                _disposed = true;
+            });
+        }
+
         #endregion
 
-        private void DisposeSubscriber(ISubscriber subscriber)
+        internal event Action<RosNode> Disposing = node => { };
+
+        internal Task InitializeAsync(bool enableLogger)
         {
-            var topicName = subscriber.TopicName;
+            if (enableLogger)
+            {
+                var t1 = CreatePublisherAsync<Log>("/rosout").ContinueWith(t => LogPubliser = t.Result);
+
+                var t2 = RegisterServiceAsync(NodeId + "/get_loggers", new GetLoggers(GetLoggers));
+                var t3 = RegisterServiceAsync(NodeId + "/set_logger_level", new SetLoggerLevel(SetLoggerLevel));
+
+                return Task.Factory.StartNew(() => Task.WaitAll(new Task[] {t1, t2, t3}));
+            }
+            else
+            {
+                return Task.Factory.StartNew(() => { });
+            }
+        }
+
+
+        internal SetLoggerLevel.Response SetLoggerLevel(SetLoggerLevel.Request request)
+        {
+            if (request.logger == "RosSharp")
+            {
+                byte level;
+                if (LogLevelExtensions.TryParse(request.level, out level))
+                {
+                    LogLevel = level;
+                }
+            }
+
+            return new SetLoggerLevel.Response();
+        }
+
+        internal GetLoggers.Response GetLoggers(GetLoggers.Request request)
+        {
+            return new GetLoggers.Response()
+            {
+                loggers = new List<Logger>()
+                {
+                    new Logger() {name = "RosSharp", level = LogLevel.ToLogLevelString()}
+                }
+            };
+        }
+
+        private Task DisposeSubscriberAsync(string topicName)
+        {
             _logger.Debug(m => m("Disposing Subscriber[{0}]", topicName));
 
-            _masterClient
+            return _masterClient
                 .UnregisterSubscriberAsync(NodeId, topicName, _slaveServer.SlaveUri)
                 .ContinueWith(task =>
                 {
-                    if(task.IsFaulted)
+                    if (task.IsFaulted)
                     {
                         _logger.Error("UnregisterSubscriber: Failure", task.Exception.InnerException);
                     }
@@ -386,25 +403,32 @@ namespace RosSharp.Node
                 });
         }
 
-        private void DisposePublisher(IPublisher publisher)
+        private Task DisposePublisherAsync(string topicName)
         {
-            var topicName = publisher.TopicName;
             _logger.Debug(m => m("Disposing Publisher[{0}]", topicName));
 
-            _masterClient
+            return _masterClient
                 .UnregisterPublisherAsync(NodeId, topicName, _slaveServer.SlaveUri)
                 .ContinueWith(task =>
                 {
-                    if(task.IsFaulted)
+                    if (task.IsFaulted)
                     {
                         _logger.Error("UnregisterPublisher: Failure", task.Exception.InnerException);
                     }
                     _topicContainer.RemovePublisher(topicName);
-                    _logger.Debug(m => m("DispUnregisterPublisher: [{0}]", topicName));
+                    _slaveServer.RemoveListener(topicName);
+                    _logger.Debug(m => m("UnregisterPublisher: [{0}]", topicName));
                 });
         }
 
-        internal Task RemoveServiceAsync(string serviceName)
+        private Task DisposeServiceAsync(string serviceName)
+        {
+            return _masterClient
+                .UnregisterServiceAsync(NodeId, serviceName, _slaveServer.SlaveUri)
+                .ContinueWith(_ => _serviceServers.Remove(serviceName));
+        }
+
+        private Task DisposeProxyAsync(string serviceName)
         {
             return _masterClient
                 .UnregisterServiceAsync(NodeId, serviceName, _slaveServer.SlaveUri)

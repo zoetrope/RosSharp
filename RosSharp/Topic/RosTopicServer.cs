@@ -74,21 +74,26 @@ namespace RosSharp.Topic
             
             var tcs = new TaskCompletionSource<IObservable<TMessage>>();
             _client.ConnectAsync(param.HostName, param.PortNumber)
-                .ContinueWith(t1 =>
+                .ContinueWith(connectTask =>
                 {
                     _logger.Debug("StartAsync Connected");
-                    if (t1.IsFaulted) tcs.SetException(t1.Exception.InnerException);
-                    else if (t1.IsCanceled) tcs.SetCanceled();
-                    else
+                    
+                    if(connectTask.Status == TaskStatus.RanToCompletion)
                     {
                         try
                         {
-                            ConnectToPublisherAsync(nodelay).ContinueWith(t2 =>
+                            ConnectToPublisherAsync(nodelay).ContinueWith(connectedTask =>
                             {
                                 _logger.Debug("StartAsync ConnectToPublisherAsync");
-                                if (t2.IsFaulted) tcs.SetException(t2.Exception.InnerException);
-                                else if (t2.IsCanceled) tcs.SetCanceled();
-                                else tcs.SetResult(t2.Result);
+                                
+                                if(connectedTask.Status == TaskStatus.RanToCompletion)
+                                {
+                                    tcs.SetResult(connectedTask.Result);
+                                }
+                                else if(connectedTask.Status == TaskStatus.Faulted)
+                                {
+                                    tcs.SetException(connectedTask.Exception.InnerException);
+                                }
                             });
                         }
                         catch (Exception ex)
@@ -96,6 +101,10 @@ namespace RosSharp.Topic
                             _logger.Error("Connect Error", ex);
                             tcs.SetException(ex);
                         }
+                    }
+                    else if(connectTask.Status == TaskStatus.Faulted)
+                    {
+                        tcs.SetException(connectTask.Exception.InnerException);
                     }
                 });
 
@@ -130,9 +139,8 @@ namespace RosSharp.Topic
                 .ContinueWith(task =>
                 {
                     _logger.Debug("ConnectToPublisherAsync Sent");
-                    if (task.IsFaulted) tcs.SetException(task.Exception.InnerException);
-                    else if (task.IsCanceled) tcs.SetCanceled();
-                    else
+                    
+                    if(task.Status == TaskStatus.RanToCompletion)
                     {
                         try
                         {
@@ -149,6 +157,10 @@ namespace RosSharp.Topic
                             _logger.Error("Header Deserialize Error", ex);
                             tcs.SetException(ex);
                         }
+                    }
+                    else if(task.Status == TaskStatus.Faulted)
+                    {
+                        tcs.SetException(task.Exception.InnerException);
                     }
                 });
 

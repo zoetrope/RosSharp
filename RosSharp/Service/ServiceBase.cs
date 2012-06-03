@@ -72,6 +72,13 @@ namespace RosSharp.Service
             _action = req => (TResponse) action(req);
         }
 
+        internal event Func<Task> Disposing = () => Task.Factory.StartNew(() => { });
+
+        public Task DisposeAsync()
+        {
+            return Disposing();
+        }
+
         IMessage IService.CreateRequest()
         {
             return new TRequest();
@@ -88,5 +95,10 @@ namespace RosSharp.Service
         }
 
         #endregion
+
+        public void Dispose()
+        {
+            DisposeAsync().Wait();
+        }
     }
 }

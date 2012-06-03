@@ -17,14 +17,14 @@ namespace RosSharp.MemoryLeakTest
 
             var masterServer = new MasterServer(11311);
 
-            var runner = new TestRunner() {TestCount = 1000, PrintCount = 100};
+            var runner = new TestRunner() {TestCount = 100, PrintCount = 10};
 
-            runner.Run(new NodeTest());
+//            runner.Run(new NodeTest());
             runner.Run(new PublisherTest());
-            runner.Run(new SubscriberTest());
-            runner.Run(new ServiceServerTest());
-            runner.Run(new ServiceProxyTest());
-            runner.Run(new ParameterTest());
+//            runner.Run(new SubscriberTest());
+//            runner.Run(new ServiceServerTest());
+//            runner.Run(new ServiceProxyTest());
+//            runner.Run(new ParameterTest());
 
             masterServer.Dispose();
             Ros.Dispose();

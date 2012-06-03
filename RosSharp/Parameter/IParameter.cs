@@ -34,11 +34,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace RosSharp.Parameter
 {
     internal interface IParameter : IDisposable
     {
         void Update(object value);
+        Task DisposeAsync();
     }
 }

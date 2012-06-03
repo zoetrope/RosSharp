@@ -175,13 +175,20 @@ namespace RosSharp.Parameter
             }
         }
 
-        public void Dispose()
+        public Task DisposeAsync()
         {
             if (_parameterSubject != null)
             {
-                _parameterServerClient.UnsubscribeParamAsync(NodeId, _slaveUri, Name).Wait();
+                _parameterSubject.Dispose();
                 _parameterSubject = null;
             }
+
+            return _parameterServerClient.UnsubscribeParamAsync(NodeId, _slaveUri, Name);
+        }
+
+        public void Dispose()
+        {
+            DisposeAsync().Wait();
         }
 
         #endregion

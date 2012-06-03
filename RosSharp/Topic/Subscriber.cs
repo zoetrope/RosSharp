@@ -48,7 +48,7 @@ namespace RosSharp.Topic
     ///   Subscribes message on a ROS Topic
     /// </summary>
     /// <typeparam name="TMessage"> Message Type </typeparam>
-    public sealed class Subscriber<TMessage> : ISubscriber, IObservable<TMessage>, IDisposable
+    public sealed class Subscriber<TMessage> : ISubscriber, IObservable<TMessage>
         where TMessage : IMessage, new()
     {
         private readonly ILog _logger = LogManager.GetCurrentClassLogger();
@@ -69,21 +69,22 @@ namespace RosSharp.Topic
 
         public string NodeId { get; private set; }
 
-        #region IDisposable Members
-
-        public void Dispose()
+        public Task DisposeAsync()
         {
-            var handler = Disposing;
-            if (handler != null)
-            {
-                handler(this);
-            }
-            Disposing = null;
-
             lock (_disposables)
             {
                 _disposables.Dispose();
             }
+            var handler = Disposing;
+            Disposing = null;
+            return handler(TopicName);
+        }
+
+        #region IDisposable Members
+
+        public void Dispose()
+        {
+            DisposeAsync().Wait();
         }
 
         #endregion
@@ -159,6 +160,6 @@ namespace RosSharp.Topic
             return _onConnectedSubject;
         }
 
-        internal event Action<ISubscriber> Disposing;
+        internal event Func<string, Task> Disposing = s => Task.Factory.StartNew(() => { });
     }
 }

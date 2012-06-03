@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
+using System.Threading;
 using RosSharp.Node;
 using RosSharp.Topic;
 
@@ -22,7 +24,12 @@ namespace RosSharp.MemoryLeakTest
         public void Do(int index)
         {
             var publisher = _node.CreatePublisherAsync<std_msgs.Int32>("test").Result;
-            
+
+            //publisher.OnConnectedAsObservable().First();
+            Thread.Sleep(2000);
+
+            Console.WriteLine("Connected");
+
             for (int i = 0; i < 10; i++)
             {
                 publisher.OnNext(new std_msgs.Int32() {data = i});

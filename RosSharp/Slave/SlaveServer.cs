@@ -87,6 +87,11 @@ namespace RosSharp.Slave
             _tcpRosListener.Add(topic, listener);
         }
 
+        internal void RemoveListener(string topic)
+        {
+            _tcpRosListener.Remove(topic);
+        }
+
         #region IDisposable Members
 
         public void Dispose()
@@ -95,6 +100,7 @@ namespace RosSharp.Slave
             RemotingServices.Disconnect(this);
 
             _tcpRosListener.Values.ToList().ForEach(x => x.Dispose());
+            _tcpRosListener.Clear();
         }
 
         #endregion

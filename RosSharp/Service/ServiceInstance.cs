@@ -46,7 +46,7 @@ using RosSharp.Transport;
 
 namespace RosSharp.Service
 {
-    internal sealed class ServiceInstance<TService>
+    internal sealed class ServiceInstance<TService> : IDisposable
         where TService : IService, new()
     {
         private readonly string _nodeId;
@@ -148,6 +148,11 @@ namespace RosSharp.Service
             res.Serialize(bw);
 
             return ms;
+        }
+
+        public void Dispose()
+        {
+            _client.Dispose();
         }
     }
 }

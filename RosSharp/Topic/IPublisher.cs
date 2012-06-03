@@ -34,10 +34,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace RosSharp.Topic
 {
-    internal interface IPublisher : ITopic
+    internal interface IPublisher : ITopic, IDisposable
     {
+        Task DisposeAsync();
     }
 }

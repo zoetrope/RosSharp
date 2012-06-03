@@ -131,7 +131,7 @@ namespace RosSharp.Service
                                 throw new RosTopicException("MD5Sum mismatch error");
                             }
 
-                            var proxy = new ServiceProxy<TService>(service, tcpClient);
+                            var proxy = new ServiceProxy<TService>(serviceName, service, tcpClient);
                             tcs.SetResult(proxy);
                         }
                         catch (Exception ex)

@@ -33,6 +33,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Common.Logging;
@@ -102,8 +103,18 @@ namespace RosSharp
         /// </summary>
         public static void Dispose()
         {
+            DisposeAsync().Wait();
+        }
+
+        /// <summary>
+        ///   Asynchronous dispose all nodes
+        /// </summary>
+        public static Task DisposeAsync()
+        {
             var nodes = GetNodes();
-            nodes.ForEach(node => node.Dispose());
+            var tasks = nodes.Select(node => node.DisposeAsync());
+            
+            return Task.Factory.StartNew(() => Task.WaitAll(tasks.ToArray()));
         }
 
         private static Uri ReadMasterUri()
@@ -215,14 +226,14 @@ namespace RosSharp
 
                 initTask.ContinueWith(t =>
                 {
-                    tcs.TrySetResult(node);
                     node.Disposing += DisposeNode;
                     _nodes.Add(nodeName, node);
-
+                    tcs.SetResult(node);
                 }, TaskContinuationOptions.OnlyOnRanToCompletion);
 
-                initTask.ContinueWith(t => tcs.TrySetException(t.Exception.InnerException),
-                                      TaskContinuationOptions.OnlyOnFaulted);
+                initTask.ContinueWith(
+                    t => tcs.SetException(t.Exception.InnerException),
+                    TaskContinuationOptions.OnlyOnFaulted);
 
                 return tcs.Task;
             }

@@ -46,7 +46,7 @@ namespace RosSharp.Topic
     ///   Publishes message on a ROS Topic
     /// </summary>
     /// <typeparam name="TMessage"> Message Type </typeparam>
-    public sealed class Publisher<TMessage> : IPublisher, IObserver<TMessage>, IDisposable
+    public sealed class Publisher<TMessage> : IPublisher, IObserver<TMessage>
         where TMessage : IMessage, new()
     {
         private readonly ILog _logger = LogManager.GetCurrentClassLogger();
@@ -66,17 +66,8 @@ namespace RosSharp.Topic
 
         public string NodeId { get; private set; }
 
-        #region IDisposable Members
-
-        public void Dispose()
+        public Task DisposeAsync()
         {
-            var handler = Disposing;
-            if (handler != null)
-            {
-                handler(this);
-            }
-            Disposing = null;
-
             lock (_rosTopicClients)
             {
                 foreach (var topic in _rosTopicClients)
@@ -85,6 +76,17 @@ namespace RosSharp.Topic
                 }
                 _rosTopicClients.Clear();
             }
+
+            var handler = Disposing;
+            Disposing = null;
+            return handler(TopicName);
+        }
+
+        #region IDisposable Members
+
+        public void Dispose()
+        {
+            DisposeAsync().Wait();
         }
 
         #endregion
@@ -171,6 +173,6 @@ namespace RosSharp.Topic
             //TODO: 不要では？
         }
 
-        internal event Action<IPublisher> Disposing;
+        internal event Func<string, Task> Disposing = s => Task.Factory.StartNew(() => { });
     }
 }

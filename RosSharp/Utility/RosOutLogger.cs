@@ -86,7 +86,7 @@ namespace RosSharp
                     _publisher.OnNext(new Log() {msg = message.ToString()});
                 }
             }
-
+            
             //Console.WriteLine(sb.ToString());
         }
     }

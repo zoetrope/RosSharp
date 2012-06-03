@@ -32,19 +32,39 @@
 
 using System;
 using System.Net;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
+using System.Threading.Tasks;
 using Common.Logging;
 using RosSharp.Transport;
 
 namespace RosSharp.Service
 {
-    internal sealed class ServiceServer<TService> : IDisposable
+    public interface IServiceServer : IDisposable
+    {
+        string ServiceName { get; }
+        Task DisposeAsync();
+    }
+
+    internal sealed class ServiceServer<TService> : IServiceServer
         where TService : IService, new()
     {
         private TcpRosListener _listener;
         private readonly string _nodeId;
         private readonly ILog _logger = LogManager.GetCurrentClassLogger();
+        private readonly CompositeDisposable _instanceDisposables = new CompositeDisposable();
+        private IDisposable _disposable;
+
+        public string ServiceName { get; private set; }
+        public Task DisposeAsync()
+        {
+            _disposable.Dispose();
+            _instanceDisposables.Dispose();
+            _listener.Dispose();
+
+            return Disposing(ServiceName);
+        }
 
         public ServiceServer(string nodeId)
         {
@@ -56,18 +76,23 @@ namespace RosSharp.Service
             get { return _listener.EndPoint; }
         }
 
-        public IDisposable StartService(string serviceName, IService service)
+        public void StartService(string serviceName, IService service)
         {
+            ServiceName = serviceName;
+
             _listener = new TcpRosListener(0);
-            return _listener.AcceptAsync()
+            _disposable = _listener.AcceptAsync()
                 .Select(socket => new ServiceInstance<TService>(_nodeId, service, socket))
+                .Do(instance=>_instanceDisposables.Add(instance))
                 .SelectMany(instance => instance.StartAsync(serviceName).ToObservable())
                 .Subscribe(_ => { }, ex => _logger.Error("Start Service Error", ex));
         }
 
+        public event Func<string, Task> Disposing = _ => Task.Factory.StartNew(() => { });
+
         public void Dispose()
         {
-            _listener.Dispose();
+            DisposeAsync().Wait();
         }
     }
 }
