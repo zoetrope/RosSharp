@@ -88,7 +88,7 @@ namespace RosSharp.Topic
         }
 
 
-        public Task StartAsync(Socket socket, bool latching = false)
+        public Task<IObservable<byte[]>> StartAsync(Socket socket, bool latching = false)
         {
             _client = new TcpRosClient(socket);
 
@@ -99,7 +99,7 @@ namespace RosSharp.Topic
                 .ToTask();
         }
 
-        private Unit OnReceivedHeader(byte[] data, bool latching)
+        private IObservable<byte[]> OnReceivedHeader(byte[] data, bool latching)
         {
             _logger.Debug("OnReceivedHeader");
 
@@ -144,7 +144,9 @@ namespace RosSharp.Topic
 
             Connected = true;
 
-            return Unit.Default;
+
+
+            return _client.ReceiveAsync();
         }
     }
 }

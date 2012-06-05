@@ -15,8 +15,8 @@ namespace RosSharp.Sample
             //Console.ReadKey();
 
             var publisher = node.CreatePublisherAsync<RosSharp.std_msgs.String>("/chatter").Result;
-            
-            publisher.OnConnectedAsObservable().First();
+
+            publisher.ConnectionCounterChangedAsObservable().Where(x => x > 0).First();
 
             Console.WriteLine("Start Send");
 

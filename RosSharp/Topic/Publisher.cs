@@ -50,7 +50,7 @@ namespace RosSharp.Topic
         where TMessage : IMessage, new()
     {
         private readonly ILog _logger = LogManager.GetCurrentClassLogger();
-        private readonly ReplaySubject<Unit> _onConnectedSubject = new ReplaySubject<Unit>();
+        private readonly BehaviorSubject<int> _connectionCounterSubject = new BehaviorSubject<int>(0);
         private readonly List<RosTopicClient<TMessage>> _rosTopicClients = new List<RosTopicClient<TMessage>>();
         private readonly bool _latching;
         private TMessage _lastPublishedMessage;
@@ -132,9 +132,9 @@ namespace RosSharp.Topic
 
         #endregion
 
-        public IObservable<Unit> OnConnectedAsObservable()
+        public IObservable<int> ConnectionCounterChangedAsObservable()
         {
-            return _onConnectedSubject;
+            return _connectionCounterSubject;
         }
 
         internal Task AddTopic(Socket socket)
@@ -147,6 +147,19 @@ namespace RosSharp.Topic
                     if(startTask.Status == TaskStatus.RanToCompletion)
                     {
                         _logger.Debug("AddTopic: Started");
+
+                        startTask.Result.Subscribe(
+                            _ => { },
+                            ex=>
+                            {
+                                lock (_rosTopicClients)
+                                {
+                                    _rosTopicClients.Remove(rosTopicClient);
+                                    _connectionCounterSubject.OnNext(_rosTopicClients.Count);
+                                }
+                            }
+                            );
+
                         lock (_rosTopicClients)
                         {
                             _rosTopicClients.Add(rosTopicClient);
@@ -158,7 +171,7 @@ namespace RosSharp.Topic
                         }
 
                         _logger.Debug("OnConnected");
-                        _onConnectedSubject.OnNext(Unit.Default);
+                        _connectionCounterSubject.OnNext(_rosTopicClients.Count);
                     }
                     else if (startTask.Status == TaskStatus.Faulted)
                     {

@@ -44,8 +44,8 @@ namespace RosSharp.IntegrationTests
             var publisher = node.CreatePublisherAsync<std_msgs.ByteMultiArray>("test_topic").Result;
             var subscriber = node.CreateSubscriberAsync<std_msgs.ByteMultiArray>("test_topic").Result;
 
-            publisher.OnConnectedAsObservable().Timeout(TestTimeout).First();
-            subscriber.OnConnectedAsObservable().Timeout(TestTimeout).First();
+            publisher.ConnectionCounterChangedAsObservable().Where(x => x > 0).Timeout(TestTimeout).First();
+            subscriber.ConnectionCounterChangedAsObservable().Where(x => x > 0).Timeout(TestTimeout).First();
 
             subscriber.Subscribe(observer);
 
@@ -78,8 +78,8 @@ namespace RosSharp.IntegrationTests
             var publisher = node.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
             var subscriber = node.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
 
-            publisher.OnConnectedAsObservable().Timeout(TestTimeout).First();
-            subscriber.OnConnectedAsObservable().Timeout(TestTimeout).First();
+            publisher.ConnectionCounterChangedAsObservable().Where(x => x > 0).Timeout(TestTimeout).First();
+            subscriber.ConnectionCounterChangedAsObservable().Where(x => x > 0).Timeout(TestTimeout).First();
 
             subscriber.Subscribe(observer);
             obs.Subscribe(publisher);
@@ -119,8 +119,8 @@ namespace RosSharp.IntegrationTests
             var subscriber = node.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
             var publisher = node.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
 
-            publisher.OnConnectedAsObservable().Timeout(TestTimeout).First();
-            subscriber.OnConnectedAsObservable().Timeout(TestTimeout).First();
+            publisher.ConnectionCounterChangedAsObservable().Where(x => x > 0).Timeout(TestTimeout).First();
+            subscriber.ConnectionCounterChangedAsObservable().Where(x => x > 0).Timeout(TestTimeout).First();
 
             subscriber.Subscribe(observer);
             obs.Subscribe(publisher);
@@ -165,10 +165,10 @@ namespace RosSharp.IntegrationTests
             var publisher = node1.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
             var subscriber3 = node3.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
 
-            publisher.OnConnectedAsObservable().Timeout(TestTimeout).First();
-            subscriber1.OnConnectedAsObservable().Timeout(TestTimeout).First();
-            subscriber2.OnConnectedAsObservable().Timeout(TestTimeout).First();
-            subscriber3.OnConnectedAsObservable().Timeout(TestTimeout).First();
+            publisher.ConnectionCounterChangedAsObservable().Where(x => x > 0).Timeout(TestTimeout).First();
+            subscriber1.ConnectionCounterChangedAsObservable().Where(x => x > 0).Timeout(TestTimeout).First();
+            subscriber2.ConnectionCounterChangedAsObservable().Where(x => x > 0).Timeout(TestTimeout).First();
+            subscriber3.ConnectionCounterChangedAsObservable().Where(x => x > 0).Timeout(TestTimeout).First();
 
             subscriber1.Subscribe(observer1);
             subscriber2.Subscribe(observer2);
@@ -233,10 +233,10 @@ namespace RosSharp.IntegrationTests
             var subscriber = node1.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
             var publisher3 = node3.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
 
-            publisher1.OnConnectedAsObservable().Timeout(TestTimeout).First();
-            publisher2.OnConnectedAsObservable().Timeout(TestTimeout).First();
-            publisher3.OnConnectedAsObservable().Timeout(TestTimeout).First();
-            subscriber.OnConnectedAsObservable().Timeout(TestTimeout).First();
+            publisher1.ConnectionCounterChangedAsObservable().Where(x => x > 0).Timeout(TestTimeout).First();
+            publisher2.ConnectionCounterChangedAsObservable().Where(x => x > 0).Timeout(TestTimeout).First();
+            publisher3.ConnectionCounterChangedAsObservable().Where(x => x > 0).Timeout(TestTimeout).First();
+            subscriber.ConnectionCounterChangedAsObservable().Where(x => x > 0).Timeout(TestTimeout).First();
 
             subscriber.Subscribe(observer);
             obs1.Subscribe(publisher1);

@@ -310,7 +310,6 @@ namespace RosSharp.Node
         {
             if (_disposed) throw new ObjectDisposedException("RosNode");
             
-            //TODO: すべてを終了させる。ロックが必要？
             var tasks = new List<Task>();
             
             tasks.AddRange(_topicContainer.GetPublishers().Select(pub => pub.DisposeAsync()));
@@ -320,8 +319,6 @@ namespace RosSharp.Node
             tasks.AddRange(_serviceServers.Values.Select(service => service.DisposeAsync()));
 
             tasks.AddRange(_parameters.Values.Select(param => param.DisposeAsync()));
-            //終了待ち
-
 
             return Task.Factory.StartNew(() =>
             {

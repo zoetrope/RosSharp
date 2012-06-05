@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Sockets;
+using System.Reactive.Linq;
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace RosSharp.Tests.Topic
         [HostType("Moles")]
         public void AddTopic_Success()
         {
-            MRosTopicClient<std_msgs.String>.AllInstances.StartAsyncSocketBoolean = (t1, t2, t3) => Task.Factory.StartNew(() => { });
+            MRosTopicClient<std_msgs.String>.AllInstances.StartAsyncSocketBoolean = (t1, t2, t3) => Task<IObservable<byte[]>>.Factory.StartNew(Observable.Empty<byte[]>);
 
             var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             var pub = new Publisher<std_msgs.String>("test", "testnode");
@@ -37,7 +38,7 @@ namespace RosSharp.Tests.Topic
         public void AddTopic_Error()
         {
             MRosTopicClient<std_msgs.String>.AllInstances.StartAsyncSocketBoolean =
-                (t1, t2, t3) => Task.Factory.StartNew(() => { throw new InvalidOperationException("Start Error"); });
+                (t1, t2, t3) => Task<IObservable<byte[]>>.Factory.StartNew(() => { throw new InvalidOperationException("Start Error"); });
 
             var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             var pub = new Publisher<std_msgs.String>("test", "testnode");
@@ -51,7 +52,7 @@ namespace RosSharp.Tests.Topic
         public void AddTopic_MultipleTopicSuccess()
         {
             MRosTopicClient<std_msgs.String>.AllInstances.StartAsyncSocketBoolean =
-                (t1, t2, t3) => Task.Factory.StartNew(() => { });
+                (t1, t2, t3) => Task<IObservable<byte[]>>.Factory.StartNew(Observable.Empty<byte[]>);
             MRosTopicClient<std_msgs.String>.AllInstances.SendAsyncTMessage =
                 (t1, t2) => Task.Factory.StartNew(() => t2.SerializeLength);
 
@@ -72,7 +73,7 @@ namespace RosSharp.Tests.Topic
         public void OnNext_Success()
         {
             MRosTopicClient<std_msgs.String>.AllInstances.StartAsyncSocketBoolean = 
-                (t1, t2, t3) => Task.Factory.StartNew(() => { });
+                (t1, t2, t3) => Task<IObservable<byte[]>>.Factory.StartNew(Observable.Empty<byte[]>);
             MRosTopicClient<std_msgs.String>.AllInstances.SendAsyncTMessage =
                 (t1, t2) => Task.Factory.StartNew(() => t2.SerializeLength);
 

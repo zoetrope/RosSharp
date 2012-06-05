@@ -54,7 +54,7 @@ namespace RosSharp.Topic
         private readonly ILog _logger = LogManager.GetCurrentClassLogger();
         private readonly Subject<TMessage> _aggregateSubject = new Subject<TMessage>();
         private readonly CompositeDisposable _disposables = new CompositeDisposable();
-        private readonly ReplaySubject<Unit> _onConnectedSubject = new ReplaySubject<Unit>();
+        private readonly BehaviorSubject<int> _connectionCounterSubject = new BehaviorSubject<int>(0);
         private readonly List<RosTopicServer<TMessage>> _rosTopicServers = new List<RosTopicServer<TMessage>>();
         private readonly bool _nodelay;
 
@@ -139,14 +139,20 @@ namespace RosSharp.Topic
                     {
                         var d = startTask.Result.Subscribe(
                             x => _aggregateSubject.OnNext(x),
-                            ex => _logger.Error("Subscriber OnError",ex));
+                            ex =>
+                            {
+                                var index = _rosTopicServers.FindIndex(x => x.SlaveUri == slaveUri);
+                                _rosTopicServers.RemoveAt(index);
+                                _connectionCounterSubject.OnNext(_rosTopicServers.Count);
+                                _logger.Error("Subscriber OnError", ex);
+                            });
 
                         lock (_disposables)
                         {
                             _disposables.Add(d);
                         }
                         
-                        _onConnectedSubject.OnNext(Unit.Default);
+                        _connectionCounterSubject.OnNext(_rosTopicServers.Count);
                     }
                     else if(startTask.Status == TaskStatus.Faulted)
                     {
@@ -155,9 +161,9 @@ namespace RosSharp.Topic
                 });
         }
 
-        public IObservable<Unit> OnConnectedAsObservable()
+        public IObservable<int> ConnectionCounterChangedAsObservable()
         {
-            return _onConnectedSubject;
+            return _connectionCounterSubject;
         }
 
         internal event Func<string, Task> Disposing = s => Task.Factory.StartNew(() => { });

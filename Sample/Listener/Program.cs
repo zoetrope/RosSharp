@@ -18,7 +18,7 @@ namespace RosSharp.Sample
 
             var subscriber = node.CreateSubscriberAsync<RosSharp.std_msgs.String>("/chatter").Result;
 
-            subscriber.OnConnectedAsObservable().First();
+            subscriber.ConnectionCounterChangedAsObservable().Where(x => x > 0).First();
 
             subscriber.Subscribe(
                 x => Console.WriteLine(x.data),
