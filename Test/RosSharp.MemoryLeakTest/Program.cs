@@ -29,6 +29,9 @@ namespace RosSharp.MemoryLeakTest
             masterServer.Dispose();
             Ros.Dispose();
 
+            GC.Collect();
+            Console.WriteLine("Memory={0}, Message=final", GC.GetTotalMemory(false));
+
             Console.WriteLine("Finished All Memory Leak Test.");
             Console.WriteLine("Press Any Key.");
             Console.ReadKey();

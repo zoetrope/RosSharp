@@ -66,6 +66,8 @@ namespace RosSharp.Transport
 
             var next = Notification.CreateOnNext(value);
 
+            List<IObserver<T>> observers;
+
             lock (_lockObject)
             {
                 if (_observers.Count == 0)
@@ -73,8 +75,10 @@ namespace RosSharp.Transport
                     _logger.Info("Notify");
                     _notifications.Add(next);
                 }
+
+                observers = _observers.ToList();
             }
-            _observers.ForEach(next.Accept);
+            observers.ForEach(next.Accept);
         }
 
         public void OnError(Exception error)
@@ -84,14 +88,17 @@ namespace RosSharp.Transport
 
             var err = Notification.CreateOnError<T>(error);
 
+            List<IObserver<T>> observers;
+
             lock (_lockObject)
             {
                 if (_observers.Count == 0)
                 {
                     _notifications.Add(err);
                 }
+                observers = _observers.ToList();
             }
-            _observers.ForEach(err.Accept);
+            observers.ForEach(err.Accept);
         }
 
         public void OnCompleted()
@@ -101,22 +108,24 @@ namespace RosSharp.Transport
 
             var completed = Notification.CreateOnCompleted<T>();
 
+            List<IObserver<T>> observers;
             lock (_lockObject)
             {
                 if (_observers.Count == 0)
                 {
                     _notifications.Add(completed);
                 }
+                observers = _observers.ToList();
             }
-            _observers.ForEach(completed.Accept);
+            observers.ForEach(completed.Accept);
         }
 
         public IDisposable Subscribe(IObserver<T> observer)
         {
             _logger.Info("Subscribe");
-            _observers.Add(observer);
             lock (_lockObject)
             {
+                _observers.Add(observer);
                 if (_notifications.Any())
                 {
                     _logger.Info("Subscribe Notify!");
@@ -124,7 +133,13 @@ namespace RosSharp.Transport
                     _notifications.Clear();
                 }
             }
-            return Disposable.Create(() => _observers.Remove(observer));
+            return Disposable.Create(() =>
+            {
+                lock (_lockObject)
+                {
+                    _observers.Remove(observer);
+                }
+            });
         }
 
         #endregion

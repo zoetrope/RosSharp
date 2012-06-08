@@ -51,6 +51,7 @@ namespace RosSharp.Transport
         private readonly IScheduler _scheduler = new EventLoopScheduler();
         private OneLineCacheSubject<byte[]> _oneLineCacheSubject;
         private readonly ILog _logger = LogManager.GetCurrentClassLogger();
+        private IDisposable _receiveDisposable;
 
         public TcpRosClient()
         {
@@ -73,6 +74,7 @@ namespace RosSharp.Transport
             //_logger.Debug(m => m("Close Socket[{0}]", _socket.LocalEndPoint));
             _socket.Close();
             _socket = null;
+            _receiveDisposable.Dispose();
         }
 
         #endregion
@@ -97,7 +99,7 @@ namespace RosSharp.Transport
             if(_oneLineCacheSubject ==null)
             {
                 _oneLineCacheSubject = new OneLineCacheSubject<byte[]>();
-                _socket.ReceiveAsObservable(_scheduler).Subscribe(_oneLineCacheSubject);
+                _receiveDisposable = _socket.ReceiveAsObservable(_scheduler).Subscribe(_oneLineCacheSubject);
             }
             return Observable.Create<byte[]>(observer =>
             {

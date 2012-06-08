@@ -173,6 +173,8 @@ namespace RosSharp.Node
             return tcs.Task;
         }
 
+        private Dictionary<string, IDisposable> _publisherDisposables = new Dictionary<string, IDisposable>();
+
         public Task<Publisher<TMessage>> CreatePublisherAsync<TMessage>(string topicName, bool latching = false)
             where TMessage : IMessage, new()
         {
@@ -192,13 +194,15 @@ namespace RosSharp.Node
             var tcpRosListener = new TcpRosListener(0);
             _slaveServer.AddListener(topicName, tcpRosListener);
 
-            tcpRosListener.AcceptAsync()
+            var acceptDisposable = tcpRosListener.AcceptAsync()
                 .Do(_ => _logger.Debug("Accepted for Publisher"))
                 .Subscribe(socket => publisher.AddTopic(socket),
                            ex => _logger.Error("Accept Error", ex));
 
-            var tcs = new TaskCompletionSource<Publisher<TMessage>>();
+            _publisherDisposables.Add(topicName, acceptDisposable);
 
+            var tcs = new TaskCompletionSource<Publisher<TMessage>>();
+            
             _logger.Debug("RegisterPublisher");
             _masterClient
                 .RegisterPublisherAsync(NodeId, topicName, publisher.MessageType, _slaveServer.SlaveUri)
@@ -218,7 +222,7 @@ namespace RosSharp.Node
                     }
                     
                 });
-
+            
             return tcs.Task;
         }
 
@@ -414,6 +418,9 @@ namespace RosSharp.Node
                     }
                     _topicContainer.RemovePublisher(topicName);
                     _slaveServer.RemoveListener(topicName);
+
+                    _publisherDisposables[topicName].Dispose();
+                    _publisherDisposables.Remove(topicName);
                     _logger.Debug(m => m("UnregisterPublisher: [{0}]", topicName));
                 });
         }

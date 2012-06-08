@@ -76,8 +76,7 @@ namespace RosSharp.Transport
 
         public IObservable<Socket> AcceptAsync()
         {
-            return Observable.Create<Socket>(
-                observer => _socket.AcceptAsObservable(_socket.LocalEndPoint).Subscribe(observer));
+            return _socket.AcceptAsObservable(_socket.LocalEndPoint);
         }
     }
 }

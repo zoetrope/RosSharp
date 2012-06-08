@@ -11,12 +11,12 @@ namespace RosSharp.MemoryLeakTest
 {
     class PublisherTest : ITest
     {
-        private INode _node;
+        private RosNode _node;
         private Subscriber<std_msgs.Int32> _subscriber;
 
         public void Initialize()
         {
-            _node = Ros.CreateNodeAsync("test", enableLogger: false).Result;
+            _node = (RosNode)Ros.CreateNodeAsync("test", enableLogger: false).Result;
 
             _subscriber = _node.CreateSubscriberAsync<std_msgs.Int32>("test").Result;
         }
@@ -29,7 +29,11 @@ namespace RosSharp.MemoryLeakTest
                 .Where(x => x > 0)
                 .Timeout(TimeSpan.FromSeconds(3))
                 .First();
-
+            _subscriber.ConnectionCounterChangedAsObservable()
+                .Where(x => x > 0)
+                .Timeout(TimeSpan.FromSeconds(3))
+                .First();
+            
             for (int i = 0; i < 10; i++)
             {
                 publisher.OnNext(new std_msgs.Int32() {data = i});
@@ -41,6 +45,7 @@ namespace RosSharp.MemoryLeakTest
                 .Where(x => x == 0)
                 .Timeout(TimeSpan.FromSeconds(3))
                 .First();
+            
         }
 
         public void Cleanup()

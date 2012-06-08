@@ -89,6 +89,7 @@ namespace RosSharp.Slave
 
         internal void RemoveListener(string topic)
         {
+            _tcpRosListener[topic].Dispose();
             _tcpRosListener.Remove(topic);
         }
 
