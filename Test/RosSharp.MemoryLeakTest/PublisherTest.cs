@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Text;
 using System.Threading;
 using RosSharp.Node;
@@ -33,12 +34,17 @@ namespace RosSharp.MemoryLeakTest
                 .Where(x => x > 0)
                 .Timeout(TimeSpan.FromSeconds(3))
                 .First();
-            
+
+            var subject = new Subject<std_msgs.Int32>();
+            var d = _subscriber.Subscribe(subject);
+
             for (int i = 0; i < 10; i++)
             {
                 publisher.OnNext(new std_msgs.Int32() {data = i});
             }
-            
+
+            d.Dispose();
+
             publisher.Dispose();
 
             _subscriber.ConnectionCounterChangedAsObservable()

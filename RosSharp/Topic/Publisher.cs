@@ -157,6 +157,14 @@ namespace RosSharp.Topic
                                     _rosTopicClients.Remove(rosTopicClient);
                                     _connectionCounterSubject.OnNext(_rosTopicClients.Count);
                                 }
+                            },
+                            ()=>
+                            {
+                                lock (_rosTopicClients)
+                                {
+                                    _rosTopicClients.Remove(rosTopicClient);
+                                    _connectionCounterSubject.OnNext(_rosTopicClients.Count);
+                                }
                             }
                             );
 

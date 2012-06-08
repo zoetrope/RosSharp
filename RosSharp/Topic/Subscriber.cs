@@ -71,10 +71,22 @@ namespace RosSharp.Topic
 
         public Task DisposeAsync()
         {
+            lock (_rosTopicServers)
+            {
+                foreach (var server in _rosTopicServers)
+                {
+                    server.Dispose();
+                }
+                _rosTopicServers.Clear();
+            }
+
             lock (_disposables)
             {
                 _disposables.Dispose();
             }
+
+            _aggregateSubject.Dispose();
+
             var handler = Disposing;
             Disposing = null;
             return handler(TopicName);
@@ -104,9 +116,14 @@ namespace RosSharp.Topic
         {
             _logger.Debug("UpdatePublishers");
 
-            var slaves = publishers
-                .Except(_rosTopicServers.Select(server => server.SlaveUri))
-                .Select(x => new SlaveClient(x));
+            List<SlaveClient> slaves;
+            lock (_rosTopicServers)
+            {
+                slaves = publishers
+                    .Except(_rosTopicServers.Select(server => server.SlaveUri))
+                    .Select(x => new SlaveClient(x))
+                    .ToList();
+            }
 
             foreach (var slaveClient in slaves)
             {
@@ -130,29 +147,68 @@ namespace RosSharp.Topic
         private void ConnectServer(TopicParam param, Uri slaveUri)
         {
             var server = new RosTopicServer<TMessage>(NodeId, TopicName, slaveUri);
-            _rosTopicServers.Add(server);
+            lock (_rosTopicServers)
+            {
+                _rosTopicServers.Add(server);
+            }
 
             server.StartAsync(param, _nodelay).ContinueWith(
                 startTask =>
                 {
                     if (startTask.Status == TaskStatus.RanToCompletion)
                     {
-                        var d = startTask.Result.Subscribe(
+                        var lazyDisposable = new SingleAssignmentDisposable();
+
+                        var subs = startTask.Result;
+
+                        var d = subs.Subscribe(
                             x => _aggregateSubject.OnNext(x),
                             ex =>
                             {
-                                var index = _rosTopicServers.FindIndex(x => x.SlaveUri == slaveUri);
-                                _rosTopicServers.RemoveAt(index);
-                                _connectionCounterSubject.OnNext(_rosTopicServers.Count);
-                                _logger.Error("Subscriber OnError", ex);
+                                lock (_rosTopicServers)
+                                {
+                                    var index = _rosTopicServers.FindIndex(x => x.SlaveUri == slaveUri);
+                                    if (index != -1)
+                                    {
+                                        _rosTopicServers.RemoveAt(index);
+                                        _connectionCounterSubject.OnNext(_rosTopicServers.Count);
+                                        lazyDisposable.Dispose();
+                                    }
+                                }
+                                //_aggregateSubject.OnError(ex);
+                            },() =>
+                            {
+                                lock (_rosTopicServers)
+                                {
+                                    var index = _rosTopicServers.FindIndex(x => x.SlaveUri == slaveUri);
+                                    if (index != -1)
+                                    {
+                                        _rosTopicServers.RemoveAt(index);
+                                        _connectionCounterSubject.OnNext(_rosTopicServers.Count);
+                                        lazyDisposable.Dispose();
+                                    }
+                                }
+                                //_aggregateSubject.OnCompleted();
                             });
+
+                        lazyDisposable.Disposable = Disposable.Create(() =>
+                        {
+                            d.Dispose();
+                            lock (_disposables)
+                            {
+                                _disposables.Remove(d);
+                            }
+                            
+                        });
 
                         lock (_disposables)
                         {
                             _disposables.Add(d);
                         }
-                        
-                        _connectionCounterSubject.OnNext(_rosTopicServers.Count);
+                        lock (_rosTopicServers)
+                        {
+                            _connectionCounterSubject.OnNext(_rosTopicServers.Count);
+                        }
                     }
                     else if(startTask.Status == TaskStatus.Faulted)
                     {

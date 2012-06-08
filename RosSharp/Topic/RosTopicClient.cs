@@ -144,8 +144,6 @@ namespace RosSharp.Topic
 
             Connected = true;
 
-
-
             return _client.ReceiveAsync();
         }
     }

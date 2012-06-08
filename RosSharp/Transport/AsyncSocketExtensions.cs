@@ -92,7 +92,12 @@ namespace RosSharp.Transport
                             _logger.Info(m => m("OnNext: {0}", x.Dump()));
                             observer.OnNext(x);
                         }
-                    },observer.OnError);
+                    },ex=>
+                    {
+                        socket.Close();
+                        observer.OnError(ex);
+                        observer.OnCompleted();
+                    });
             });
 
         }

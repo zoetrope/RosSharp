@@ -123,12 +123,7 @@ namespace RosSharp.Transport
 
                         return rest;
                     })
-                    .Subscribe(_ => { },
-                               ex =>
-                               {
-                                   observer.OnError(ex);
-                                   observer.OnCompleted();
-                               });
+                    .Subscribe(_ => { }, observer.OnError, observer.OnCompleted);
 
                 return disposable;
             });
