@@ -18,8 +18,9 @@ namespace RosSharp.MemoryLeakTest
 
         public void Do(int index)
         {
-            var d = _node.RegisterServiceAsync(
-                "add_two_ints", new AddTwoInts(x => new AddTwoInts.Response() {sum = x.a + x.b}));
+            var d = _node
+                .RegisterServiceAsync("add_two_ints", new AddTwoInts(x => new AddTwoInts.Response() {sum = x.a + x.b}))
+                .Result;
 
 
             var proxy = _node.CreateProxyAsync<AddTwoInts>("add_two_ints").Result;
@@ -29,9 +30,7 @@ namespace RosSharp.MemoryLeakTest
                 proxy.Invoke(new AddTwoInts.Request() { a = i, b = i * 2 });
             }
 
-
-            
-            //proxy.Dispose();
+            proxy.Dispose();
             
             d.Dispose();
         }

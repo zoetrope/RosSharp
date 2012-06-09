@@ -42,19 +42,13 @@ namespace RosSharp.Node
     /// <summary>
     ///   Defines interface for ROS NODE
     /// </summary>
-    public interface INode : IDisposable
+    public interface INode : IAsyncDisposable
     {
         /// <summary>
         /// Node ID
         /// </summary>
         string NodeId { get; }
-
-        /// <summary>
-        /// Asynchronous Dispose
-        /// </summary>
-        /// <returns>task object for asynchronous operation</returns>
-        Task DisposeAsync();
-
+        
         /// <summary>
         /// Create a ROS Topic Subscriber
         /// </summary>

@@ -39,7 +39,7 @@ namespace RosSharp.Service
     /// <summary>
     ///   Defines interface for ROS Service
     /// </summary>
-    public interface IService : IDisposable
+    public interface IService : IAsyncDisposable
     {
         /// <summary>
         /// Service Type Name
@@ -55,12 +55,6 @@ namespace RosSharp.Service
         /// Raw Service Definition
         /// </summary>
         string ServiceDefinition { get; }
-
-        /// <summary>
-        /// Asynchronous Dispose
-        /// </summary>
-        /// <returns>task object for asynchronous operation</returns>
-        Task DisposeAsync();
 
         /// <summary>
         /// Create default Request instance

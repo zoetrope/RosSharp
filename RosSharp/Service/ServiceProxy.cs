@@ -43,9 +43,8 @@ using RosSharp.Transport;
 
 namespace RosSharp.Service
 {
-    internal interface IServiceProxy : IDisposable
+    internal interface IServiceProxy : IAsyncDisposable
     {
-        Task DisposeAsync();
         IMessage Invoke(IMessage request);
     }
 

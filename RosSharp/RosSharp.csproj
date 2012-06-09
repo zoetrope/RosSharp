@@ -97,6 +97,7 @@
     <Compile Include="Generated\srv\roscpp\SetLoggerLevel.cs" />
     <Compile Include="Generated\srv\sample\AddTwoInts.cs" />
     <Compile Include="Generated\srv\std_srvs\Empty.cs" />
+    <Compile Include="IAsyncDisposable.cs" />
     <Compile Include="Name.cs" />
     <Compile Include="Parameter\IParameter.cs" />
     <Compile Include="Parameter\Parameter.cs" />

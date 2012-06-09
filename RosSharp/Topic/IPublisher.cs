@@ -38,8 +38,7 @@ using System.Threading.Tasks;
 
 namespace RosSharp.Topic
 {
-    internal interface IPublisher : ITopic, IDisposable
+    internal interface IPublisher : ITopic, IAsyncDisposable
     {
-        Task DisposeAsync();
     }
 }

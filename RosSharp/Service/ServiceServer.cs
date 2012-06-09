@@ -41,10 +41,9 @@ using RosSharp.Transport;
 
 namespace RosSharp.Service
 {
-    public interface IServiceServer : IDisposable
+    public interface IServiceServer : IAsyncDisposable
     {
         string ServiceName { get; }
-        Task DisposeAsync();
     }
 
     internal sealed class ServiceServer<TService> : IServiceServer

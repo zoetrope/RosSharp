@@ -38,10 +38,8 @@ using System.Threading.Tasks;
 
 namespace RosSharp.Topic
 {
-    internal interface ISubscriber : ITopic, IDisposable
+    internal interface ISubscriber : ITopic, IAsyncDisposable
     {
-        Task DisposeAsync();
-
         void UpdatePublishers(List<Uri> publishers);
     }
 }

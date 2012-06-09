@@ -38,9 +38,8 @@ using System.Threading.Tasks;
 
 namespace RosSharp.Parameter
 {
-    internal interface IParameter : IDisposable
+    internal interface IParameter : IAsyncDisposable
     {
         void Update(object value);
-        Task DisposeAsync();
     }
 }
