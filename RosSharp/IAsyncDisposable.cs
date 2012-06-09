@@ -13,5 +13,7 @@ namespace RosSharp
         /// </summary>
         /// <returns>task object for asynchronous operation</returns>
         Task DisposeAsync();
+
+        event Func<string, Task> Disposing;
     }
 }

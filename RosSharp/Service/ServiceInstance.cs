@@ -35,6 +35,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Text;
@@ -63,19 +64,21 @@ namespace RosSharp.Service
             _client = new TcpRosClient(s);
         }
 
-        internal Task StartAsync(string serviceName)
+        internal Task<IObservable<Unit>> StartAsync(string serviceName)
         {
             _serviceName = serviceName;
 
-            return _client.ReceiveAsync()
-                .Take(1)
-                .Select(b => TcpRosHeaderSerializer.Deserialize(new MemoryStream(b)))
-                .Select(x => ConnectToService(x))
-                .ToTask();
+            return Task<IObservable<Unit>>.Factory.StartNew(() => ConnectToService().Result);
         }
 
-        private Task ConnectToService(dynamic header)
+        private Task<IObservable<Unit>> ConnectToService()
         {
+            dynamic header = _client.ReceiveAsync()
+                .Take(1)
+                .Select(b => TcpRosHeaderSerializer.Deserialize(new MemoryStream(b)))
+                .Timeout(TimeSpan.FromMilliseconds(Ros.TopicTimeout))
+                .First();
+
             var dummy = new TService();
             _logger.Info(m => m("Receive Header {0}", header.ToString()));
 
@@ -106,25 +109,14 @@ namespace RosSharp.Service
                 {
                     _logger.Info("SendTaskAsync ContinueWith");
 
-                    _client.ReceiveAsync()
-                        .Subscribe(b =>
+                    return _client.ReceiveAsync()
+                        .Select(b =>
                         {
                             var res = Invoke(new MemoryStream(b));
                             var array = res.ToArray();
-                            try
-                            {
-                                _client.SendAsync(array).Wait();
-                            }
-                            catch (Exception ex)
-                            {
-                                _logger.Error("Send Error", ex);
-                            }
-
-                        }, ex =>
-                        {
-                            _logger.Error("Receive Error", ex);
+                            _client.SendAsync(array).Wait();
+                            return Unit.Default;
                         });
-
                 });
         }
 

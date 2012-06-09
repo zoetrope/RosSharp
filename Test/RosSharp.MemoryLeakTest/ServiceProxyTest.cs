@@ -3,19 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using RosSharp.Node;
+using RosSharp.Service;
 
 namespace RosSharp.MemoryLeakTest
 {
     class ServiceProxyTest : ITest
     {
         private INode _node;
+        private IServiceServer _serviceServer;
 
         public void Initialize()
         {
             _node = Ros.CreateNodeAsync("test", enableLogger: false).Result;
 
-            _node.RegisterServiceAsync("add_two_ints",
-                                       new AddTwoInts(x => new AddTwoInts.Response() {sum = x.a + x.b}));
+            _serviceServer = _node
+                .RegisterServiceAsync("add_two_ints", new AddTwoInts(req => new AddTwoInts.Response() {sum = req.a + req.b}))
+                .Result;
         }
 
         public void Do(int index)
@@ -32,6 +35,7 @@ namespace RosSharp.MemoryLeakTest
 
         public void Cleanup()
         {
+            _serviceServer.Dispose();
             _node.Dispose();
         }
     }

@@ -67,6 +67,7 @@ namespace RosSharp.Node
         private readonly SlaveServer _slaveServer;
         private readonly TopicContainer _topicContainer;
         private bool _disposed;
+        private Dictionary<string, IDisposable> _publisherDisposables = new Dictionary<string, IDisposable>();
 
         public RosNode(string nodeId)
         {
@@ -128,7 +129,6 @@ namespace RosSharp.Node
 
         public void Dispose()
         {
-            DisposeAsync().Wait();
         }
 
 
@@ -156,8 +156,8 @@ namespace RosSharp.Node
                 .ContinueWith(task =>
                 {
                     _logger.Debug("Registered Subscriber");
-                    
-                    if(task.Status == TaskStatus.RanToCompletion)
+
+                    if (task.Status == TaskStatus.RanToCompletion)
                     {
                         ((ISubscriber) subscriber).UpdatePublishers(task.Result);
                         tcs.SetResult(subscriber);
@@ -167,13 +167,10 @@ namespace RosSharp.Node
                         tcs.SetException(task.Exception.InnerException);
                         _logger.Error("RegisterSubscriber: Failure", task.Exception.InnerException);
                     }
-                    
                 });
 
             return tcs.Task;
         }
-
-        private Dictionary<string, IDisposable> _publisherDisposables = new Dictionary<string, IDisposable>();
 
         public Task<Publisher<TMessage>> CreatePublisherAsync<TMessage>(string topicName, bool latching = false)
             where TMessage : IMessage, new()
@@ -202,7 +199,7 @@ namespace RosSharp.Node
             _publisherDisposables.Add(topicName, acceptDisposable);
 
             var tcs = new TaskCompletionSource<Publisher<TMessage>>();
-            
+
             _logger.Debug("RegisterPublisher");
             _masterClient
                 .RegisterPublisherAsync(NodeId, topicName, publisher.MessageType, _slaveServer.SlaveUri)
@@ -210,7 +207,7 @@ namespace RosSharp.Node
                 {
                     _logger.Debug("Registered Publisher");
 
-                    if(task.Status == TaskStatus.RanToCompletion)
+                    if (task.Status == TaskStatus.RanToCompletion)
                     {
                         publisher.UpdateSubscribers(task.Result);
                         tcs.SetResult(publisher);
@@ -220,9 +217,8 @@ namespace RosSharp.Node
                         _logger.Error("RegisterPublisher: Failure", task.Exception.InnerException);
                         tcs.SetException(task.Exception.InnerException);
                     }
-                    
                 });
-            
+
             return tcs.Task;
         }
 
@@ -313,9 +309,9 @@ namespace RosSharp.Node
         public Task DisposeAsync()
         {
             if (_disposed) throw new ObjectDisposedException("RosNode");
-            
+
             var tasks = new List<Task>();
-            
+
             tasks.AddRange(_topicContainer.GetPublishers().Select(pub => pub.DisposeAsync()));
             tasks.AddRange(_topicContainer.GetSubscribers().Select(sub => sub.DisposeAsync()));
 
@@ -332,7 +328,7 @@ namespace RosSharp.Node
 
                 if (handler != null)
                 {
-                    handler(this);
+                    handler(NodeId);
                 }
 
                 _slaveServer.Dispose();
@@ -340,9 +336,9 @@ namespace RosSharp.Node
             });
         }
 
-        #endregion
+        public event Func<string, Task> Disposing = _ => Task.Factory.StartNew(() => { });
 
-        internal event Action<RosNode> Disposing = node => { };
+        #endregion
 
         internal Task InitializeAsync(bool enableLogger)
         {
@@ -434,9 +430,7 @@ namespace RosSharp.Node
 
         private Task DisposeProxyAsync(string serviceName)
         {
-            return _masterClient
-                .UnregisterServiceAsync(NodeId, serviceName, _slaveServer.SlaveUri)
-                .ContinueWith(_ => _serviceServers.Remove(serviceName));
+            return Task.Factory.StartNew(() => _serviceProxies.Remove(serviceName));
         }
 
         private void SlaveServerOnParameterUpdated(string key, object value)

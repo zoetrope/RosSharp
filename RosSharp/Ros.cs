@@ -253,15 +253,18 @@ namespace RosSharp
             return nodes;
         }
 
-        private static void DisposeNode(RosNode rosNode)
+        private static Task DisposeNode(string nodeId)
         {
-            lock (_nodes)
+            return Task.Factory.StartNew(() =>
             {
-                if (_nodes.ContainsKey(rosNode.NodeId))
+                lock (_nodes)
                 {
-                    _nodes.Remove(rosNode.NodeId);
+                    if (_nodes.ContainsKey(nodeId))
+                    {
+                        _nodes.Remove(nodeId);
+                    }
                 }
-            }
+            });
         }
     }
 }

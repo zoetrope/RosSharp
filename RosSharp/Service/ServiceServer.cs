@@ -32,6 +32,7 @@
 
 using System;
 using System.Net;
+using System.Net.Sockets;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
@@ -49,21 +50,11 @@ namespace RosSharp.Service
     internal sealed class ServiceServer<TService> : IServiceServer
         where TService : IService, new()
     {
-        private TcpRosListener _listener;
-        private readonly string _nodeId;
-        private readonly ILog _logger = LogManager.GetCurrentClassLogger();
         private readonly CompositeDisposable _instanceDisposables = new CompositeDisposable();
+        private readonly ILog _logger = LogManager.GetCurrentClassLogger();
+        private readonly string _nodeId;
         private IDisposable _disposable;
-
-        public string ServiceName { get; private set; }
-        public Task DisposeAsync()
-        {
-            _disposable.Dispose();
-            _instanceDisposables.Dispose();
-            _listener.Dispose();
-
-            return Disposing(ServiceName);
-        }
+        private TcpRosListener _listener;
 
         public ServiceServer(string nodeId)
         {
@@ -75,16 +66,19 @@ namespace RosSharp.Service
             get { return _listener.EndPoint; }
         }
 
-        public void StartService(string serviceName, IService service)
-        {
-            ServiceName = serviceName;
+        #region IServiceServer Members
 
-            _listener = new TcpRosListener(0);
-            _disposable = _listener.AcceptAsync()
-                .Select(socket => new ServiceInstance<TService>(_nodeId, service, socket))
-                .Do(instance=>_instanceDisposables.Add(instance))
-                .SelectMany(instance => instance.StartAsync(serviceName).ToObservable())
-                .Subscribe(_ => { }, ex => _logger.Error("Start Service Error", ex));
+        public string ServiceName { get; private set; }
+
+        public Task DisposeAsync()
+        {
+            _disposable.Dispose();
+            _listener.Dispose();
+            lock (_instanceDisposables)
+            {
+                _instanceDisposables.Dispose();
+            }
+            return Disposing(ServiceName);
         }
 
         public event Func<string, Task> Disposing = _ => Task.Factory.StartNew(() => { });
@@ -92,6 +86,59 @@ namespace RosSharp.Service
         public void Dispose()
         {
             DisposeAsync().Wait();
+        }
+
+        #endregion
+
+        public void StartService(string serviceName, IService service)
+        {
+            ServiceName = serviceName;
+
+            _listener = new TcpRosListener(0);
+            _disposable = _listener.AcceptAsync()
+                .Subscribe(
+                    socket => CreateNewServiceInstance(service, socket),
+                    ex =>
+                    {
+                        _logger.Error("ServiceServer: Accept Error", ex);
+                        Dispose();
+                    }, Dispose);
+        }
+
+        private void CreateNewServiceInstance(IService service, Socket socket)
+        {
+            var instance = new ServiceInstance<TService>(_nodeId, service, socket);
+
+            instance.StartAsync(ServiceName)
+                .ContinueWith(startTask=>
+                {
+                    if(startTask.Status == TaskStatus.RanToCompletion)
+                    {
+                        var lazyDisposable = new SingleAssignmentDisposable();
+                        var d = startTask.Result.Subscribe(
+                            _ => { },
+                            ex => lazyDisposable.Dispose(),
+                            lazyDisposable.Dispose);
+
+                        lock (_instanceDisposables)
+                        {
+                            _instanceDisposables.Add(d);
+                        }
+
+                        lazyDisposable.Disposable = Disposable.Create(() =>
+                        {
+                            d.Dispose();
+                            lock (_instanceDisposables)
+                            {
+                                _instanceDisposables.Remove(d);
+                            }
+                        });
+                    }
+                    else if(startTask.Status == TaskStatus.Faulted)
+                    {
+                        _logger.Error("ServiceServer: StartAsync Error", startTask.Exception.InnerException);
+                    }
+                });
         }
     }
 }

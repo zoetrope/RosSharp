@@ -34,6 +34,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Common.Logging;
@@ -49,10 +50,10 @@ namespace RosSharp.Topic
     public sealed class Publisher<TMessage> : IPublisher, IObserver<TMessage>
         where TMessage : IMessage, new()
     {
-        private readonly ILog _logger = LogManager.GetCurrentClassLogger();
         private readonly BehaviorSubject<int> _connectionCounterSubject = new BehaviorSubject<int>(0);
-        private readonly List<RosTopicClient<TMessage>> _rosTopicClients = new List<RosTopicClient<TMessage>>();
         private readonly bool _latching;
+        private readonly ILog _logger = LogManager.GetCurrentClassLogger();
+        private readonly List<RosTopicClient<TMessage>> _rosTopicClients = new List<RosTopicClient<TMessage>>();
         private TMessage _lastPublishedMessage;
 
         internal Publisher(string topicName, string nodeId, bool latching = false)
@@ -65,31 +66,6 @@ namespace RosSharp.Topic
         }
 
         public string NodeId { get; private set; }
-
-        public Task DisposeAsync()
-        {
-            lock (_rosTopicClients)
-            {
-                foreach (var topic in _rosTopicClients)
-                {
-                    topic.Dispose();
-                }
-                _rosTopicClients.Clear();
-            }
-
-            var handler = Disposing;
-            Disposing = null;
-            return handler(TopicName);
-        }
-
-        #region IDisposable Members
-
-        public void Dispose()
-        {
-            DisposeAsync().Wait();
-        }
-
-        #endregion
 
         #region IObserver<TMessage> Members
 
@@ -126,16 +102,59 @@ namespace RosSharp.Topic
 
         #region IPublisher Members
 
+        public Task DisposeAsync()
+        {
+            lock (_rosTopicClients)
+            {
+                foreach (var topic in _rosTopicClients)
+                {
+                    topic.Dispose();
+                }
+                _rosTopicClients.Clear();
+            }
+
+            var handler = Disposing;
+            Disposing = null;
+            return handler(TopicName);
+        }
+
+        public void Dispose()
+        {
+            DisposeAsync().Wait();
+        }
+
         public string TopicName { get; private set; }
 
         public string MessageType { get; private set; }
+        public event Func<string, Task> Disposing = _ => Task.Factory.StartNew(() => { });
 
         #endregion
 
-        public IObservable<int> ConnectionCounterChangedAsObservable()
+        public IObservable<int> ConnectionChangedAsObservable()
         {
             return _connectionCounterSubject;
         }
+
+        public void WaitForConnection()
+        {
+            ConnectionChangedAsObservable().Where(x => x > 0).First();
+        }
+
+        public void WaitForDisconnection()
+        {
+            ConnectionChangedAsObservable().Where(x => x == 0).First();
+        }
+
+        public void WaitForConnection(TimeSpan timeout)
+        {
+            ConnectionChangedAsObservable().Where(x => x > 0).Timeout(timeout).First();
+        }
+
+        public void WaitForDisconnection(TimeSpan timeout)
+        {
+            ConnectionChangedAsObservable().Where(x => x == 0).Timeout(timeout).First();
+        }
+
 
         internal Task AddTopic(Socket socket)
         {
@@ -144,13 +163,13 @@ namespace RosSharp.Topic
             return rosTopicClient.StartAsync(socket, _latching)
                 .ContinueWith(startTask =>
                 {
-                    if(startTask.Status == TaskStatus.RanToCompletion)
+                    if (startTask.Status == TaskStatus.RanToCompletion)
                     {
                         _logger.Debug("AddTopic: Started");
 
                         startTask.Result.Subscribe(
                             _ => { },
-                            ex=>
+                            ex =>
                             {
                                 lock (_rosTopicClients)
                                 {
@@ -158,7 +177,7 @@ namespace RosSharp.Topic
                                     _connectionCounterSubject.OnNext(_rosTopicClients.Count);
                                 }
                             },
-                            ()=>
+                            () =>
                             {
                                 lock (_rosTopicClients)
                                 {
@@ -173,7 +192,7 @@ namespace RosSharp.Topic
                             _rosTopicClients.Add(rosTopicClient);
                         }
 
-                        if(_latching && _lastPublishedMessage != null)
+                        if (_latching && _lastPublishedMessage != null)
                         {
                             OnNext(_lastPublishedMessage);
                         }
@@ -193,7 +212,5 @@ namespace RosSharp.Topic
         {
             //TODO: 不要では？
         }
-
-        internal event Func<string, Task> Disposing = s => Task.Factory.StartNew(() => { });
     }
 }

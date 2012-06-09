@@ -52,9 +52,6 @@ namespace RosSharp.Service
         where TService : IService, new()
     {
         private readonly TcpRosClient _client;
-        public TService Service { get; private set; }
-        public string ServiceName { get; private set; }
-        public event Func<string, Task> Disposing = _ => Task.Factory.StartNew(() => { });
 
         public ServiceProxy(string serviceName, TService service, TcpRosClient client)
         {
@@ -63,7 +60,16 @@ namespace RosSharp.Service
             _client = client;
 
             Service.SetAction(Invoke);
+
+            Service.Disposing += _ => DisposeAsync();
         }
+
+        public TService Service { get; private set; }
+        public string ServiceName { get; private set; }
+
+        #region IServiceProxy Members
+
+        public event Func<string, Task> Disposing = _ => Task.Factory.StartNew(() => { });
 
         public void Dispose()
         {
@@ -97,10 +103,11 @@ namespace RosSharp.Service
             bw.Write(request.SerializeLength);
             request.Serialize(bw);
             var senddata = ms.ToArray();
-            _client.SendAsync(senddata).ToObservable().Timeout(TimeSpan.FromMilliseconds(Ros.TopicTimeout)).First();
+            _client.SendAsync(senddata).Wait(TimeSpan.FromMilliseconds(Ros.TopicTimeout));
 
             return response.Timeout(TimeSpan.FromMilliseconds(Ros.TopicTimeout)).First();
         }
 
+        #endregion
     }
 }

@@ -53,6 +53,8 @@ namespace RosSharp.Service
 
         #region ITypedService<TRequest,TResponse> Members
 
+        public event Func<string, Task> Disposing = _ => Task.Factory.StartNew(() => { });
+
         public abstract string ServiceType { get; }
         public abstract string Md5Sum { get; }
         public abstract string ServiceDefinition { get; }
@@ -72,11 +74,9 @@ namespace RosSharp.Service
             _action = req => (TResponse) action(req);
         }
 
-        internal event Func<Task> Disposing = () => Task.Factory.StartNew(() => { });
-
         public Task DisposeAsync()
         {
-            return Disposing();
+            return Disposing(null);
         }
 
         IMessage IService.CreateRequest()
@@ -94,11 +94,11 @@ namespace RosSharp.Service
             return _action((TRequest) req);
         }
 
-        #endregion
-
         public void Dispose()
         {
             DisposeAsync().Wait();
         }
+
+        #endregion
     }
 }

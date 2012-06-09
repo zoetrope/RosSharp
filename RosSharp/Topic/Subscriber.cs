@@ -51,14 +51,14 @@ namespace RosSharp.Topic
     public sealed class Subscriber<TMessage> : ISubscriber, IObservable<TMessage>
         where TMessage : IMessage, new()
     {
-        private readonly ILog _logger = LogManager.GetCurrentClassLogger();
         private readonly Subject<TMessage> _aggregateSubject = new Subject<TMessage>();
-        private readonly CompositeDisposable _disposables = new CompositeDisposable();
         private readonly BehaviorSubject<int> _connectionCounterSubject = new BehaviorSubject<int>(0);
-        private readonly List<RosTopicServer<TMessage>> _rosTopicServers = new List<RosTopicServer<TMessage>>();
+        private readonly CompositeDisposable _disposables = new CompositeDisposable();
+        private readonly ILog _logger = LogManager.GetCurrentClassLogger();
         private readonly bool _nodelay;
+        private readonly List<RosTopicServer<TMessage>> _rosTopicServers = new List<RosTopicServer<TMessage>>();
 
-        internal Subscriber(string topicName, string nodeId, bool nodelay=true)
+        internal Subscriber(string topicName, string nodeId, bool nodelay = true)
         {
             TopicName = topicName;
             var dummy = new TMessage();
@@ -68,6 +68,17 @@ namespace RosSharp.Topic
         }
 
         public string NodeId { get; private set; }
+
+        #region IObservable<TMessage> Members
+
+        public IDisposable Subscribe(IObserver<TMessage> observer)
+        {
+            return _aggregateSubject.Subscribe(observer);
+        }
+
+        #endregion
+
+        #region ISubscriber Members
 
         public Task DisposeAsync()
         {
@@ -92,25 +103,10 @@ namespace RosSharp.Topic
             return handler(TopicName);
         }
 
-        #region IDisposable Members
-
         public void Dispose()
         {
             DisposeAsync().Wait();
         }
-
-        #endregion
-
-        #region IObservable<TMessage> Members
-
-        public IDisposable Subscribe(IObserver<TMessage> observer)
-        {
-            return _aggregateSubject.Subscribe(observer);
-        }
-
-        #endregion
-
-        #region ISubscriber Members
 
         void ISubscriber.UpdatePublishers(List<Uri> publishers)
         {
@@ -131,16 +127,14 @@ namespace RosSharp.Topic
                 var requestTask = slaveClient.RequestTopicAsync(NodeId, TopicName, new List<ProtocolInfo> {new ProtocolInfo(ProtocolType.TCPROS)});
                 requestTask.ContinueWith(t => ConnectServer(t.Result, uri), TaskContinuationOptions.OnlyOnRanToCompletion);
 
-                requestTask.ContinueWith(t =>
-                {
-                    _logger.Error(m => m("RequestTopicAsync Failure :{0}", uri), t.Exception.InnerException);
-                }, TaskContinuationOptions.OnlyOnFaulted);
+                requestTask.ContinueWith(t => { _logger.Error(m => m("RequestTopicAsync Failure :{0}", uri), t.Exception.InnerException); }, TaskContinuationOptions.OnlyOnFaulted);
             }
         }
 
         public string TopicName { get; private set; }
 
         public string MessageType { get; private set; }
+        public event Func<string, Task> Disposing = _ => Task.Factory.StartNew(() => { });
 
         #endregion
 
@@ -176,7 +170,7 @@ namespace RosSharp.Topic
                                     }
                                 }
                                 //_aggregateSubject.OnError(ex);
-                            },() =>
+                            }, () =>
                             {
                                 lock (_rosTopicServers)
                                 {
@@ -198,7 +192,6 @@ namespace RosSharp.Topic
                             {
                                 _disposables.Remove(d);
                             }
-                            
                         });
 
                         lock (_disposables)
@@ -210,18 +203,36 @@ namespace RosSharp.Topic
                             _connectionCounterSubject.OnNext(_rosTopicServers.Count);
                         }
                     }
-                    else if(startTask.Status == TaskStatus.Faulted)
+                    else if (startTask.Status == TaskStatus.Faulted)
                     {
                         _logger.Error("ConnectServer Error", startTask.Exception.InnerException);
                     }
                 });
         }
 
-        public IObservable<int> ConnectionCounterChangedAsObservable()
+        public IObservable<int> ConnectionChangedAsObservable()
         {
             return _connectionCounterSubject;
         }
 
-        internal event Func<string, Task> Disposing = s => Task.Factory.StartNew(() => { });
+        public void WaitForConnection()
+        {
+            ConnectionChangedAsObservable().Where(x => x > 0).First();
+        }
+
+        public void WaitForDisconnection()
+        {
+            ConnectionChangedAsObservable().Where(x => x == 0).First();
+        }
+
+        public void WaitForConnection(TimeSpan timeout)
+        {
+            ConnectionChangedAsObservable().Where(x => x > 0).Timeout(timeout).First();
+        }
+
+        public void WaitForDisconnection(TimeSpan timeout)
+        {
+            ConnectionChangedAsObservable().Where(x => x == 0).Timeout(timeout).First();
+        }
     }
 }

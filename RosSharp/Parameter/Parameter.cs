@@ -46,8 +46,8 @@ namespace RosSharp.Parameter
     {
         private readonly IParameterCoverter<T> _converter;
         private readonly ParameterServerClient _parameterServerClient;
-        private Subject<T> _parameterSubject;
         private readonly Uri _slaveUri;
+        private Subject<T> _parameterSubject;
 
         internal Parameter(string nodeId, string paramName, Uri slaveUri, ParameterServerClient client)
         {
@@ -58,15 +58,15 @@ namespace RosSharp.Parameter
             _parameterServerClient = client;
 
 
-            if(typeof(T).IsPrimitive || typeof(T) == typeof(string))
+            if (typeof (T).IsPrimitive || typeof (T) == typeof (string))
             {
                 _converter = new PrimitiveParameterConverter<T>();
             }
-            else if(typeof(T) == typeof(List<>))
+            else if (typeof (T) == typeof (List<>))
             {
                 _converter = new ListParameterConverter<T>();
             }
-            else if (typeof(T) == typeof(DictionaryParameter))
+            else if (typeof (T) == typeof (DictionaryParameter))
             {
                 _converter = new DictionaryParameterConverter<T>();
             }
@@ -74,23 +74,6 @@ namespace RosSharp.Parameter
             {
                 throw new ArgumentException("invalid Type Argument");
             }
-        }
-
-        internal Task InitializeAsync()
-        {
-            return _parameterServerClient.HasParamAsync(NodeId, Name)
-                .ContinueWith(task =>
-                {
-                    if (task.Result)
-                    {
-                        return _parameterServerClient.GetParamAsync(NodeId, Name);
-                    }
-                    else
-                    {
-                        return _parameterServerClient.SetParamAsync(NodeId, Name, new XmlRpcStruct());
-                    }
-                })
-                .Unwrap();
         }
 
         public string NodeId { get; private set; }
@@ -103,10 +86,7 @@ namespace RosSharp.Parameter
                 var result = _parameterServerClient.GetParamAsync(NodeId, Name).Result;
                 return _converter.ConvertTo(result);
             }
-            set
-            {
-                _parameterServerClient.SetParamAsync(NodeId, Name, _converter.ConvertFrom(value)).Wait();
-            }
+            set { _parameterServerClient.SetParamAsync(NodeId, Name, _converter.ConvertFrom(value)).Wait(); }
         }
 
         #region IObservable<T> Members
@@ -117,15 +97,15 @@ namespace RosSharp.Parameter
             {
                 _parameterSubject = new Subject<T>();
                 var disposable = _parameterSubject.Subscribe(observer);
-                
+
                 var subsTask = _parameterServerClient.SubscribeParamAsync(NodeId, _slaveUri, Name);
-                
+
                 subsTask.ContinueWith(
                     t =>
                     {
                         try
                         {
-                            if(t.Result is XmlRpcStruct && ((XmlRpcStruct)t.Result).Keys.Count == 0)
+                            if (t.Result is XmlRpcStruct && ((XmlRpcStruct) t.Result).Keys.Count == 0)
                             {
                                 // if subscribe to parameter that are not set, receive an empty XmlRpcStruct.
                                 return;
@@ -140,26 +120,27 @@ namespace RosSharp.Parameter
                             _parameterSubject.OnCompleted();
                         }
                     }, TaskContinuationOptions.OnlyOnRanToCompletion);
-                
+
                 subsTask.ContinueWith(
                     t =>
                     {
                         _parameterSubject.OnError(t.Exception.InnerException);
                         _parameterSubject.OnCompleted();
                     }, TaskContinuationOptions.OnlyOnFaulted);
-                
+
                 return disposable;
             }
             else
             {
                 return _parameterSubject.Subscribe(observer);
             }
-            
         }
 
         #endregion
 
         #region IParameter Members
+
+        public event Func<string, Task> Disposing = _ => Task.Factory.StartNew(() => { });
 
         void IParameter.Update(object value)
         {
@@ -192,5 +173,22 @@ namespace RosSharp.Parameter
         }
 
         #endregion
+
+        internal Task InitializeAsync()
+        {
+            return _parameterServerClient.HasParamAsync(NodeId, Name)
+                .ContinueWith(task =>
+                {
+                    if (task.Result)
+                    {
+                        return _parameterServerClient.GetParamAsync(NodeId, Name);
+                    }
+                    else
+                    {
+                        return _parameterServerClient.SetParamAsync(NodeId, Name, new XmlRpcStruct());
+                    }
+                })
+                .Unwrap();
+        }
     }
 }

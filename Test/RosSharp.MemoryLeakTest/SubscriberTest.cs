@@ -26,14 +26,8 @@ namespace RosSharp.MemoryLeakTest
         {
             var subscriber = _node.CreateSubscriberAsync<std_msgs.Int32>("test").Result;
 
-            subscriber.ConnectionCounterChangedAsObservable()
-                .Where(x => x > 0)
-                .Timeout(TimeSpan.FromSeconds(3))
-                .First();
-            _publisher.ConnectionCounterChangedAsObservable()
-                .Where(x => x > 0)
-                .Timeout(TimeSpan.FromSeconds(3))
-                .First();
+            subscriber.WaitForConnection(TimeSpan.FromSeconds(3));
+            _publisher.WaitForConnection(TimeSpan.FromSeconds(3));
 
             var subject = new Subject<std_msgs.Int32>();
             var d = subscriber.Subscribe(subject);
@@ -47,10 +41,7 @@ namespace RosSharp.MemoryLeakTest
 
             subscriber.Dispose();
 
-            _publisher.ConnectionCounterChangedAsObservable()
-                .Where(x => x == 0)
-                .Timeout(TimeSpan.FromSeconds(3))
-                .First();
+            _publisher.WaitForDisconnection(TimeSpan.FromSeconds(3));
 
         }
 

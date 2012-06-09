@@ -14,7 +14,7 @@ namespace RosSharp.IntegrationTests
     public class PublisherAndSubscriberTest : ReactiveTest
     {
         private MasterServer _masterServer;
-        private static TimeSpan TestTimeout = TimeSpan.FromSeconds(15);
+        private static TimeSpan TestTimeout = TimeSpan.FromSeconds(3);
 
         [TestInitialize]
         public void Initialize()
@@ -44,8 +44,8 @@ namespace RosSharp.IntegrationTests
             var publisher = node.CreatePublisherAsync<std_msgs.ByteMultiArray>("test_topic").Result;
             var subscriber = node.CreateSubscriberAsync<std_msgs.ByteMultiArray>("test_topic").Result;
 
-            publisher.ConnectionCounterChangedAsObservable().Where(x => x > 0).Timeout(TestTimeout).First();
-            subscriber.ConnectionCounterChangedAsObservable().Where(x => x > 0).Timeout(TestTimeout).First();
+            publisher.WaitForConnection(TestTimeout);
+            subscriber.WaitForConnection(TestTimeout);
 
             subscriber.Subscribe(observer);
 
@@ -78,8 +78,8 @@ namespace RosSharp.IntegrationTests
             var publisher = node.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
             var subscriber = node.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
 
-            publisher.ConnectionCounterChangedAsObservable().Where(x => x > 0).Timeout(TestTimeout).First();
-            subscriber.ConnectionCounterChangedAsObservable().Where(x => x > 0).Timeout(TestTimeout).First();
+            publisher.WaitForConnection(TestTimeout);
+            subscriber.WaitForConnection(TestTimeout);
 
             subscriber.Subscribe(observer);
             obs.Subscribe(publisher);
@@ -119,8 +119,8 @@ namespace RosSharp.IntegrationTests
             var subscriber = node.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
             var publisher = node.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
 
-            publisher.ConnectionCounterChangedAsObservable().Where(x => x > 0).Timeout(TestTimeout).First();
-            subscriber.ConnectionCounterChangedAsObservable().Where(x => x > 0).Timeout(TestTimeout).First();
+            publisher.WaitForConnection(TestTimeout);
+            subscriber.WaitForConnection(TestTimeout);
 
             subscriber.Subscribe(observer);
             obs.Subscribe(publisher);
@@ -165,10 +165,10 @@ namespace RosSharp.IntegrationTests
             var publisher = node1.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
             var subscriber3 = node3.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
 
-            publisher.ConnectionCounterChangedAsObservable().Where(x => x > 0).Timeout(TestTimeout).First();
-            subscriber1.ConnectionCounterChangedAsObservable().Where(x => x > 0).Timeout(TestTimeout).First();
-            subscriber2.ConnectionCounterChangedAsObservable().Where(x => x > 0).Timeout(TestTimeout).First();
-            subscriber3.ConnectionCounterChangedAsObservable().Where(x => x > 0).Timeout(TestTimeout).First();
+            publisher.WaitForConnection(TestTimeout);
+            subscriber1.WaitForConnection(TestTimeout);
+            subscriber2.WaitForConnection(TestTimeout);
+            subscriber3.WaitForConnection(TestTimeout);
 
             subscriber1.Subscribe(observer1);
             subscriber2.Subscribe(observer2);
@@ -180,14 +180,16 @@ namespace RosSharp.IntegrationTests
             observer2.Timeout(TestTimeout).First().data.Is("abc");
             observer3.Timeout(TestTimeout).First().data.Is("abc");
 
+            observer1.Dispose();
             scheduler.AdvanceBy(10);
-            observer1.Timeout(TestTimeout).First().data.Is("defg");
+            AssertEx.Throws<TimeoutException>(() => observer1.Timeout(TestTimeout).First());
             observer2.Timeout(TestTimeout).First().data.Is("defg");
             observer3.Timeout(TestTimeout).First().data.Is("defg");
 
+            observer2.Dispose();
             scheduler.AdvanceBy(10);
-            observer1.Timeout(TestTimeout).First().data.Is("hijklmn");
-            observer2.Timeout(TestTimeout).First().data.Is("hijklmn");
+            AssertEx.Throws<TimeoutException>(() => observer1.Timeout(TestTimeout).First());
+            AssertEx.Throws<TimeoutException>(() => observer2.Timeout(TestTimeout).First());
             observer3.Timeout(TestTimeout).First().data.Is("hijklmn");
 
 
@@ -233,10 +235,10 @@ namespace RosSharp.IntegrationTests
             var subscriber = node1.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
             var publisher3 = node3.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
 
-            publisher1.ConnectionCounterChangedAsObservable().Where(x => x > 0).Timeout(TestTimeout).First();
-            publisher2.ConnectionCounterChangedAsObservable().Where(x => x > 0).Timeout(TestTimeout).First();
-            publisher3.ConnectionCounterChangedAsObservable().Where(x => x > 0).Timeout(TestTimeout).First();
-            subscriber.ConnectionCounterChangedAsObservable().Where(x => x > 0).Timeout(TestTimeout).First();
+            publisher1.WaitForConnection(TestTimeout);
+            publisher2.WaitForConnection(TestTimeout);
+            publisher3.WaitForConnection(TestTimeout);
+            subscriber.WaitForConnection(TestTimeout);
 
             subscriber.Subscribe(observer);
             obs1.Subscribe(publisher1);
