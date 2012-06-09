@@ -144,6 +144,11 @@ namespace RosSharp.Parameter
 
         void IParameter.Update(object value)
         {
+            if(_parameterSubject == null)
+            {
+                return;
+            }
+
             try
             {
                 var data = _converter.ConvertTo(value);

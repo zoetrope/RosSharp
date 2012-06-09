@@ -12,16 +12,10 @@ namespace RosSharp.Sample
             Ros.HostName = "192.168.11.3";
 
             var node = Ros.CreateNodeAsync("/Talker").Result;
-            //Console.ReadKey();
 
             var publisher = node.CreatePublisherAsync<RosSharp.std_msgs.String>("/chatter").Result;
 
             publisher.WaitForConnection();
-
-            Console.WriteLine("Start Send");
-
-            //Console.WriteLine("Press Any Key. Start Send.");
-            //Console.ReadKey();
 
             int i = 0;
             while (true)
@@ -30,10 +24,9 @@ namespace RosSharp.Sample
                 Console.WriteLine("data = {0}", data.data);
                 publisher.OnNext(data);
                 Thread.Sleep(TimeSpan.FromSeconds(1));
-                
             }
 
-            //Ros.Dispose();
+            Ros.Dispose();
         }
     }
 }

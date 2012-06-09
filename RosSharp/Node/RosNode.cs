@@ -309,6 +309,7 @@ namespace RosSharp.Node
         public Task DisposeAsync()
         {
             if (_disposed) throw new ObjectDisposedException("RosNode");
+            _disposed = true;
 
             var tasks = new List<Task>();
 
@@ -322,7 +323,7 @@ namespace RosSharp.Node
 
             return Task.Factory.StartNew(() =>
             {
-                Task.WaitAll(tasks.ToArray());
+                Task.WaitAll(tasks.ToArray()); //TODO: 例外が起きたら他の処理が行われない・・・
                 var handler = Disposing;
                 Disposing = null;
 
@@ -332,7 +333,6 @@ namespace RosSharp.Node
                 }
 
                 _slaveServer.Dispose();
-                _disposed = true;
             });
         }
 

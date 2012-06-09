@@ -99,8 +99,6 @@ namespace RosSharp.Tests.Node
 
             pub.Dispose();
             node.Dispose();
-
-            Thread.Sleep(TimeSpan.FromSeconds(6));
         }
         
         [TestMethod]
@@ -112,13 +110,7 @@ namespace RosSharp.Tests.Node
             var sub = node.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
 
             sub.Dispose();
-
-
             node.Dispose();
-
-            Thread.Sleep(TimeSpan.FromSeconds(6));
-            //Subscriber.OnCompleted?
-
         }
         [TestMethod]
         public void DisposeService()

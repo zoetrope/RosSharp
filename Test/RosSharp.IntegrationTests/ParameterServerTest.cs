@@ -29,14 +29,14 @@ namespace RosSharp.IntegrationTests
         [TestCleanup]
         public void Cleanup()
         {
-            _masterServer.Dispose();
             Ros.Dispose();
+            _masterServer.Dispose();
         }
 
         [TestMethod]
         public void IntParameter()
         {
-            var node = Ros.CreateNodeAsync("test").Result;
+            var node = Ros.CreateNodeAsync("test", enableLogger: false).Result;
             
             var param = node.CreateParameterAsync<int>("test_param").Result;
 

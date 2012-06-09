@@ -22,9 +22,9 @@ namespace RosSharp.MemoryLeakTest
 //            runner.Run(new NodeTest());
             //runner.Run(new PublisherTest());
             //runner.Run(new SubscriberTest());
-            runner.Run(new ServiceServerTest());
+            //runner.Run(new ServiceServerTest());
             //runner.Run(new ServiceProxyTest());
-//            runner.Run(new ParameterTest());
+            runner.Run(new ParameterTest());
 
             masterServer.Dispose();
             Ros.Dispose();
