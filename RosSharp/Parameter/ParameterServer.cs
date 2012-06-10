@@ -299,7 +299,7 @@ namespace RosSharp.Parameter
             {
                 if (_subscribers.ContainsKey(key))
                 {
-                    if (!_subscribers[key].Any(x=>x.SlaveUri==callerUri))
+                    if (_subscribers[key].Any(x => x.SlaveUri == callerUri))
                     {
                         var index = _subscribers[key].FindIndex(x => x.SlaveUri == callerUri);
                         _subscribers[key].RemoveAt(index);

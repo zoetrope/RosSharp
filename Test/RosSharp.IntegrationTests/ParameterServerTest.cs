@@ -45,7 +45,6 @@ namespace RosSharp.IntegrationTests
             for(int i=0;i<10;i++)
             {
                 param.Value = i;
-                Thread.Sleep(TimeSpan.FromSeconds(1));
             }
         }
         
@@ -61,7 +60,6 @@ namespace RosSharp.IntegrationTests
             for (double i = 0.0; i < 10.0; i+=1.1)
             {
                 param.Value = i;
-                Thread.Sleep(TimeSpan.FromSeconds(1));
             }
         }
 
@@ -77,7 +75,6 @@ namespace RosSharp.IntegrationTests
             for (int i = 0; i < 10; i++)
             {
                 param.Value = i.ToString();
-                Thread.Sleep(TimeSpan.FromSeconds(1));
             }
         }
         
@@ -93,7 +90,6 @@ namespace RosSharp.IntegrationTests
             for (int i = 0; i < 10; i++)
             {
                 param.Value = new List<int>() {i, i + 1, i + 2, i + 3};
-                Thread.Sleep(TimeSpan.FromSeconds(1));
             }
         }
         [TestMethod]
@@ -110,8 +106,6 @@ namespace RosSharp.IntegrationTests
                 dynamic val = param.Value;
                 val.IntValue = i;
                 val.StringValue = i.ToString();
-
-                Thread.Sleep(TimeSpan.FromSeconds(1));
             }
         }
     }

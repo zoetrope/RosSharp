@@ -20,7 +20,10 @@ namespace RosSharp.MemoryLeakTest
         {
             var param = _node.CreateParameterAsync<int>("param" + index).Result;
 
-            var d = param.Subscribe(x => Console.WriteLine(x));
+            var d = param.Subscribe(x =>
+            {
+                
+            });
 
             for (int i = 0; i < 10;i++ )
             {

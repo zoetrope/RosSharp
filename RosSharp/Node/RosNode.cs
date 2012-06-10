@@ -106,6 +106,7 @@ namespace RosSharp.Node
             }
 
             var param = new Parameter<T>(NodeId, paramName, _slaveServer.SlaveUri, _parameterServerClient);
+            param.Disposing += DisposeParameter;
 
             _parameters.Add(paramName, param);
 
@@ -433,6 +434,13 @@ namespace RosSharp.Node
             return Task.Factory.StartNew(() => _serviceProxies.Remove(serviceName));
         }
 
+        private Task DisposeParameter(string paramName)
+        {
+            return Task.Factory.StartNew(() =>
+            {
+                _parameters.Remove(paramName);
+            });
+        }
         private void SlaveServerOnParameterUpdated(string key, object value)
         {
             if (!_parameters.ContainsKey(key))

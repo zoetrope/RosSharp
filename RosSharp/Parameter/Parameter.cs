@@ -169,6 +169,10 @@ namespace RosSharp.Parameter
                 _parameterSubject = null;
             }
 
+            var handler = Disposing;
+            Disposing = null;
+            handler(Name).Wait();
+
             return _parameterServerClient.UnsubscribeParamAsync(NodeId, _slaveUri, Name);
         }
 
