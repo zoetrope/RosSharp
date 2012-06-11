@@ -9,7 +9,7 @@ namespace RosSharp.MemoryLeakTest
 {
     class ServiceProxyTest : ITest
     {
-        private INode _node;
+        private RosNode _node;
         private IServiceServer _serviceServer;
 
         public void Initialize()

@@ -9,7 +9,7 @@ namespace RosSharp.MemoryLeakTest
 {
     class ParameterTest : ITest
     {
-        private INode _node;
+        private RosNode _node;
 
         public void Initialize()
         {
@@ -18,7 +18,7 @@ namespace RosSharp.MemoryLeakTest
 
         public void Do(int index)
         {
-            var param = _node.CreateParameterAsync<int>("param" + index).Result;
+            var param = _node.CreatePrimitiveParameterAsync<int>("param" + index).Result;
 
             var d = param.Subscribe(x =>
             {

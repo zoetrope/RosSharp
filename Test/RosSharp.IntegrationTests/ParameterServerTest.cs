@@ -38,7 +38,7 @@ namespace RosSharp.IntegrationTests
         {
             var node = Ros.CreateNodeAsync("test", enableLogger: false).Result;
             
-            var param = node.CreateParameterAsync<int>("test_param").Result;
+            var param = node.CreatePrimitiveParameterAsync<int>("test_param").Result;
 
             param.Subscribe(x => Console.WriteLine("param = {0}", x), ex => Console.WriteLine(ex));
 
@@ -53,7 +53,7 @@ namespace RosSharp.IntegrationTests
         {
             var node = Ros.CreateNodeAsync("test").Result;
 
-            var param = node.CreateParameterAsync<double>("test_param").Result;
+            var param = node.CreatePrimitiveParameterAsync<double>("test_param").Result;
 
             param.Subscribe(x => Console.WriteLine("param = {0}", x), ex => Console.WriteLine(ex));
 
@@ -68,7 +68,7 @@ namespace RosSharp.IntegrationTests
         {
             var node = Ros.CreateNodeAsync("test").Result;
 
-            var param = node.CreateParameterAsync<string>("test_param").Result;
+            var param = node.CreatePrimitiveParameterAsync<string>("test_param").Result;
 
             param.Subscribe(x => Console.WriteLine("param = {0}", x), ex => Console.WriteLine(ex));
 
@@ -83,7 +83,7 @@ namespace RosSharp.IntegrationTests
         {
             var node = Ros.CreateNodeAsync("test").Result;
 
-            var param = node.CreateParameterAsync<List<int>>("test_param").Result;
+            var param = node.CreateListParameterAsync<int>("test_param").Result;
 
             param.Subscribe(xs => Console.WriteLine("param = {0}", string.Join(",", xs)), ex => Console.WriteLine(ex));
 
@@ -97,7 +97,7 @@ namespace RosSharp.IntegrationTests
         {
             var node = Ros.CreateNodeAsync("test").Result;
 
-            var param = node.CreateParameterAsync<DictionaryParameter>("test_param").Result;
+            var param = node.CreateDynamicParameterAsync("test_param").Result;
 
             param.Subscribe(x => Console.WriteLine("param = {0}", x), ex => Console.WriteLine(ex));
 

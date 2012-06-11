@@ -11,7 +11,7 @@ namespace RosSharp.MemoryLeakTest
 {
     class SubscriberTest : ITest
     {
-        private INode _node;
+        private RosNode _node;
         private Publisher<std_msgs.Int32> _publisher;
 
         public void Initialize()

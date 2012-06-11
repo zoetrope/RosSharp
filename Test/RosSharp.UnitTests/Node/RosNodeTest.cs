@@ -81,7 +81,7 @@ namespace RosSharp.Tests.Node
             var sub = node.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
             var service = node.RegisterServiceAsync(
                 "myservice", new AddTwoInts(req => new AddTwoInts.Response() {sum = req.a + req.b}));
-            var param = node.CreateParameterAsync<int>("param").Result;
+            var param = node.CreatePrimitiveParameterAsync<int>("param").Result;
 
             node.Dispose();
 
@@ -128,7 +128,7 @@ namespace RosSharp.Tests.Node
         {
             var node = Ros.CreateNodeAsync("test").Result;
 
-            var param = node.CreateParameterAsync<int>("param").Result;
+            var param = node.CreatePrimitiveParameterAsync<int>("param").Result;
 
             param.Dispose();
         }
