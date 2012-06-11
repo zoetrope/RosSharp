@@ -42,52 +42,16 @@ using CookComputing.XmlRpc;
 
 namespace RosSharp.Parameter
 {
-    public sealed class Parameter<T> : IObservable<T>, IParameter
+    public abstract class Parameter<T> : IObservable<T>, IParameter
     {
-        private readonly IParameterCoverter<T> _converter;
-        private readonly ParameterServerClient _parameterServerClient;
-        private readonly Uri _slaveUri;
-        private Subject<T> _parameterSubject;
-
-        internal Parameter(string nodeId, string paramName, Uri slaveUri, ParameterServerClient client)
-        {
-            NodeId = nodeId;
-            Name = paramName;
-            _slaveUri = slaveUri;
-
-            _parameterServerClient = client;
-
-
-            if (typeof (T).IsPrimitive || typeof (T) == typeof (string))
-            {
-                _converter = new PrimitiveParameterConverter<T>();
-            }
-            else if (typeof (T) == typeof (List<>))
-            {
-                _converter = new ListParameterConverter<T>();
-            }
-            else if (typeof (T) == typeof (DictionaryParameter))
-            {
-                _converter = new DictionaryParameterConverter<T>();
-            }
-            else
-            {
-                throw new ArgumentException("invalid Type Argument");
-            }
-        }
-
+        internal IParameterCoverter<T> _converter;
+        
+        protected Uri _slaveUri;
+        protected ParameterServerClient _parameterServerClient;
+        protected Subject<T> _parameterSubject;
+        
         public string NodeId { get; private set; }
         public string Name { get; private set; }
-
-        public T Value
-        {
-            get
-            {
-                var result = _parameterServerClient.GetParamAsync(NodeId, Name).Result;
-                return _converter.ConvertTo(result);
-            }
-            set { _parameterServerClient.SetParamAsync(NodeId, Name, _converter.ConvertFrom(value)).Wait(); }
-        }
 
         #region IObservable<T> Members
 
@@ -171,9 +135,10 @@ namespace RosSharp.Parameter
 
             var handler = Disposing;
             Disposing = null;
-            handler(Name).Wait();
 
-            return _parameterServerClient.UnsubscribeParamAsync(NodeId, _slaveUri, Name);
+            return _parameterServerClient.UnsubscribeParamAsync(NodeId, _slaveUri, Name)
+                .ContinueWith(_=>handler(Name))
+                .Unwrap();
         }
 
         public void Dispose()
@@ -183,8 +148,14 @@ namespace RosSharp.Parameter
 
         #endregion
 
-        internal Task InitializeAsync()
+        public Task InitializeAsync(string nodeId, string paramName, Uri slaveUri, ParameterServerClient client)
         {
+            NodeId = nodeId;
+            Name = paramName;
+            _slaveUri = slaveUri;
+
+            _parameterServerClient = client;
+
             return _parameterServerClient.HasParamAsync(NodeId, Name)
                 .ContinueWith(task =>
                 {
@@ -199,5 +170,43 @@ namespace RosSharp.Parameter
                 })
                 .Unwrap();
         }
+    }
+
+    public sealed class PrimitiveParameter<T> : Parameter<T>
+    {
+        public PrimitiveParameter() 
+        {
+            _converter = new PrimitiveParameterConverter<T>();
+        }
+        
+        public T Value
+        {
+            get
+            {
+                var result = _parameterServerClient.GetParamAsync(NodeId, Name).Result;
+                return _converter.ConvertTo(result);
+            }
+            set { _parameterServerClient.SetParamAsync(NodeId, Name, _converter.ConvertFrom(value)).Wait(); }
+        }
+
+
+    }
+    public sealed class ListParameter<T> : Parameter<List<T>>
+    {
+        public ListParameter()
+        {
+                _converter = new ListParameterConverter<List<T>>();
+        }
+
+
+    }
+    public sealed class DynamicParameter : Parameter<DictionaryParameter>
+    {
+        public DynamicParameter()
+        {
+                _converter = new DynamicParameterConverter();
+        }
+
+
     }
 }

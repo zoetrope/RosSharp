@@ -54,7 +54,7 @@ namespace RosSharp.Node
     /// <summary>
     ///   ROS Node
     /// </summary>
-    public class RosNode : INode
+    public class RosNode : IAsyncDisposable
     {
         private readonly ILog _logger = LogManager.GetCurrentClassLogger();
         private readonly MasterClient _masterClient;
@@ -92,11 +92,75 @@ namespace RosSharp.Node
 
         internal Publisher<Log> LogPubliser { get; private set; }
 
-        #region INode Members
-
+        /// <summary>
+        ///   Node ID
+        /// </summary>
         public string NodeId { get; private set; }
 
-        public Task<Parameter<T>> CreateParameterAsync<T>(string paramName)
+        #region IAsyncDisposable Members
+
+        public void Dispose()
+        {
+            DisposeAsync().Wait();
+        }
+
+        public Task DisposeAsync()
+        {
+            if (_disposed) throw new ObjectDisposedException("RosNode");
+            _disposed = true;
+
+            var tasks = new List<Task>();
+
+            tasks.AddRange(_topicContainer.GetPublishers().Select(pub => pub.DisposeAsync()));
+            tasks.AddRange(_topicContainer.GetSubscribers().Select(sub => sub.DisposeAsync()));
+
+            tasks.AddRange(_serviceProxies.Values.Select(proxy => proxy.DisposeAsync()));
+            tasks.AddRange(_serviceServers.Values.Select(service => service.DisposeAsync()));
+
+            tasks.AddRange(_parameters.Values.Select(param => param.DisposeAsync()));
+
+            return Task.Factory.StartNew(() =>
+            {
+                Task.WaitAll(tasks.ToArray()); //TODO: 例外が起きたら他の処理が行われない・・・
+                var handler = Disposing;
+                Disposing = null;
+
+                if (handler != null)
+                {
+                    handler(NodeId);
+                }
+
+                _slaveServer.Dispose();
+            });
+        }
+
+        public event Func<string, Task> Disposing = _ => Task.Factory.StartNew(() => { });
+
+        #endregion
+
+        /// <summary>
+        ///   Create a ROS Parameter
+        /// </summary>
+        /// <typeparam name="T"> Parameter Type </typeparam>
+        /// <param name="paramName"> Parameter Name </param>
+        /// <returns> Parameter </returns>
+        public Task<PrimitiveParameter<T>> CreatePrimitiveParameterAsync<T>(string paramName)
+        {
+            return CreateParameterAsync<PrimitiveParameter<T>>(paramName);
+        }
+
+        public Task<ListParameter<T>> CreateListParameterAsync<T>(string paramName)
+        {
+            return CreateParameterAsync<ListParameter<T>>(paramName);
+        }
+
+        public Task<DynamicParameter> CreateDynamicParameterAsync(string paramName)
+        {
+            return CreateParameterAsync<DynamicParameter>(paramName);
+        }
+
+        private Task<T> CreateParameterAsync<T>(string paramName)
+            where T : IParameter, new()
         {
             if (_disposed) throw new ObjectDisposedException("RosNode");
 
@@ -105,14 +169,14 @@ namespace RosSharp.Node
                 throw new InvalidOperationException(paramName + " is already created.");
             }
 
-            var param = new Parameter<T>(NodeId, paramName, _slaveServer.SlaveUri, _parameterServerClient);
+            var param = new T();
             param.Disposing += DisposeParameter;
 
             _parameters.Add(paramName, param);
 
-            var tcs = new TaskCompletionSource<Parameter<T>>();
+            var tcs = new TaskCompletionSource<T>();
 
-            param.InitializeAsync().ContinueWith(task =>
+            param.InitializeAsync(NodeId, paramName, _slaveServer.SlaveUri, _parameterServerClient).ContinueWith(task =>
             {
                 if (task.Status == TaskStatus.RanToCompletion)
                 {
@@ -128,11 +192,14 @@ namespace RosSharp.Node
             return tcs.Task;
         }
 
-        public void Dispose()
-        {
-        }
 
-
+        /// <summary>
+        ///   Create a ROS Topic Subscriber
+        /// </summary>
+        /// <typeparam name="TMessage"> Topic Message Type </typeparam>
+        /// <param name="topicName"> Topic Name </param>
+        /// <param name="nodelay"> false: Socket uses the Nagle algorithm </param>
+        /// <returns> Subscriber </returns>
         public Task<Subscriber<TMessage>> CreateSubscriberAsync<TMessage>(string topicName, bool nodelay = true)
             where TMessage : IMessage, new()
         {
@@ -173,6 +240,13 @@ namespace RosSharp.Node
             return tcs.Task;
         }
 
+        /// <summary>
+        ///   Create a ROS Topic Publisher
+        /// </summary>
+        /// <typeparam name="TMessage"> Topic Message Type </typeparam>
+        /// <param name="topicName"> Topic Name </param>
+        /// <param name="latching"> true: send the latest published message when subscribed topic </param>
+        /// <returns> Publisher </returns>
         public Task<Publisher<TMessage>> CreatePublisherAsync<TMessage>(string topicName, bool latching = false)
             where TMessage : IMessage, new()
         {
@@ -223,6 +297,12 @@ namespace RosSharp.Node
             return tcs.Task;
         }
 
+        /// <summary>
+        ///   Create a Proxy Object for ROS Service
+        /// </summary>
+        /// <typeparam name="TService"> Service Type </typeparam>
+        /// <param name="serviceName"> Service Name </param>
+        /// <returns> Proxy Object </returns>
         public Task<TService> CreateProxyAsync<TService>(string serviceName)
             where TService : IService, new()
         {
@@ -270,6 +350,13 @@ namespace RosSharp.Node
             return tcs.Task;
         }
 
+        /// <summary>
+        ///   Register a ROS Service
+        /// </summary>
+        /// <typeparam name="TService"> Service Type </typeparam>
+        /// <param name="serviceName"> Service Name </param>
+        /// <param name="service"> Service Instance </param>
+        /// <returns> object that dispose a service </returns>
         public Task<IServiceServer> RegisterServiceAsync<TService>(string serviceName, TService service)
             where TService : IService, new()
         {
@@ -306,40 +393,6 @@ namespace RosSharp.Node
                 });
             return tcs.Task;
         }
-
-        public Task DisposeAsync()
-        {
-            if (_disposed) throw new ObjectDisposedException("RosNode");
-            _disposed = true;
-
-            var tasks = new List<Task>();
-
-            tasks.AddRange(_topicContainer.GetPublishers().Select(pub => pub.DisposeAsync()));
-            tasks.AddRange(_topicContainer.GetSubscribers().Select(sub => sub.DisposeAsync()));
-
-            tasks.AddRange(_serviceProxies.Values.Select(proxy => proxy.DisposeAsync()));
-            tasks.AddRange(_serviceServers.Values.Select(service => service.DisposeAsync()));
-
-            tasks.AddRange(_parameters.Values.Select(param => param.DisposeAsync()));
-
-            return Task.Factory.StartNew(() =>
-            {
-                Task.WaitAll(tasks.ToArray()); //TODO: 例外が起きたら他の処理が行われない・・・
-                var handler = Disposing;
-                Disposing = null;
-
-                if (handler != null)
-                {
-                    handler(NodeId);
-                }
-
-                _slaveServer.Dispose();
-            });
-        }
-
-        public event Func<string, Task> Disposing = _ => Task.Factory.StartNew(() => { });
-
-        #endregion
 
         internal Task InitializeAsync(bool enableLogger)
         {
@@ -436,11 +489,9 @@ namespace RosSharp.Node
 
         private Task DisposeParameter(string paramName)
         {
-            return Task.Factory.StartNew(() =>
-            {
-                _parameters.Remove(paramName);
-            });
+            return Task.Factory.StartNew(() => { _parameters.Remove(paramName); });
         }
+
         private void SlaveServerOnParameterUpdated(string key, object value)
         {
             if (!_parameters.ContainsKey(key))

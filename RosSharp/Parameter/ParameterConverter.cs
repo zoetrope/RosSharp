@@ -80,17 +80,17 @@ namespace RosSharp.Parameter
         #endregion
     }
 
-    internal sealed class DictionaryParameterConverter<T> : IParameterCoverter<T>
+    internal sealed class DynamicParameterConverter : IParameterCoverter<DictionaryParameter>
     {
         #region IParameterCoverter<T> Members
 
-        public T ConvertTo(object value)
+        public DictionaryParameter ConvertTo(object value)
         {
             //TODO:
             throw new NotImplementedException();
         }
 
-        public object ConvertFrom(T value)
+        public object ConvertFrom(DictionaryParameter value)
         {
             throw new NotImplementedException();
         }

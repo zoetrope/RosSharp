@@ -41,5 +41,7 @@ namespace RosSharp.Parameter
     internal interface IParameter : IAsyncDisposable
     {
         void Update(object value);
+
+        Task InitializeAsync(string nodeId, string paramName, Uri slaveUri, ParameterServerClient client);
     }
 }
