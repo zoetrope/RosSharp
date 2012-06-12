@@ -170,15 +170,7 @@ namespace RosSharp.Parameter
                 })
                 .Unwrap();
         }
-    }
 
-    public sealed class PrimitiveParameter<T> : Parameter<T>
-    {
-        public PrimitiveParameter() 
-        {
-            _converter = new PrimitiveParameterConverter<T>();
-        }
-        
         public T Value
         {
             get
@@ -188,6 +180,15 @@ namespace RosSharp.Parameter
             }
             set { _parameterServerClient.SetParamAsync(NodeId, Name, _converter.ConvertFrom(value)).Wait(); }
         }
+    }
+
+    public sealed class PrimitiveParameter<T> : Parameter<T>
+    {
+        public PrimitiveParameter() 
+        {
+            _converter = new PrimitiveParameterConverter<T>();
+        }
+        
 
 
     }
@@ -195,7 +196,7 @@ namespace RosSharp.Parameter
     {
         public ListParameter()
         {
-                _converter = new ListParameterConverter<List<T>>();
+                _converter = new ListParameterConverter<T>();
         }
 
 

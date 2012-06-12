@@ -62,19 +62,25 @@ namespace RosSharp.Parameter
         #endregion
     }
 
-    internal sealed class ListParameterConverter<T> : IParameterCoverter<T>
+    internal sealed class ListParameterConverter<T> : IParameterCoverter<List<T>>
     {
         #region IParameterCoverter<T> Members
 
-        public T ConvertTo(object value)
+        public List<T> ConvertTo(object value)
         {
-            //TODO:
-            throw new NotImplementedException();
+            if(value is T[])
+            {
+                return new List<T>((T[]) value);
+            }
+            else
+            {
+                throw new ArgumentException("Parameter value is invalid type. " + value.GetType().Name);
+            }
         }
 
-        public object ConvertFrom(T value)
+        public object ConvertFrom(List<T> value)
         {
-            throw new NotImplementedException();
+            return value.ToArray();
         }
 
         #endregion
@@ -86,13 +92,19 @@ namespace RosSharp.Parameter
 
         public DictionaryParameter ConvertTo(object value)
         {
-            //TODO:
-            throw new NotImplementedException();
+            if(value is XmlRpcStruct)
+            {
+                return new DictionaryParameter((XmlRpcStruct)value);
+            }
+            else
+            {
+                throw new ArgumentException("Parameter value is invalid type. " + value.GetType().Name);
+            }
         }
 
         public object ConvertFrom(DictionaryParameter value)
         {
-            throw new NotImplementedException();
+            return value.RawData;
         }
 
         #endregion
@@ -100,28 +112,28 @@ namespace RosSharp.Parameter
 
     public sealed class DictionaryParameter : DynamicObject
     {
-        private XmlRpcStruct _xmlRpcStruct;
+        internal XmlRpcStruct RawData { get; set; }
         
         public DictionaryParameter(XmlRpcStruct members)
         {
-            _xmlRpcStruct = members;
+            RawData = members;
         }
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
-            if(!_xmlRpcStruct.ContainsKey(binder.Name))
+            if(!RawData.ContainsKey(binder.Name))
             {
                 result = null;
                 return false;
             }
 
-            result = _xmlRpcStruct[binder.Name];
+            result = RawData[binder.Name];
             return true;
         }
 
         public override bool TrySetMember(SetMemberBinder binder, object value)
         {
-            _xmlRpcStruct[binder.Name] = value;
+            RawData[binder.Name] = value;
             return true;
         }
 
@@ -129,9 +141,9 @@ namespace RosSharp.Parameter
         {
             var sb = new StringBuilder();
 
-            foreach (var key in _xmlRpcStruct.Keys)
+            foreach (var key in RawData.Keys)
             {
-                sb.Append(key + " = " + _xmlRpcStruct[key] + "\r\n");
+                sb.Append(key + " = " + RawData[key] + "\r\n");
             }
 
             return sb.ToString();
