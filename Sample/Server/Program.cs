@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using RosSharp.Master;
 
 namespace RosSharp.Sample
@@ -9,13 +10,13 @@ namespace RosSharp.Sample
         {
             Ros.MasterUri = new Uri("http://192.168.11.2:11311/");
             Ros.HostName = "192.168.11.2";
+            Ros.XmlRpcTimeout = 3000;
+            Ros.TopicTimeout = 3000;
 
-            var node = Ros.CreateNodeAsync("Server").Result;
+            //SyncMain();
+            AsyncMainTAP();
+            //AsyncMain();
 
-            node.RegisterServiceAsync("/add_two_ints", new AddTwoInts(add_two_ints)).Wait();
-
-            //node.RegisterServiceAsync("/add_two_ints",new AddTwoInts(req => new AddTwoInts.Response {sum = req.a + req.b})).Wait();
-            
             Console.WriteLine("Press Any Key.");
             Console.ReadKey();
         }
@@ -26,6 +27,52 @@ namespace RosSharp.Sample
             return new AddTwoInts.Response() { sum = req.a + req.b };
         }
 
+        static void SyncMain()
+        {
+            try
+            {
+                var node = Ros.CreateNodeAsync("/Server").Result;
+                var server = node.RegisterServiceAsync("/add_two_ints", new AddTwoInts(add_two_ints)).Result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+        }
+
+        static void AsyncMainTAP()
+        {
+            Ros.CreateNodeAsync("/Server")
+                .ContinueWith(node =>
+                {
+                    return node.Result.RegisterServiceAsync("/add_two_ints", new AddTwoInts(add_two_ints));
+                })
+                .Unwrap()
+                .ContinueWith(server =>
+                {
+                    server.Wait();
+                })
+                .ContinueWith(res =>
+                {
+                    Console.WriteLine("失敗！！！！！！！！！！！");
+                    //Console.WriteLine(res.Exception.InnerException);
+                }, TaskContinuationOptions.OnlyOnFaulted);
+        }
+        /*
+        static async void AsyncMain()
+        {
+            try
+            {
+                var node = await Ros.CreateNodeAsync("/Server");
+                var server = await node.RegisterServiceAsync("/add_two_ints", new AddTwoInts(add_two_ints));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+        */
     }
 
 
