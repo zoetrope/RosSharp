@@ -15,9 +15,9 @@ RosSharpは、ROSのC#クライアントライブラリです。
 特徴
 ==================================================
 
-* RosSharp is implemented based on Reactive Extensions
-* `NuGet <http://nuget.codeplex.com/>`_  installation support
-* Create ROS Node
+* RosSharpはReactive Extensionsをベースにしています。
+* `NuGet <http://nuget.codeplex.com/>`_  でのインストールをサポートしています。
+* ノードの作成
 * Master/Slave/ParameterServer API XML-RPC Client
 * Master/Slave/ParameterServer API XML-RPC Server
 * Topic (TCPROS) Connection
@@ -26,11 +26,10 @@ RosSharpは、ROSのC#クライアントライブラリです。
 * RosCore (Master Server & Parameter Server & RosOut Node)
 * GenMsg (Code generation tool from .msg/.srv files)
 
-未実装機能
-==================================================
+以下の機能は実装していません。
 
 * Remapping Arguments
-* Graph Resource Names (supports only the global name)
+* Graph Resource Names (global nameのみをサポートしています)
 * Clock Node
 * roslang
 
@@ -156,29 +155,36 @@ app.configでの設定
 プログラミング
 ***************************************************
 
-using directive
+
+
+同期型
 ==================================================
 
-ソースコードに下記のusing句を追加します。
 
 .. code-block:: csharp
 
-  using RosSharp;
+  try
+  {
+    var node = ROS.CreateNodeAsync("Test").Result;
+    
+    
+    // 
+    var subscriber = node.CreateSubscriberAsync<RosSharp.std_msgs.String>("/chatter").Result;
+    subscriber.Subscribe(x => Console.WriteLine(x.data));
+    
+    
 
-ノードの作成
-==================================================
-
-.. code-block:: csharp
-
-  var node = ROS.CreateNode("Test");
+  }
+  catch(Exception ex)
+  {
+    
+  }
 
 Subscriber
 ==================================================
 
 .. code-block:: csharp
 
-  var subscriber = node.CreateSubscriberAsync<RosSharp.std_msgs.String>("/chatter").Result;
-  subscriber.Subscribe(x => Console.WriteLine(x.data));
 
 
 Publisher
@@ -280,7 +286,7 @@ roscpp
 RosCore
 ==================================================
 
-RosCore is
+RosCore has the following features:
 
 * a ROS Master
 * a ROS ParameterServer
