@@ -39,10 +39,10 @@ namespace RosSharp.IntegrationTests
         {
             var observer = new OneLineCacheSubject<std_msgs.ByteMultiArray>();
 
-            var node = Ros.CreateNodeAsync("test").Result;
+            var node = Ros.InitNodeAsync("test").Result;
 
-            var publisher = node.CreatePublisherAsync<std_msgs.ByteMultiArray>("test_topic").Result;
-            var subscriber = node.CreateSubscriberAsync<std_msgs.ByteMultiArray>("test_topic").Result;
+            var publisher = node.PublisherAsync<std_msgs.ByteMultiArray>("test_topic").Result;
+            var subscriber = node.SubscriberAsync<std_msgs.ByteMultiArray>("test_topic").Result;
 
             publisher.WaitForConnection(TestTimeout);
             subscriber.WaitForConnection(TestTimeout);
@@ -73,10 +73,10 @@ namespace RosSharp.IntegrationTests
                 OnNext(30, new std_msgs.String() {data = "hijklmn"})
                 );
 
-            var node = Ros.CreateNodeAsync("test").Result;
+            var node = Ros.InitNodeAsync("test").Result;
 
-            var publisher = node.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
-            var subscriber = node.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
+            var publisher = node.PublisherAsync<std_msgs.String>("test_topic").Result;
+            var subscriber = node.SubscriberAsync<std_msgs.String>("test_topic").Result;
 
             publisher.WaitForConnection(TestTimeout);
             subscriber.WaitForConnection(TestTimeout);
@@ -114,10 +114,10 @@ namespace RosSharp.IntegrationTests
                 OnNext(30, new std_msgs.String() { data = "hijklmn" })
                 );
 
-            var node = Ros.CreateNodeAsync("test").Result;
+            var node = Ros.InitNodeAsync("test").Result;
 
-            var subscriber = node.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
-            var publisher = node.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
+            var subscriber = node.SubscriberAsync<std_msgs.String>("test_topic").Result;
+            var publisher = node.PublisherAsync<std_msgs.String>("test_topic").Result;
 
             publisher.WaitForConnection(TestTimeout);
             subscriber.WaitForConnection(TestTimeout);
@@ -156,14 +156,14 @@ namespace RosSharp.IntegrationTests
                 OnNext(30, new std_msgs.String() { data = "hijklmn" })
                 );
 
-            var node1 = Ros.CreateNodeAsync("test1").Result;
-            var node2 = Ros.CreateNodeAsync("test2").Result;
-            var node3 = Ros.CreateNodeAsync("test3").Result;
+            var node1 = Ros.InitNodeAsync("test1").Result;
+            var node2 = Ros.InitNodeAsync("test2").Result;
+            var node3 = Ros.InitNodeAsync("test3").Result;
 
-            var subscriber1 = node1.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
-            var subscriber2 = node2.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
-            var publisher = node1.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
-            var subscriber3 = node3.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
+            var subscriber1 = node1.SubscriberAsync<std_msgs.String>("test_topic").Result;
+            var subscriber2 = node2.SubscriberAsync<std_msgs.String>("test_topic").Result;
+            var publisher = node1.PublisherAsync<std_msgs.String>("test_topic").Result;
+            var subscriber3 = node3.SubscriberAsync<std_msgs.String>("test_topic").Result;
 
             publisher.WaitForConnection(TestTimeout);
             subscriber1.WaitForConnection(TestTimeout);
@@ -226,14 +226,14 @@ namespace RosSharp.IntegrationTests
                 OnNext(330, new std_msgs.String() { data = "hijklmn3" })
                 );
 
-            var node1 = Ros.CreateNodeAsync("test1").Result;
-            var node2 = Ros.CreateNodeAsync("test2").Result;
-            var node3 = Ros.CreateNodeAsync("test3").Result;
+            var node1 = Ros.InitNodeAsync("test1").Result;
+            var node2 = Ros.InitNodeAsync("test2").Result;
+            var node3 = Ros.InitNodeAsync("test3").Result;
 
-            var publisher1 = node1.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
-            var publisher2 = node2.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
-            var subscriber = node1.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
-            var publisher3 = node3.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
+            var publisher1 = node1.PublisherAsync<std_msgs.String>("test_topic").Result;
+            var publisher2 = node2.PublisherAsync<std_msgs.String>("test_topic").Result;
+            var subscriber = node1.SubscriberAsync<std_msgs.String>("test_topic").Result;
+            var publisher3 = node3.PublisherAsync<std_msgs.String>("test_topic").Result;
 
             publisher1.WaitForConnection(TestTimeout);
             publisher2.WaitForConnection(TestTimeout);

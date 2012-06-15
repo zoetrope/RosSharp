@@ -27,8 +27,8 @@ namespace RosSharp.Sample
         {
             try
             {
-                var node = Ros.CreateNodeAsync("/Listener").Result;
-                var subscriber = node.CreateSubscriberAsync<RosSharp.std_msgs.String>("/chatter").Result;
+                var node = Ros.InitNodeAsync("/Listener").Result;
+                var subscriber = node.SubscriberAsync<RosSharp.std_msgs.String>("/chatter").Result;
                 subscriber.WaitForConnection();
                 subscriber.Subscribe(x => Console.WriteLine(x.data));
             }
@@ -41,10 +41,10 @@ namespace RosSharp.Sample
 
         static void AsyncMainTAP()
         {
-            Ros.CreateNodeAsync("/Listener")
+            Ros.InitNodeAsync("/Listener")
                 .ContinueWith(node =>
                 {
-                    return node.Result.CreateSubscriberAsync<RosSharp.std_msgs.String>("/chatter");
+                    return node.Result.SubscriberAsync<RosSharp.std_msgs.String>("/chatter");
                 })
                 .Unwrap()
                 .ContinueWith(subscriber =>
@@ -62,8 +62,8 @@ namespace RosSharp.Sample
         {
             try
             {
-                var node = await Ros.CreateNodeAsync("/Listener");
-                var subscriber = await node.CreateSubscriberAsync<RosSharp.std_msgs.String>("/chatter");
+                var node = await Ros.InitNodeAsync("/Listener");
+                var subscriber = await node.SubscriberAsync<RosSharp.std_msgs.String>("/chatter");
                 subscriber.Subscribe(x => Console.WriteLine(x.data));
             }
             catch (Exception ex)

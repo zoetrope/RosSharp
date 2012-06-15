@@ -213,8 +213,9 @@ namespace RosSharp
         /// </summary>
         /// <param name="nodeName"> ROS Node name </param>
         /// <param name="enableLogger"> if true, enable RosOut Logger </param>
+        /// <param name="anonymous"> if true, named to an anonymous name (append a random number to the node name) </param>
         /// <returns> created Node </returns>
-        public static Task<RosNode> CreateNodeAsync(string nodeName, bool enableLogger = true)
+        public static Task<RosNode> InitNodeAsync(string nodeName, bool enableLogger = true, bool anonymous = false)
         {
             lock (_nodes)
             {

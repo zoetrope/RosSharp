@@ -36,9 +36,9 @@ namespace RosSharp.IntegrationTests
         [TestMethod]
         public void IntParameter()
         {
-            var node = Ros.CreateNodeAsync("test", enableLogger: false).Result;
+            var node = Ros.InitNodeAsync("test", enableLogger: false).Result;
             
-            var param = node.CreatePrimitiveParameterAsync<int>("test_param").Result;
+            var param = node.PrimitiveParameterAsync<int>("test_param").Result;
 
             param.Subscribe(x => Console.WriteLine("param = {0}", x), ex => Console.WriteLine(ex));
 
@@ -51,9 +51,9 @@ namespace RosSharp.IntegrationTests
         [TestMethod]
         public void DoubleParameter()
         {
-            var node = Ros.CreateNodeAsync("test").Result;
+            var node = Ros.InitNodeAsync("test").Result;
 
-            var param = node.CreatePrimitiveParameterAsync<double>("test_param").Result;
+            var param = node.PrimitiveParameterAsync<double>("test_param").Result;
 
             param.Subscribe(x => Console.WriteLine("param = {0}", x), ex => Console.WriteLine(ex));
 
@@ -66,9 +66,9 @@ namespace RosSharp.IntegrationTests
         [TestMethod]
         public void StringParameter()
         {
-            var node = Ros.CreateNodeAsync("test").Result;
+            var node = Ros.InitNodeAsync("test").Result;
 
-            var param = node.CreatePrimitiveParameterAsync<string>("test_param").Result;
+            var param = node.PrimitiveParameterAsync<string>("test_param").Result;
 
             param.Subscribe(x => Console.WriteLine("param = {0}", x), ex => Console.WriteLine(ex));
 
@@ -81,9 +81,9 @@ namespace RosSharp.IntegrationTests
         [TestMethod]
         public void ListParameter()
         {
-            var node = Ros.CreateNodeAsync("test").Result;
+            var node = Ros.InitNodeAsync("test").Result;
 
-            var param = node.CreateListParameterAsync<int>("test_param").Result;
+            var param = node.ListParameterAsync<int>("test_param").Result;
 
             param.Subscribe(xs => Console.WriteLine("param = {0}", string.Join(",", xs)), ex => Console.WriteLine(ex));
 
@@ -95,9 +95,9 @@ namespace RosSharp.IntegrationTests
         [TestMethod]
         public void DictionaryParameter()
         {
-            var node = Ros.CreateNodeAsync("test").Result;
+            var node = Ros.InitNodeAsync("test").Result;
 
-            var param = node.CreateDynamicParameterAsync("test_param").Result;
+            var param = node.DynamicParameterAsync("test_param").Result;
 
             param.Subscribe(x => Console.WriteLine("param = {0}", x), ex => Console.WriteLine(ex));
 

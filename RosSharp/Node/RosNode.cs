@@ -139,22 +139,33 @@ namespace RosSharp.Node
         #endregion
 
         /// <summary>
-        ///   Create a ROS Parameter
+        ///   Create a Primitive Parameter
         /// </summary>
-        /// <typeparam name="T"> Parameter Type </typeparam>
+        /// <typeparam name="T"> Parameter Type (primitive type only)</typeparam>
         /// <param name="paramName"> Parameter Name </param>
         /// <returns> Parameter </returns>
-        public Task<PrimitiveParameter<T>> CreatePrimitiveParameterAsync<T>(string paramName)
+        public Task<PrimitiveParameter<T>> PrimitiveParameterAsync<T>(string paramName)
         {
             return CreateParameterAsync<PrimitiveParameter<T>>(paramName);
         }
 
-        public Task<ListParameter<T>> CreateListParameterAsync<T>(string paramName)
+        /// <summary>
+        ///   Create a List Parameter
+        /// </summary>
+        /// <typeparam name="T"> Parameter Type (primitive type only)</typeparam>
+        /// <param name="paramName"> Parameter Name </param>
+        /// <returns> Parameter </returns>
+        public Task<ListParameter<T>> ListParameterAsync<T>(string paramName)
         {
             return CreateParameterAsync<ListParameter<T>>(paramName);
         }
 
-        public Task<DynamicParameter> CreateDynamicParameterAsync(string paramName)
+        /// <summary>
+        ///   Create a Dynamic Parameter
+        /// </summary>
+        /// <param name="paramName"> Parameter Name </param>
+        /// <returns> Parameter </returns>
+        public Task<DynamicParameter> DynamicParameterAsync(string paramName)
         {
             return CreateParameterAsync<DynamicParameter>(paramName);
         }
@@ -200,7 +211,7 @@ namespace RosSharp.Node
         /// <param name="topicName"> Topic Name </param>
         /// <param name="nodelay"> false: Socket uses the Nagle algorithm </param>
         /// <returns> Subscriber </returns>
-        public Task<Subscriber<TMessage>> CreateSubscriberAsync<TMessage>(string topicName, bool nodelay = true)
+        public Task<Subscriber<TMessage>> SubscriberAsync<TMessage>(string topicName, bool nodelay = true)
             where TMessage : IMessage, new()
         {
             if (_disposed) throw new ObjectDisposedException("RosNode");
@@ -247,7 +258,7 @@ namespace RosSharp.Node
         /// <param name="topicName"> Topic Name </param>
         /// <param name="latching"> true: send the latest published message when subscribed topic </param>
         /// <returns> Publisher </returns>
-        public Task<Publisher<TMessage>> CreatePublisherAsync<TMessage>(string topicName, bool latching = false)
+        public Task<Publisher<TMessage>> PublisherAsync<TMessage>(string topicName, bool latching = false)
             where TMessage : IMessage, new()
         {
             if (_disposed) throw new ObjectDisposedException("RosNode");
@@ -303,7 +314,7 @@ namespace RosSharp.Node
         /// <typeparam name="TService"> Service Type </typeparam>
         /// <param name="serviceName"> Service Name </param>
         /// <returns> Proxy Object </returns>
-        public Task<TService> CreateProxyAsync<TService>(string serviceName)
+        public Task<TService> ServiceProxyAsync<TService>(string serviceName)
             where TService : IService, new()
         {
             if (_disposed) throw new ObjectDisposedException("RosNode");
@@ -350,6 +361,11 @@ namespace RosSharp.Node
             return tcs.Task;
         }
 
+        public void WaitForService(TimeSpan timeout)
+        {
+            
+        }
+
         /// <summary>
         ///   Register a ROS Service
         /// </summary>
@@ -357,7 +373,7 @@ namespace RosSharp.Node
         /// <param name="serviceName"> Service Name </param>
         /// <param name="service"> Service Instance </param>
         /// <returns> object that dispose a service </returns>
-        public Task<IServiceServer> RegisterServiceAsync<TService>(string serviceName, TService service)
+        public Task<IServiceServer> AdvertiseServiceAsync<TService>(string serviceName, TService service)
             where TService : IService, new()
         {
             if (_disposed) throw new ObjectDisposedException("RosNode");
@@ -398,10 +414,10 @@ namespace RosSharp.Node
         {
             if (enableLogger)
             {
-                var t1 = CreatePublisherAsync<Log>("/rosout").ContinueWith(t => LogPubliser = t.Result);
+                var t1 = PublisherAsync<Log>("/rosout").ContinueWith(t => LogPubliser = t.Result);
 
-                var t2 = RegisterServiceAsync(NodeId + "/get_loggers", new GetLoggers(GetLoggers));
-                var t3 = RegisterServiceAsync(NodeId + "/set_logger_level", new SetLoggerLevel(SetLoggerLevel));
+                var t2 = AdvertiseServiceAsync(NodeId + "/get_loggers", new GetLoggers(GetLoggers));
+                var t3 = AdvertiseServiceAsync(NodeId + "/set_logger_level", new SetLoggerLevel(SetLoggerLevel));
 
                 return Task.Factory.StartNew(() => Task.WaitAll(new Task[] {t1, t2, t3}));
             }

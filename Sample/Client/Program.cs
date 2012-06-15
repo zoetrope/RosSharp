@@ -25,8 +25,8 @@ namespace RosSharp.Sample
         {
             try
             {
-                var node = Ros.CreateNodeAsync("/Client").Result;
-                var proxy = node.CreateProxyAsync<AddTwoInts>("/add_two_ints").Result;
+                var node = Ros.InitNodeAsync("/Client").Result;
+                var proxy = node.ServiceProxyAsync<AddTwoInts>("/add_two_ints").Result;
 
                 var res1 = proxy.Invoke(new AddTwoInts.Request() { a = 1, b = 2 });
                 Console.WriteLine(res1.sum);
@@ -40,10 +40,10 @@ namespace RosSharp.Sample
 
         static void AsyncMainTAP()
         {
-            Ros.CreateNodeAsync("/Client")
+            Ros.InitNodeAsync("/Client")
                 .ContinueWith(node =>
                 {
-                    return node.Result.CreateProxyAsync<AddTwoInts>("/add_two_ints");
+                    return node.Result.ServiceProxyAsync<AddTwoInts>("/add_two_ints");
                 })
                 .Unwrap()
                 .ContinueWith(proxy =>
@@ -66,8 +66,8 @@ namespace RosSharp.Sample
         {
             try
             {
-                var node = await Ros.CreateNodeAsync("/Client");
-                var proxy = await node.CreateProxyAsync<AddTwoInts>("/add_two_ints");
+                var node = await Ros.InitNodeAsync("/Client");
+                var proxy = await node.ServiceProxyAsync<AddTwoInts>("/add_two_ints");
 
                 var res1 = await proxy.InvokeAsync(new AddTwoInts.Request() { a = 1, b = 2 });
                 Console.WriteLine(res1.sum);

@@ -104,7 +104,7 @@ namespace RosSharp.Master
         /// </returns>
         public object[] RegisterService(string callerId, string service, string serviceApi, string callerApi)
         {
-            _logger.Debug(m => m("RegisterServiceAsync(callerId={0},service={1},serviceApi={2},callerApi={3})"
+            _logger.Debug(m => m("AdvertiseServiceAsync(callerId={0},service={1},serviceApi={2},callerApi={3})"
                                  , callerId, service, serviceApi, callerApi));
 
             if (string.IsNullOrEmpty(service))

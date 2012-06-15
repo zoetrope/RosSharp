@@ -14,7 +14,7 @@ namespace RosSharp.Tests
         {
             Ros.GetNodes().Count.Is(0);
 
-            var node = Ros.CreateNodeAsync("test").Result;
+            var node = Ros.InitNodeAsync("test").Result;
 
             Ros.GetNodes().Count.Is(1);
 
@@ -28,7 +28,7 @@ namespace RosSharp.Tests
         {
             Ros.GetNodes().Count.Is(0);
 
-            var node = Ros.CreateNodeAsync("test").Result;
+            var node = Ros.InitNodeAsync("test").Result;
 
             Ros.GetNodes().Count.Is(1);
 

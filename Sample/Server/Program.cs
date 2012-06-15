@@ -31,8 +31,8 @@ namespace RosSharp.Sample
         {
             try
             {
-                var node = Ros.CreateNodeAsync("/Server").Result;
-                var server = node.RegisterServiceAsync("/add_two_ints", new AddTwoInts(add_two_ints)).Result;
+                var node = Ros.InitNodeAsync("/Server").Result;
+                var server = node.AdvertiseServiceAsync("/add_two_ints", new AddTwoInts(add_two_ints)).Result;
             }
             catch (Exception ex)
             {
@@ -43,10 +43,10 @@ namespace RosSharp.Sample
 
         static void AsyncMainTAP()
         {
-            Ros.CreateNodeAsync("/Server")
+            Ros.InitNodeAsync("/Server")
                 .ContinueWith(node =>
                 {
-                    return node.Result.RegisterServiceAsync("/add_two_ints", new AddTwoInts(add_two_ints));
+                    return node.Result.AdvertiseServiceAsync("/add_two_ints", new AddTwoInts(add_two_ints));
                 })
                 .Unwrap()
                 .ContinueWith(server =>
@@ -64,8 +64,8 @@ namespace RosSharp.Sample
         {
             try
             {
-                var node = await Ros.CreateNodeAsync("/Server");
-                var server = await node.RegisterServiceAsync("/add_two_ints", new AddTwoInts(add_two_ints));
+                var node = await Ros.InitNodeAsync("/Server");
+                var server = await node.AdvertiseServiceAsync("/add_two_ints", new AddTwoInts(add_two_ints));
             }
             catch (Exception ex)
             {

@@ -14,16 +14,16 @@ namespace RosSharp.MemoryLeakTest
 
         public void Initialize()
         {
-            _node = Ros.CreateNodeAsync("test", enableLogger: false).Result;
+            _node = Ros.InitNodeAsync("test", enableLogger: false).Result;
 
             _serviceServer = _node
-                .RegisterServiceAsync("add_two_ints", new AddTwoInts(req => new AddTwoInts.Response() {sum = req.a + req.b}))
+                .AdvertiseServiceAsync("add_two_ints", new AddTwoInts(req => new AddTwoInts.Response() {sum = req.a + req.b}))
                 .Result;
         }
 
         public void Do(int index)
         {
-            var proxy = _node.CreateProxyAsync<AddTwoInts>("add_two_ints").Result;
+            var proxy = _node.ServiceProxyAsync<AddTwoInts>("add_two_ints").Result;
 
             for (int i = 0; i < 10; i++)
             {

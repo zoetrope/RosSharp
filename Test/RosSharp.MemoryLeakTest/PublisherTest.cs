@@ -17,14 +17,14 @@ namespace RosSharp.MemoryLeakTest
 
         public void Initialize()
         {
-            _node = (RosNode)Ros.CreateNodeAsync("test", enableLogger: false).Result;
+            _node = (RosNode)Ros.InitNodeAsync("test", enableLogger: false).Result;
 
-            _subscriber = _node.CreateSubscriberAsync<std_msgs.Int32>("test").Result;
+            _subscriber = _node.SubscriberAsync<std_msgs.Int32>("test").Result;
         }
 
         public void Do(int index)
         {
-            var publisher = _node.CreatePublisherAsync<std_msgs.Int32>("test").Result;
+            var publisher = _node.PublisherAsync<std_msgs.Int32>("test").Result;
 
             publisher.WaitForConnection(TimeSpan.FromSeconds(3));
             _subscriber.WaitForConnection(TimeSpan.FromSeconds(3));

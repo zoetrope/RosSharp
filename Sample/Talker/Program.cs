@@ -26,9 +26,9 @@ namespace RosSharp.Sample
         {
             try
             {
-                var node = Ros.CreateNodeAsync("/Talker").Result;
+                var node = Ros.InitNodeAsync("/Talker").Result;
 
-                var publisher = node.CreatePublisherAsync<RosSharp.std_msgs.String>("/chatter").Result;
+                var publisher = node.PublisherAsync<RosSharp.std_msgs.String>("/chatter").Result;
 
                 publisher.WaitForConnection();
 
@@ -51,10 +51,10 @@ namespace RosSharp.Sample
 
         static void AsyncMainTAP()
         {
-            Ros.CreateNodeAsync("/Talker")
+            Ros.InitNodeAsync("/Talker")
                 .ContinueWith(node =>
                 {
-                    return node.Result.CreatePublisherAsync<RosSharp.std_msgs.String>("/chatter");
+                    return node.Result.PublisherAsync<RosSharp.std_msgs.String>("/chatter");
                 })
                 .Unwrap()
                 .ContinueWith(publisher =>
@@ -80,9 +80,9 @@ namespace RosSharp.Sample
         {
             try
             {
-                var node = await Ros.CreateNodeAsync("/Talker");
+                var node = await Ros.InitNodeAsync("/Talker");
 
-                var publisher = await node.CreatePublisherAsync<RosSharp.std_msgs.String>("/chatter");
+                var publisher = await node.PublisherAsync<RosSharp.std_msgs.String>("/chatter");
 
                 int i = 0;
                 while (true)

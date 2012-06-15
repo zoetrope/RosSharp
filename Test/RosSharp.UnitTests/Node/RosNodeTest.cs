@@ -37,51 +37,51 @@ namespace RosSharp.Tests.Node
         {
             Ros.MasterUri = new Uri("http://localhost:9999/");
 
-            AssertEx.Throws<AggregateException>(() => Ros.CreateNodeAsync("test").Wait());
+            AssertEx.Throws<AggregateException>(() => Ros.InitNodeAsync("test").Wait());
         }
 
         [TestMethod]
         public void CreateSubscriber_Error()
         {
             Ros.MasterUri = new Uri("http://localhost:9999/");
-            var node = Ros.CreateNodeAsync("test",enableLogger:false).Result;
-            AssertEx.Throws<AggregateException>(() => node.CreateSubscriberAsync<std_msgs.String>("test_topic").Wait());
+            var node = Ros.InitNodeAsync("test",enableLogger:false).Result;
+            AssertEx.Throws<AggregateException>(() => node.SubscriberAsync<std_msgs.String>("test_topic").Wait());
         }
 
         [TestMethod]
         public void CreatePublisher_Error()
         {
             Ros.MasterUri = new Uri("http://localhost:9999/");
-            var node = Ros.CreateNodeAsync("test", enableLogger: false).Result;
-            AssertEx.Throws<AggregateException>(() => node.CreatePublisherAsync<std_msgs.String>("test_topic").Wait());
+            var node = Ros.InitNodeAsync("test", enableLogger: false).Result;
+            AssertEx.Throws<AggregateException>(() => node.PublisherAsync<std_msgs.String>("test_topic").Wait());
         }
 
         [TestMethod]
         public void RegisterService_Error()
         {
             Ros.MasterUri = new Uri("http://localhost:9999/");
-            var node = Ros.CreateNodeAsync("test", enableLogger: false).Result;
-            AssertEx.Throws<AggregateException>(() => node.RegisterServiceAsync("/chatter", new AddTwoInts(_ => new AddTwoInts.Response())).Wait());
+            var node = Ros.InitNodeAsync("test", enableLogger: false).Result;
+            AssertEx.Throws<AggregateException>(() => node.AdvertiseServiceAsync("/chatter", new AddTwoInts(_ => new AddTwoInts.Response())).Wait());
         }
 
         [TestMethod]
         public void CreateProxy_Error()
         {
             Ros.MasterUri = new Uri("http://localhost:9999/");
-            var node = Ros.CreateNodeAsync("test", enableLogger: false).Result;
-            AssertEx.Throws<AggregateException>(() => node.CreateProxyAsync<AddTwoInts>("/chatter").Wait());
+            var node = Ros.InitNodeAsync("test", enableLogger: false).Result;
+            AssertEx.Throws<AggregateException>(() => node.ServiceProxyAsync<AddTwoInts>("/chatter").Wait());
         }
 
         [TestMethod]
         public void DisposeNode()
         {
-            var node = Ros.CreateNodeAsync("test").Result;
+            var node = Ros.InitNodeAsync("test").Result;
 
-            var pub = node.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
-            var sub = node.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
-            var service = node.RegisterServiceAsync(
+            var pub = node.PublisherAsync<std_msgs.String>("test_topic").Result;
+            var sub = node.SubscriberAsync<std_msgs.String>("test_topic").Result;
+            var service = node.AdvertiseServiceAsync(
                 "myservice", new AddTwoInts(req => new AddTwoInts.Response() {sum = req.a + req.b}));
-            var param = node.CreatePrimitiveParameterAsync<int>("param").Result;
+            var param = node.PrimitiveParameterAsync<int>("param").Result;
 
             node.Dispose();
 
@@ -92,10 +92,10 @@ namespace RosSharp.Tests.Node
         [TestMethod]
         public void DisposePublisher()
         {
-            var node = Ros.CreateNodeAsync("test").Result;
+            var node = Ros.InitNodeAsync("test").Result;
 
-            var pub = node.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
-            var sub = node.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
+            var pub = node.PublisherAsync<std_msgs.String>("test_topic").Result;
+            var sub = node.SubscriberAsync<std_msgs.String>("test_topic").Result;
 
             pub.Dispose();
             node.Dispose();
@@ -104,10 +104,10 @@ namespace RosSharp.Tests.Node
         [TestMethod]
         public void DisposeSubscriber()
         {
-            var node = Ros.CreateNodeAsync("test").Result;
+            var node = Ros.InitNodeAsync("test").Result;
 
-            var pub = node.CreatePublisherAsync<std_msgs.String>("test_topic").Result;
-            var sub = node.CreateSubscriberAsync<std_msgs.String>("test_topic").Result;
+            var pub = node.PublisherAsync<std_msgs.String>("test_topic").Result;
+            var sub = node.SubscriberAsync<std_msgs.String>("test_topic").Result;
 
             sub.Dispose();
             node.Dispose();
@@ -115,9 +115,9 @@ namespace RosSharp.Tests.Node
         [TestMethod]
         public void DisposeService()
         {
-            var node = Ros.CreateNodeAsync("test").Result;
+            var node = Ros.InitNodeAsync("test").Result;
 
-            var service = node.RegisterServiceAsync(
+            var service = node.AdvertiseServiceAsync(
                 "myservice", new AddTwoInts(req => new AddTwoInts.Response() {sum = req.a + req.b})).Result;
 
             service.Dispose();
@@ -126,9 +126,9 @@ namespace RosSharp.Tests.Node
         [TestMethod]
         public void DisposeParameter()
         {
-            var node = Ros.CreateNodeAsync("test").Result;
+            var node = Ros.InitNodeAsync("test").Result;
 
-            var param = node.CreatePrimitiveParameterAsync<int>("param").Result;
+            var param = node.PrimitiveParameterAsync<int>("param").Result;
 
             param.Dispose();
         }

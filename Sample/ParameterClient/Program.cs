@@ -25,8 +25,8 @@ namespace RosSharp.Sample
         {
             try
             {
-                var node = Ros.CreateNodeAsync("/ParameterSample").Result;
-                var param = node.CreatePrimitiveParameterAsync<string>("/test_param").Result;
+                var node = Ros.InitNodeAsync("/ParameterSample").Result;
+                var param = node.PrimitiveParameterAsync<string>("/test_param").Result;
                 param.Subscribe(x => Console.WriteLine(x));
                 param.Value = "test";
             }
@@ -39,10 +39,10 @@ namespace RosSharp.Sample
 
         static void AsyncMainTAP()
         {
-            Ros.CreateNodeAsync("/ParameterSample")
+            Ros.InitNodeAsync("/ParameterSample")
                 .ContinueWith(node =>
                 {
-                    return node.Result.CreatePrimitiveParameterAsync<string>("/test_param");
+                    return node.Result.PrimitiveParameterAsync<string>("/test_param");
                 })
                 .Unwrap()
                 .ContinueWith(param =>
@@ -61,8 +61,8 @@ namespace RosSharp.Sample
         {
             try
             {
-                var node = await Ros.CreateNodeAsync("/ParameterSample");
-                var param = await node.CreatePrimitiveParameterAsync<string>("/test_param");
+                var node = await Ros.InitNodeAsync("/ParameterSample");
+                var param = await node.PrimitiveParameterAsync<string>("/test_param");
                 param.Subscribe(x => Console.WriteLine(x));
                 param.Value = "test";
             }

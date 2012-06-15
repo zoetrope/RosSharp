@@ -13,12 +13,12 @@ namespace RosSharp.MemoryLeakTest
 
         public void Initialize()
         {
-            _node = Ros.CreateNodeAsync("test", enableLogger: false).Result;
+            _node = Ros.InitNodeAsync("test", enableLogger: false).Result;
         }
 
         public void Do(int index)
         {
-            var param = _node.CreatePrimitiveParameterAsync<int>("param" + index).Result;
+            var param = _node.PrimitiveParameterAsync<int>("param" + index).Result;
 
             var d = param.Subscribe(x =>
             {

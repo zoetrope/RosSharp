@@ -15,7 +15,7 @@ namespace RosSharp.MemoryLeakTest
         public void Do(int index)
         {
             var nodeName = "test" + index;
-            var node = Ros.CreateNodeAsync(nodeName, enableLogger: false).Result;
+            var node = Ros.InitNodeAsync(nodeName, enableLogger: false).Result;
             node.Dispose();
         }
 
