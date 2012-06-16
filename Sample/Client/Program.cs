@@ -1,24 +1,22 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace RosSharp.Sample
 {
+    /// <summary>
+    /// 
+    /// </summary>
     class Program
     {
         static void Main(string[] args)
         {
-            Ros.MasterUri = new Uri("http://192.168.11.3:11311/");
-            Ros.HostName = "192.168.11.3";
-            Ros.XmlRpcTimeout = 3000;
-            Ros.TopicTimeout = 3000;
-
-            SyncMain();
-            //AsyncMainTAP();
+            //SyncMain();
+            AsyncMainTAP();
             //AsyncMain();
 
             Console.WriteLine("Press Any Key.");
             Console.ReadKey();
+            Ros.Dispose();
         }
 
         static void SyncMain()
@@ -26,15 +24,11 @@ namespace RosSharp.Sample
             try
             {
                 var node = Ros.InitNodeAsync("/Client").Result;
-
-                node.WaitForService("/add_two_ints").Wait(TimeSpan.FromSeconds(50));
-
-                Console.WriteLine("Service OK");
-
+                node.WaitForService("/add_two_ints").Wait(TimeSpan.FromSeconds(10));
                 var proxy = node.ServiceProxyAsync<AddTwoInts>("/add_two_ints").Result;
 
-                var res1 = proxy.Invoke(new AddTwoInts.Request() { a = 1, b = 2 });
-                Console.WriteLine(res1.sum);
+                var res = proxy.Invoke(new AddTwoInts.Request() { a = 1, b = 2 });
+                Console.WriteLine("Sum = {0}", res.sum);
             }
             catch (Exception ex)
             {
@@ -48,6 +42,11 @@ namespace RosSharp.Sample
             Ros.InitNodeAsync("/Client")
                 .ContinueWith(node =>
                 {
+                    return node.Result.WaitForService("/add_two_ints").ContinueWith(_ => node.Result);
+                })
+                .Unwrap()
+                .ContinueWith(node =>
+                {
                     return node.Result.ServiceProxyAsync<AddTwoInts>("/add_two_ints");
                 })
                 .Unwrap()
@@ -58,12 +57,11 @@ namespace RosSharp.Sample
                 .Unwrap()
                 .ContinueWith(res=>
                 {
-                    Console.WriteLine(res.Result.sum);
+                    Console.WriteLine("Sum = {0}", res.Result.sum);
                 })
                 .ContinueWith(res =>
                 {
-                    Console.WriteLine("失敗！！！！！！！！！！！");
-                    //Console.WriteLine(res.Exception.InnerException);
+                    Console.WriteLine(res.Exception.Message);
                 }, TaskContinuationOptions.OnlyOnFaulted);
         }
         /*
@@ -72,10 +70,11 @@ namespace RosSharp.Sample
             try
             {
                 var node = await Ros.InitNodeAsync("/Client");
+                await node.WaitForService("/add_two_ints");
                 var proxy = await node.ServiceProxyAsync<AddTwoInts>("/add_two_ints");
 
-                var res1 = await proxy.InvokeAsync(new AddTwoInts.Request() { a = 1, b = 2 });
-                Console.WriteLine(res1.sum);
+                var res = await proxy.InvokeAsync(new AddTwoInts.Request() { a = 1, b = 2 });
+                Console.WriteLine("Sum = {0}", res.sum);
             }
             catch (Exception ex)
             {

@@ -9,16 +9,12 @@ namespace RosSharp.Sample
     {
         static void Main(string[] args)
         {
-            Ros.MasterUri = new Uri("http://192.168.11.3:11311/");
-            Ros.HostName = "192.168.11.3";
-            Ros.XmlRpcTimeout = 3000;
-            Ros.TopicTimeout = 3000;
-
             //SyncMain();
             AsyncMainTAP();
             //AsyncMain();
 
-            Thread.Sleep(Timeout.Infinite);
+            Console.WriteLine("Press Any Key.");
+            Console.ReadKey();
             Ros.Dispose();
         }
 
@@ -29,7 +25,6 @@ namespace RosSharp.Sample
             {
                 var node = Ros.InitNodeAsync("/Listener").Result;
                 var subscriber = node.SubscriberAsync<RosSharp.std_msgs.String>("/chatter").Result;
-                subscriber.WaitForConnection();
                 subscriber.Subscribe(x => Console.WriteLine(x.data));
             }
             catch (Exception ex)
@@ -53,8 +48,7 @@ namespace RosSharp.Sample
                 })
                 .ContinueWith(res =>
                 {
-                    Console.WriteLine("失敗！！！！！！！！！！！");
-                    //Console.WriteLine(res.Exception.InnerException);
+                    Console.WriteLine(res.Exception.Message);
                 }, TaskContinuationOptions.OnlyOnFaulted);
         }
         /*

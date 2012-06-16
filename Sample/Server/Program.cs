@@ -8,17 +8,13 @@ namespace RosSharp.Sample
     {
         static void Main(string[] args)
         {
-            Ros.MasterUri = new Uri("http://192.168.11.3:11311/");
-            Ros.HostName = "192.168.11.3";
-            Ros.XmlRpcTimeout = 3000;
-            Ros.TopicTimeout = 3000;
-
             //SyncMain();
             AsyncMainTAP();
             //AsyncMain();
 
             Console.WriteLine("Press Any Key.");
             Console.ReadKey();
+            Ros.Dispose();
         }
 
         static AddTwoInts.Response add_two_ints(AddTwoInts.Request req)
@@ -55,8 +51,7 @@ namespace RosSharp.Sample
                 })
                 .ContinueWith(res =>
                 {
-                    Console.WriteLine("失敗！！！！！！！！！！！");
-                    //Console.WriteLine(res.Exception.InnerException);
+                    Console.WriteLine(res.Exception.Message);
                 }, TaskContinuationOptions.OnlyOnFaulted);
         }
         /*

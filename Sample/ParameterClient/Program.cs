@@ -7,17 +7,13 @@ namespace RosSharp.Sample
     {
         static void Main(string[] args)
         {
-            Ros.MasterUri = new Uri("http://192.168.11.5:11311/");
-            Ros.HostName = "192.168.11.3";
-            Ros.XmlRpcTimeout = 3000;
-            Ros.TopicTimeout = 3000;
-
             //SyncMain();
             AsyncMainTAP();
             //AsyncMain();
 
             Console.WriteLine("Press Any Key.");
             Console.ReadKey();
+            Ros.Dispose();
         }
 
 
@@ -27,6 +23,7 @@ namespace RosSharp.Sample
             {
                 var node = Ros.InitNodeAsync("/ParameterSample").Result;
                 var param = node.PrimitiveParameterAsync<string>("/test_param").Result;
+                
                 param.Subscribe(x => Console.WriteLine(x));
                 param.Value = "test";
             }
@@ -52,8 +49,7 @@ namespace RosSharp.Sample
                 })
                 .ContinueWith(res =>
                 {
-                    Console.WriteLine("失敗！！！！！！！！！！！");
-                    //Console.WriteLine(res.Exception.InnerException);
+                    Console.WriteLine(res.Exception.Message);
                 }, TaskContinuationOptions.OnlyOnFaulted);
         }
         /*
@@ -63,6 +59,7 @@ namespace RosSharp.Sample
             {
                 var node = await Ros.InitNodeAsync("/ParameterSample");
                 var param = await node.PrimitiveParameterAsync<string>("/test_param");
+                
                 param.Subscribe(x => Console.WriteLine(x));
                 param.Value = "test";
             }
