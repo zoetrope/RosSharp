@@ -35,6 +35,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
 using System.Threading;
 using System.Threading.Tasks;
 using Common.Logging;
@@ -392,9 +393,12 @@ namespace RosSharp.Node
             return tcs.Task;
         }
 
-        public void WaitForService(TimeSpan timeout)
+        public Task WaitForService(string serviceName)
         {
-            
+            return Observable.Defer(() => _masterClient.LookupServiceAsync(NodeId, serviceName).ToObservable())
+                .RetryWithDelay(TimeSpan.FromSeconds(5))
+                .Take(1)
+                .ToTask();
         }
 
         /// <summary>

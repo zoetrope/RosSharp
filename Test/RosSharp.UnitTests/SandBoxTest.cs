@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Reactive.Threading.Tasks;
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
@@ -92,7 +94,46 @@ namespace RosSharp.Tests
             }
         }
 
+        [TestMethod]
+        public void Rx_Retry()
+        {
+            Observable.Defer<int>(
+                () => Task<int>.Factory.StartNew(() =>
+                {
+                    Thread.Sleep(1000);
+                    Console.WriteLine("Execute! {0}", DateTime.Now);
+                    throw new Exception("hoge");
+                }).ToObservable())
+                .Retry(5)
+                .Timeout(TimeSpan.FromSeconds(3))
+                .Subscribe(
+                    x => { Console.WriteLine("data = {0}", x); },
+                    ex => { Console.WriteLine("error = {0}", ex.Message); },
+                    () => Console.WriteLine("Completed")
+                );
 
+            Thread.Sleep(6000);
+        }
+        
+        [TestMethod]
+        public void Rx_RetryAndDelay()
+        {
+            Observable.Defer<int>(
+                () => Task<int>.Factory.StartNew(() =>
+                {
+                    Console.WriteLine("Execute! {0}", DateTime.Now);
+                    throw new Exception("hoge");
+                }).ToObservable())
+                .RetryWithDelay(TimeSpan.FromSeconds(1))
+                .Timeout(TimeSpan.FromSeconds(5))
+                .Subscribe(
+                    x => { Console.WriteLine("data = {0}", x); },
+                    ex => { Console.WriteLine("error = {0}", ex.Message); },
+                    () => Console.WriteLine("Completed")
+                );
+
+            Thread.Sleep(6000);
+        }
 
         [TestMethod]
         public void Rx_PublishLastException()
