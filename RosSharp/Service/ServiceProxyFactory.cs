@@ -37,16 +37,18 @@ using System.Threading.Tasks;
 using Common.Logging;
 using RosSharp.Topic;
 using RosSharp.Transport;
+using RosSharp.Utility;
 
 namespace RosSharp.Service
 {
     internal sealed class ServiceProxyFactory
     {
-        private readonly ILog _logger = LogManager.GetCurrentClassLogger();
+        private readonly ILog _logger;
 
         public ServiceProxyFactory(string nodeId)
         {
             NodeId = nodeId;
+            _logger = RosOutLogManager.GetCurrentNodeLogger(NodeId);
         }
 
         public string NodeId { get; private set; }
@@ -131,7 +133,7 @@ namespace RosSharp.Service
                                 throw new RosTopicException("MD5Sum mismatch error");
                             }
 
-                            var proxy = new ServiceProxy<TService>(serviceName, service, tcpClient);
+                            var proxy = new ServiceProxy<TService>(NodeId, serviceName, service, tcpClient);
                             tcs.SetResult(proxy);
                         }
                         catch (Exception ex)

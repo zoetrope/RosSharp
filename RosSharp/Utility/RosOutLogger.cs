@@ -49,45 +49,58 @@ namespace RosSharp
     /// </summary>
     internal sealed class RosOutLogger : AbstractSimpleLogger
     {
-        private readonly RosNode _node;
-        private readonly Publisher<Log> _publisher;
+        private readonly string _nodeId;
+        private RosNode _node;
+        private Publisher<Log> _publisher;
         
-        internal RosOutLogger(string logName, LogLevel logLevel, bool showLevel, bool showDateTime, bool showLogName,
-                            string dateTimeFormat)
-            : base(logName, logLevel, showLevel, showDateTime, showLogName, dateTimeFormat)
+        internal RosOutLogger(string typeName, string nodeId, LogLevel logLevel, bool showLevel, bool showDateTime, bool showLogName,string dateTimeFormat)
+            : base(typeName, logLevel, showLevel, showDateTime, showLogName, dateTimeFormat)
         {
-
-            _node = Ros.GetNodes().OfType<RosNode>().FirstOrDefault(x => x.NodeId == logName);
+            _nodeId = nodeId;
+            _node = Ros.GetNodes().FirstOrDefault(x => x.NodeId == _nodeId);
 
             if (_node != null)
             {
                 _publisher = _node.LogPubliser;
             }
-
-            
         }
 
         protected override void WriteInternal(LogLevel targetLevel, object message, Exception e)
         {
             var sb = new StringBuilder();
             FormatOutput(sb, targetLevel, message, e);
+
+            if(_node == null)
+            {
+                _node = Ros.GetNodes().FirstOrDefault(x => x.NodeId == _nodeId);
+            }
+
             LogLevel currentLevel = LogLevel.Info;
+            string nodeId = "unknown";
 
             if (_node != null)
             {
                 currentLevel = _node.LogLevel.ToLogLevel();
-                //_node.
+                nodeId = _node.NodeId;
+            }
+
+            if (_publisher == null && _node != null)
+            {
+                _publisher = _node.LogPubliser;
             }
 
             if (_publisher != null)
             {
                 if (targetLevel >= currentLevel)
                 {
-                    _publisher.OnNext(new Log() {msg = message.ToString()});
+                    _publisher.OnNext(new Log()
+                    {
+                        name = nodeId,
+                        level = currentLevel.ToLogLevel(),
+                        msg = message.ToString()
+                    });
                 }
             }
-            
-            //Console.WriteLine(sb.ToString());
         }
     }
 }

@@ -40,6 +40,7 @@ using System.Threading.Tasks;
 using Common.Logging;
 using RosSharp.Message;
 using RosSharp.Transport;
+using RosSharp.Utility;
 
 namespace RosSharp.Topic
 {
@@ -52,8 +53,9 @@ namespace RosSharp.Topic
         public RosTopicClient(string nodeId, string topicName)
         {
             Connected = false;
-
             NodeId = nodeId;
+            _logger = RosOutLogManager.GetCurrentNodeLogger(NodeId);
+
             TopicName = topicName;
         }
 

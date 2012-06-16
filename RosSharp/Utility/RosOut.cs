@@ -35,6 +35,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Text;
+using Common.Logging;
 using RosSharp.roscpp;
 using RosSharp.rosgraph_msgs;
 
@@ -45,19 +46,30 @@ namespace RosSharp
     /// </summary>
     public sealed class RosOut
     {
+        private readonly ILog _logger = LogManager.GetCurrentClassLogger();
+
         public void Start()
         {
-            var node = Ros.InitNodeAsync("/rosout").Result;
+            var node = Ros.InitNodeAsync("/rosout", enableLogger:false).Result;
 
             var publisher = node.PublisherAsync<Log>("/rosout_agg").Result;
             var subscriber = node.SubscriberAsync<Log>("/rosout").Result;
 
-            subscriber
-                .Do(x => Console.WriteLine(x.msg))
-                .Subscribe(publisher);
-//
-//            node.AdvertiseServiceAsync("/rosout/get_loggers", new GetLoggers(GetLoggers)).Wait();
-//            node.AdvertiseServiceAsync("/rosout/set_logger_level", new SetLoggerLevel(SetLoggerLevel)).Wait();
+
+            subscriber.Subscribe(x =>
+            {
+                Console.WriteLine(x);
+            });
+            
+            var d = subscriber.Publish(xs =>
+            {
+                xs.Where(x => x.level == Log.DEBUG).Subscribe(x => _logger.Debug(m => m("Node = {0}, Message = {1}", x.name, x.msg)));
+                xs.Where(x => x.level == Log.INFO).Subscribe(x => _logger.Info(m => m("Node = {0}, Message = {1}", x.name, x.msg)));
+                xs.Where(x => x.level == Log.WARN).Subscribe(x => _logger.Warn(m => m("Node = {0}, Message = {1}", x.name, x.msg)));
+                xs.Where(x => x.level == Log.ERROR).Subscribe(x => _logger.Error(m => m("Node = {0}, Message = {1}", x.name, x.msg)));
+                xs.Where(x => x.level == Log.FATAL).Subscribe(x => _logger.Fatal(m => m("Node = {0}, Message = {1}", x.name, x.msg)));
+                return xs;
+            }).Subscribe();
 
         }
     }

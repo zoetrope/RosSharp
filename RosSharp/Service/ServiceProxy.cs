@@ -38,8 +38,10 @@ using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Text;
 using System.Threading.Tasks;
+using Common.Logging;
 using RosSharp.Message;
 using RosSharp.Transport;
+using RosSharp.Utility;
 
 namespace RosSharp.Service
 {
@@ -51,10 +53,16 @@ namespace RosSharp.Service
     internal class ServiceProxy<TService> : IServiceProxy
         where TService : IService, new()
     {
+        private readonly ILog _logger;
         private readonly TcpRosClient _client;
 
-        public ServiceProxy(string serviceName, TService service, TcpRosClient client)
+        public string NodeId { get; private set; }
+
+        public ServiceProxy(string nodeId, string serviceName, TService service, TcpRosClient client)
         {
+            NodeId = nodeId;
+            _logger = RosOutLogManager.GetCurrentNodeLogger(NodeId);
+
             ServiceName = serviceName;
             Service = service;
             _client = client;

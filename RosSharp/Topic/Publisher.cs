@@ -40,6 +40,7 @@ using System.Threading.Tasks;
 using Common.Logging;
 using RosSharp.Message;
 using System.Linq;
+using RosSharp.Utility;
 
 namespace RosSharp.Topic
 {
@@ -52,16 +53,19 @@ namespace RosSharp.Topic
     {
         private readonly BehaviorSubject<int> _connectionCounterSubject = new BehaviorSubject<int>(0);
         private readonly bool _latching;
-        private readonly ILog _logger = LogManager.GetCurrentClassLogger();
+        private readonly ILog _logger;
         private readonly List<RosTopicClient<TMessage>> _rosTopicClients = new List<RosTopicClient<TMessage>>();
         private TMessage _lastPublishedMessage;
 
         internal Publisher(string topicName, string nodeId, bool latching = false)
         {
+            NodeId = nodeId;
             var dummy = new TMessage();
             TopicName = topicName;
             MessageType = dummy.MessageType;
-            NodeId = nodeId;
+
+             _logger = RosOutLogManager.GetCurrentNodeLogger(NodeId);  
+
             _latching = latching;
         }
 
@@ -73,6 +77,8 @@ namespace RosSharp.Topic
         {
             lock (_rosTopicClients) //ロック範囲が広い？
             {
+                var failedClients = new List<RosTopicClient<TMessage>>();
+
                 foreach (var client in _rosTopicClients)
                 {
                     try
@@ -82,8 +88,15 @@ namespace RosSharp.Topic
                     catch (Exception ex)
                     {
                         _logger.Error("SendError", ex);
+                        failedClients.Add(client);
                     }
                 }
+
+                foreach (var c in failedClients)
+                {
+                    _rosTopicClients.Remove(c);
+                }
+                
                 _lastPublishedMessage = value;
             }
         }

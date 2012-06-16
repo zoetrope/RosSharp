@@ -86,15 +86,15 @@ namespace RosSharp.Parameter
         #endregion
     }
 
-    internal sealed class DynamicParameterConverter : IParameterCoverter<DictionaryParameter>
+    internal sealed class DynamicParameterConverter : IParameterCoverter<DynamicParameterObject>
     {
         #region IParameterCoverter<T> Members
 
-        public DictionaryParameter ConvertTo(object value)
+        public DynamicParameterObject ConvertTo(object value)
         {
             if(value is XmlRpcStruct)
             {
-                return new DictionaryParameter((XmlRpcStruct)value);
+                return new DynamicParameterObject((XmlRpcStruct)value);
             }
             else
             {
@@ -102,7 +102,7 @@ namespace RosSharp.Parameter
             }
         }
 
-        public object ConvertFrom(DictionaryParameter value)
+        public object ConvertFrom(DynamicParameterObject value)
         {
             return value.RawData;
         }
@@ -110,11 +110,11 @@ namespace RosSharp.Parameter
         #endregion
     }
 
-    public sealed class DictionaryParameter : DynamicObject
+    public sealed class DynamicParameterObject : DynamicObject
     {
         internal XmlRpcStruct RawData { get; set; }
         
-        public DictionaryParameter(XmlRpcStruct members)
+        public DynamicParameterObject(XmlRpcStruct members)
         {
             RawData = members;
         }

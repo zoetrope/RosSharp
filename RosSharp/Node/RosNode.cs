@@ -56,7 +56,7 @@ namespace RosSharp.Node
     /// </summary>
     public class RosNode : IAsyncDisposable
     {
-        private readonly ILog _logger = LogManager.GetCurrentClassLogger();
+        private readonly ILog _logger;
         private readonly MasterClient _masterClient;
         private readonly ParameterServerClient _parameterServerClient;
         private readonly Dictionary<string, IParameter> _parameters = new Dictionary<string, IParameter>();
@@ -71,11 +71,32 @@ namespace RosSharp.Node
 
         public RosNode(string nodeId)
         {
-            LogLevel = Log.INFO;
-
-            _logger.InfoFormat("Create Node: {0}", nodeId);
-
+            _disposed = false;
+            
             NodeId = nodeId;
+
+            _logger = RosOutLogManager.GetCurrentNodeLogger(NodeId);
+
+            if (_logger.IsDebugEnabled)
+            {
+                LogLevel = Log.DEBUG;
+            }
+            else if (_logger.IsInfoEnabled)
+            {
+                LogLevel = Log.INFO;
+            }
+            else if (_logger.IsWarnEnabled)
+            {
+                LogLevel = Log.WARN;
+            }
+            else if (_logger.IsErrorEnabled)
+            {
+                LogLevel = Log.ERROR;
+            }
+            else if (_logger.IsFatalEnabled)
+            {
+                LogLevel = Log.FATAL;
+            }
 
             _masterClient = new MasterClient(Ros.MasterUri);
             _parameterServerClient = new ParameterServerClient(Ros.MasterUri);
@@ -86,6 +107,8 @@ namespace RosSharp.Node
             _slaveServer = new SlaveServer(NodeId, 0, _topicContainer);
 
             _slaveServer.ParameterUpdated += SlaveServerOnParameterUpdated;
+
+            _logger.InfoFormat("Create Node: {0}", nodeId);
         }
 
         internal byte LogLevel { get; private set; }
@@ -121,7 +144,15 @@ namespace RosSharp.Node
 
             return Task.Factory.StartNew(() =>
             {
-                Task.WaitAll(tasks.ToArray()); //TODO: 例外が起きたら他の処理が行われない・・・
+                try
+                {
+                    Task.WaitAll(tasks.ToArray());
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error("RosNode Dispose Error", ex);
+                }
+                
                 var handler = Disposing;
                 Disposing = null;
 
@@ -419,11 +450,15 @@ namespace RosSharp.Node
                 var t2 = AdvertiseServiceAsync(NodeId + "/get_loggers", new GetLoggers(GetLoggers));
                 var t3 = AdvertiseServiceAsync(NodeId + "/set_logger_level", new SetLoggerLevel(SetLoggerLevel));
 
-                return Task.Factory.StartNew(() => Task.WaitAll(new Task[] {t1, t2, t3}));
+                return Task.Factory.StartNew(() =>
+                {
+                    Task.WaitAll(new Task[] {t1, t2, t3});
+                    _logger.Info(m => m("Created Node = {0}", NodeId));
+                });
             }
             else
             {
-                return Task.Factory.StartNew(() => { });
+                return Task.Factory.StartNew(() => { _logger.Info(m => m("Created Node = {0}", NodeId)); });
             }
         }
 

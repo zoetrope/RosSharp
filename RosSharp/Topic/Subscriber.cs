@@ -41,6 +41,7 @@ using System.Threading.Tasks;
 using Common.Logging;
 using RosSharp.Message;
 using RosSharp.Slave;
+using RosSharp.Utility;
 
 namespace RosSharp.Topic
 {
@@ -54,16 +55,17 @@ namespace RosSharp.Topic
         private readonly Subject<TMessage> _aggregateSubject = new Subject<TMessage>();
         private readonly BehaviorSubject<int> _connectionCounterSubject = new BehaviorSubject<int>(0);
         private readonly CompositeDisposable _disposables = new CompositeDisposable();
-        private readonly ILog _logger = LogManager.GetCurrentClassLogger();
+        private readonly ILog _logger;
         private readonly bool _nodelay;
         private readonly List<RosTopicServer<TMessage>> _rosTopicServers = new List<RosTopicServer<TMessage>>();
 
         internal Subscriber(string topicName, string nodeId, bool nodelay = true)
         {
+            NodeId = nodeId;
+            _logger = RosOutLogManager.GetCurrentNodeLogger(NodeId);
             TopicName = topicName;
             var dummy = new TMessage();
             MessageType = dummy.MessageType;
-            NodeId = nodeId;
             _nodelay = nodelay;
         }
 

@@ -90,7 +90,6 @@ namespace RosSharp.Transport
 
         public Task<int> SendAsync(byte[] data)
         {
-            _logger.Debug(m => m("Send Data = {0}", data.Dump()));
             return _socket.SendTaskAsync(data);
         }
 

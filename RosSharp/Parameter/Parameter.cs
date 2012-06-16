@@ -38,12 +38,15 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Text;
 using System.Threading.Tasks;
+using Common.Logging;
 using CookComputing.XmlRpc;
+using RosSharp.Utility;
 
 namespace RosSharp.Parameter
 {
     public abstract class Parameter<T> : IObservable<T>, IParameter
     {
+        private ILog _logger = LogManager.GetCurrentClassLogger();
         internal IParameterCoverter<T> _converter;
         
         protected Uri _slaveUri;
@@ -151,6 +154,8 @@ namespace RosSharp.Parameter
         public Task InitializeAsync(string nodeId, string paramName, Uri slaveUri, ParameterServerClient client)
         {
             NodeId = nodeId;
+            _logger = RosOutLogManager.GetCurrentNodeLogger(NodeId);
+
             Name = paramName;
             _slaveUri = slaveUri;
 
@@ -201,7 +206,7 @@ namespace RosSharp.Parameter
 
 
     }
-    public sealed class DynamicParameter : Parameter<DictionaryParameter>
+    public sealed class DynamicParameter : Parameter<DynamicParameterObject>
     {
         public DynamicParameter()
         {

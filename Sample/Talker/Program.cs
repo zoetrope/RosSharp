@@ -9,7 +9,7 @@ namespace RosSharp.Sample
     {
         static void Main(string[] args)
         {
-            Ros.MasterUri = new Uri("http://192.168.11.4:11311/");
+            Ros.MasterUri = new Uri("http://192.168.11.3:11311/");
             Ros.HostName = "192.168.11.3";
             Ros.XmlRpcTimeout = 3000;
             Ros.TopicTimeout = 3000;
@@ -18,6 +18,7 @@ namespace RosSharp.Sample
             AsyncMainTAP();
             //AsyncMain();
 
+            Thread.Sleep(Timeout.Infinite);
             Ros.Dispose();
         }
 

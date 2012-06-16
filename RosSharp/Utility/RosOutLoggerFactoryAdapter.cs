@@ -59,7 +59,23 @@ namespace RosSharp
         protected override ILog CreateLogger(string name, LogLevel level, bool showLevel, bool showDateTime,
                                              bool showLogName, string dateTimeFormat)
         {
-            return new RosOutLogger(name, level, showLevel, showDateTime, showLogName, dateTimeFormat);
+            var names = name.Split('@');
+
+            string nodeId;
+            string typeName;
+
+            if(names.Length == 2)
+            {
+                typeName = names[0];
+                nodeId = names[1];
+            }
+            else
+            {
+                typeName = name;
+                nodeId = "unknown";
+            }
+
+            return new RosOutLogger(typeName, nodeId, level, showLevel, showDateTime, showLogName, dateTimeFormat);
         }
     }
 }

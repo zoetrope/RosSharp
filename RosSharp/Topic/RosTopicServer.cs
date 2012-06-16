@@ -38,6 +38,7 @@ using Common.Logging;
 using RosSharp.Message;
 using RosSharp.Slave;
 using RosSharp.Transport;
+using RosSharp.Utility;
 
 namespace RosSharp.Topic
 {
@@ -46,12 +47,13 @@ namespace RosSharp.Topic
     {
         private TcpRosClient _client;
         public Uri SlaveUri { get; private set; }
-        private readonly ILog _logger = LogManager.GetCurrentClassLogger();
+        private readonly ILog _logger;
         
 
         public RosTopicServer(string nodeId, string topicName, Uri slaveUri)
         {
             NodeId = nodeId;
+            _logger = RosOutLogManager.GetCurrentNodeLogger(NodeId);
             TopicName = topicName;
             SlaveUri = slaveUri;
         }

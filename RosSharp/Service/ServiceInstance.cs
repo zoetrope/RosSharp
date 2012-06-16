@@ -44,21 +44,24 @@ using System.Threading.Tasks;
 using Common.Logging;
 using RosSharp.Topic;
 using RosSharp.Transport;
+using RosSharp.Utility;
 
 namespace RosSharp.Service
 {
     internal sealed class ServiceInstance<TService> : IDisposable
         where TService : IService, new()
     {
-        private readonly string _nodeId;
         private readonly IService _service;
         private readonly TcpRosClient _client;
-        private readonly ILog _logger = LogManager.GetCurrentClassLogger();
+        private readonly ILog _logger;
         private string _serviceName;
+
+        public string NodeId { get; private set; }
 
         public ServiceInstance(string nodeId, IService service, Socket s)
         {
-            _nodeId = nodeId;
+            NodeId = nodeId;
+            _logger = RosOutLogManager.GetCurrentNodeLogger(NodeId);
             _service = service;
 
             _client = new TcpRosClient(s);
@@ -95,7 +98,7 @@ namespace RosSharp.Service
 
             var sendHeader = new
             {
-                callerid = _nodeId,
+                callerid = NodeId,
                 md5sum = dummy.Md5Sum,
                 service = _serviceName,
                 type = dummy.ServiceType

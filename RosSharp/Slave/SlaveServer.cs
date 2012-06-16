@@ -43,6 +43,7 @@ using Common.Logging;
 using CookComputing.XmlRpc;
 using RosSharp.Topic;
 using RosSharp.Transport;
+using RosSharp.Utility;
 
 namespace RosSharp.Slave
 {
@@ -54,13 +55,15 @@ namespace RosSharp.Slave
         private readonly HttpServerChannel _channel;
         private readonly Dictionary<string,TcpRosListener> _tcpRosListener;
         private readonly TopicContainer _topicContainer;
-        private string _nodeId;
+        public string NodeId { get; private set; }
 
-        private readonly ILog _logger = LogManager.GetCurrentClassLogger();
+        private readonly ILog _logger;
 
         internal SlaveServer(string nodeId, int portNumber, TopicContainer topicContainer)
         {
-            _nodeId = nodeId;
+            NodeId = nodeId;
+            _logger = RosOutLogManager.GetCurrentNodeLogger(NodeId);
+
             _topicContainer = topicContainer;
             _tcpRosListener = new Dictionary<string, TcpRosListener>();
 

@@ -39,6 +39,7 @@ using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using Common.Logging;
 using RosSharp.Transport;
+using RosSharp.Utility;
 
 namespace RosSharp.Service
 {
@@ -51,14 +52,16 @@ namespace RosSharp.Service
         where TService : IService, new()
     {
         private readonly CompositeDisposable _instanceDisposables = new CompositeDisposable();
-        private readonly ILog _logger = LogManager.GetCurrentClassLogger();
-        private readonly string _nodeId;
+        private readonly ILog _logger;
         private IDisposable _disposable;
         private TcpRosListener _listener;
 
+        public string NodeId { get; private set; }
+
         public ServiceServer(string nodeId)
         {
-            _nodeId = nodeId;
+            NodeId = nodeId;
+            _logger = RosOutLogManager.GetCurrentNodeLogger(NodeId);
         }
 
         public IPEndPoint EndPoint
@@ -107,7 +110,7 @@ namespace RosSharp.Service
 
         private void CreateNewServiceInstance(IService service, Socket socket)
         {
-            var instance = new ServiceInstance<TService>(_nodeId, service, socket);
+            var instance = new ServiceInstance<TService>(NodeId, service, socket);
 
             instance.StartAsync(ServiceName)
                 .ContinueWith(startTask=>
