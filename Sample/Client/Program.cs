@@ -19,6 +19,9 @@ namespace RosSharp.Sample
             Ros.Dispose();
         }
 
+        /// <summary>
+        /// Synchronous 
+        /// </summary>
         static void SyncMain()
         {
             try

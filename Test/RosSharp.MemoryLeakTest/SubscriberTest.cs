@@ -4,14 +4,13 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Text;
-using RosSharp.Node;
 using RosSharp.Topic;
 
 namespace RosSharp.MemoryLeakTest
 {
     class SubscriberTest : ITest
     {
-        private RosNode _node;
+        private Node _node;
         private Publisher<std_msgs.Int32> _publisher;
 
         public void Initialize()

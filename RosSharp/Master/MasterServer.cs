@@ -70,10 +70,9 @@ namespace RosSharp.Master
             ChannelServices.RegisterChannel(_channel, false);
             RemotingServices.Marshal(this, "/");
 
-            _logger.Info(m => m("MasterServer launched {0}", MasterUri.ToString()));
-
             _parameterServer = new ParameterServer(MasterUri);
 
+            _logger.Info(m => m("MasterServer launched {0}", MasterUri.ToString()));
         }
 
         public Uri MasterUri { get; private set; }
@@ -84,6 +83,8 @@ namespace RosSharp.Master
         {
             ChannelServices.UnregisterChannel(_channel);
             RemotingServices.Disconnect(this);
+
+            _logger.Info(m => m("MasterServer disposed {0}", MasterUri.ToString()));
         }
 
         #endregion
@@ -670,6 +671,7 @@ namespace RosSharp.Master
         public object[] Shutdown(string callerId, string msg)
         {
             _logger.Debug(m => m("Shutdown(callerId={0},msg={1})", callerId, msg));
+            //TODO:
             throw new NotImplementedException();
         }
 

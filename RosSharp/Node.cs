@@ -33,10 +33,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
-using System.Threading;
 using System.Threading.Tasks;
 using Common.Logging;
 using RosSharp.Master;
@@ -50,12 +48,12 @@ using RosSharp.Utility;
 using RosSharp.roscpp;
 using RosSharp.rosgraph_msgs;
 
-namespace RosSharp.Node
+namespace RosSharp
 {
     /// <summary>
     ///   ROS Node
     /// </summary>
-    public class RosNode : IAsyncDisposable
+    public class Node : IAsyncDisposable
     {
         private readonly ILog _logger;
         private readonly MasterClient _masterClient;
@@ -70,7 +68,7 @@ namespace RosSharp.Node
         private bool _disposed;
         private Dictionary<string, IDisposable> _publisherDisposables = new Dictionary<string, IDisposable>();
 
-        public RosNode(string nodeId)
+        public Node(string nodeId)
         {
             _disposed = false;
             
@@ -130,7 +128,7 @@ namespace RosSharp.Node
 
         public Task DisposeAsync()
         {
-            if (_disposed) throw new ObjectDisposedException("RosNode");
+            if (_disposed) throw new ObjectDisposedException("Node");
             _disposed = true;
 
             var tasks = new List<Task>();
@@ -151,7 +149,7 @@ namespace RosSharp.Node
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error("RosNode Dispose Error", ex);
+                    _logger.Error("Node Dispose Error", ex);
                 }
                 
                 var handler = Disposing;
@@ -205,7 +203,7 @@ namespace RosSharp.Node
         private Task<T> CreateParameterAsync<T>(string paramName)
             where T : IParameter, new()
         {
-            if (_disposed) throw new ObjectDisposedException("RosNode");
+            if (_disposed) throw new ObjectDisposedException("Node");
 
             if (_parameters.ContainsKey(paramName))
             {
@@ -246,7 +244,7 @@ namespace RosSharp.Node
         public Task<Subscriber<TMessage>> SubscriberAsync<TMessage>(string topicName, bool nodelay = true)
             where TMessage : IMessage, new()
         {
-            if (_disposed) throw new ObjectDisposedException("RosNode");
+            if (_disposed) throw new ObjectDisposedException("Node");
 
             if (_topicContainer.HasSubscriber(topicName))
             {
@@ -293,7 +291,7 @@ namespace RosSharp.Node
         public Task<Publisher<TMessage>> PublisherAsync<TMessage>(string topicName, bool latching = false)
             where TMessage : IMessage, new()
         {
-            if (_disposed) throw new ObjectDisposedException("RosNode");
+            if (_disposed) throw new ObjectDisposedException("Node");
 
             if (_topicContainer.HasPublisher(topicName))
             {
@@ -349,7 +347,7 @@ namespace RosSharp.Node
         public Task<TService> ServiceProxyAsync<TService>(string serviceName)
             where TService : IService, new()
         {
-            if (_disposed) throw new ObjectDisposedException("RosNode");
+            if (_disposed) throw new ObjectDisposedException("Node");
             if (_serviceProxies.ContainsKey(serviceName))
             {
                 throw new InvalidOperationException(serviceName + " is already created.");
@@ -411,7 +409,7 @@ namespace RosSharp.Node
         public Task<IServiceServer> AdvertiseServiceAsync<TService>(string serviceName, TService service)
             where TService : IService, new()
         {
-            if (_disposed) throw new ObjectDisposedException("RosNode");
+            if (_disposed) throw new ObjectDisposedException("Node");
             if (_serviceServers.ContainsKey(serviceName))
             {
                 throw new InvalidOperationException(serviceName + " is already registered.");

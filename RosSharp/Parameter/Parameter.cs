@@ -32,11 +32,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Text;
 using System.Threading.Tasks;
 using Common.Logging;
 using CookComputing.XmlRpc;
@@ -44,25 +40,43 @@ using RosSharp.Utility;
 
 namespace RosSharp.Parameter
 {
-    public abstract class Parameter<T> : IObservable<T>, IParameter
+    /// <summary>
+    /// Base class for Ros Parameter Management
+    /// </summary>
+    /// <typeparam name="TParam">Parameter Type. </typeparam>
+    public abstract class Parameter<TParam> : IObservable<TParam>, IParameter
     {
+        internal IParameterCoverter<TParam> _converter;
         private ILog _logger = LogManager.GetCurrentClassLogger();
-        internal IParameterCoverter<T> _converter;
-        
-        protected Uri _slaveUri;
+
         protected ParameterServerClient _parameterServerClient;
-        protected Subject<T> _parameterSubject;
-        
+        protected Subject<TParam> _parameterSubject;
+        protected Uri _slaveUri;
+
         public string NodeId { get; private set; }
         public string Name { get; private set; }
 
+        /// <summary>
+        /// 
+        /// Timeout Exception
+        /// </summary>
+        public TParam Value
+        {
+            get
+            {
+                GetAsync().Wait(TimeSpan.FromSeconds(Ros.TopicTimeout));
+                return GetAsync().Result;
+            }
+            set { SetAsync(value).Wait(TimeSpan.FromSeconds(Ros.TopicTimeout)); }
+        }
+
         #region IObservable<T> Members
 
-        public IDisposable Subscribe(IObserver<T> observer)
+        public IDisposable Subscribe(IObserver<TParam> observer)
         {
             if (_parameterSubject == null)
             {
-                _parameterSubject = new Subject<T>();
+                _parameterSubject = new Subject<TParam>();
                 var disposable = _parameterSubject.Subscribe(observer);
 
                 var subsTask = _parameterServerClient.SubscribeParamAsync(NodeId, _slaveUri, Name);
@@ -83,6 +97,7 @@ namespace RosSharp.Parameter
                         }
                         catch (Exception ex)
                         {
+                            _logger.Error("Convert Error", ex);
                             _parameterSubject.OnError(ex);
                             _parameterSubject.OnCompleted();
                         }
@@ -91,6 +106,7 @@ namespace RosSharp.Parameter
                 subsTask.ContinueWith(
                     t =>
                     {
+                        _logger.Error("Failed to SubscribeParam", t.Exception.InnerException);
                         _parameterSubject.OnError(t.Exception.InnerException);
                         _parameterSubject.OnCompleted();
                     }, TaskContinuationOptions.OnlyOnFaulted);
@@ -109,25 +125,6 @@ namespace RosSharp.Parameter
 
         public event Func<string, Task> Disposing = _ => Task.Factory.StartNew(() => { });
 
-        void IParameter.Update(object value)
-        {
-            if(_parameterSubject == null)
-            {
-                return;
-            }
-
-            try
-            {
-                var data = _converter.ConvertTo(value);
-                _parameterSubject.OnNext(data);
-            }
-            catch (Exception ex)
-            {
-                _parameterSubject.OnError(ex);
-                _parameterSubject.OnCompleted();
-            }
-        }
-
         public Task DisposeAsync()
         {
             if (_parameterSubject != null)
@@ -140,7 +137,7 @@ namespace RosSharp.Parameter
             Disposing = null;
 
             return _parameterServerClient.UnsubscribeParamAsync(NodeId, _slaveUri, Name)
-                .ContinueWith(_=>handler(Name))
+                .ContinueWith(_ => handler(Name))
                 .Unwrap();
         }
 
@@ -149,9 +146,27 @@ namespace RosSharp.Parameter
             DisposeAsync().Wait();
         }
 
-        #endregion
+        void IParameter.Update(object value)
+        {
+            if (_parameterSubject == null)
+            {
+                return;
+            }
 
-        public Task InitializeAsync(string nodeId, string paramName, Uri slaveUri, ParameterServerClient client)
+            try
+            {
+                var data = _converter.ConvertTo(value);
+                _parameterSubject.OnNext(data);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Convert Error", ex);
+                _parameterSubject.OnError(ex);
+                _parameterSubject.OnCompleted();
+            }
+        }
+
+        Task IParameter.InitializeAsync(string nodeId, string paramName, Uri slaveUri, ParameterServerClient client)
         {
             NodeId = nodeId;
             _logger = RosOutLogManager.GetCurrentNodeLogger(NodeId);
@@ -176,43 +191,41 @@ namespace RosSharp.Parameter
                 .Unwrap();
         }
 
-        public T Value
+        #endregion
+
+        public Task<TParam> GetAsync()
         {
-            get
-            {
-                var result = _parameterServerClient.GetParamAsync(NodeId, Name).Result;
-                return _converter.ConvertTo(result);
-            }
-            set { _parameterServerClient.SetParamAsync(NodeId, Name, _converter.ConvertFrom(value)).Wait(); }
+            return _parameterServerClient.GetParamAsync(NodeId, Name)
+                .ContinueWith(res => _converter.ConvertTo(res.Result));
+        }
+
+        public Task SetAsync(TParam value)
+        {
+            return _parameterServerClient.SetParamAsync(NodeId, Name, _converter.ConvertFrom(value));
         }
     }
 
-    public sealed class PrimitiveParameter<T> : Parameter<T>
+    public sealed class PrimitiveParameter<TParam> : Parameter<TParam>
     {
-        public PrimitiveParameter() 
+        public PrimitiveParameter()
         {
-            _converter = new PrimitiveParameterConverter<T>();
+            _converter = new PrimitiveParameterConverter<TParam>();
         }
-        
-
-
     }
-    public sealed class ListParameter<T> : Parameter<List<T>>
+
+    public sealed class ListParameter<TElement> : Parameter<List<TElement>>
     {
         public ListParameter()
         {
-                _converter = new ListParameterConverter<T>();
+            _converter = new ListParameterConverter<TElement>();
         }
-
-
     }
+
     public sealed class DynamicParameter : Parameter<DynamicParameterObject>
     {
         public DynamicParameter()
         {
-                _converter = new DynamicParameterConverter();
+            _converter = new DynamicParameterConverter();
         }
-
-
     }
 }

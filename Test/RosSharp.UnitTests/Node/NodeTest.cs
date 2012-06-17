@@ -9,7 +9,7 @@ using RosSharp.Master;
 namespace RosSharp.Tests.Node
 {
     [TestClass]
-    public class RosNodeTest
+    public class NodeTest
     {
         private MasterServer _masterServer;
 

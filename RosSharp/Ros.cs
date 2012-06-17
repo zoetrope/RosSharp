@@ -38,7 +38,6 @@ using System.Net;
 using System.Threading.Tasks;
 using Common.Logging;
 using Common.Logging.Simple;
-using RosSharp.Node;
 
 namespace RosSharp
 {
@@ -47,7 +46,7 @@ namespace RosSharp
     /// </summary>
     public static class Ros
     {
-        private static readonly Dictionary<string, RosNode> _nodes = new Dictionary<string, RosNode>();
+        private static readonly Dictionary<string, Node> _nodes = new Dictionary<string, Node>();
 
         /// <summary>
         ///   XML-RPC URI of the Master
@@ -215,13 +214,13 @@ namespace RosSharp
         /// <param name="enableLogger"> if true, enable RosOut Logger </param>
         /// <param name="anonymous"> if true, named to an anonymous name (append a random number to the node name) </param>
         /// <returns> created Node </returns>
-        public static Task<RosNode> InitNodeAsync(string nodeName, bool enableLogger = true, bool anonymous = false)
+        public static Task<Node> InitNodeAsync(string nodeName, bool enableLogger = true, bool anonymous = false)
         {
             lock (_nodes)
             {
-                var node = new RosNode(nodeName);
+                var node = new Node(nodeName);
 
-                var tcs = new TaskCompletionSource<RosNode>();
+                var tcs = new TaskCompletionSource<Node>();
 
                 var initTask = node.InitializeAsync(enableLogger);
 
@@ -244,12 +243,12 @@ namespace RosSharp
         ///   Get all nodes
         /// </summary>
         /// <returns> all nodes </returns>
-        public static List<RosNode> GetNodes()
+        public static List<Node> GetNodes()
         {
-            List<RosNode> nodes;
+            List<Node> nodes;
             lock (_nodes)
             {
-                nodes = new List<RosNode>(_nodes.Values);
+                nodes = new List<Node>(_nodes.Values);
             }
             return nodes;
         }

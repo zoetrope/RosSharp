@@ -131,7 +131,7 @@
     <Compile Include="Parameter\ParameterServerClient.cs" />
     <Compile Include="Topic\Publisher.cs" />
     <Compile Include="Ros.cs" />
-    <Compile Include="Node\RosNode.cs" />
+    <Compile Include="Node.cs" />
     <Compile Include="Transport\OneLineCacheSubject.cs" />
     <Compile Include="Transport\TcpRosListener.cs" />
     <Compile Include="Topic\RosTopicClient.cs" />

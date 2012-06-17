@@ -62,7 +62,7 @@
   <ItemGroup>
     <Compile Include="ChainingAssertion.MSTest.cs" />
     <Compile Include="Master\RegistrationContainerTest.cs" />
-    <Compile Include="Node\RosNodeTest.cs" />
+    <Compile Include="Node\NodeTest.cs" />
     <Compile Include="Parameter\ParameterServerClientTest.cs" />
     <Compile Include="Parameter\ParameterServerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

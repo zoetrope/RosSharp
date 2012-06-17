@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Reactive.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace RosSharp.Sample

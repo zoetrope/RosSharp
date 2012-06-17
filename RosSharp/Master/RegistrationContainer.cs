@@ -192,6 +192,7 @@ namespace RosSharp.Master
 
         public Uri LookUpNode(string nodeName)
         {
+            //TODO:
             throw new NotImplementedException();
         }
     }

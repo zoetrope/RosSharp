@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using RosSharp.Node;
 using System.Reactive.Linq;
 
 namespace RosSharp.MemoryLeakTest
 {
     class ParameterTest : ITest
     {
-        private RosNode _node;
+        private Node _node;
 
         public void Initialize()
         {

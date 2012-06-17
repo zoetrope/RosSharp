@@ -5,19 +5,18 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Text;
 using System.Threading;
-using RosSharp.Node;
 using RosSharp.Topic;
 
 namespace RosSharp.MemoryLeakTest
 {
     class PublisherTest : ITest
     {
-        private RosNode _node;
+        private Node _node;
         private Subscriber<std_msgs.Int32> _subscriber;
 
         public void Initialize()
         {
-            _node = (RosNode)Ros.InitNodeAsync("test", enableLogger: false).Result;
+            _node = (Node)Ros.InitNodeAsync("test", enableLogger: false).Result;
 
             _subscriber = _node.SubscriberAsync<std_msgs.Int32>("test").Result;
         }

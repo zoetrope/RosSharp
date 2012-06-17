@@ -37,7 +37,6 @@ using System.Linq;
 using System.Text;
 using Common.Logging;
 using Common.Logging.Simple;
-using RosSharp.Node;
 using RosSharp.Topic;
 using RosSharp.Utility;
 using RosSharp.rosgraph_msgs;
@@ -50,7 +49,7 @@ namespace RosSharp
     internal sealed class RosOutLogger : AbstractSimpleLogger
     {
         private readonly string _nodeId;
-        private RosNode _node;
+        private Node _node;
         private Publisher<Log> _publisher;
         
         internal RosOutLogger(string typeName, string nodeId, LogLevel logLevel, bool showLevel, bool showDateTime, bool showLogName,string dateTimeFormat)
