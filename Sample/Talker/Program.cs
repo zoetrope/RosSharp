@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using RosSharp;
 
-namespace RosSharp.Sample
+namespace Sample
 {
     class Program
     {

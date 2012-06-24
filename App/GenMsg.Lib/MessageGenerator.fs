@@ -189,9 +189,11 @@ let createMessageType ns name =
     "        }\r\n"
 
 let hasHeader (msgs : RosMessage list) =
-    msgs |> Seq.head
-         |> fun x -> match x with | Leaf(UserDefinition(["Header";]),_) -> true | _ -> false
-         |> fun x -> if x then "true" else "false"
+    match msgs with
+    | [] -> "false"
+    | _ -> msgs |> Seq.head
+                |> fun x -> match x with | Leaf(UserDefinition(["Header";]),_) -> true | _ -> false
+                |> fun x -> if x then "true" else "false"
 
 let createMessageMember msgs =
     "        ///<exclude/>\r\n" +
@@ -274,6 +276,8 @@ let getHashCode (msg : RosMessage) =
 
 let getEquals (msg : RosMessage) =
     match msg with
+    | Leaf (FixedArray (_, _), Variable(name)) -> "other." + name + ".SequenceEqual(" + name + ")"
+    | Leaf (VariableArray (_), Variable(name)) -> "other." + name + ".SequenceEqual(" + name + ")"
     | Leaf (t, Variable(name)) -> "other." + name + ".Equals(" + name + ")"
     | Leaf (_, Constant(_, _)) -> ""
     
@@ -330,6 +334,7 @@ let createNamespace (ns : string) =
     "using System.Linq;\r\n" +
     "using RosSharp.Message;\r\n" +
     "using RosSharp.Service;\r\n" +
+    "using RosSharp.std_msgs;\r\n" +
     "namespace " + getFullNameSpace ns + "\r\n" +
     "{\r\n"
 

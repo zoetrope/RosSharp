@@ -8,7 +8,7 @@
     <ProjectGuid>{C26EE4A1-064B-47F1-B0BC-544DAAED7698}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RosSharp.Sample</RootNamespace>
+    <RootNamespace>Sample</RootNamespace>
     <AssemblyName>Listener</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>

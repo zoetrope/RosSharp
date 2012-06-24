@@ -56,7 +56,8 @@ namespace RosSharp.GenMsg
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine("Fail {0}, {1}", file, ex.Message);
+                        Console.WriteLine("Fail {0}, {1}", file, ex);
+                        //Console.WriteLine("Fail {0}, {1}", file, ex.Message);
                     }
                 });
             }
