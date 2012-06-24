@@ -3,9 +3,12 @@ RosSharp Documentation
 
 Overview
 ***************************************************
-RosSharp is C# client library for ROS.
+RosSharp is ROS client library implemented in C#.
 
 `ROS <http://ros.org/>`_ is Robot Operating System developed by `Willow Garage <http://www.willowgarage.com/>`_.
+
+If you use a RosSharp, you can write a code that subscribe/publish a topic, provide/use a service, 
+subscribe/read/write a parameter in C#.
 
 * Author: `zoetrope <https://twitter.com/#!/zoetro>`_
 * License: `BSD License <https://github.com/zoetrope/RosSharp/blob/master/License.txt>`_
@@ -15,19 +18,27 @@ RosSharp is C# client library for ROS.
 Features
 ==================================================
 
-* RosSharp is implemented based on Reactive Extensions
-* `NuGet <http://nuget.codeplex.com/>`_  installation support
-* Create ROS Node
-* Master/Slave/ParameterServer API XML-RPC Client
-* Master/Slave/ParameterServer API XML-RPC Server
-* Topic (TCPROS) Connection
-* Service Connection
-* RosOut (Logging Node)
-* RosCore (Master Server & Parameter Server & RosOut Node)
-* GenMsg (Code generation tool from .msg/.srv files)
+* RosSharp provides a asynchronous API, it is implemented based on Reactive Extensions and Task Parallel Library(TPL).
+* `NuGet <http://nuget.codeplex.com/>`_  installation support.
+* ROS Client
+
+  * Publisher/Subscriber
+  * Service Connection
+  * Parameter Client
+
+* ROS Server
+
+  * Master
+  * Parameter Server
+  * RosOut (Logging Node)
+
+* Tool Support
+
+  * RosCore (Master Server & Parameter Server & RosOut Node)
+  * GenMsg (Code generation tool from .msg/.srv files).
+
 
 The following features are not supported
-==================================================
 
 * Remapping Arguments
 * Graph Resource Names (supports only the global name)
@@ -44,6 +55,7 @@ System Requirements
 * NDesk.Options
 * F# Runtime 2.0 (for GenMsg)
 * FParsec (for GenMsg)
+* Common.Logging.Log4Net (for RosCore)
 
 Installation
 ***************************************************
@@ -51,11 +63,18 @@ Installation
 use NuGet
 ==================================================
 
-To install RosSharp, run the following command in the NuGet Package Manager Console ::
+* Install NuGet (NuGet requires Visual Studio 2010)
+
+  * http://nuget.codeplex.com/
+
+* To install RosSharp, run the following command in the NuGet Package Manager Console ::
 
   PM> Install-Package RosSharp -Pre
 
-Binary Package
+When using NuGet, RosCore and GenMsg is not installed.
+You need use a following binary package.
+
+use Binary Package
 ==================================================
 
 * Download a file through the following link.
@@ -63,7 +82,79 @@ Binary Package
   * https://github.com/zoetrope/RosSharp/downloads
 
 * Start Visual Studio and create new project.
-* Add reference to downloaded dll files.
+
+* Add to project reference a following assemblies.
+
+  * RosSharp.dll
+  * System.Reactive.dll
+  * CookComputing.XmlRpcServerV2.dll
+  * CookComputing.XmlRpcV2.dll
+  * Common.Logging.dll
+
+Programming
+***************************************************
+
+using directive
+==================================================
+
+Add the following Using directive to the your code.
+
+.. code-block:: csharp
+
+  using RosSharp;
+
+Create Node
+==================================================
+
+.. code-block:: csharp
+
+  var node = RosManager.CreateNode("Test");
+
+Subscriber
+==================================================
+
+.. code-block:: csharp
+
+  var subscriber = node.CreateSubscriberAsync<RosSharp.std_msgs.String>("/chatter").Result;
+  subscriber.Subscribe(x => Console.WriteLine(x.data));
+
+
+Publisher
+==================================================
+
+.. code-block:: csharp
+
+  var publisher = node.CreatePublisherAsync<RosSharp.std_msgs.String>("/chatter").Result;
+  publisher.OnNext(new RosSharp.std_msgs.String() {data = "test message"};);
+
+Register Service
+==================================================
+
+.. code-block:: csharp
+
+  node.RegisterServiceAsync("/add_two_ints",
+    new AddTwoInts(req => new AddTwoInts.Response {sum = req.a + req.b})).Wait();
+
+Use Service
+==================================================
+
+.. code-block:: csharp
+
+  var proxy = node.CreateProxyAsync<AddTwoInts>("/add_two_ints").Result;
+  var res = proxy.Invoke(new AddTwoInts.Request() {a = 1, b = 2});
+  Console.WriteLine(res.sum);
+
+ParameterServer
+==================================================
+
+.. code-block:: csharp
+
+  var param = node.CreateParameterAsync<string>("rosversion").Result;
+  Console.WriteLine(param.Value);
+  param.Value = "test";
+  param.Subscribe(x => Console.WriteLine(x));
+
+
 
 Settings
 ***************************************************
@@ -153,71 +244,8 @@ Setting by a app.config
 
 See the `Common.Logging Documentation <http://netcommon.sourceforge.net/docs/2.0.0/reference/html/index.html>`_
 
-Programming
-***************************************************
 
-using directive
-==================================================
-
-Add the following Using directive to the your code.
-
-.. code-block:: csharp
-
-  using RosSharp;
-
-Create Node
-==================================================
-
-.. code-block:: csharp
-
-  var node = RosManager.CreateNode("Test");
-
-Subscriber
-==================================================
-
-.. code-block:: csharp
-
-  var subscriber = node.CreateSubscriberAsync<RosSharp.std_msgs.String>("/chatter").Result;
-  subscriber.Subscribe(x => Console.WriteLine(x.data));
-
-
-Publisher
-==================================================
-
-.. code-block:: csharp
-
-  var publisher = node.CreatePublisherAsync<RosSharp.std_msgs.String>("/chatter").Result;
-  publisher.OnNext(new RosSharp.std_msgs.String() {data = "test message"};);
-
-Register Service
-==================================================
-
-.. code-block:: csharp
-
-  node.RegisterServiceAsync("/add_two_ints",
-    new AddTwoInts(req => new AddTwoInts.Response {sum = req.a + req.b})).Wait();
-
-Use Service
-==================================================
-
-.. code-block:: csharp
-
-  var proxy = node.CreateProxyAsync<AddTwoInts>("/add_two_ints").Result;
-  var res = proxy.Invoke(new AddTwoInts.Request() {a = 1, b = 2});
-  Console.WriteLine(res.sum);
-
-ParameterServer
-==================================================
-
-.. code-block:: csharp
-
-  var param = node.CreateParameterAsync<string>("rosversion").Result;
-  Console.WriteLine(param.Value);
-  param.Value = "test";
-  param.Subscribe(x => Console.WriteLine(x));
-
-
-Compatibility
+Interoperability
 ***************************************************
 
 
