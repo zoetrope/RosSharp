@@ -25,7 +25,7 @@ namespace RosSharp.GenMsg
 
             if (files.Count == 0 || (generateType != "msg" && generateType != "srv"))
             {
-                Console.WriteLine("Usage: GenMsg -t msg|srv [-n namespace] [-o output_dir] [[-i include_dir]...] FileName");
+                Console.WriteLine("Usage: GenMsg -t msg|srv [-n namespace] [-o output_dir] [[-i include_dir]...] FileName...");
                 Environment.Exit(0);
             }
 
@@ -56,8 +56,8 @@ namespace RosSharp.GenMsg
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine("Fail {0}, {1}", file, ex);
-                        //Console.WriteLine("Fail {0}, {1}", file, ex.Message);
+                        //Console.WriteLine("Fail {0}, {1}", file, ex);
+                        Console.WriteLine("Fail {0}, {1}", file, ex.Message);
                     }
                 });
             }

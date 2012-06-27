@@ -1,4 +1,4 @@
-RosSharpドキュメント
+RosSharpDocumentation (Japanease)
 ##################################################
 
 概要
@@ -7,8 +7,8 @@ RosSharpは、C#で書かれたROSのクライアントライブラリです。
 
 `ROS <http://ros.org/>`_ は `Willow Garage <http://www.willowgarage.com/>`_ の開発するRobot Operating Systemです。
 
-RosSharpを利用することで、ROSのトピックの購読と発行、サービスの提供や利用、パラメータの購読や読み書きがC#の
-コードで書けるようになります。
+RosSharpを利用することで、ROSのトピックの購読と発行、サービスの提供と利用、パラメータの購読と読み書きが
+C#のコードで書けるようになります。
 
 * 開発者: `zoetrope <https://twitter.com/#!/zoetro>`_
 * ライセンス: `BSD License <https://github.com/zoetrope/RosSharp/blob/master/License.txt>`_
@@ -18,15 +18,15 @@ RosSharpを利用することで、ROSのトピックの購読と発行、サー
 特徴
 ==================================================
 
-* RosSharpはReactive Extensions(Rx)とTask Parallel Library(TPL)をベースにしており、非同期呼び出しのAPIを提供します。
+* RosSharpはReactive Extensions (Rx) とTask Parallel Library (TPL) をベースにしており、非同期呼び出しのAPIを提供します。
 * `NuGet <http://nuget.codeplex.com/>`_  でのインストールをサポートしています。
-* ROSのクライアント機能
+* ROSのクライアント機能のサポート
 
   * Publisher/Subscriber
   * Service Connection
   * Parameter Client
 
-* ROSのサーバ機能
+* ROSのサーバ機能のサポート
 
   * Master
   * Parameter Server
@@ -48,14 +48,39 @@ RosSharpを利用することで、ROSのトピックの購読と発行、サー
 ***************************************************
 
 * .NET Framework 4
+
 * Reactive Extensions
+
+  * http://msdn.microsoft.com/en-us/data/gg577609.aspx
+
 * Common.Logging
+
+  * Apache License, Version 2.0.
+  * http://netcommon.sourceforge.net/
+
 * XML-RPC.NET
-* NDesk.Options
+
+  * MIT X11 license
+  * http://xml-rpc.net/
+
+* NDesk.Options (for GenMsg, RosCore)
+
+  * MIT/X11 license.
+  * http://www.ndesk.org/Options
+
 * F# Runtime 2.0 (for GenMsg)
+
+  * http://www.microsoft.com/download/details.aspx?id=13450
+
 * FParsec (for GenMsg)
+
+  * BSD License
+  * http://www.quanttec.com/fparsec/
+
 * log4net (for RosCore)
-* Common.Logging.Log4Net (for RosCore)
+
+  * Apache License, Version 2.0.
+  * http://logging.apache.org/log4net/index.html
 
 インストール方法
 ***************************************************
@@ -71,9 +96,10 @@ NuGetの利用
 
   PM> Install-Package RosSharp -Pre
 
-
 なお、NuGetでインストールを行った場合、RosCoreとGenMsgはインストールされません。
 RosCoreとGenMsgを利用する場合は、下記のバイナリパッケージをダウンロードしてください。
+
+* プロジェクトの対象のフレームワークを.NET Framework 4 Client Profileから.NET Framework 4に変更してください。
 
 バイナリパッケージの利用
 ==================================================
@@ -92,47 +118,30 @@ RosCoreとGenMsgを利用する場合は、下記のバイナリパッケージ�
   * CookComputing.XmlRpcV2.dll
   * Common.Logging.dll
 
+* プロジェクトの対象のフレームワークを.NET Framework 4 Client Profileから.NET Framework 4に変更してください。
 
 クイックスタート
 ***************************************************
 
-RosSharpは、
-Reactive Extensions(Rx)とTask Parallel Library(TPL)をベースにしており、非同期呼び出しのAPIを提供します。
+このセクションでは、同期呼び出しによるRosSharpの使い方について説明します。
 
+ここでのプログラムはusing句や、Main関数の記述を省略しています。
+完全に動作するプログラムは、下記を参照してください。
 
-なお、下記のプログラムはusing句や、Main関数の記述を省略しています。
+https://github.com/zoetrope/RosSharp/tree/master/Sample
 
-完全に動作するプログラムは、
-を参照してください。
-
-
-Subscriber - Publisherのサンプル
+トピック (Publisher/Subscriber)
 ==================================================
 
-SubscriberとPublisherを利用して、ノード間でメッセージをやり取りする
-
-
-Subscriber
--------------------------------------------------
-
-
-.. code-block:: csharp
-
-  try
-  {
-    var node = ROS.InitNodeAsync("Test").Result;
-    // 
-    var subscriber = node.SubscriberAsync<RosSharp.std_msgs.String>("/chatter").Result;
-    subscriber.Subscribe(x => Console.WriteLine(x.data));
-  }
-  catch(Exception ex)
-  {
-    
-  }
-
+トピックはノード間でメッセージを送受信するための機能です。
+Publisherからメッセージを送信し、それをSubscriberが受け取ります。
 
 Publisher
 -------------------------------------------------
+
+Publisherは名前と型を指定して、ノードから生成することができます。
+
+PublisherはIObserver<T>を実装しています。
 
 .. code-block:: csharp
 
@@ -149,15 +158,43 @@ Publisher
   }
   catch(Exception ex)
   {
+    Console.WriteLine(ex.Message);
   }
 
-Service
+Subscriber
+-------------------------------------------------
+
+Subscriberは名前と型を指定して、ノードから生成することができます。
+
+SubscriberはIObservable<T>を実装しており、Reactive Extensions (Rx)による柔軟なメッセージの
+購読を行うことができます。
+
+.. code-block:: csharp
+
+  try
+  {
+    var node = ROS.InitNodeAsync("Test").Result;
+    var subscriber = node.SubscriberAsync<RosSharp.std_msgs.String>("/chatter").Result;
+    subscriber.Subscribe(x => Console.WriteLine(x.data));
+  }
+  catch(Exception ex)
+  {
+    Console.WriteLine(ex.Message);
+  }
+
+
+サービス
 ==================================================
 
-サービスの提供と利用のサンプル
+サービスはノード間でのメソッド呼び出しのための機能です。
+
+サービスは、リクエストメッセージとレスポンスメッセージを1つ持ちます。
+
 
 Register Service
 -------------------------------------------------
+
+サービスの呼び出され側では、サービス名を指定して呼び出される関数の登録を行います。
 
 .. code-block:: csharp
 
@@ -165,12 +202,12 @@ Register Service
   {
     var node = ROS.InitNodeAsync("Test").Result;
 
-    // サービスを
     var service = node.AdvertiseServiceAsync("/add_two_ints",
       new AddTwoInts(req => new AddTwoInts.Response {sum = req.a + req.b})).Result;
   }
   catch(Exception ex)
   {
+    Console.WriteLine(ex.Message);
   }
 
   
@@ -178,25 +215,25 @@ Register Service
 Use Service
 -------------------------------------------------
 
+サービスの呼び出し側では、サービス名を指定して呼び出すためのプロキシを生成します。
+
 .. code-block:: csharp
 
   try
   {
     var node = ROS.InitNodeAsync("Test").Result;
 
-    // Serviceが登録されるまで待ちます。
     node.WaitForService("/add_two_ints").Wait();
     
-    // Serviceが登録される前にProxyを作成した場合は失敗します。
     var proxy = node.ServiceProxyAsync<AddTwoInts>("/add_two_ints").Result;
     
-    // サービスを呼び出します。
     var res = proxy.Invoke(new AddTwoInts.Request() {a = 1, b = 2});
     
     Console.WriteLine(res.sum);
   }
   catch(Exception ex)
   {
+    Console.WriteLine(ex.Message);
   }
 
 Parameter
@@ -204,15 +241,19 @@ Parameter
 
 複数のノード間で同一のパラメータを共有するための機能です。
 
-パラメータの読み書きと、値が書き換わったときの監視(Subscribe)
-
+パラメータの読み書きと、値が書き換わったときの監視(Subscribe)機能を提供します。
 
 データ型には、プリミティブ型、リスト型、ディクショナリ型を利用することが可能です。
 
-プリミティブ型
+プリミティブ型パラメータ
 -------------------------------------------------
 
-int, double, stringなどを利用することができます。
+パラメータは名前と型を指定してノードから生成することができます。
+
+ParameterはIObservable<T>を実装しており、Reactive Extensions (Rx)による柔軟なメッセージの
+購読を行うことができます。
+
+Parameter.Valueプロパティを利用して、パラメータの読み書きを行うことができます。
 
 .. code-block:: csharp
 
@@ -220,116 +261,57 @@ int, double, stringなどを利用することができます。
   {
     var node = ROS.InitNodeAsync("Test").Result;
 
-    //
     var param = node.PrimitiveParameterAsync<string>("rosversion").Result;
     
-    // 
     param.Subscribe(x => Console.WriteLine(x));
 
-    // 
     Console.WriteLine(param.Value);
     param.Value = "test";
   }
   catch(Exception ex)
   {
+    Console.WriteLine(ex.Message);
   }
-
-
-リスト型
--------------------------------------------------
-
-.. code-block:: csharp
-
-
-  try
-  {
-    var node = ROS.InitNodeAsync("Test").Result;
-
-    var param = node.ListParameterAsync<int>("rosversion").Result;
-    
-    param.Subscribe(x => Console.WriteLine(x));
-
-    foreach(var i in param.Value)
-    {
-      Console.WriteLine("value[{0}] = {1}", i, 
-    }
-    param.Value.Add()
-  }
-  catch(Exception ex)
-  {
-  }
-
-
-ディクショナリ型
--------------------------------------------------
-
-.. code-block:: csharp
-
-  try
-  {
-    var node = ROS.InitNodeAsync("Test").Result;
-
-    var param = node.DynamicParameterAsync("").Result;
-    Console.WriteLine(param.Value);
-    
-    param.Subscribe(x => Console.WriteLine(x));
-
-    dynamic val = param.Value;
-    
-    val.
-  }
-  catch(Exception ex)
-  {
-  }
-
-
-Dispose
-==================================================
-
-.. code-block:: csharp
-
-  publisher.Dispose();
-  
-  // 
-  subscriber.Dispose();
-  
-  // 
-  proxy.Dispose();
-  
-  param.Dispose();
-
-  // ノードに含まれるすべてのPublisher, Subscriber, Service, ServiceProxy, Parameterを終了する。
-  node.Dispose();
-  
-  // 同一プロセスに含まれるすべてのノードを終了する。
-  Ros.Dispose();
-
-非同期型のDisposeAsync()も用意してあります。
-
 
 TPLによる非同期プログラミング
 ==================================================
 
+RosSharpでは、Task Parallel Library (TPL) を利用して非同期スタイルのコードを記述することができます。
+
+Subscriberを利用したコードは下記のように書き換えることができます。
+
+.. code-block:: csharp
+
+  Ros.InitNodeAsync("Test")
+      .ContinueWith(node =>
+      {
+          return node.Result.SubscriberAsync<RosSharp.std_msgs.String>("/chatter");
+      })
+      .Unwrap()
+      .ContinueWith(subscriber =>
+      {
+          subscriber.Result.Subscribe(x => Console.WriteLine(x.data));
+      })
+      .ContinueWith(res =>
+      {
+          Console.WriteLine(res.Exception.Message);
+      }, TaskContinuationOptions.OnlyOnFaulted);
 
 
-Asynchronous Programming with async/await
+
 async/awaitによる非同期プログラミング
 ==================================================
 
-Visual Studio 2012からasync/await構文を利用すると、同期型と同じような書き方で
+Visual Studio 2012から導入されるasync/await構文を利用すると、同期呼び出しと同じような書き方で
 非同期プログラミングを行うことができます。
-
-なお、2012年6月ｘｘ日現在、
-今後仕様が変わる可能性もあるので注意してください。
+(下記はVisual Studio 2012 RCで動作します。)
 
 .. code-block:: csharp
 
   try
   {
-      var node = await Ros.InitNodeAsync("test");
-
+      var node = await Ros.InitNodeAsync("Test");
       var subscriber = await node.SubscriberAsync<RosSharp.std_msgs.String>("/chatter");
-
       subscriber.Subscribe(x => Console.WriteLine(x.data));
   }
   catch(Exception ex)
@@ -337,6 +319,7 @@ Visual Studio 2012からasync/await構文を利用すると、同期型と同じ
       Console.WriteLine(ex.Message);
   }
 
+.. _setting-ja:
 
 設定
 ***************************************************
@@ -344,7 +327,8 @@ Visual Studio 2012からasync/await構文を利用すると、同期型と同じ
 RosSharpでは、各種設定をソースコード、アプリケーション構成ファイル(app.config)、
 環境変数の3つの方法で設定することができます。
 
-優先順位は、
+ソースコードによる設定が最も優先順位が高く、アプリケーション構成ファイルによる
+設定は最も優先順位が低くなります。
 
 ネットワーク設定
 ==================================================
@@ -352,7 +336,7 @@ RosSharpでは、各種設定をソースコード、アプリケーション構
 コードでの設定
 -------------------------------------------------
 
-なお、ノードを生成する前に呼び出すようにしてください。
+ノードを生成する前に呼び出すようにしてください。
 
 .. code-block:: csharp
 
@@ -461,13 +445,22 @@ RosSharpは、rospy、rosjava、rosrubyなど、様々な言語によるROS実�
 ただし、roscppはいくつか問題があるため、そのままでは接続することができません。
 下記の手順に従って、roscppを修正する必要があります。
 
-* XmlRpc++は、XML-RPC.NETのレスポンスヘッダをパースすることができない。
+XmlRpc++がXML-RPC.NETのレスポンスヘッダをパースすることができない。
 ==================================================
 
-* roscppは、URIの一部を無視してしまう。
+XmlRpc++には下記の問題があります。
+
+* http://sourceforge.net/tracker/?func=detail&aid=1644372&group_id=70654&atid=528553
+* http://sourceforge.net/projects/xmlrpcpp/forums/forum/240495/topic/2487516
+
+この問題を修正する必要があります。
+
+roscppがURIの一部を無視してしまう。
 ==================================================
 
+ros_comm/clients/cpp/roscpp/src/libros/subscription.cppのSubscription::negotiateConnection関数において、SlaveのURLのポート番号の後ろの文字列が無視されています。
 
+XmlRpcClientのインスタンスを作成する際に、ポート番号の後ろの文字列を渡す必要があります。
 
 アプリケーション
 ***************************************************
@@ -481,25 +474,30 @@ RosCoreは、トピックやサービスの管理、パラメータサーバ、�
 
 なお、ROSが標準で提供しているroscoreを利用することも可能です。
 
-http://www.ros.org/wiki/roscore
+* http://www.ros.org/wiki/roscore
 
 
 使い方
 --------------------------------------------------
 
-RosCoreは下記のようにコマンドラインから実行します。
+RosCoreは下記のようにコマンドラインから実行します。 ::
 
-> RosCore [-p port]
+  > RosCore [-p port]
 
-> RosCore -p 11311
+|
 
--pオプションでポート番号を指定することができます。
--pオプションを省略した場合は、デフォルトの11311番が利用されます。
+例 ::
+
+  > RosCore -p 11311
+
+|
+
+-pオプション
+  マスターサーバのポート番号を指定することができます。オプションを省略した場合は、デフォルトの11311番が利用されます。
 
 RosCore.exe.configファイルにおいて、ネットワークの設定やログの設定を変更することが可能です。
 
-設定内容は、通常のノードと同じですので
-を参照してください。
+設定内容は、通常のノードと同じですので :ref:`setting-ja` を参照してください。
 
 RosCoreでは、ロガーにlog4netを利用しており、各ノードから収集したログをファイルに保存します。
 
@@ -508,30 +506,47 @@ GenMsg
 ==================================================
 GenMsgは.msg/.srv形式のファイルから、C#のソースコードを生成するためのツールです。
 
-トピックやサービスで利用する型を
+.msg/.srv形式のファイルについては、下記のリンクを参考にしくください。
 
-トピックでやり取りするデータ型を定義したい場合は .msg ファイルを作成し、
-GenMsgを利用してソースコードを生成し、
+* http://www.ros.org/wiki/msg
+* http://www.ros.org/wiki/srv
 
+トピックで新しいメッセージ型を利用したい場合は、.msgファイルを作成し、GenMsgでC#のコードを生成します。
 
-.srvファイルでは、サービスの引数と戻り値の型をユーザが定義することができます。
+サービスで新しいサービス型を利用したい場合は、.srvファイルを作成し、GenMsgでC#のコードを生成します。
 
 
 使い方
 --------------------------------------------------
 
-> GenMsg -t type [-i include_dir -o output_dir] file_name ...
+GenMsgは下記のようにコマンドラインから実行します。 ::
 
--tオプションには msg か srv を指定してください。
+  > GenMsg -t msg|srv [-n namespace] [-o output_dir] [[-i include_dir]...] FileName...
 
--i 他の.msgファイルで定義されている型を利用する場合は、そのファイルの含まれるディレクトリを指定します。
+|
 
--o 生成したC#のソースコードの出力先を指定します。
+例 ::
+
+  > GenMsg -t msg -i "..\msg\roslib" "..\msg\roslib\Time.msg"
+
+|
 
 
+-tオプション
+  Messageのコードを生成する場合はmsgを、Serviceのコードを生成する場合はsrvを指定します。
 
-例：
+-nオプション
+  生成するコードのネームスペースを指定します。
 
-> GenMsg -t msg -i "..\msg\roslib" "..\msg\roslib\Time.msg"
+-oオプション
+  生成したC#のソースコードの出力先を指定します。
+
+-iオプション
+  他の.msgファイルで定義されている型を利用する場合は、そのファイルの含まれるディレクトリを指定します。
+
+FileName
+  .msgファイルか.srvファイルを指定します。複数個のファイルを指定することが可能です。
+
+
 
 
