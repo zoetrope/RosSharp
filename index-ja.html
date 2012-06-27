@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>RosSharpドキュメント &mdash; RosSharp 0.1 documentation</title>
+    <title>RosSharpDocumentation (Japanease) &mdash; RosSharp 0.1 documentation</title>
     
     <link rel="stylesheet" href="_static/agogo.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="RosSharp 0.1 documentation" href="index.html" />
-    <link rel="prev" title="RosSharp Documentation" href="index-en.html" /> 
+    <link rel="prev" title="RosSharp Documentation (English)" href="index-en.html" /> 
   </head>
   <body>
     <div class="header-wrapper">
@@ -34,7 +34,7 @@
         <div class="headertitle"><a
           href="index.html">RosSharp Documentation</a></div>
         <div class="rel">
-          <a href="index-en.html" title="RosSharp Documentation"
+          <a href="index-en.html" title="RosSharp Documentation (English)"
              accesskey="P">previous</a> |
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a>
@@ -50,89 +50,315 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="rossharp">
-<h1>RosSharpドキュメント<a class="headerlink" href="#rossharp" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="rossharpdocumentation-japanease">
+<h1>RosSharpDocumentation (Japanease)<a class="headerlink" href="#rossharpdocumentation-japanease" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="id1">
 <h2>概要<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<p>RosSharpは、ROSのC#クライアントライブラリです。</p>
+<p>RosSharpは、C#で書かれたROSのクライアントライブラリです。</p>
 <p><a class="reference external" href="http://ros.org/">ROS</a> は <a class="reference external" href="http://www.willowgarage.com/">Willow Garage</a> の開発するRobot Operating Systemです。</p>
+<p>RosSharpを利用することで、ROSのトピックの購読と発行、サービスの提供と利用、パラメータの購読と読み書きが
+C#のコードで書けるようになります。</p>
 <ul class="simple">
-<li>Author: <a class="reference external" href="https://twitter.com/#!/zoetro">zoetrope</a></li>
-<li>License: <a class="reference external" href="https://github.com/zoetrope/RosSharp/blob/master/License.txt">BSD License</a></li>
-<li>Source: <a class="reference external" href="https://github.com/zoetrope/RosSharp">https://github.com/zoetrope/RosSharp</a></li>
-<li>NuGet Package: <a class="reference external" href="http://nuget.org/packages/RosSharp">http://nuget.org/packages/RosSharp</a></li>
+<li>開発者: <a class="reference external" href="https://twitter.com/#!/zoetro">zoetrope</a></li>
+<li>ライセンス: <a class="reference external" href="https://github.com/zoetrope/RosSharp/blob/master/License.txt">BSD License</a></li>
+<li>ソースコード: <a class="reference external" href="https://github.com/zoetrope/RosSharp">https://github.com/zoetrope/RosSharp</a></li>
+<li>NuGetパッケージ: <a class="reference external" href="http://nuget.org/packages/RosSharp">http://nuget.org/packages/RosSharp</a></li>
 </ul>
 <div class="section" id="id2">
 <h3>特徴<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>RosSharp is implemented based on Reactive Extensions</li>
-<li><a class="reference external" href="http://nuget.codeplex.com/">NuGet</a>  installation support</li>
-<li>Create ROS Node</li>
-<li>Master/Slave/ParameterServer API XML-RPC Client</li>
-<li>Master/Slave/ParameterServer API XML-RPC Server</li>
-<li>Topic (TCPROS) Connection</li>
+<li>RosSharpはReactive Extensions (Rx) とTask Parallel Library (TPL) をベースにしており、非同期呼び出しのAPIを提供します。</li>
+<li><a class="reference external" href="http://nuget.codeplex.com/">NuGet</a>  でのインストールをサポートしています。</li>
+<li>ROSのクライアント機能のサポート<ul>
+<li>Publisher/Subscriber</li>
 <li>Service Connection</li>
-<li>RosOut (Logging Node)</li>
-<li>RosCore (Master Server &amp; Parameter Server &amp; RosOut Node)</li>
-<li>GenMsg (Code generation tool from .msg/.srv files)</li>
+<li>Parameter Client</li>
 </ul>
-</div>
-<div class="section" id="id3">
-<h3>未実装機能<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+</li>
+<li>ROSのサーバ機能のサポート<ul>
+<li>Master</li>
+<li>Parameter Server</li>
+<li>RosOut (Logging Node)</li>
+</ul>
+</li>
+<li>ツールの提供<ul>
+<li>RosCore (Master Server &amp; Parameter Server &amp; RosOut Node)</li>
+<li>GenMsg (.msg/.srvファイルからコードを生成するツール)</li>
+</ul>
+</li>
+</ul>
+<p>以下の機能は未実装です。</p>
 <ul class="simple">
 <li>Remapping Arguments</li>
-<li>Graph Resource Names (supports only the global name)</li>
+<li>Graph Resource Names (global nameのみをサポートしています)</li>
 <li>Clock Node</li>
 <li>roslang</li>
 </ul>
 </div>
 </div>
-<div class="section" id="id4">
-<h2>システム要件<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id3">
+<h2>システム要件<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>.NET Framework 4</li>
-<li>Reactive Extensions</li>
-<li>Common.Logging</li>
-<li>XML-RPC.NET</li>
-<li>NDesk.Options</li>
-<li>F# Runtime 2.0 (for GenMsg)</li>
-<li>FParsec (for GenMsg)</li>
+<li>Reactive Extensions<ul>
+<li><a class="reference external" href="http://msdn.microsoft.com/en-us/data/gg577609.aspx">http://msdn.microsoft.com/en-us/data/gg577609.aspx</a></li>
+</ul>
+</li>
+<li>Common.Logging<ul>
+<li>Apache License, Version 2.0.</li>
+<li><a class="reference external" href="http://netcommon.sourceforge.net/">http://netcommon.sourceforge.net/</a></li>
+</ul>
+</li>
+<li>XML-RPC.NET<ul>
+<li>MIT X11 license</li>
+<li><a class="reference external" href="http://xml-rpc.net/">http://xml-rpc.net/</a></li>
+</ul>
+</li>
+<li>NDesk.Options (for GenMsg, RosCore)<ul>
+<li>MIT/X11 license.</li>
+<li><a class="reference external" href="http://www.ndesk.org/Options">http://www.ndesk.org/Options</a></li>
+</ul>
+</li>
+<li>F# Runtime 2.0 (for GenMsg)<ul>
+<li><a class="reference external" href="http://www.microsoft.com/download/details.aspx?id=13450">http://www.microsoft.com/download/details.aspx?id=13450</a></li>
+</ul>
+</li>
+<li>FParsec (for GenMsg)<ul>
+<li>BSD License</li>
+<li><a class="reference external" href="http://www.quanttec.com/fparsec/">http://www.quanttec.com/fparsec/</a></li>
+</ul>
+</li>
+<li>log4net (for RosCore)<ul>
+<li>Apache License, Version 2.0.</li>
+<li><a class="reference external" href="http://logging.apache.org/log4net/index.html">http://logging.apache.org/log4net/index.html</a></li>
+</ul>
+</li>
 </ul>
 </div>
+<div class="section" id="id4">
+<h2>インストール方法<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="id5">
-<h2>インストール方法<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<h3>NuGetの利用<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first">NuGet拡張をインストールしてください。(NuGet拡張を利用するためには、Visual Studio 2010 Professional以上が必要です。)</p>
+<ul class="simple">
+<li><a class="reference external" href="http://nuget.codeplex.com/">http://nuget.codeplex.com/</a></li>
+</ul>
+</li>
+<li><p class="first">RosSharpをインストールするには、NuGet Package Manager Consoleから下記のコマンドを実行してください。</p>
+<p>PM&gt; Install-Package RosSharp -Pre</p>
+</li>
+</ul>
+<p>なお、NuGetでインストールを行った場合、RosCoreとGenMsgはインストールされません。
+RosCoreとGenMsgを利用する場合は、下記のバイナリパッケージをダウンロードしてください。</p>
+<ul class="simple">
+<li>プロジェクトの対象のフレームワークを.NET Framework 4 Client Profileから.NET Framework 4に変更してください。</li>
+</ul>
+</div>
 <div class="section" id="id6">
-<h3>NuGetの利用<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
-<p>RosSharpをインストールするには、NuGet Package Manager Consoleから下記のコマンドを実行してください。</p>
-<div class="highlight-python"><pre>PM&gt; Install-Package RosSharp -Pre</pre>
-</div>
-</div>
-<div class="section" id="id7">
-<h3>バイナリパッケージ<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<h3>バイナリパッケージの利用<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>下記のリンクからバイナリパッケージをダウンロードします。<ul>
 <li><a class="reference external" href="https://github.com/zoetrope/RosSharp/downloads">https://github.com/zoetrope/RosSharp/downloads</a></li>
 </ul>
 </li>
 <li>Visual Studioを起動します。</li>
-<li>ダウンロードしたdllを参照に追加します。</li>
+<li>プロジェクトの参照設定にRosSharp.dllを追加します。<ul>
+<li>RosSharp.dll</li>
+<li>System.Reactive.dll</li>
+<li>CookComputing.XmlRpcServerV2.dll</li>
+<li>CookComputing.XmlRpcV2.dll</li>
+<li>Common.Logging.dll</li>
+</ul>
+</li>
+<li>プロジェクトの対象のフレームワークを.NET Framework 4 Client Profileから.NET Framework 4に変更してください。</li>
 </ul>
 </div>
 </div>
+<div class="section" id="id7">
+<h2>クイックスタート<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
+<p>このセクションでは、同期呼び出しによるRosSharpの使い方について説明します。</p>
+<p>ここでのプログラムはusing句や、Main関数の記述を省略しています。
+完全に動作するプログラムは、下記を参照してください。</p>
+<p><a class="reference external" href="https://github.com/zoetrope/RosSharp/tree/master/Sample">https://github.com/zoetrope/RosSharp/tree/master/Sample</a></p>
+<div class="section" id="publisher-subscriber">
+<h3>トピック (Publisher/Subscriber)<a class="headerlink" href="#publisher-subscriber" title="Permalink to this headline">¶</a></h3>
+<p>トピックはノード間でメッセージを送受信するための機能です。
+Publisherからメッセージを送信し、それをSubscriberが受け取ります。</p>
+<div class="section" id="publisher">
+<h4>Publisher<a class="headerlink" href="#publisher" title="Permalink to this headline">¶</a></h4>
+<p>Publisherは名前と型を指定して、ノードから生成することができます。</p>
+<p>PublisherはIObserver&lt;T&gt;を実装しています。</p>
+<div class="highlight-csharp"><div class="highlight"><pre><span class="k">try</span>
+<span class="p">{</span>
+  <span class="kt">var</span> <span class="n">node</span> <span class="p">=</span> <span class="n">ROS</span><span class="p">.</span><span class="n">InitNodeAsync</span><span class="p">(</span><span class="s">&quot;Test&quot;</span><span class="p">).</span><span class="n">Result</span><span class="p">;</span>
+  <span class="kt">var</span> <span class="n">publisher</span> <span class="p">=</span> <span class="n">node</span><span class="p">.</span><span class="n">PublisherAsync</span><span class="p">&lt;</span><span class="n">RosSharp</span><span class="p">.</span><span class="n">std_msgs</span><span class="p">.</span><span class="n">String</span><span class="p">&gt;(</span><span class="s">&quot;/chatter&quot;</span><span class="p">).</span><span class="n">Result</span><span class="p">;</span>
+
+  <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">=</span><span class="m">0</span><span class="p">;</span><span class="n">i</span><span class="p">&lt;</span><span class="m">100</span><span class="p">;</span><span class="n">i</span><span class="p">++)</span>
+  <span class="p">{</span>
+    <span class="n">publisher</span><span class="p">.</span><span class="n">OnNext</span><span class="p">(</span><span class="k">new</span> <span class="n">RosSharp</span><span class="p">.</span><span class="n">std_msgs</span><span class="p">.</span><span class="n">String</span><span class="p">()</span> <span class="p">{</span><span class="n">data</span> <span class="p">=</span> <span class="s">&quot;test message&quot;</span><span class="p">};);</span>
+    <span class="n">Thread</span><span class="p">.</span><span class="n">Sleep</span><span class="p">(</span><span class="n">TimeSpan</span><span class="p">.</span><span class="n">FromSeconds</span><span class="p">(</span><span class="m">1</span><span class="p">));</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="k">catch</span><span class="p">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">ex</span><span class="p">.</span><span class="n">Message</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="subscriber">
+<h4>Subscriber<a class="headerlink" href="#subscriber" title="Permalink to this headline">¶</a></h4>
+<p>Subscriberは名前と型を指定して、ノードから生成することができます。</p>
+<p>SubscriberはIObservable&lt;T&gt;を実装しており、Reactive Extensions (Rx)による柔軟なメッセージの
+購読を行うことができます。</p>
+<div class="highlight-csharp"><div class="highlight"><pre><span class="k">try</span>
+<span class="p">{</span>
+  <span class="kt">var</span> <span class="n">node</span> <span class="p">=</span> <span class="n">ROS</span><span class="p">.</span><span class="n">InitNodeAsync</span><span class="p">(</span><span class="s">&quot;Test&quot;</span><span class="p">).</span><span class="n">Result</span><span class="p">;</span>
+  <span class="kt">var</span> <span class="n">subscriber</span> <span class="p">=</span> <span class="n">node</span><span class="p">.</span><span class="n">SubscriberAsync</span><span class="p">&lt;</span><span class="n">RosSharp</span><span class="p">.</span><span class="n">std_msgs</span><span class="p">.</span><span class="n">String</span><span class="p">&gt;(</span><span class="s">&quot;/chatter&quot;</span><span class="p">).</span><span class="n">Result</span><span class="p">;</span>
+  <span class="n">subscriber</span><span class="p">.</span><span class="n">Subscribe</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">data</span><span class="p">));</span>
+<span class="p">}</span>
+<span class="k">catch</span><span class="p">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">ex</span><span class="p">.</span><span class="n">Message</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
 <div class="section" id="id8">
-<h2>設定<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
+<h3>サービス<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<p>サービスはノード間でのメソッド呼び出しのための機能です。</p>
+<p>サービスは、リクエストメッセージとレスポンスメッセージを1つ持ちます。</p>
+<div class="section" id="register-service">
+<h4>Register Service<a class="headerlink" href="#register-service" title="Permalink to this headline">¶</a></h4>
+<p>サービスの呼び出され側では、サービス名を指定して呼び出される関数の登録を行います。</p>
+<div class="highlight-csharp"><div class="highlight"><pre><span class="k">try</span>
+<span class="p">{</span>
+  <span class="kt">var</span> <span class="n">node</span> <span class="p">=</span> <span class="n">ROS</span><span class="p">.</span><span class="n">InitNodeAsync</span><span class="p">(</span><span class="s">&quot;Test&quot;</span><span class="p">).</span><span class="n">Result</span><span class="p">;</span>
+
+  <span class="kt">var</span> <span class="n">service</span> <span class="p">=</span> <span class="n">node</span><span class="p">.</span><span class="n">AdvertiseServiceAsync</span><span class="p">(</span><span class="s">&quot;/add_two_ints&quot;</span><span class="p">,</span>
+    <span class="k">new</span> <span class="nf">AddTwoInts</span><span class="p">(</span><span class="n">req</span> <span class="p">=&gt;</span> <span class="k">new</span> <span class="n">AddTwoInts</span><span class="p">.</span><span class="n">Response</span> <span class="p">{</span><span class="n">sum</span> <span class="p">=</span> <span class="n">req</span><span class="p">.</span><span class="n">a</span> <span class="p">+</span> <span class="n">req</span><span class="p">.</span><span class="n">b</span><span class="p">})).</span><span class="n">Result</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">catch</span><span class="p">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">ex</span><span class="p">.</span><span class="n">Message</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="use-service">
+<h4>Use Service<a class="headerlink" href="#use-service" title="Permalink to this headline">¶</a></h4>
+<p>サービスの呼び出し側では、サービス名を指定して呼び出すためのプロキシを生成します。</p>
+<div class="highlight-csharp"><div class="highlight"><pre><span class="k">try</span>
+<span class="p">{</span>
+  <span class="kt">var</span> <span class="n">node</span> <span class="p">=</span> <span class="n">ROS</span><span class="p">.</span><span class="n">InitNodeAsync</span><span class="p">(</span><span class="s">&quot;Test&quot;</span><span class="p">).</span><span class="n">Result</span><span class="p">;</span>
+
+  <span class="n">node</span><span class="p">.</span><span class="n">WaitForService</span><span class="p">(</span><span class="s">&quot;/add_two_ints&quot;</span><span class="p">).</span><span class="n">Wait</span><span class="p">();</span>
+
+  <span class="kt">var</span> <span class="n">proxy</span> <span class="p">=</span> <span class="n">node</span><span class="p">.</span><span class="n">ServiceProxyAsync</span><span class="p">&lt;</span><span class="n">AddTwoInts</span><span class="p">&gt;(</span><span class="s">&quot;/add_two_ints&quot;</span><span class="p">).</span><span class="n">Result</span><span class="p">;</span>
+
+  <span class="kt">var</span> <span class="n">res</span> <span class="p">=</span> <span class="n">proxy</span><span class="p">.</span><span class="n">Invoke</span><span class="p">(</span><span class="k">new</span> <span class="n">AddTwoInts</span><span class="p">.</span><span class="n">Request</span><span class="p">()</span> <span class="p">{</span><span class="n">a</span> <span class="p">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">b</span> <span class="p">=</span> <span class="m">2</span><span class="p">});</span>
+
+  <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">res</span><span class="p">.</span><span class="n">sum</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="k">catch</span><span class="p">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">ex</span><span class="p">.</span><span class="n">Message</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="parameter">
+<h3>Parameter<a class="headerlink" href="#parameter" title="Permalink to this headline">¶</a></h3>
+<p>複数のノード間で同一のパラメータを共有するための機能です。</p>
+<p>パラメータの読み書きと、値が書き換わったときの監視(Subscribe)機能を提供します。</p>
+<p>データ型には、プリミティブ型、リスト型、ディクショナリ型を利用することが可能です。</p>
 <div class="section" id="id9">
-<h3>ネットワーク設定<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="id10">
-<h4>コードでの設定<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h4>
+<h4>プリミティブ型パラメータ<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h4>
+<p>パラメータは名前と型を指定してノードから生成することができます。</p>
+<p>ParameterはIObservable&lt;T&gt;を実装しており、Reactive Extensions (Rx)による柔軟なメッセージの
+購読を行うことができます。</p>
+<p>Parameter.Valueプロパティを利用して、パラメータの読み書きを行うことができます。</p>
+<div class="highlight-csharp"><div class="highlight"><pre><span class="k">try</span>
+<span class="p">{</span>
+  <span class="kt">var</span> <span class="n">node</span> <span class="p">=</span> <span class="n">ROS</span><span class="p">.</span><span class="n">InitNodeAsync</span><span class="p">(</span><span class="s">&quot;Test&quot;</span><span class="p">).</span><span class="n">Result</span><span class="p">;</span>
+
+  <span class="kt">var</span> <span class="n">param</span> <span class="p">=</span> <span class="n">node</span><span class="p">.</span><span class="n">PrimitiveParameterAsync</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;(</span><span class="s">&quot;rosversion&quot;</span><span class="p">).</span><span class="n">Result</span><span class="p">;</span>
+
+  <span class="n">param</span><span class="p">.</span><span class="n">Subscribe</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">x</span><span class="p">));</span>
+
+  <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">param</span><span class="p">.</span><span class="n">Value</span><span class="p">);</span>
+  <span class="n">param</span><span class="p">.</span><span class="n">Value</span> <span class="p">=</span> <span class="s">&quot;test&quot;</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">catch</span><span class="p">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">ex</span><span class="p">.</span><span class="n">Message</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="tpl">
+<h3>TPLによる非同期プログラミング<a class="headerlink" href="#tpl" title="Permalink to this headline">¶</a></h3>
+<p>RosSharpでは、Task Parallel Library (TPL) を利用して非同期スタイルのコードを記述することができます。</p>
+<p>Subscriberを利用したコードは下記のように書き換えることができます。</p>
+<div class="highlight-csharp"><div class="highlight"><pre><span class="n">Ros</span><span class="p">.</span><span class="n">InitNodeAsync</span><span class="p">(</span><span class="s">&quot;Test&quot;</span><span class="p">)</span>
+    <span class="p">.</span><span class="n">ContinueWith</span><span class="p">(</span><span class="n">node</span> <span class="p">=&gt;</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">node</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">SubscriberAsync</span><span class="p">&lt;</span><span class="n">RosSharp</span><span class="p">.</span><span class="n">std_msgs</span><span class="p">.</span><span class="n">String</span><span class="p">&gt;(</span><span class="s">&quot;/chatter&quot;</span><span class="p">);</span>
+    <span class="p">})</span>
+    <span class="p">.</span><span class="n">Unwrap</span><span class="p">()</span>
+    <span class="p">.</span><span class="n">ContinueWith</span><span class="p">(</span><span class="n">subscriber</span> <span class="p">=&gt;</span>
+    <span class="p">{</span>
+        <span class="n">subscriber</span><span class="p">.</span><span class="n">Result</span><span class="p">.</span><span class="n">Subscribe</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">data</span><span class="p">));</span>
+    <span class="p">})</span>
+    <span class="p">.</span><span class="n">ContinueWith</span><span class="p">(</span><span class="n">res</span> <span class="p">=&gt;</span>
+    <span class="p">{</span>
+        <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">res</span><span class="p">.</span><span class="n">Exception</span><span class="p">.</span><span class="n">Message</span><span class="p">);</span>
+    <span class="p">},</span> <span class="n">TaskContinuationOptions</span><span class="p">.</span><span class="n">OnlyOnFaulted</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="async-await">
+<h3>async/awaitによる非同期プログラミング<a class="headerlink" href="#async-await" title="Permalink to this headline">¶</a></h3>
+<p>Visual Studio 2012から導入されるasync/await構文を利用すると、同期呼び出しと同じような書き方で
+非同期プログラミングを行うことができます。
+(下記はVisual Studio 2012 RCで動作します。)</p>
+<div class="highlight-csharp"><div class="highlight"><pre><span class="k">try</span>
+<span class="p">{</span>
+    <span class="kt">var</span> <span class="n">node</span> <span class="p">=</span> <span class="n">await</span> <span class="n">Ros</span><span class="p">.</span><span class="n">InitNodeAsync</span><span class="p">(</span><span class="s">&quot;Test&quot;</span><span class="p">);</span>
+    <span class="kt">var</span> <span class="n">subscriber</span> <span class="p">=</span> <span class="n">await</span> <span class="n">node</span><span class="p">.</span><span class="n">SubscriberAsync</span><span class="p">&lt;</span><span class="n">RosSharp</span><span class="p">.</span><span class="n">std_msgs</span><span class="p">.</span><span class="n">String</span><span class="p">&gt;(</span><span class="s">&quot;/chatter&quot;</span><span class="p">);</span>
+    <span class="n">subscriber</span><span class="p">.</span><span class="n">Subscribe</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">data</span><span class="p">));</span>
+<span class="p">}</span>
+<span class="k">catch</span><span class="p">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">ex</span><span class="p">.</span><span class="n">Message</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="setting-ja">
+<span id="id10"></span><h2>設定<a class="headerlink" href="#setting-ja" title="Permalink to this headline">¶</a></h2>
+<p>RosSharpでは、各種設定をソースコード、アプリケーション構成ファイル(app.config)、
+環境変数の3つの方法で設定することができます。</p>
+<p>ソースコードによる設定が最も優先順位が高く、アプリケーション構成ファイルによる
+設定は最も優先順位が低くなります。</p>
+<div class="section" id="id11">
+<h3>ネットワーク設定<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id12">
+<h4>コードでの設定<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h4>
+<p>ノードを生成する前に呼び出すようにしてください。</p>
 <div class="highlight-csharp"><div class="highlight"><pre><span class="c1">// ローカルネットワークのホスト名またはIPアドレス</span>
-<span class="n">RosManager</span><span class="p">.</span><span class="n">HostName</span> <span class="p">=</span> <span class="s">&quot;192.168.1.11&quot;</span><span class="p">;</span>
+<span class="n">Ros</span><span class="p">.</span><span class="n">HostName</span> <span class="p">=</span> <span class="s">&quot;192.168.1.11&quot;</span><span class="p">;</span>
 <span class="c1">// Masterへの接続URI</span>
-<span class="n">RosManager</span><span class="p">.</span><span class="n">MasterUri</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Uri</span><span class="p">(</span><span class="s">&quot;http://192.168.1.10:11311&quot;</span><span class="p">);</span>
+<span class="n">Ros</span><span class="p">.</span><span class="n">MasterUri</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Uri</span><span class="p">(</span><span class="s">&quot;http://192.168.1.10:11311&quot;</span><span class="p">);</span>
 <span class="c1">// ROS TOPICのタイムアウト時間[msec]</span>
-<span class="n">RosManager</span><span class="p">.</span><span class="n">TopicTimeout</span> <span class="p">=</span> <span class="m">3000</span><span class="p">;</span>
+<span class="n">Ros</span><span class="p">.</span><span class="n">TopicTimeout</span> <span class="p">=</span> <span class="m">3000</span><span class="p">;</span>
 <span class="c1">// XML-RPCのメソッド呼び出しのタイムアウト時間[msec]</span>
-<span class="n">RosManager</span><span class="p">.</span><span class="n">XmlRpcTimeout</span> <span class="p">=</span> <span class="m">3000</span><span class="p">;</span>
+<span class="n">Ros</span><span class="p">.</span><span class="n">XmlRpcTimeout</span> <span class="p">=</span> <span class="m">3000</span><span class="p">;</span>
 </pre></div>
 </div>
 </div>
@@ -153,8 +379,8 @@
 </pre></div>
 </div>
 </div>
-<div class="section" id="id11">
-<h4>環境変数での設定<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="id13">
+<h4>環境変数での設定<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h4>
 <ul class="simple">
 <li>ROS_MASTER_URI</li>
 <li>ROS_HOSTNAME</li>
@@ -163,21 +389,37 @@
 </ul>
 </div>
 </div>
-<div class="section" id="id12">
-<h3>ログ設定<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="id13">
-<h4>コードでの設定<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="id14">
+<h3>ログ設定<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
+<p>RosSharpでは、ログの出力にCommon.Loggingを利用しており、
+設定によって利用するロガーを切り替えることが可能です。</p>
+<p>デフォルトでは、RosOutLoggerが利用され、ログはRosOutへと送信されます。
+これをコンソールに出力したり、log4netを利用してファイルやイベントログに出力することができます。</p>
+<p>詳細については <a class="reference external" href="http://netcommon.sourceforge.net/docs/2.0.0/reference/html/index.html">Common.Logging Documentation</a>
+を参照してください。</p>
+<div class="section" id="id15">
+<h4>コードでの設定<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-csharp"><div class="highlight"><pre><span class="kt">var</span> <span class="n">properties</span> <span class="p">=</span> <span class="k">new</span> <span class="n">NameValueCollection</span><span class="p">();</span>
+
+<span class="c1">// ログのレベルの設定</span>
 <span class="n">properties</span><span class="p">[</span><span class="s">&quot;level&quot;</span><span class="p">]</span> <span class="p">=</span> <span class="s">&quot;DEBUG&quot;</span><span class="p">;</span>
+
+<span class="c1">// ログにログ名を出力するかどうかの設定</span>
 <span class="n">properties</span><span class="p">[</span><span class="s">&quot;showLogName&quot;</span><span class="p">]</span> <span class="p">=</span> <span class="s">&quot;true&quot;</span><span class="p">;</span>
+
+<span class="c1">// ログに日付を出力するかどうかの設定</span>
 <span class="n">properties</span><span class="p">[</span><span class="s">&quot;showDataTime&quot;</span><span class="p">]</span> <span class="p">=</span> <span class="s">&quot;true&quot;</span><span class="p">;</span>
+
+<span class="c1">// ログに出力する日付のフォーマットを設定</span>
 <span class="n">properties</span><span class="p">[</span><span class="s">&quot;dateTimeFormat&quot;</span><span class="p">]</span> <span class="p">=</span> <span class="s">&quot;yyyy/MM/dd HH:mm:ss:fff&quot;</span><span class="p">;</span>
+
+<span class="c1">// 利用するロガーを設定</span>
 <span class="n">LogManager</span><span class="p">.</span><span class="n">Adapter</span> <span class="p">=</span> <span class="k">new</span> <span class="n">RosOutLoggerFactoryAdapter</span><span class="p">(</span><span class="n">properties</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="id14">
-<h4>app.configでの設定<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="id16">
+<h4>app.configでの設定<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
 <span class="nt">&lt;configuration&gt;</span>
   <span class="nt">&lt;configSections&gt;</span>
@@ -199,86 +441,98 @@
 <span class="nt">&lt;/configuration&gt;</span>
 </pre></div>
 </div>
-<p>詳細については <a class="reference external" href="http://netcommon.sourceforge.net/docs/2.0.0/reference/html/index.html">Common.Logging Documentation</a> を参照してください。</p>
-</div>
-</div>
-</div>
-<div class="section" id="id15">
-<h2>プログラミング<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="using-directive">
-<h3>using directive<a class="headerlink" href="#using-directive" title="Permalink to this headline">¶</a></h3>
-<p>ソースコードに下記のusing句を追加します。</p>
-<div class="highlight-csharp"><div class="highlight"><pre><span class="k">using</span> <span class="nn">RosSharp</span><span class="p">;</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="id16">
-<h3>ノードの作成<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-csharp"><div class="highlight"><pre><span class="kt">var</span> <span class="n">node</span> <span class="p">=</span> <span class="n">ROS</span><span class="p">.</span><span class="n">CreateNode</span><span class="p">(</span><span class="s">&quot;Test&quot;</span><span class="p">);</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="subscriber">
-<h3>Subscriber<a class="headerlink" href="#subscriber" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-csharp"><div class="highlight"><pre><span class="kt">var</span> <span class="n">subscriber</span> <span class="p">=</span> <span class="n">node</span><span class="p">.</span><span class="n">CreateSubscriberAsync</span><span class="p">&lt;</span><span class="n">RosSharp</span><span class="p">.</span><span class="n">std_msgs</span><span class="p">.</span><span class="n">String</span><span class="p">&gt;(</span><span class="s">&quot;/chatter&quot;</span><span class="p">).</span><span class="n">Result</span><span class="p">;</span>
-<span class="n">subscriber</span><span class="p">.</span><span class="n">Subscribe</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">data</span><span class="p">));</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="publisher">
-<h3>Publisher<a class="headerlink" href="#publisher" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-csharp"><div class="highlight"><pre><span class="kt">var</span> <span class="n">publisher</span> <span class="p">=</span> <span class="n">node</span><span class="p">.</span><span class="n">CreatePublisherAsync</span><span class="p">&lt;</span><span class="n">RosSharp</span><span class="p">.</span><span class="n">std_msgs</span><span class="p">.</span><span class="n">String</span><span class="p">&gt;(</span><span class="s">&quot;/chatter&quot;</span><span class="p">).</span><span class="n">Result</span><span class="p">;</span>
-<span class="n">publisher</span><span class="p">.</span><span class="n">OnNext</span><span class="p">(</span><span class="k">new</span> <span class="n">RosSharp</span><span class="p">.</span><span class="n">std_msgs</span><span class="p">.</span><span class="n">String</span><span class="p">()</span> <span class="p">{</span><span class="n">data</span> <span class="p">=</span> <span class="s">&quot;test message&quot;</span><span class="p">};);</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="register-service">
-<h3>Register Service<a class="headerlink" href="#register-service" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-csharp"><div class="highlight"><pre><span class="n">node</span><span class="p">.</span><span class="n">RegisterServiceAsync</span><span class="p">(</span><span class="s">&quot;/add_two_ints&quot;</span><span class="p">,</span>
-  <span class="k">new</span> <span class="nf">AddTwoInts</span><span class="p">(</span><span class="n">req</span> <span class="p">=&gt;</span> <span class="k">new</span> <span class="n">AddTwoInts</span><span class="p">.</span><span class="n">Response</span> <span class="p">{</span><span class="n">sum</span> <span class="p">=</span> <span class="n">req</span><span class="p">.</span><span class="n">a</span> <span class="p">+</span> <span class="n">req</span><span class="p">.</span><span class="n">b</span><span class="p">})).</span><span class="n">Wait</span><span class="p">();</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="use-service">
-<h3>Use Service<a class="headerlink" href="#use-service" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-csharp"><div class="highlight"><pre><span class="kt">var</span> <span class="n">proxy</span> <span class="p">=</span> <span class="n">node</span><span class="p">.</span><span class="n">CreateProxyAsync</span><span class="p">&lt;</span><span class="n">AddTwoInts</span><span class="p">&gt;(</span><span class="s">&quot;/add_two_ints&quot;</span><span class="p">).</span><span class="n">Result</span><span class="p">;</span>
-<span class="kt">var</span> <span class="n">res</span> <span class="p">=</span> <span class="n">proxy</span><span class="p">.</span><span class="n">Invoke</span><span class="p">(</span><span class="k">new</span> <span class="n">AddTwoInts</span><span class="p">.</span><span class="n">Request</span><span class="p">()</span> <span class="p">{</span><span class="n">a</span> <span class="p">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">b</span> <span class="p">=</span> <span class="m">2</span><span class="p">});</span>
-<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">res</span><span class="p">.</span><span class="n">sum</span><span class="p">);</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="parameterserver">
-<h3>ParameterServer<a class="headerlink" href="#parameterserver" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-csharp"><div class="highlight"><pre><span class="kt">var</span> <span class="n">param</span> <span class="p">=</span> <span class="n">node</span><span class="p">.</span><span class="n">CreateParameterAsync</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;(</span><span class="s">&quot;rosversion&quot;</span><span class="p">).</span><span class="n">Result</span><span class="p">;</span>
-<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">param</span><span class="p">.</span><span class="n">Value</span><span class="p">);</span>
-<span class="n">param</span><span class="p">.</span><span class="n">Value</span> <span class="p">=</span> <span class="s">&quot;test&quot;</span><span class="p">;</span>
-<span class="n">param</span><span class="p">.</span><span class="n">Subscribe</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">x</span><span class="p">));</span>
-</pre></div>
 </div>
 </div>
 </div>
 <div class="section" id="id17">
-<h2>アプリケーション<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h2>
+<h2>相互運用性<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h2>
+<p>RosSharpは、rospy、rosjava、rosrubyなど、様々な言語によるROS実装と接続することが可能です。</p>
+<p>ただし、roscppはいくつか問題があるため、そのままでは接続することができません。
+下記の手順に従って、roscppを修正する必要があります。</p>
+<div class="section" id="xmlrpc-xml-rpc-net">
+<h3>XmlRpc++がXML-RPC.NETのレスポンスヘッダをパースすることができない。<a class="headerlink" href="#xmlrpc-xml-rpc-net" title="Permalink to this headline">¶</a></h3>
+<p>XmlRpc++には下記の問題があります。</p>
+<ul class="simple">
+<li><a class="reference external" href="http://sourceforge.net/tracker/?func=detail&amp;aid=1644372&amp;group_id=70654&amp;atid=528553">http://sourceforge.net/tracker/?func=detail&amp;aid=1644372&amp;group_id=70654&amp;atid=528553</a></li>
+<li><a class="reference external" href="http://sourceforge.net/projects/xmlrpcpp/forums/forum/240495/topic/2487516">http://sourceforge.net/projects/xmlrpcpp/forums/forum/240495/topic/2487516</a></li>
+</ul>
+<p>この問題を修正する必要があります。</p>
+</div>
+<div class="section" id="roscppuri">
+<h3>roscppがURIの一部を無視してしまう。<a class="headerlink" href="#roscppuri" title="Permalink to this headline">¶</a></h3>
+<p>ros_comm/clients/cpp/roscpp/src/libros/subscription.cppのSubscription::negotiateConnection関数において、SlaveのURLのポート番号の後ろの文字列が無視されています。</p>
+<p>XmlRpcClientのインスタンスを作成する際に、ポート番号の後ろの文字列を渡す必要があります。</p>
+</div>
+</div>
+<div class="section" id="id18">
+<h2>アプリケーション<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="roscore">
 <h3>RosCore<a class="headerlink" href="#roscore" title="Permalink to this headline">¶</a></h3>
-<p>RosCore is</p>
+<p>RosCoreは、トピックやサービスの管理、パラメータサーバ、ログの出力を管理するためのアプリケーションです。</p>
+<p>ノードを生成する前に、必ず起動しておく必要があります。</p>
+<p>なお、ROSが標準で提供しているroscoreを利用することも可能です。</p>
 <ul class="simple">
-<li>a ROS Master</li>
-<li>a ROS ParameterServer</li>
-<li>a rosout logging node</li>
+<li><a class="reference external" href="http://www.ros.org/wiki/roscore">http://www.ros.org/wiki/roscore</a></li>
 </ul>
-<p><a class="reference external" href="http://www.ros.org/wiki/roscore">http://www.ros.org/wiki/roscore</a></p>
-<div class="section" id="usage">
-<h4>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h4>
-<p>&gt; RosCore -p 11311</p>
+<div class="section" id="id19">
+<h4>使い方<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h4>
+<p>RosCoreは下記のようにコマンドラインから実行します。</p>
+<div class="highlight-python"><pre>&gt; RosCore [-p port]</pre>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>例</p>
+<div class="highlight-python"><pre>&gt; RosCore -p 11311</pre>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<dl class="docutils">
+<dt>-pオプション</dt>
+<dd>マスターサーバのポート番号を指定することができます。オプションを省略した場合は、デフォルトの11311番が利用されます。</dd>
+</dl>
+<p>RosCore.exe.configファイルにおいて、ネットワークの設定やログの設定を変更することが可能です。</p>
+<p>設定内容は、通常のノードと同じですので <a class="reference internal" href="#setting-ja"><em>設定</em></a> を参照してください。</p>
+<p>RosCoreでは、ロガーにlog4netを利用しており、各ノードから収集したログをファイルに保存します。</p>
 </div>
 </div>
 <div class="section" id="genmsg">
 <h3>GenMsg<a class="headerlink" href="#genmsg" title="Permalink to this headline">¶</a></h3>
-<p>GenMsg is a tool that code generation from .msg / .srv format files.</p>
-<div class="section" id="id18">
-<h4>Usage<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h4>
-<p>&gt; GenMsg -t msg -i &#8221;..msgroslib&#8221; &#8221;..msgroslibTime.msg&#8221;</p>
+<p>GenMsgは.msg/.srv形式のファイルから、C#のソースコードを生成するためのツールです。</p>
+<p>.msg/.srv形式のファイルについては、下記のリンクを参考にしくください。</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.ros.org/wiki/msg">http://www.ros.org/wiki/msg</a></li>
+<li><a class="reference external" href="http://www.ros.org/wiki/srv">http://www.ros.org/wiki/srv</a></li>
+</ul>
+<p>トピックで新しいメッセージ型を利用したい場合は、.msgファイルを作成し、GenMsgでC#のコードを生成します。</p>
+<p>サービスで新しいサービス型を利用したい場合は、.srvファイルを作成し、GenMsgでC#のコードを生成します。</p>
+<div class="section" id="id20">
+<h4>使い方<a class="headerlink" href="#id20" title="Permalink to this headline">¶</a></h4>
+<p>GenMsgは下記のようにコマンドラインから実行します。</p>
+<div class="highlight-python"><pre>&gt; GenMsg -t msg|srv [-n namespace] [-o output_dir] [[-i include_dir]...] FileName...</pre>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>例</p>
+<div class="highlight-python"><pre>&gt; GenMsg -t msg -i "..\msg\roslib" "..\msg\roslib\Time.msg"</pre>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<dl class="docutils">
+<dt>-tオプション</dt>
+<dd>Messageのコードを生成する場合はmsgを、Serviceのコードを生成する場合はsrvを指定します。</dd>
+<dt>-nオプション</dt>
+<dd>生成するコードのネームスペースを指定します。</dd>
+<dt>-oオプション</dt>
+<dd>生成したC#のソースコードの出力先を指定します。</dd>
+<dt>-iオプション</dt>
+<dd>他の.msgファイルで定義されている型を利用する場合は、そのファイルの含まれるディレクトリを指定します。</dd>
+<dt>FileName</dt>
+<dd>.msgファイルか.srvファイルを指定します。複数個のファイルを指定することが可能です。</dd>
+</dl>
 </div>
 </div>
 </div>
@@ -292,14 +546,15 @@
         <div class="sidebar">
           <h3>Table Of Contents</h3>
           <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="index-en.html">RosSharp Documentation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">RosSharpドキュメント</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="index-en.html">RosSharp Documentation (English)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">RosSharpDocumentation (Japanease)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#id1">概要</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id4">システム要件</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id5">インストール方法</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id8">設定</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id15">プログラミング</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id17">アプリケーション</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">システム要件</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">インストール方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">クイックスタート</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setting-ja">設定</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id17">相互運用性</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id18">アプリケーション</a></li>
 </ul>
 </li>
 </ul>
@@ -322,7 +577,7 @@
     <div class="footer-wrapper">
       <div class="footer">
         <div class="left">
-          <a href="index-en.html" title="RosSharp Documentation"
+          <a href="index-en.html" title="RosSharp Documentation (English)"
              >previous</a> |
           <a href="genindex.html" title="General Index"
              >index</a>
