@@ -12,23 +12,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample", "Sample", "{B02FD51D-88FD-4A11-9BFE-AF4F3719C802}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Listener", "Sample\Listener\Listener.csproj", "{C26EE4A1-064B-47F1-B0BC-544DAAED7698}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Listener.Dev", "Sample\Listener\Listener.Dev.csproj", "{C26EE4A1-064B-47F1-B0BC-544DAAED7698}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Talker", "Sample\Talker\Talker.csproj", "{572772C7-D172-497F-A428-D10141BBCA72}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Talker.Dev", "Sample\Talker\Talker.Dev.csproj", "{572772C7-D172-497F-A428-D10141BBCA72}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{57BD2B28-6427-4973-A179-C1841417F349}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RosCore", "App\RosCore\RosCore.csproj", "{25D53A55-E534-4CCA-9358-A51971838437}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Sample\Server\Server.csproj", "{553D2314-FDAA-4C06-A4D6-11B9D5F6225A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddTwoIntsServer.Dev", "Sample\AddTwoIntsServer\AddTwoIntsServer.Dev.csproj", "{553D2314-FDAA-4C06-A4D6-11B9D5F6225A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Sample\Client\Client.csproj", "{23DD82FC-DB6F-4214-9C95-DB9FA6B80336}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddTwoIntsClient.Dev", "Sample\AddTwoIntsClient\AddTwoIntsClient.Dev.csproj", "{23DD82FC-DB6F-4214-9C95-DB9FA6B80336}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "GenMsg.Lib", "App\GenMsg.Lib\GenMsg.Lib.fsproj", "{13BD4894-20F5-428F-AD57-AFA5E733F832}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "GenMsg.Tests", "App\GenMsg.Tests\GenMsg.Tests.fsproj", "{37548AA3-9223-4DD3-BC46-9668518D7B87}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParameterClient", "Sample\ParameterClient\ParameterClient.csproj", "{31592B97-7CFB-4592-AF05-D689BA80BB19}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParameterClient.Dev", "Sample\ParameterClient\ParameterClient.Dev.csproj", "{31592B97-7CFB-4592-AF05-D689BA80BB19}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenMsg", "App\GenMsg\GenMsg.csproj", "{2FDE74DC-9A76-4B89-AEDC-B98871E74758}"
 EndProject
