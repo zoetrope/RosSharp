@@ -1,29 +1,32 @@
 @Set Path=C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319;%PATH%
-rem msbuild ..\RosSharp\RosSharp.csproj /p:Configuration=Release /t:Rebuild
-rem msbuild ..\App\GenMsg.Lib\GenMsg.Lib.fsproj /p:Configuration=Release /t:Rebuild
-rem msbuild ..\App\GenMsg\GenMsg.csproj /p:Configuration=Release /t:Rebuild
-rem msbuild ..\App\RosCore\RosCore.csproj /p:Configuration=Release /t:Rebuild
+msbuild ..\RosSharp\RosSharp.csproj /p:Configuration=Release /t:Rebuild
+msbuild ..\App\GenMsg.Lib\GenMsg.Lib.fsproj /p:Configuration=Release /t:Rebuild
+msbuild ..\App\GenMsg\GenMsg.csproj /p:Configuration=Release /t:Rebuild
+msbuild ..\App\RosCore\RosCore.csproj /p:Configuration=Release /t:Rebuild
 
 set RosSharpDir=.\RosSharp-0.1.0
 
-rem mkdir %RosSharpDir%
-rem 
-rem robocopy ..\ .\%RosSharpDir%\ License.txt
-rem 
-rem mkdir %RosSharpDir%\bin
-rem 
-rem robocopy ..\App\RosCore\bin\Release\ .\%RosSharpDir%\bin *.dll
-rem robocopy ..\App\RosCore\bin\Release\ .\%RosSharpDir%\bin *.xml
-rem robocopy ..\App\RosCore\bin\Release\ .\%RosSharpDir%\bin RosCore.exe
-rem robocopy ..\App\RosCore\bin\Release\ .\%RosSharpDir%\bin RosCore.exe.config
-rem 
-rem robocopy ..\App\GenMsg\bin\Release\ .\%RosSharpDir%\bin *.dll
-rem robocopy ..\App\GenMsg\bin\Release\ .\%RosSharpDir%\bin *.xml
-rem robocopy ..\App\GenMsg\bin\Release\ .\%RosSharpDir%\bin GenMsg.exe
-rem 
-rem mkdir %RosSharpDir%\doc
-rem 
-rem robocopy ..\Doc\build\html .\%RosSharpDir%\doc
+mkdir %RosSharpDir%
+
+robocopy ..\ .\%RosSharpDir%\ License.txt
+
+mkdir %RosSharpDir%\bin
+
+robocopy ..\App\RosCore\bin\Release\ .\%RosSharpDir%\bin *.dll
+robocopy ..\App\RosCore\bin\Release\ .\%RosSharpDir%\bin *.xml
+robocopy ..\App\RosCore\bin\Release\ .\%RosSharpDir%\bin RosCore.exe
+robocopy ..\App\RosCore\bin\Release\ .\%RosSharpDir%\bin RosCore.exe.config
+
+robocopy ..\App\GenMsg\bin\Release\ .\%RosSharpDir%\bin *.dll
+robocopy ..\App\GenMsg\bin\Release\ .\%RosSharpDir%\bin *.xml
+robocopy ..\App\GenMsg\bin\Release\ .\%RosSharpDir%\bin GenMsg.exe
+
+mkdir %RosSharpDir%\doc
+cd ..\Doc
+call make html
+cd ..\Utility
+robocopy /S ..\Doc\build\html .\%RosSharpDir%\doc
+
 
 mkdir %RosSharpDir%\sample
 
@@ -62,5 +65,16 @@ robocopy ..\Sample\Talker .\%RosSharpDir%\sample\Talker Program.cs
 robocopy ..\Sample\Talker .\%RosSharpDir%\sample\Talker Talker.csproj
 robocopy ..\Sample\Talker .\%RosSharpDir%\sample\Talker app.config
 robocopy ..\Sample\Talker\Properties .\%RosSharpDir%\sample\Talker\Properties
+
+
+
+
+
+
+rem msbuild %RosSharpDir%\sample\AddTwoIntsClient\AddTwoIntsClient.csproj /p:Configuration=Release /t:Rebuild
+rem msbuild %RosSharpDir%\sample\AddTwoIntsServer\AddTwoIntsServer.csproj /p:Configuration=Release /t:Rebuild
+rem msbuild %RosSharpDir%\sample\Listener\Listener.csproj /p:Configuration=Release /t:Rebuild
+rem msbuild %RosSharpDir%\sample\ParameterClient\ParameterClient.csproj /p:Configuration=Release /t:Rebuild
+rem msbuild %RosSharpDir%\sample\Talker\Talker.csproj /p:Configuration=Release /t:Rebuild
 
 pause

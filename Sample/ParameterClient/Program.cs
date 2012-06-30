@@ -4,6 +4,9 @@ using RosSharp;
 
 namespace Sample
 {
+    /// <summary>
+    /// Sample code for Parameter client
+    /// </summary>
     class Program
     {
         static void Main(string[] args)
@@ -18,6 +21,9 @@ namespace Sample
         }
 
 
+        /// <summary>
+        /// Synchronous version
+        /// </summary>
         static void SyncMain()
         {
             try
@@ -35,6 +41,9 @@ namespace Sample
 
         }
 
+        /// <summary>
+        /// Asynchronous version by TAP (Task-based Asynchronous Pattern)
+        /// </summary>
         static void AsyncMainTAP()
         {
             Ros.InitNodeAsync("/ParameterSample")
@@ -50,10 +59,13 @@ namespace Sample
                 })
                 .ContinueWith(res =>
                 {
-                    Console.WriteLine(res.Exception.Message);
+                    Console.WriteLine(res.Exception.InnerException.Message);
                 }, TaskContinuationOptions.OnlyOnFaulted);
         }
         /*
+        /// <summary>
+        /// Asynchronous version by using async/await
+        /// </summary>
         static async void AsyncMain()
         {
             try

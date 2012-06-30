@@ -60,7 +60,9 @@ namespace RosSharp.Master
             }
             else
             {
-                _logger.Error(m => m("Already registered Service [{0}]", service));
+                _serviceRegistrationInfos[service].Service.Uri = serviceUri;
+                _serviceRegistrationInfos[service].Service.NodeId = nodeId;
+                _logger.Info(m => m("Update Service [{0}]", service));
             }
         }
 

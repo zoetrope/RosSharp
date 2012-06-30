@@ -122,7 +122,7 @@ namespace RosSharp.Service
                             var dummy = new TService();
                             dynamic recvHeader = receiveHeaderObs.Timeout(TimeSpan.FromMilliseconds(Ros.TopicTimeout)).First();
 
-                            if (recvHeader.service != serviceName)
+                            if (recvHeader.HasMember("service") && recvHeader.service != serviceName)
                             {
                                 _logger.Error(m => m("ServiceName mismatch error, expected={0} actual={1}", serviceName, recvHeader.topic));
                                 throw new RosTopicException("ServiceName mismatch error");

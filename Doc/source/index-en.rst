@@ -435,7 +435,7 @@ Setting by a app.config
 Interoperability
 ***************************************************
 
-RosSharp has interoperability with other implementations of ROS, rospy, rosjava and roruby.
+RosSharp has interoperability with other implementations of ROS, rospy and rosjava.
 
 But, roscpp has problems for interoperability.
 If you want interoperability with roscpp, you should fix the roscpp following steps.

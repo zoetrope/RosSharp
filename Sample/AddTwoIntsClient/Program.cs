@@ -5,12 +5,14 @@ using RosSharp;
 namespace Sample
 {
     /// <summary>
-    /// 
+    /// Sample code for Service client
     /// </summary>
     class Program
     {
         static void Main(string[] args)
         {
+            Ros.HostName = "192.168.11.2";
+            Ros.MasterUri = new Uri("http://192.168.11.2:11311/");
             //SyncMain();
             AsyncMainTAP();
             //AsyncMain();
@@ -21,15 +23,15 @@ namespace Sample
         }
 
         /// <summary>
-        /// Synchronous 
+        /// Synchronous version
         /// </summary>
         static void SyncMain()
         {
             try
             {
                 var node = Ros.InitNodeAsync("/Client").Result;
-                node.WaitForService("/add_two_ints").Wait(TimeSpan.FromSeconds(10));
-                var proxy = node.ServiceProxyAsync<AddTwoInts>("/add_two_ints").Result;
+                node.WaitForService("add_two_ints").Wait(TimeSpan.FromSeconds(10));
+                var proxy = node.ServiceProxyAsync<AddTwoInts>("add_two_ints").Result;
 
                 var res = proxy.Invoke(new AddTwoInts.Request() { a = 1, b = 2 });
                 Console.WriteLine("Sum = {0}", res.sum);
@@ -41,6 +43,9 @@ namespace Sample
 
         }
 
+        /// <summary>
+        /// Asynchronous version by TAP (Task-based Asynchronous Pattern)
+        /// </summary>
         static void AsyncMainTAP()
         {
             Ros.InitNodeAsync("/Client")
@@ -65,10 +70,13 @@ namespace Sample
                 })
                 .ContinueWith(res =>
                 {
-                    Console.WriteLine(res.Exception.Message);
+                    Console.WriteLine(res.Exception.InnerException.Message);
                 }, TaskContinuationOptions.OnlyOnFaulted);
         }
         /*
+        /// <summary>
+        /// Asynchronous version by using async/await
+        /// </summary>
         static async void AsyncMain()
         {
             try

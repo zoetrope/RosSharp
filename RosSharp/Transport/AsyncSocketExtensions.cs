@@ -31,9 +31,6 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Reactive.Concurrency;
@@ -41,7 +38,6 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Common.Logging;
-using RosSharp.Topic;
 
 namespace RosSharp.Transport
 {
@@ -68,11 +64,9 @@ namespace RosSharp.Transport
                 {
                     var recv = Observable.FromAsyncPattern<byte[], int, int, SocketFlags, int>(socket.BeginReceive, socket.EndReceive);
                     var buffer = new byte[1024];
-                    _logger.Info(m => m("receiving..."));
                     return recv(buffer, 0, 1024, SocketFlags.None)
                         .Select(length =>
                         {
-                            _logger.Info(m => m("received!!"));
                             var ret = new byte[length];
                             Buffer.BlockCopy(buffer, 0, ret, 0, length);
                             return ret;
@@ -89,7 +83,7 @@ namespace RosSharp.Transport
                         }
                         else
                         {
-                            _logger.Info(m => m("OnNext: {0}", x.Dump()));
+                            //_logger.Info(m => m("OnNext: {0}", x.Dump()));
                             observer.OnNext(x);
                         }
                     },ex=>

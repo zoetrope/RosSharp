@@ -4,6 +4,9 @@ using RosSharp;
 
 namespace Sample
 {
+    /// <summary>
+    /// Sample code for Service server
+    /// </summary>
     class Program
     {
         static void Main(string[] args)
@@ -23,6 +26,9 @@ namespace Sample
             return new AddTwoInts.Response() { sum = req.a + req.b };
         }
 
+        /// <summary>
+        /// Synchronous version
+        /// </summary>
         static void SyncMain()
         {
             try
@@ -37,6 +43,9 @@ namespace Sample
 
         }
 
+        /// <summary>
+        /// Asynchronous version by TAP (Task-based Asynchronous Pattern)
+        /// </summary>
         static void AsyncMainTAP()
         {
             Ros.InitNodeAsync("/Server")
@@ -51,10 +60,13 @@ namespace Sample
                 })
                 .ContinueWith(res =>
                 {
-                    Console.WriteLine(res.Exception.Message);
+                    Console.WriteLine(res.Exception.InnerException.Message);
                 }, TaskContinuationOptions.OnlyOnFaulted);
         }
         /*
+        /// <summary>
+        /// Asynchronous version by using async/await
+        /// </summary>
         static async void AsyncMain()
         {
             try
