@@ -3,7 +3,7 @@ RosSharp Documentation (English)
 
 Overview
 ***************************************************
-RosSharp is ROS client library implemented in C#.
+RosSharp is ROS client library implemented by pure C#.
 
 `ROS <http://ros.org/>`_ is Robot Operating System developed by `Willow Garage <http://www.willowgarage.com/>`_.
 
@@ -43,6 +43,15 @@ The following features are not supported
 * Graph Resource Names (supports only the global name)
 * Clock Node
 * roslang
+
+Release Notes
+***************************************************
+
+RosSharp 0.1.0
+==================================================
+* 2012/06/27
+* First Release
+
 
 System Requirements
 ***************************************************
@@ -272,7 +281,7 @@ Parameter.Value property provides a feature of read/write value;
   }
 
 Asynchronous Programming with Task Parallel Library
-==================================================
+============================================================================
 
 You can write an asynchronous style code using the Task Parallel Library (TPL).
 
@@ -426,14 +435,14 @@ Setting by a app.config
 Interoperability
 ***************************************************
 
-RosSharp has interoperability with other implementations of ROS, rospy, rosjava and roruby.
+RosSharp has interoperability with other implementations of ROS, rospy and rosjava.
 
 But, roscpp has problems for interoperability.
 If you want interoperability with roscpp, you should fix the roscpp following steps.
 
 
 XmlRpc++ can not parse a response header of XML-RPC.NET
-==================================================
+============================================================================
 
 XmlRpc++ has a following issue.
 
