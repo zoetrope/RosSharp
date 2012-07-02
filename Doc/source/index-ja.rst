@@ -102,7 +102,7 @@ NuGetの利用
 
 * RosSharpをインストールするには、NuGet Package Manager Consoleから下記のコマンドを実行してください。 ::
 
-  PM> Install-Package RosSharp -Pre
+  PM> Install-Package RosSharp
 
 なお、NuGetでインストールを行った場合、RosCoreとGenMsgはインストールされません。
 RosCoreとGenMsgを利用する場合は、下記のバイナリパッケージをダウンロードしてください。

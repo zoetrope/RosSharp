@@ -103,7 +103,7 @@ Use NuGet
 
 * To install RosSharp, run the following command in the NuGet Package Manager Console ::
 
-  PM> Install-Package RosSharp -Pre
+  PM> Install-Package RosSharp
 
 If you use NuGet, RosCore and GenMsg is not installed.
 You need download a following binary package.

@@ -11,8 +11,6 @@ namespace Sample
     {
         static void Main(string[] args)
         {
-            Ros.HostName = "192.168.11.2";
-            Ros.MasterUri = new Uri("http://192.168.11.2:11311/");
             //SyncMain();
             AsyncMainTAP();
             //AsyncMain();
