@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Reactive.Linq;
-using CookComputing.XmlRpc.Moles;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RosSharp.Master;
-using RosSharp.Master.Moles;
 
 namespace RosSharp.Tests.Master
 {

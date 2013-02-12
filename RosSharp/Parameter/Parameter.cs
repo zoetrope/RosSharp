@@ -125,7 +125,7 @@ namespace RosSharp.Parameter
 
         public event Func<string, Task> Disposing = _ => Task.Factory.StartNew(() => { });
 
-        public Task DisposeAsync()
+        public async Task DisposeAsync()
         {
             if (_parameterSubject != null)
             {
@@ -136,9 +136,8 @@ namespace RosSharp.Parameter
             var handler = Disposing;
             Disposing = null;
 
-            return _parameterServerClient.UnsubscribeParamAsync(NodeId, _slaveUri, Name)
-                .ContinueWith(_ => handler(Name))
-                .Unwrap();
+            await _parameterServerClient.UnsubscribeParamAsync(NodeId, _slaveUri, Name);
+            await handler(Name);
         }
 
         public void Dispose()
@@ -166,7 +165,7 @@ namespace RosSharp.Parameter
             }
         }
 
-        Task IParameter.InitializeAsync(string nodeId, string paramName, Uri slaveUri, ParameterServerClient client)
+        async Task IParameter.InitializeAsync(string nodeId, string paramName, Uri slaveUri, ParameterServerClient client)
         {
             NodeId = nodeId;
             _logger = RosOutLogManager.GetCurrentNodeLogger(NodeId);
@@ -176,32 +175,28 @@ namespace RosSharp.Parameter
 
             _parameterServerClient = client;
 
-            return _parameterServerClient.HasParamAsync(NodeId, Name)
-                .ContinueWith(task =>
-                {
-                    if (task.Result)
-                    {
-                        return _parameterServerClient.GetParamAsync(NodeId, Name);
-                    }
-                    else
-                    {
-                        return _parameterServerClient.SetParamAsync(NodeId, Name, new XmlRpcStruct());
-                    }
-                })
-                .Unwrap();
+            var result = await _parameterServerClient.HasParamAsync(NodeId, Name);
+            if (result)
+            {
+                await _parameterServerClient.GetParamAsync(NodeId, Name);
+            }
+            else
+            {
+                await _parameterServerClient.SetParamAsync(NodeId, Name, new XmlRpcStruct());
+            }
         }
 
         #endregion
 
-        public Task<TParam> GetAsync()
+        public async Task<TParam> GetAsync()
         {
-            return _parameterServerClient.GetParamAsync(NodeId, Name)
-                .ContinueWith(res => _converter.ConvertTo(res.Result));
+            var result = await _parameterServerClient.GetParamAsync(NodeId, Name);
+            return _converter.ConvertTo(result);
         }
 
-        public Task SetAsync(TParam value)
+        public async Task SetAsync(TParam value)
         {
-            return _parameterServerClient.SetParamAsync(NodeId, Name, _converter.ConvertFrom(value));
+            await _parameterServerClient.SetParamAsync(NodeId, Name, _converter.ConvertFrom(value));
         }
     }
 

@@ -59,10 +59,10 @@ namespace RosSharp.Parameter
         /// <param name="callerId"> ROS caller ID </param>
         /// <param name="key"> Parameter name. </param>
         /// <returns> ignore </returns>
-        public Task DeleteParamAsync(string callerId, string key)
+        public async Task DeleteParamAsync(string callerId, string key)
         {
-            return Task<object[]>.Factory.FromAsync(_proxy.BeginDeleteParam, _proxy.EndDeleteParam, callerId, key, null)
-                .ContinueWith(task => { if ((StatusCode) task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string) task.Result[1]); });
+            var result = await Task<object[]>.Factory.FromAsync(_proxy.BeginDeleteParam, _proxy.EndDeleteParam, callerId, key, null);
+            if ((StatusCode)result[0] != StatusCode.Success) throw new InvalidOperationException((string)result[1]);
         }
 
         /// <summary>
@@ -72,10 +72,10 @@ namespace RosSharp.Parameter
         /// <param name="key"> Parameter name. </param>
         /// <param name="value"> Parameter value. </param>
         /// <returns> ignore </returns>
-        public Task SetParamAsync(string callerId, string key, object value)
+        public async Task SetParamAsync(string callerId, string key, object value)
         {
-            return Task<object[]>.Factory.FromAsync(_proxy.BeginSetParam, _proxy.EndSetParam, callerId, key, value, null)
-                .ContinueWith(task => { if ((StatusCode) task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string) task.Result[1]); });
+            var result = await Task<object[]>.Factory.FromAsync(_proxy.BeginSetParam, _proxy.EndSetParam, callerId, key, value, null);
+            if ((StatusCode)result[0] != StatusCode.Success) throw new InvalidOperationException((string)result[1]);
         }
 
         /// <summary>
@@ -84,14 +84,11 @@ namespace RosSharp.Parameter
         /// <param name="callerId"> ROS caller ID </param>
         /// <param name="key"> Parameter name. If key is a namespace, getParam() will return a parameter tree. </param>
         /// <returns> parameterValue </returns>
-        public Task<object> GetParamAsync(string callerId, string key)
+        public async Task<object> GetParamAsync(string callerId, string key)
         {
-            return Task<object[]>.Factory.FromAsync(_proxy.BeginGetParam, _proxy.EndGetParam, callerId, key, null)
-                .ContinueWith(task =>
-                {
-                    if ((StatusCode) task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string) task.Result[1]);
-                    return task.Result[2];
-                });
+            var result = await Task<object[]>.Factory.FromAsync(_proxy.BeginGetParam, _proxy.EndGetParam, callerId, key, null);
+            if ((StatusCode)result[0] != StatusCode.Success) throw new InvalidOperationException((string)result[1]);
+            return result[2];
         }
 
         /// <summary>
@@ -100,14 +97,11 @@ namespace RosSharp.Parameter
         /// <param name="callerId"> ROS caller ID </param>
         /// <param name="key"> Parameter name to search for. </param>
         /// <returns> foundKey </returns>
-        public Task<string> SearchParamAsync(string callerId, string key)
+        public async Task<string> SearchParamAsync(string callerId, string key)
         {
-            return Task<object[]>.Factory.FromAsync(_proxy.BeginSearchParam, _proxy.EndSearchParam, callerId, key, null)
-                .ContinueWith(task =>
-                {
-                    if ((StatusCode) task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string) task.Result[1]);
-                    return (string) task.Result[2];
-                });
+            var result = await Task<object[]>.Factory.FromAsync(_proxy.BeginSearchParam, _proxy.EndSearchParam, callerId, key, null);
+            if ((StatusCode)result[0] != StatusCode.Success) throw new InvalidOperationException((string)result[1]);
+            return (string)result[2];
         }
 
         /// <summary>
@@ -117,14 +111,11 @@ namespace RosSharp.Parameter
         /// <param name="callerApi"> Node API URI of subscriber for paramUpdate callbacks. </param>
         /// <param name="key"> Parameter name </param>
         /// <returns> parameterValue </returns>
-        public Task<object> SubscribeParamAsync(string callerId, Uri callerApi, string key)
+        public async Task<object> SubscribeParamAsync(string callerId, Uri callerApi, string key)
         {
-            return Task<object[]>.Factory.FromAsync(_proxy.BeginSubscribeParam, _proxy.EndSubscribeParam, callerId, callerApi.ToString(), key, null)
-                .ContinueWith(task =>
-                {
-                    if ((StatusCode) task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string) task.Result[1]);
-                    return task.Result[2];
-                });
+            var result = await Task<object[]>.Factory.FromAsync(_proxy.BeginSubscribeParam, _proxy.EndSubscribeParam, callerId, callerApi.ToString(), key, null);
+            if ((StatusCode)result[0] != StatusCode.Success) throw new InvalidOperationException((string)result[1]);
+            return result[2];
         }
 
         /// <summary>
@@ -134,14 +125,11 @@ namespace RosSharp.Parameter
         /// <param name="callerApi"> Node API URI of subscriber. </param>
         /// <param name="key"> Parameter name. </param>
         /// <returns> number of unsubscribed </returns>
-        public Task<int> UnsubscribeParamAsync(string callerId, Uri callerApi, string key)
+        public async Task<int> UnsubscribeParamAsync(string callerId, Uri callerApi, string key)
         {
-            return Task<object[]>.Factory.FromAsync(_proxy.BeginUnsubscribeParam, _proxy.EndUnsubscribeParam, callerId, callerApi.ToString(), key, null)
-                .ContinueWith(task =>
-                {
-                    if ((StatusCode) task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string) task.Result[1]);
-                    return (int) task.Result[2];
-                });
+            var result = await Task<object[]>.Factory.FromAsync(_proxy.BeginUnsubscribeParam, _proxy.EndUnsubscribeParam, callerId, callerApi.ToString(), key, null);
+            if ((StatusCode)result[0] != StatusCode.Success) throw new InvalidOperationException((string)result[1]);
+            return (int)result[2];
         }
 
         /// <summary>
@@ -150,14 +138,11 @@ namespace RosSharp.Parameter
         /// <param name="callerId"> ROS caller ID. </param>
         /// <param name="key"> Parameter name. </param>
         /// <returns> hasParam </returns>
-        public Task<bool> HasParamAsync(string callerId, string key)
+        public async Task<bool> HasParamAsync(string callerId, string key)
         {
-            return Task<object[]>.Factory.FromAsync(_proxy.BeginHasParam, _proxy.EndHasParam, callerId, key, null)
-                .ContinueWith(task =>
-                {
-                    if ((StatusCode) task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string) task.Result[1]);
-                    return (bool) task.Result[2];
-                });
+            var result = await Task<object[]>.Factory.FromAsync(_proxy.BeginHasParam, _proxy.EndHasParam, callerId, key, null);
+            if ((StatusCode)result[0] != StatusCode.Success) throw new InvalidOperationException((string)result[1]);
+            return (bool)result[2];
         }
 
         /// <summary>
@@ -165,14 +150,11 @@ namespace RosSharp.Parameter
         /// </summary>
         /// <param name="callerId"> ROS caller ID. </param>
         /// <returns> parameter name list </returns>
-        public Task<List<string>> GetParamNamesAsync(string callerId)
+        public async Task<List<string>> GetParamNamesAsync(string callerId)
         {
-            return Task<object[]>.Factory.FromAsync(_proxy.BeginGetParamNames, _proxy.EndGetParamNames, callerId, null)
-                .ContinueWith(task =>
-                {
-                    if ((StatusCode) task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string) task.Result[1]);
-                    return ((string[]) task.Result[2]).ToList();
-                });
+            var result = await Task<object[]>.Factory.FromAsync(_proxy.BeginGetParamNames, _proxy.EndGetParamNames, callerId, null);
+            if ((StatusCode)result[0] != StatusCode.Success) throw new InvalidOperationException((string)result[1]);
+            return ((string[])result[2]).ToList();
         }
     }
 }

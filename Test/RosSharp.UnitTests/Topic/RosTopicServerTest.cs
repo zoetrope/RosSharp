@@ -11,7 +11,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RosSharp.Slave;
 using RosSharp.Topic;
 using RosSharp.Transport;
-using RosSharp.Transport.Moles;
 
 namespace RosSharp.Tests.Topic
 {

@@ -9,8 +9,6 @@ using Microsoft.Reactive.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RosSharp.Slave;
 using RosSharp.Topic;
-using RosSharp.Slave.Moles;
-using RosSharp.Topic.Moles;
 
 namespace RosSharp.Tests.Topic
 {

@@ -40,6 +40,6 @@ namespace RosSharp.Topic
 {
     internal interface ISubscriber : ITopic, IAsyncDisposable
     {
-        void UpdatePublishers(List<Uri> publishers);
+        Task UpdatePublishers(List<Uri> publishers);
     }
 }

@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reactive.Linq;
-using CookComputing.XmlRpc.Moles;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RosSharp.Slave;
-using RosSharp.Slave.Moles;
 
 namespace RosSharp.Tests.Slave
 {

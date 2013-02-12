@@ -7,7 +7,6 @@ using Microsoft.CSharp.RuntimeBinder;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RosSharp.Topic;
 using RosSharp.Transport;
-using RosSharp.Transport.Moles;
 
 namespace RosSharp.Tests.Topic
 {

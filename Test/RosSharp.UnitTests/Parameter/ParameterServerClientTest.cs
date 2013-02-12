@@ -4,10 +4,8 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-using CookComputing.XmlRpc.Moles;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RosSharp.Parameter;
-using RosSharp.Parameter.Moles;
 
 namespace RosSharp.Tests.Parameter
 {

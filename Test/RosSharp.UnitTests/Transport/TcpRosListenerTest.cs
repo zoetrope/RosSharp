@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net.Sockets;
-using System.Net.Sockets.Moles;
 using System.Reactive.Linq;
 using System.Text;
 using System.Collections.Generic;
@@ -9,7 +8,6 @@ using System.Threading;
 using Microsoft.Reactive.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RosSharp.Transport;
-using RosSharp.Transport.Moles;
 
 namespace RosSharp.Tests.Transport
 {

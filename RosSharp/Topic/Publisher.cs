@@ -150,75 +150,74 @@ namespace RosSharp.Topic
 
         public void WaitForConnection()
         {
-            ConnectionChangedAsObservable().Where(x => x > 0).First();
+            ConnectionChangedAsObservable().Where(x => x > 0).Wait();
         }
 
         public void WaitForDisconnection()
         {
-            ConnectionChangedAsObservable().Where(x => x == 0).First();
+            ConnectionChangedAsObservable().Where(x => x == 0).Wait();
         }
 
         public void WaitForConnection(TimeSpan timeout)
         {
-            ConnectionChangedAsObservable().Where(x => x > 0).Timeout(timeout).First();
+            ConnectionChangedAsObservable().Where(x => x > 0).Timeout(timeout).Wait();
         }
 
         public void WaitForDisconnection(TimeSpan timeout)
         {
-            ConnectionChangedAsObservable().Where(x => x == 0).Timeout(timeout).First();
+            ConnectionChangedAsObservable().Where(x => x == 0).Timeout(timeout).Wait();
         }
 
 
-        internal Task AddTopic(Socket socket)
+        internal async Task AddTopic(Socket socket)
         {
             var rosTopicClient = new RosTopicClient<TMessage>(NodeId, TopicName);
 
-            return rosTopicClient.StartAsync(socket, _latching)
-                .ContinueWith(startTask =>
-                {
-                    if (startTask.Status == TaskStatus.RanToCompletion)
+            try
+            {
+                var result = await rosTopicClient.StartAsync(socket, _latching);
+
+                _logger.Debug("AddTopic: Started");
+
+                result.Subscribe(
+                    _ => { },
+                    ex =>
                     {
-                        _logger.Debug("AddTopic: Started");
-
-                        startTask.Result.Subscribe(
-                            _ => { },
-                            ex =>
-                            {
-                                lock (_rosTopicClients)
-                                {
-                                    _rosTopicClients.Remove(rosTopicClient);
-                                    _connectionCounterSubject.OnNext(_rosTopicClients.Count);
-                                }
-                            },
-                            () =>
-                            {
-                                lock (_rosTopicClients)
-                                {
-                                    _rosTopicClients.Remove(rosTopicClient);
-                                    _connectionCounterSubject.OnNext(_rosTopicClients.Count);
-                                }
-                            }
-                            );
-
                         lock (_rosTopicClients)
                         {
-                            _rosTopicClients.Add(rosTopicClient);
+                            _rosTopicClients.Remove(rosTopicClient);
+                            _connectionCounterSubject.OnNext(_rosTopicClients.Count);
                         }
-
-                        if (_latching && _lastPublishedMessage != null)
-                        {
-                            OnNext(_lastPublishedMessage);
-                        }
-
-                        _logger.Debug("OnConnected");
-                        _connectionCounterSubject.OnNext(_rosTopicClients.Count);
-                    }
-                    else if (startTask.Status == TaskStatus.Faulted)
+                    },
+                    () =>
                     {
-                        _logger.Error("AddTopic: Failure", startTask.Exception.InnerException);
-                        throw startTask.Exception.InnerException;
+                        lock (_rosTopicClients)
+                        {
+                            _rosTopicClients.Remove(rosTopicClient);
+                            _connectionCounterSubject.OnNext(_rosTopicClients.Count);
+                        }
                     }
-                });
+                    );
+
+                lock (_rosTopicClients)
+                {
+                    _rosTopicClients.Add(rosTopicClient);
+                }
+
+                if (_latching && _lastPublishedMessage != null)
+                {
+                    OnNext(_lastPublishedMessage);
+                }
+
+                _logger.Debug("OnConnected");
+                _connectionCounterSubject.OnNext(_rosTopicClients.Count);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("AddTopic: Failure", ex);
+                throw;
+            }
+
         }
 
         internal void UpdateSubscribers(List<Uri> subscribers)

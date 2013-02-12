@@ -62,63 +62,60 @@ namespace RosSharp.Slave
         /// </summary>
         /// <param name="callerId"> ROS caller ID. </param>
         /// <returns> stats </returns>
-        public Task<BusStatistics> GetBusStatsAsync(string callerId)
+        public async Task<BusStatistics> GetBusStatsAsync(string callerId)
         {
-            return Task<object[]>.Factory.FromAsync(_proxy.BeginGetBusStats, _proxy.EndGetBusStats, callerId, null)
-                .ContinueWith(task =>
-                {
-                    if ((StatusCode) task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string) task.Result[1]);
-                    
-                    var statistics = (object[])task.Result[2];
+            var result = await Task<object[]>.Factory.FromAsync(_proxy.BeginGetBusStats, _proxy.EndGetBusStats, callerId, null);
+            if ((StatusCode)result[0] != StatusCode.Success) throw new InvalidOperationException((string)result[1]);
 
-                    var ret = new BusStatistics();
+            var statistics = (object[])result[2];
 
-                    if (statistics[0] is object[])
+            var ret = new BusStatistics();
+
+            if (statistics[0] is object[])
+            {
+                ret.PublishStatistics = ((object[])statistics[0])
+                    .Cast<object[]>()
+                    .Select(x => new PublishStatistic()
                     {
-                        ret.PublishStatistics = ((object[]) statistics[0])
+                        TopicName = (string)x[0],
+                        MessageDataSent = (int)x[1],
+                        ConnectionData = ((object[])x[2])
                             .Cast<object[]>()
-                            .Select(x => new PublishStatistic()
+                            .Select(y => new PublishConnectionData()
                             {
-                                TopicName = (string) x[0],
-                                MessageDataSent = (int)x[1],
-                                ConnectionData = ((object[]) x[2])
-                                    .Cast<object[]>()
-                                    .Select(y=>new PublishConnectionData()
-                                    {
-                                        ConnectionId = (int)y[0],
-                                        BytesSent = (int)y[1],
-                                        NumSent = (int)y[2],
-                                        Connected = (bool)y[3]
-                                    })
-                                    .ToList(),
-                            }).ToList();
-                    }
-                    if (statistics[1] is object[])
+                                ConnectionId = (int)y[0],
+                                BytesSent = (int)y[1],
+                                NumSent = (int)y[2],
+                                Connected = (bool)y[3]
+                            })
+                            .ToList(),
+                    }).ToList();
+            }
+            if (statistics[1] is object[])
+            {
+                ret.SubscribeStatistics = ((object[])statistics[1])
+                    .Cast<object[]>()
+                    .Select(x => new SubscirbeStatistic()
                     {
-                        ret.SubscribeStatistics = ((object[])statistics[1])
+                        TopicName = (string)x[0],
+                        ConnectionData = ((object[])x[1])
                             .Cast<object[]>()
-                            .Select(x => new SubscirbeStatistic()
+                            .Select(y => new SubscribeConnectionData()
                             {
-                                TopicName = (string) x[0],
-                                ConnectionData = ((object[])x[1])
-                                    .Cast<object[]>()
-                                    .Select(y=>new SubscribeConnectionData()
-                                    {
-                                        ConnectionId = (int)y[0],
-                                        BytesReceived = (int)y[1],
-                                        NumSent = (int)y[2],
-                                        DropEstimate = (int)y[3],
-                                        Connected = (bool)y[4]
-                                    })
-                                    .ToList(),
-                            }).ToList();
-                    }
-                    if (statistics[2] is object[])
-                    {
-                        //proposed...
-                    }
-                    return ret;
-                });
+                                ConnectionId = (int)y[0],
+                                BytesReceived = (int)y[1],
+                                NumSent = (int)y[2],
+                                DropEstimate = (int)y[3],
+                                Connected = (bool)y[4]
+                            })
+                            .ToList(),
+                    }).ToList();
+            }
+            if (statistics[2] is object[])
+            {
+                //proposed...
+            }
+            return ret;
         }
 
         /// <summary>
@@ -126,24 +123,21 @@ namespace RosSharp.Slave
         /// </summary>
         /// <param name="callerId"> ROS caller ID. </param>
         /// <returns> businfo </returns>
-        public Task<BusInformation> GetBusInfoAsync(string callerId)
+        public async Task<BusInformation> GetBusInfoAsync(string callerId)
         {
-            return Task<object[]>.Factory.FromAsync(_proxy.BeginGetBusInfo, _proxy.EndGetBusInfo, callerId, null)
-                .ContinueWith(task =>
-                {
-                    if ((StatusCode) task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string) task.Result[1]);
-                    
-                    var info = (object[]) task.Result[2];
-                    return new BusInformation()
-                    {
-                        ConnectionId = (int)info[0],
-                        DestinationId = (string)info[1],
-                        Direction = (string)info[2],
-                        Transport = (string)info[3],
-                        Topic = (string)info[4],
-                        Connected = (bool)info[5]
-                    };
-                });
+            var result = await Task<object[]>.Factory.FromAsync(_proxy.BeginGetBusInfo, _proxy.EndGetBusInfo, callerId, null);
+            if ((StatusCode)result[0] != StatusCode.Success) throw new InvalidOperationException((string)result[1]);
+
+            var info = (object[])result[2];
+            return new BusInformation()
+            {
+                ConnectionId = (int)info[0],
+                DestinationId = (string)info[1],
+                Direction = (string)info[2],
+                Transport = (string)info[3],
+                Topic = (string)info[4],
+                Connected = (bool)info[5]
+            };
         }
 
         /// <summary>
@@ -151,14 +145,11 @@ namespace RosSharp.Slave
         /// </summary>
         /// <param name="callerId"> ROS caller ID. </param>
         /// <returns> URI of the master </returns>
-        public Task<Uri> GetMasterUriAsync(string callerId)
+        public async Task<Uri> GetMasterUriAsync(string callerId)
         {
-            return Task<object[]>.Factory.FromAsync(_proxy.BeginGetMasterUri, _proxy.EndGetMasterUri, callerId, null)
-                .ContinueWith(task =>
-                {
-                    if ((StatusCode) task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string) task.Result[1]);
-                    return new Uri((string) task.Result[2]);
-                });
+            var result = await Task<object[]>.Factory.FromAsync(_proxy.BeginGetMasterUri, _proxy.EndGetMasterUri, callerId, null);
+            if ((StatusCode)result[0] != StatusCode.Success) throw new InvalidOperationException((string)result[1]);
+            return new Uri((string)result[2]);
         }
 
         /// <summary>
@@ -167,10 +158,10 @@ namespace RosSharp.Slave
         /// <param name="callerId"> ROS caller ID. </param>
         /// <param name="msg"> A message describing why the node is being shutdown. </param>
         /// <returns> ignore </returns>
-        public Task ShutdownAsync(string callerId, string msg)
+        public async Task ShutdownAsync(string callerId, string msg)
         {
-            return Task<object[]>.Factory.FromAsync(_proxy.BeginShutdown, _proxy.EndShutdown, callerId, msg, null)
-                .ContinueWith(task => { if ((StatusCode) task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string) task.Result[1]); });
+            var result = await Task<object[]>.Factory.FromAsync(_proxy.BeginShutdown, _proxy.EndShutdown, callerId, msg, null);
+            if ((StatusCode)result[0] != StatusCode.Success) throw new InvalidOperationException((string)result[1]);
         }
 
         /// <summary>
@@ -178,14 +169,11 @@ namespace RosSharp.Slave
         /// </summary>
         /// <param name="callerId"> ROS caller ID. </param>
         /// <returns> server process pid </returns>
-        public Task<int> GetPidAsync(string callerId)
+        public async Task<int> GetPidAsync(string callerId)
         {
-            return Task<object[]>.Factory.FromAsync(_proxy.BeginGetPid, _proxy.EndGetPid, callerId, null)
-                .ContinueWith(task =>
-                {
-                    if ((StatusCode) task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string) task.Result[1]);
-                    return (int) task.Result[2];
-                });
+            var result = await Task<object[]>.Factory.FromAsync(_proxy.BeginGetPid, _proxy.EndGetPid, callerId, null);
+            if ((StatusCode)result[0] != StatusCode.Success) throw new InvalidOperationException((string)result[1]);
+            return (int)result[2];
         }
 
         /// <summary>
@@ -193,15 +181,12 @@ namespace RosSharp.Slave
         /// </summary>
         /// <param name="callerId"> ROS caller ID. </param>
         /// <returns> topicList is a list of topics this node subscribes to and is of the form </returns>
-        public Task<List<TopicInfo>> GetSubscriptionsAsync(string callerId)
+        public async Task<List<TopicInfo>> GetSubscriptionsAsync(string callerId)
         {
-            return Task<object[]>.Factory.FromAsync(_proxy.BeginGetSubscriptions, _proxy.EndGetSubscriptions, callerId, null)
-                .ContinueWith(task =>
-                {
-                    if ((StatusCode) task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string) task.Result[1]);
-                    return ((object[]) task.Result[2])
-                        .Select(x => new TopicInfo() {TopicName = ((string[]) x)[0], MessageType = ((string[]) x)[1]}).ToList();
-                });
+            var result = await Task<object[]>.Factory.FromAsync(_proxy.BeginGetSubscriptions, _proxy.EndGetSubscriptions, callerId, null);
+            if ((StatusCode)result[0] != StatusCode.Success) throw new InvalidOperationException((string)result[1]);
+            return ((object[])result[2])
+                .Select(x => new TopicInfo() { TopicName = ((string[])x)[0], MessageType = ((string[])x)[1] }).ToList();
         }
 
         /// <summary>
@@ -209,15 +194,12 @@ namespace RosSharp.Slave
         /// </summary>
         /// <param name="callerId"> ROS caller ID. </param>
         /// <returns> topicList is a list of topics published by this node and is of the form </returns>
-        public Task<List<TopicInfo>> GetPublicationsAsync(string callerId)
+        public async Task<List<TopicInfo>> GetPublicationsAsync(string callerId)
         {
-            return Task<object[]>.Factory.FromAsync(_proxy.BeginGetPublications, _proxy.EndGetPublications, callerId, null)
-                .ContinueWith(task =>
-                {
-                    if ((StatusCode) task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string) task.Result[1]);
-                    return ((object[]) task.Result[2])
-                        .Select(x => new TopicInfo() {TopicName = ((string[]) x)[0], MessageType = ((string[]) x)[1]}).ToList();
-                });
+            var result = await Task<object[]>.Factory.FromAsync(_proxy.BeginGetPublications, _proxy.EndGetPublications, callerId, null);
+            if ((StatusCode)result[0] != StatusCode.Success) throw new InvalidOperationException((string)result[1]);
+            return ((object[])result[2])
+                .Select(x => new TopicInfo() { TopicName = ((string[])x)[0], MessageType = ((string[])x)[1] }).ToList();
         }
 
         /// <summary>
@@ -227,10 +209,10 @@ namespace RosSharp.Slave
         /// <param name="parameterKey"> Parameter name, globally resolved. </param>
         /// <param name="parameterValue"> New parameter value. </param>
         /// <returns> ignore </returns>
-        public Task ParamUpdateAsync(string callerId, string parameterKey, object parameterValue)
+        public async Task ParamUpdateAsync(string callerId, string parameterKey, object parameterValue)
         {
-            return Task<object[]>.Factory.FromAsync(_proxy.BeginParamUpdate, _proxy.EndParamUpdate, callerId, parameterKey, parameterValue, null)
-                .ContinueWith(task => { if ((StatusCode) task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string) task.Result[1]); });
+            var result = await Task<object[]>.Factory.FromAsync(_proxy.BeginParamUpdate, _proxy.EndParamUpdate, callerId, parameterKey, parameterValue, null);
+            if ((StatusCode)result[0] != StatusCode.Success) throw new InvalidOperationException((string)result[1]);
         }
 
         /// <summary>
@@ -240,10 +222,10 @@ namespace RosSharp.Slave
         /// <param name="topic"> Topic name. </param>
         /// <param name="publishers"> List of current publishers for topic in the form of XMLRPC URIs </param>
         /// <returns> ignore </returns>
-        public Task PublisherUpdateAsync(string callerId, string topic, string[] publishers)
+        public async Task PublisherUpdateAsync(string callerId, string topic, string[] publishers)
         {
-            return Task<object[]>.Factory.FromAsync(_proxy.BeginPublisherUpdate, _proxy.EndPublisherUpdate, callerId, topic, publishers, null)
-                .ContinueWith(task => { if ((StatusCode) task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string) task.Result[1]); });
+            var result = await Task<object[]>.Factory.FromAsync(_proxy.BeginPublisherUpdate, _proxy.EndPublisherUpdate, callerId, topic, publishers, null);
+            if ((StatusCode)result[0] != StatusCode.Success) throw new InvalidOperationException((string)result[1]);
         }
 
         /// <summary>
@@ -253,23 +235,19 @@ namespace RosSharp.Slave
         /// <param name="topic"> Topic name. </param>
         /// <param name="infos"> List of desired protocols for communication in order of preference. Each protocol is a list of the form [ProtocolName, ProtocolParam1, ProtocolParam2...N] </param>
         /// <returns> protocolParams may be an empty list if there are no compatible protocols. </returns>
-        public Task<TopicParam> RequestTopicAsync(string callerId, string topic, List<ProtocolInfo> infos)
+        public async Task<TopicParam> RequestTopicAsync(string callerId, string topic, List<ProtocolInfo> infos)
         {
             var protocols = infos.Select(
-                info => new List<string>() {info.Protocol.ToString()}.Concat(info.ProtocolParams).ToArray()).ToArray();
+                info => new List<string>() { info.Protocol.ToString() }.Concat(info.ProtocolParams).ToArray()).ToArray();
 
-            return Task<object[]>.Factory.FromAsync(_proxy.BeginRequestTopic, _proxy.EndRequestTopic, callerId, topic, protocols, null)
-                .ContinueWith(task =>
-                {
-                    if ((StatusCode) task.Result[0] != StatusCode.Success) throw new InvalidOperationException((string) task.Result[1]);
-                    return new TopicParam
-                    {
-                        ProtocolName = (string) ((object[]) task.Result[2])[0],
-                        HostName = (string) ((object[]) task.Result[2])[1],
-                        PortNumber = (int) ((object[]) task.Result[2])[2]
-                    };
-                });
-
+            var result = await Task<object[]>.Factory.FromAsync(_proxy.BeginRequestTopic, _proxy.EndRequestTopic, callerId, topic, protocols, null);
+            if ((StatusCode)result[0] != StatusCode.Success) throw new InvalidOperationException((string)result[1]);
+            return new TopicParam
+            {
+                ProtocolName = (string)((object[])result[2])[0],
+                HostName = (string)((object[])result[2])[1],
+                PortNumber = (int)((object[])result[2])[2]
+            };
         }
     }
 

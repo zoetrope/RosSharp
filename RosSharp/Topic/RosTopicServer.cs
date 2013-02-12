@@ -70,51 +70,28 @@ namespace RosSharp.Topic
 
         #endregion
 
-        public Task<IObservable<TMessage>> StartAsync(TopicParam param, bool nodelay = true)
+        public async Task<IObservable<TMessage>> StartAsync(TopicParam param, bool nodelay = true)
         {
             _client = new TcpRosClient();
-            
-            var tcs = new TaskCompletionSource<IObservable<TMessage>>();
-            _client.ConnectAsync(param.HostName, param.PortNumber)
-                .ContinueWith(connectTask =>
-                {
-                    _logger.Debug("StartAsync Connected");
-                    
-                    if(connectTask.Status == TaskStatus.RanToCompletion)
-                    {
-                        try
-                        {
-                            ConnectToPublisherAsync(nodelay).ContinueWith(connectedTask =>
-                            {
-                                _logger.Debug("StartAsync ConnectToPublisherAsync");
-                                
-                                if(connectedTask.Status == TaskStatus.RanToCompletion)
-                                {
-                                    tcs.SetResult(connectedTask.Result);
-                                }
-                                else if(connectedTask.Status == TaskStatus.Faulted)
-                                {
-                                    tcs.SetException(connectedTask.Exception.InnerException);
-                                }
-                            });
-                        }
-                        catch (Exception ex)
-                        {
-                            _logger.Error("Connect Error", ex);
-                            tcs.SetException(ex);
-                        }
-                    }
-                    else if(connectTask.Status == TaskStatus.Faulted)
-                    {
-                        tcs.SetException(connectTask.Exception.InnerException);
-                    }
-                });
 
-            return tcs.Task;
+            try
+            {
+                await _client.ConnectAsync(param.HostName, param.PortNumber);
+                _logger.Debug("StartAsync Connected");
+                var result = await ConnectToPublisherAsync(nodelay);
+                _logger.Debug("StartAsync ConnectToPublisherAsync");
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Connect Error", ex);
+                throw;
+            }
         }
 
 
-        private Task<IObservable<TMessage>> ConnectToPublisherAsync(bool nodelay)
+        private async Task<IObservable<TMessage>> ConnectToPublisherAsync(bool nodelay)
         {
             var last = _client.ReceiveAsync()
                 .Take(1)
@@ -135,38 +112,25 @@ namespace RosSharp.Topic
 
             var stream = new MemoryStream();
             TcpRosHeaderSerializer.Serialize(stream, sendHeader);
-            
-            var tcs = new TaskCompletionSource<IObservable<TMessage>>();
-            _client.SendAsync(stream.ToArray())
-                .ContinueWith(task =>
-                {
-                    _logger.Debug("ConnectToPublisherAsync Sent");
-                    
-                    if(task.Status == TaskStatus.RanToCompletion)
-                    {
-                        try
-                        {
-                            var recvHeader = last.Timeout(TimeSpan.FromMilliseconds(Ros.TopicTimeout)).First();
-                            tcs.SetResult(CreateSubscriber(recvHeader));
-                        }
-                        catch (TimeoutException ex)
-                        {
-                            _logger.Error("Receive Header Timeout Error", ex);
-                            tcs.SetException(ex);
-                        }
-                        catch (RosTopicException ex)
-                        {
-                            _logger.Error("Header Deserialize Error", ex);
-                            tcs.SetException(ex);
-                        }
-                    }
-                    else if(task.Status == TaskStatus.Faulted)
-                    {
-                        tcs.SetException(task.Exception.InnerException);
-                    }
-                });
 
-            return tcs.Task;
+            var result = await _client.SendAsync(stream.ToArray());
+            _logger.Debug("ConnectToPublisherAsync Sent");
+
+            try
+            {
+                var recvHeader = last.Timeout(TimeSpan.FromMilliseconds(Ros.TopicTimeout)).Wait(); //TODO:??
+                return CreateSubscriber(recvHeader);
+            }
+            catch (TimeoutException ex)
+            {
+                _logger.Error("Receive Header Timeout Error", ex);
+                throw;
+            }
+            catch (RosTopicException ex)
+            {
+                _logger.Error("Header Deserialize Error", ex);
+                throw;
+            }
         }
 
         private IObservable<TMessage> CreateSubscriber(dynamic header)

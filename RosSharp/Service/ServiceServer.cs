@@ -108,40 +108,38 @@ namespace RosSharp.Service
                     }, Dispose);
         }
 
-        private void CreateNewServiceInstance(IService service, Socket socket)
+        private async Task CreateNewServiceInstance(IService service, Socket socket)
         {
             var instance = new ServiceInstance<TService>(NodeId, service, socket);
 
-            instance.StartAsync(ServiceName)
-                .ContinueWith(startTask=>
+            try
+            {
+                var result = await instance.StartAsync(ServiceName);
+
+                var lazyDisposable = new SingleAssignmentDisposable();
+                var d = result.Subscribe(
+                    _ => { },
+                    ex => lazyDisposable.Dispose(),
+                    lazyDisposable.Dispose);
+
+                lock (_instanceDisposables)
                 {
-                    if(startTask.Status == TaskStatus.RanToCompletion)
-                    {
-                        var lazyDisposable = new SingleAssignmentDisposable();
-                        var d = startTask.Result.Subscribe(
-                            _ => { },
-                            ex => lazyDisposable.Dispose(),
-                            lazyDisposable.Dispose);
+                    _instanceDisposables.Add(d);
+                }
 
-                        lock (_instanceDisposables)
-                        {
-                            _instanceDisposables.Add(d);
-                        }
-
-                        lazyDisposable.Disposable = Disposable.Create(() =>
-                        {
-                            d.Dispose();
-                            lock (_instanceDisposables)
-                            {
-                                _instanceDisposables.Remove(d);
-                            }
-                        });
-                    }
-                    else if(startTask.Status == TaskStatus.Faulted)
+                lazyDisposable.Disposable = Disposable.Create(() =>
+                {
+                    d.Dispose();
+                    lock (_instanceDisposables)
                     {
-                        _logger.Error("ServiceServer: StartAsync Error", startTask.Exception.InnerException);
+                        _instanceDisposables.Remove(d);
                     }
                 });
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("ServiceServer: StartAsync Error", ex);
+            }
         }
     }
 }

@@ -71,7 +71,6 @@ namespace Sample
                     Console.WriteLine(res.Exception.InnerException.Message);
                 }, TaskContinuationOptions.OnlyOnFaulted);
         }
-        /*
         /// <summary>
         /// Asynchronous version by using async/await
         /// </summary>
@@ -91,6 +90,5 @@ namespace Sample
                 Console.WriteLine(ex.Message);
             }
         }
-        */
     }
 }

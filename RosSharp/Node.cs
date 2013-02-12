@@ -195,12 +195,12 @@ namespace RosSharp
         /// </summary>
         /// <param name="paramName"> Parameter Name </param>
         /// <returns> Parameter </returns>
-        public Task<DynamicParameter> DynamicParameterAsync(string paramName)
+        public async Task<DynamicParameter> DynamicParameterAsync(string paramName)
         {
-            return CreateParameterAsync<DynamicParameter>(paramName);
+            return await CreateParameterAsync<DynamicParameter>(paramName);
         }
 
-        private Task<T> CreateParameterAsync<T>(string paramName)
+        private async Task<T> CreateParameterAsync<T>(string paramName)
             where T : IParameter, new()
         {
             if (_disposed) throw new ObjectDisposedException("Node");
@@ -215,22 +215,17 @@ namespace RosSharp
 
             _parameters.Add(paramName, param);
 
-            var tcs = new TaskCompletionSource<T>();
-
-            param.InitializeAsync(NodeId, paramName, _slaveServer.SlaveUri, _parameterServerClient).ContinueWith(task =>
+            try
             {
-                if (task.Status == TaskStatus.RanToCompletion)
-                {
-                    tcs.SetResult(param);
-                }
-                else if (task.Status == TaskStatus.Faulted)
-                {
-                    _logger.Error("Initialize Parameter: Failure", task.Exception.InnerException);
-                    tcs.SetException(task.Exception.InnerException);
-                }
-            });
+                await param.InitializeAsync(NodeId, paramName, _slaveServer.SlaveUri, _parameterServerClient);
+            }
+            catch (Exception ex) //TODO:
+            {
+                _logger.Error("Initialize Parameter: Failure", ex);
+                throw;
+            }
 
-            return tcs.Task;
+            return param;
         }
 
 
@@ -241,7 +236,7 @@ namespace RosSharp
         /// <param name="topicName"> Topic Name </param>
         /// <param name="nodelay"> false: Socket uses the Nagle algorithm </param>
         /// <returns> Subscriber </returns>
-        public Task<Subscriber<TMessage>> SubscriberAsync<TMessage>(string topicName, bool nodelay = true)
+        public async Task<Subscriber<TMessage>> SubscriberAsync<TMessage>(string topicName, bool nodelay = true)
             where TMessage : IMessage, new()
         {
             if (_disposed) throw new ObjectDisposedException("Node");
@@ -257,28 +252,20 @@ namespace RosSharp
             _topicContainer.AddSubscriber(subscriber);
             subscriber.Disposing += DisposeSubscriberAsync;
 
-            var tcs = new TaskCompletionSource<Subscriber<TMessage>>();
-
             _logger.Debug("RegisterSubscriber");
-            _masterClient
-                .RegisterSubscriberAsync(NodeId, topicName, subscriber.MessageType, _slaveServer.SlaveUri)
-                .ContinueWith(task =>
-                {
-                    _logger.Debug("Registered Subscriber");
-
-                    if (task.Status == TaskStatus.RanToCompletion)
-                    {
-                        ((ISubscriber) subscriber).UpdatePublishers(task.Result);
-                        tcs.SetResult(subscriber);
-                    }
-                    else if (task.Status == TaskStatus.Faulted)
-                    {
-                        tcs.SetException(task.Exception.InnerException);
-                        _logger.Error("RegisterSubscriber: Failure", task.Exception.InnerException);
-                    }
-                });
-
-            return tcs.Task;
+            try
+            {
+                var result = await _masterClient
+                    .RegisterSubscriberAsync(NodeId, topicName, subscriber.MessageType, _slaveServer.SlaveUri);
+                _logger.Debug("Registered Subscriber");
+                ((ISubscriber)subscriber).UpdatePublishers(result);
+            }
+            catch (Exception ex) //TODO:
+            {
+                _logger.Error("RegisterSubscriber: Failure", ex);
+                throw;
+            }
+            return subscriber;
         }
 
         /// <summary>
@@ -288,7 +275,7 @@ namespace RosSharp
         /// <param name="topicName"> Topic Name </param>
         /// <param name="latching"> true: send the latest published message when subscribed topic </param>
         /// <returns> Publisher </returns>
-        public Task<Publisher<TMessage>> PublisherAsync<TMessage>(string topicName, bool latching = false)
+        public async Task<Publisher<TMessage>> PublisherAsync<TMessage>(string topicName, bool latching = false)
             where TMessage : IMessage, new()
         {
             if (_disposed) throw new ObjectDisposedException("Node");
@@ -314,28 +301,20 @@ namespace RosSharp
 
             _publisherDisposables.Add(topicName, acceptDisposable);
 
-            var tcs = new TaskCompletionSource<Publisher<TMessage>>();
-
             _logger.Debug("RegisterPublisher");
-            _masterClient
-                .RegisterPublisherAsync(NodeId, topicName, publisher.MessageType, _slaveServer.SlaveUri)
-                .ContinueWith(task =>
-                {
-                    _logger.Debug("Registered Publisher");
-
-                    if (task.Status == TaskStatus.RanToCompletion)
-                    {
-                        publisher.UpdateSubscribers(task.Result);
-                        tcs.SetResult(publisher);
-                    }
-                    else if (task.Status == TaskStatus.Faulted)
-                    {
-                        _logger.Error("RegisterPublisher: Failure", task.Exception.InnerException);
-                        tcs.SetException(task.Exception.InnerException);
-                    }
-                });
-
-            return tcs.Task;
+            try
+            {
+                var result = await _masterClient
+                    .RegisterPublisherAsync(NodeId, topicName, publisher.MessageType, _slaveServer.SlaveUri);
+                _logger.Debug("Registered Publisher");
+                publisher.UpdateSubscribers(result);
+            }
+            catch (Exception ex) //TODO:
+            {
+                _logger.Error("RegisterPublisher: Failure", ex);
+                throw;
+            }
+            return publisher;
         }
 
         /// <summary>
@@ -344,7 +323,7 @@ namespace RosSharp
         /// <typeparam name="TService"> Service Type </typeparam>
         /// <param name="serviceName"> Service Name </param>
         /// <returns> Proxy Object </returns>
-        public Task<TService> ServiceProxyAsync<TService>(string serviceName)
+        public async Task<TService> ServiceProxyAsync<TService>(string serviceName)
             where TService : IService, new()
         {
             if (_disposed) throw new ObjectDisposedException("Node");
@@ -355,40 +334,21 @@ namespace RosSharp
 
             _logger.InfoFormat("Create ServiceProxy: {0}", serviceName);
 
-            var tcs = new TaskCompletionSource<TService>();
-
-            _masterClient
-                .LookupServiceAsync(NodeId, serviceName)
-                .ContinueWith(lookupTask =>
-                {
-                    _logger.Debug("Registered Subscriber");
-
-                    if (lookupTask.Status == TaskStatus.RanToCompletion)
-                    {
-                        _serviceProxyFactory.CreateAsync<TService>(serviceName, lookupTask.Result)
-                            .ContinueWith(createTask =>
-                            {
-                                if (createTask.Status == TaskStatus.RanToCompletion)
-                                {
-                                    var proxy = createTask.Result;
-                                    proxy.Disposing += DisposeProxyAsync;
-                                    _serviceProxies.Add(serviceName, proxy);
-                                    tcs.SetResult(proxy.Service);
-                                }
-                                else if (createTask.Status == TaskStatus.Faulted)
-                                {
-                                    tcs.SetException(createTask.Exception.InnerException);
-                                }
-                            });
-                    }
-                    else if (lookupTask.Status == TaskStatus.Faulted)
-                    {
-                        tcs.SetException(lookupTask.Exception.InnerException);
-                        _logger.Error("RegisterSubscriber: Failure", lookupTask.Exception.InnerException);
-                    }
-                });
-
-            return tcs.Task;
+            try
+            {
+                var urls = await _masterClient.LookupServiceAsync(NodeId, serviceName);
+                _logger.Debug("Registered Subscriber");
+                var proxy = await _serviceProxyFactory.CreateAsync<TService>(serviceName, urls);
+                proxy.Disposing += DisposeProxyAsync;
+                _serviceProxies.Add(serviceName, proxy);
+                return proxy.Service;
+            }
+            catch (Exception ex)//TODO:
+            {
+                _logger.Error("RegisterSubscriber: Failure", ex);
+                throw;
+            }
+            
         }
 
         public Task WaitForService(string serviceName)
@@ -406,7 +366,7 @@ namespace RosSharp
         /// <param name="serviceName"> Service Name </param>
         /// <param name="service"> Service Instance </param>
         /// <returns> object that dispose a service </returns>
-        public Task<IServiceServer> AdvertiseServiceAsync<TService>(string serviceName, TService service)
+        public async Task<IServiceServer> AdvertiseServiceAsync<TService>(string serviceName, TService service)
             where TService : IService, new()
         {
             if (_disposed) throw new ObjectDisposedException("Node");
@@ -425,22 +385,8 @@ namespace RosSharp
 
             var serviceUri = new Uri("rosrpc://" + Ros.HostName + ":" + serviceServer.EndPoint.Port);
 
-            var tcs = new TaskCompletionSource<IServiceServer>();
-
-            _masterClient
-                .RegisterServiceAsync(NodeId, serviceName, serviceUri, _slaveServer.SlaveUri)
-                .ContinueWith(registerTask =>
-                {
-                    if (registerTask.Status == TaskStatus.RanToCompletion)
-                    {
-                        tcs.SetResult(serviceServer);
-                    }
-                    else if (registerTask.Status == TaskStatus.Faulted)
-                    {
-                        tcs.SetException(registerTask.Exception.InnerException);
-                    }
-                });
-            return tcs.Task;
+            await _masterClient.RegisterServiceAsync(NodeId, serviceName, serviceUri, _slaveServer.SlaveUri);
+            return serviceServer;
         }
 
         internal Task InitializeAsync(bool enableLogger)
@@ -490,42 +436,40 @@ namespace RosSharp
             };
         }
 
-        private Task DisposeSubscriberAsync(string topicName)
+        private async Task DisposeSubscriberAsync(string topicName)
         {
             _logger.Debug(m => m("Disposing Subscriber[{0}]", topicName));
 
-            return _masterClient
-                .UnregisterSubscriberAsync(NodeId, topicName, _slaveServer.SlaveUri)
-                .ContinueWith(task =>
-                {
-                    if (task.IsFaulted)
-                    {
-                        _logger.Error("UnregisterSubscriber: Failure", task.Exception.InnerException);
-                    }
-                    _topicContainer.RemoveSubscriber(topicName);
-                    _logger.Debug(m => m("UnregisterSubscriber: [{0}]", topicName));
-                });
+            try
+            {
+                var result = await _masterClient.UnregisterSubscriberAsync(NodeId, topicName, _slaveServer.SlaveUri);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("UnregisterSubscriber: Failure", ex);
+            }
+            _topicContainer.RemoveSubscriber(topicName);
+            _logger.Debug(m => m("UnregisterSubscriber: [{0}]", topicName));
         }
 
-        private Task DisposePublisherAsync(string topicName)
+        private async Task DisposePublisherAsync(string topicName)
         {
             _logger.Debug(m => m("Disposing Publisher[{0}]", topicName));
 
-            return _masterClient
-                .UnregisterPublisherAsync(NodeId, topicName, _slaveServer.SlaveUri)
-                .ContinueWith(task =>
-                {
-                    if (task.IsFaulted)
-                    {
-                        _logger.Error("UnregisterPublisher: Failure", task.Exception.InnerException);
-                    }
-                    _topicContainer.RemovePublisher(topicName);
-                    _slaveServer.RemoveListener(topicName);
+            try
+            {
+                var result = await _masterClient.UnregisterPublisherAsync(NodeId, topicName, _slaveServer.SlaveUri);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("UnregisterPublisher: Failure", ex);
+            }
+            _topicContainer.RemovePublisher(topicName);
+            _slaveServer.RemoveListener(topicName);
 
-                    _publisherDisposables[topicName].Dispose();
-                    _publisherDisposables.Remove(topicName);
-                    _logger.Debug(m => m("UnregisterPublisher: [{0}]", topicName));
-                });
+            _publisherDisposables[topicName].Dispose();
+            _publisherDisposables.Remove(topicName);
+            _logger.Debug(m => m("UnregisterPublisher: [{0}]", topicName));
         }
 
         private Task DisposeServiceAsync(string serviceName)

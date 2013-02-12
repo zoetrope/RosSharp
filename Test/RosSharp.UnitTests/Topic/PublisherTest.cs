@@ -7,7 +7,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RosSharp.Topic;
-using RosSharp.Topic.Moles;
 
 namespace RosSharp.Tests.Topic
 {

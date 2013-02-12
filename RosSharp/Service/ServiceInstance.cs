@@ -74,13 +74,13 @@ namespace RosSharp.Service
             return Task<IObservable<Unit>>.Factory.StartNew(() => ConnectToService().Result);
         }
 
-        private Task<IObservable<Unit>> ConnectToService()
+        private async Task<IObservable<Unit>> ConnectToService()
         {
             dynamic header = _client.ReceiveAsync()
                 .Take(1)
                 .Select(b => TcpRosHeaderSerializer.Deserialize(new MemoryStream(b)))
                 .Timeout(TimeSpan.FromMilliseconds(Ros.TopicTimeout))
-                .First();
+                .Wait();
 
             var dummy = new TService();
             _logger.Info(m => m("Receive Header {0}", header.ToString()));
@@ -107,19 +107,16 @@ namespace RosSharp.Service
             var ms = new MemoryStream();
             TcpRosHeaderSerializer.Serialize(ms, sendHeader);
 
-            return _client.SendAsync(ms.ToArray())
-                .ContinueWith(task =>
-                {
-                    _logger.Info("SendTaskAsync ContinueWith");
+            var result = await _client.SendAsync(ms.ToArray());
+            _logger.Info("SendTaskAsync ContinueWith");
 
-                    return _client.ReceiveAsync()
-                        .Select(b =>
-                        {
-                            var res = Invoke(new MemoryStream(b));
-                            var array = res.ToArray();
-                            _client.SendAsync(array).Wait();
-                            return Unit.Default;
-                        });
+            return _client.ReceiveAsync()
+                .Select(b =>
+                {
+                    var res = Invoke(new MemoryStream(b));
+                    var array = res.ToArray();
+                    _client.SendAsync(array).Wait();
+                    return Unit.Default;
                 });
         }
 

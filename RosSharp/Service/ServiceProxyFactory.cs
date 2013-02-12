@@ -53,45 +53,21 @@ namespace RosSharp.Service
 
         public string NodeId { get; private set; }
 
-        public Task<ServiceProxy<TService>> CreateAsync<TService>(string serviceName, Uri uri)
+        public async Task<ServiceProxy<TService>> CreateAsync<TService>(string serviceName, Uri uri)
             where TService : IService, new()
         {
             var tcpClient = new TcpRosClient();
 
             var tcs = new TaskCompletionSource<ServiceProxy<TService>>();
 
-            tcpClient.ConnectAsync(uri.Host, uri.Port)
-                .ContinueWith(connectTask =>
-                {
-                    if (connectTask.Status == TaskStatus.RanToCompletion)
-                    {
-                        ConnectToServiceServer<TService>(serviceName, tcpClient)
-                            .ContinueWith(serviceTask =>
-                            {
-                                if (serviceTask.Status == TaskStatus.RanToCompletion)
-                                {
-                                    tcs.SetResult(serviceTask.Result);
-                                }
-                                else if (serviceTask.Status == TaskStatus.Faulted)
-                                {
-                                    tcs.SetException(serviceTask.Exception.InnerException);
-                                }
-                            });
-                    }
-                    else if(connectTask.Status == TaskStatus.Faulted)
-                    {
-                        tcs.SetException(connectTask.Exception.InnerException);
-                    }
-                });
-
-            return tcs.Task;
+            await tcpClient.ConnectAsync(uri.Host, uri.Port);
+            var result = await ConnectToServiceServer<TService>(serviceName, tcpClient);
+            return result;
         }
 
-        private Task<ServiceProxy<TService>> ConnectToServiceServer<TService>(string serviceName, TcpRosClient tcpClient)
+        private async Task<ServiceProxy<TService>> ConnectToServiceServer<TService>(string serviceName, TcpRosClient tcpClient)
             where TService : IService, new()
         {
-            var tcs = new TaskCompletionSource<ServiceProxy<TService>>();
-
             var receiveHeaderObs = tcpClient.ReceiveAsync()
                 .Select(x => TcpRosHeaderSerializer.Deserialize(new MemoryStream(x)))
                 .Take(1)
@@ -112,41 +88,30 @@ namespace RosSharp.Service
 
             TcpRosHeaderSerializer.Serialize(sendHeaderStream, sendHeader);
 
-            tcpClient.SendAsync(sendHeaderStream.ToArray())
-                .ContinueWith(sendTask =>
+            try
+            {
+                var result = await tcpClient.SendAsync(sendHeaderStream.ToArray());
+                var dummy = new TService();
+                dynamic recvHeader = receiveHeaderObs.Timeout(TimeSpan.FromMilliseconds(Ros.TopicTimeout)).Wait();
+
+                if (recvHeader.HasMember("service") && recvHeader.service != serviceName)
                 {
-                    if (sendTask.Status == TaskStatus.RanToCompletion)
-                    {
-                        try
-                        {
-                            var dummy = new TService();
-                            dynamic recvHeader = receiveHeaderObs.Timeout(TimeSpan.FromMilliseconds(Ros.TopicTimeout)).First();
+                    _logger.Error(m => m("ServiceName mismatch error, expected={0} actual={1}", serviceName, recvHeader.topic));
+                    throw new RosTopicException("ServiceName mismatch error");
+                }
+                if (recvHeader.md5sum != "*" && recvHeader.md5sum != dummy.Md5Sum)
+                {
+                    _logger.Error(m => m("MD5Sum mismatch error, expected={0} actual={1}", dummy.Md5Sum, recvHeader.md5sum));
+                    throw new RosTopicException("MD5Sum mismatch error");
+                }
 
-                            if (recvHeader.HasMember("service") && recvHeader.service != serviceName)
-                            {
-                                _logger.Error(m => m("ServiceName mismatch error, expected={0} actual={1}", serviceName, recvHeader.topic));
-                                throw new RosTopicException("ServiceName mismatch error");
-                            }
-                            if (recvHeader.md5sum != "*" && recvHeader.md5sum != dummy.Md5Sum)
-                            {
-                                _logger.Error(m => m("MD5Sum mismatch error, expected={0} actual={1}", dummy.Md5Sum, recvHeader.md5sum));
-                                throw new RosTopicException("MD5Sum mismatch error");
-                            }
-
-                            var proxy = new ServiceProxy<TService>(NodeId, serviceName, service, tcpClient);
-                            tcs.SetResult(proxy);
-                        }
-                        catch (Exception ex)
-                        {
-                            tcs.SetException(ex);
-                        }
-                    }
-                    else if (sendTask.Status == TaskStatus.Faulted)
-                    {
-                        tcs.SetException(sendTask.Exception.InnerException);
-                    }
-                });
-            return tcs.Task;
+                var proxy = new ServiceProxy<TService>(NodeId, serviceName, service, tcpClient);
+                return proxy;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
     }

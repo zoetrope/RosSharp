@@ -1,13 +1,11 @@
 ﻿using System.IO;
 using System.Net.Sockets;
-using System.Net.Sockets.Moles;
 using System.Reactive.Linq;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RosSharp.Transport;
-using RosSharp.Transport.Moles;
 
 namespace RosSharp.Tests.Transport
 {
