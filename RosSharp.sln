@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2012 for Windows Desktop
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E79A87AA-9AFE-4941-A389-E300CFDBC41D}"
 	ProjectSection(SolutionItems) = preProject
 		Local.testsettings = Local.testsettings
@@ -8,25 +10,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample", "Sample", "{B02FD51D-88FD-4A11-9BFE-AF4F3719C802}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{57BD2B28-6427-4973-A179-C1841417F349}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{4599B248-B071-422A-B308-0A9EC1A1089A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RosSharp", "RosSharp\RosSharp.csproj", "{417B1A0A-5FF8-4423-9F62-FE61AA299239}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Listener.Dev", "Sample\Listener\Listener.Dev.csproj", "{C26EE4A1-064B-47F1-B0BC-544DAAED7698}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Talker.Dev", "Sample\Talker\Talker.Dev.csproj", "{572772C7-D172-497F-A428-D10141BBCA72}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RosCore", "App\RosCore\RosCore.csproj", "{25D53A55-E534-4CCA-9358-A51971838437}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddTwoIntsServer.Dev", "Sample\AddTwoIntsServer\AddTwoIntsServer.Dev.csproj", "{553D2314-FDAA-4C06-A4D6-11B9D5F6225A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddTwoIntsClient.Dev", "Sample\AddTwoIntsClient\AddTwoIntsClient.Dev.csproj", "{23DD82FC-DB6F-4214-9C95-DB9FA6B80336}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParameterClient.Dev", "Sample\ParameterClient\ParameterClient.Dev.csproj", "{31592B97-7CFB-4592-AF05-D689BA80BB19}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RosSharp.UnitTests", "Test\RosSharp.UnitTests\RosSharp.UnitTests.csproj", "{E9C21C7C-D36E-416A-81EB-5EE719ACFDA1}"
 EndProject
@@ -38,13 +28,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{04B525
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
 		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
 Global
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = RosSharp.vsmdi
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -64,26 +50,6 @@ Global
 		{417B1A0A-5FF8-4423-9F62-FE61AA299239}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{417B1A0A-5FF8-4423-9F62-FE61AA299239}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{417B1A0A-5FF8-4423-9F62-FE61AA299239}.Release|x86.ActiveCfg = Release|Any CPU
-		{C26EE4A1-064B-47F1-B0BC-544DAAED7698}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{C26EE4A1-064B-47F1-B0BC-544DAAED7698}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{C26EE4A1-064B-47F1-B0BC-544DAAED7698}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{C26EE4A1-064B-47F1-B0BC-544DAAED7698}.Debug|x86.ActiveCfg = Debug|x86
-		{C26EE4A1-064B-47F1-B0BC-544DAAED7698}.Debug|x86.Build.0 = Debug|x86
-		{C26EE4A1-064B-47F1-B0BC-544DAAED7698}.Release|Any CPU.ActiveCfg = Release|x86
-		{C26EE4A1-064B-47F1-B0BC-544DAAED7698}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{C26EE4A1-064B-47F1-B0BC-544DAAED7698}.Release|Mixed Platforms.Build.0 = Release|x86
-		{C26EE4A1-064B-47F1-B0BC-544DAAED7698}.Release|x86.ActiveCfg = Release|x86
-		{C26EE4A1-064B-47F1-B0BC-544DAAED7698}.Release|x86.Build.0 = Release|x86
-		{572772C7-D172-497F-A428-D10141BBCA72}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{572772C7-D172-497F-A428-D10141BBCA72}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{572772C7-D172-497F-A428-D10141BBCA72}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{572772C7-D172-497F-A428-D10141BBCA72}.Debug|x86.ActiveCfg = Debug|x86
-		{572772C7-D172-497F-A428-D10141BBCA72}.Debug|x86.Build.0 = Debug|x86
-		{572772C7-D172-497F-A428-D10141BBCA72}.Release|Any CPU.ActiveCfg = Release|x86
-		{572772C7-D172-497F-A428-D10141BBCA72}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{572772C7-D172-497F-A428-D10141BBCA72}.Release|Mixed Platforms.Build.0 = Release|x86
-		{572772C7-D172-497F-A428-D10141BBCA72}.Release|x86.ActiveCfg = Release|x86
-		{572772C7-D172-497F-A428-D10141BBCA72}.Release|x86.Build.0 = Release|x86
 		{25D53A55-E534-4CCA-9358-A51971838437}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{25D53A55-E534-4CCA-9358-A51971838437}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{25D53A55-E534-4CCA-9358-A51971838437}.Debug|Mixed Platforms.Build.0 = Debug|x86
@@ -94,36 +60,6 @@ Global
 		{25D53A55-E534-4CCA-9358-A51971838437}.Release|Mixed Platforms.Build.0 = Release|x86
 		{25D53A55-E534-4CCA-9358-A51971838437}.Release|x86.ActiveCfg = Release|x86
 		{25D53A55-E534-4CCA-9358-A51971838437}.Release|x86.Build.0 = Release|x86
-		{553D2314-FDAA-4C06-A4D6-11B9D5F6225A}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{553D2314-FDAA-4C06-A4D6-11B9D5F6225A}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{553D2314-FDAA-4C06-A4D6-11B9D5F6225A}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{553D2314-FDAA-4C06-A4D6-11B9D5F6225A}.Debug|x86.ActiveCfg = Debug|x86
-		{553D2314-FDAA-4C06-A4D6-11B9D5F6225A}.Debug|x86.Build.0 = Debug|x86
-		{553D2314-FDAA-4C06-A4D6-11B9D5F6225A}.Release|Any CPU.ActiveCfg = Release|x86
-		{553D2314-FDAA-4C06-A4D6-11B9D5F6225A}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{553D2314-FDAA-4C06-A4D6-11B9D5F6225A}.Release|Mixed Platforms.Build.0 = Release|x86
-		{553D2314-FDAA-4C06-A4D6-11B9D5F6225A}.Release|x86.ActiveCfg = Release|x86
-		{553D2314-FDAA-4C06-A4D6-11B9D5F6225A}.Release|x86.Build.0 = Release|x86
-		{23DD82FC-DB6F-4214-9C95-DB9FA6B80336}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{23DD82FC-DB6F-4214-9C95-DB9FA6B80336}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{23DD82FC-DB6F-4214-9C95-DB9FA6B80336}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{23DD82FC-DB6F-4214-9C95-DB9FA6B80336}.Debug|x86.ActiveCfg = Debug|x86
-		{23DD82FC-DB6F-4214-9C95-DB9FA6B80336}.Debug|x86.Build.0 = Debug|x86
-		{23DD82FC-DB6F-4214-9C95-DB9FA6B80336}.Release|Any CPU.ActiveCfg = Release|x86
-		{23DD82FC-DB6F-4214-9C95-DB9FA6B80336}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{23DD82FC-DB6F-4214-9C95-DB9FA6B80336}.Release|Mixed Platforms.Build.0 = Release|x86
-		{23DD82FC-DB6F-4214-9C95-DB9FA6B80336}.Release|x86.ActiveCfg = Release|x86
-		{23DD82FC-DB6F-4214-9C95-DB9FA6B80336}.Release|x86.Build.0 = Release|x86
-		{31592B97-7CFB-4592-AF05-D689BA80BB19}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{31592B97-7CFB-4592-AF05-D689BA80BB19}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{31592B97-7CFB-4592-AF05-D689BA80BB19}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{31592B97-7CFB-4592-AF05-D689BA80BB19}.Debug|x86.ActiveCfg = Debug|x86
-		{31592B97-7CFB-4592-AF05-D689BA80BB19}.Debug|x86.Build.0 = Debug|x86
-		{31592B97-7CFB-4592-AF05-D689BA80BB19}.Release|Any CPU.ActiveCfg = Release|x86
-		{31592B97-7CFB-4592-AF05-D689BA80BB19}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{31592B97-7CFB-4592-AF05-D689BA80BB19}.Release|Mixed Platforms.Build.0 = Release|x86
-		{31592B97-7CFB-4592-AF05-D689BA80BB19}.Release|x86.ActiveCfg = Release|x86
-		{31592B97-7CFB-4592-AF05-D689BA80BB19}.Release|x86.Build.0 = Release|x86
 		{E9C21C7C-D36E-416A-81EB-5EE719ACFDA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E9C21C7C-D36E-416A-81EB-5EE719ACFDA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E9C21C7C-D36E-416A-81EB-5EE719ACFDA1}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -159,14 +95,12 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{C26EE4A1-064B-47F1-B0BC-544DAAED7698} = {B02FD51D-88FD-4A11-9BFE-AF4F3719C802}
-		{572772C7-D172-497F-A428-D10141BBCA72} = {B02FD51D-88FD-4A11-9BFE-AF4F3719C802}
-		{553D2314-FDAA-4C06-A4D6-11B9D5F6225A} = {B02FD51D-88FD-4A11-9BFE-AF4F3719C802}
-		{23DD82FC-DB6F-4214-9C95-DB9FA6B80336} = {B02FD51D-88FD-4A11-9BFE-AF4F3719C802}
-		{31592B97-7CFB-4592-AF05-D689BA80BB19} = {B02FD51D-88FD-4A11-9BFE-AF4F3719C802}
 		{25D53A55-E534-4CCA-9358-A51971838437} = {57BD2B28-6427-4973-A179-C1841417F349}
 		{E9C21C7C-D36E-416A-81EB-5EE719ACFDA1} = {4599B248-B071-422A-B308-0A9EC1A1089A}
 		{EB13E688-3F54-4954-8D3B-8642D4F738DC} = {4599B248-B071-422A-B308-0A9EC1A1089A}
 		{C810FB6F-B9FD-4E03-8D12-96B35BF60975} = {4599B248-B071-422A-B308-0A9EC1A1089A}
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = RosSharp.vsmdi
 	EndGlobalSection
 EndGlobal

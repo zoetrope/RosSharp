@@ -258,7 +258,7 @@ namespace RosSharp
                 var result = await _masterClient
                     .RegisterSubscriberAsync(NodeId, topicName, subscriber.MessageType, _slaveServer.SlaveUri);
                 _logger.Debug("Registered Subscriber");
-                ((ISubscriber)subscriber).UpdatePublishers(result);
+                await ((ISubscriber)subscriber).UpdatePublishers(result);
             }
             catch (Exception ex) //TODO:
             {

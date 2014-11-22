@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2012 for Web
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "GenMsg.Lib", "App\GenMsg.Lib\GenMsg.Lib.fsproj", "{13BD4894-20F5-428F-AD57-AFA5E733F832}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "GenMsg.Tests", "App\GenMsg.Tests\GenMsg.Tests.fsproj", "{37548AA3-9223-4DD3-BC46-9668518D7B87}"

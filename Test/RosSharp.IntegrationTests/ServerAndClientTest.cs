@@ -44,7 +44,7 @@ namespace RosSharp.IntegrationTests
             var res = proxy.InvokeAsync(new AddTwoInts.Request() {a = 1, b = 2})
                 .ToObservable()
                 .Timeout(TimeSpan.FromSeconds(3))
-                .First();
+                .Wait();
 
             res.sum.Is(3);
         }

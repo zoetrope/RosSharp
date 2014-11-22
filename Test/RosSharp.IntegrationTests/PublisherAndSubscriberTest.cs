@@ -51,7 +51,7 @@ namespace RosSharp.IntegrationTests
 
             publisher.OnNext(new ByteMultiArray() { data = Enumerable.Range(0, 5000).Select(x => (byte)(x % 256)).ToList() });
 
-            var data = observer.Timeout(TestTimeout).First();
+            var data = observer.Timeout(TestTimeout).Wait();
 
             data.data.Count.Is(5000);
 
@@ -85,13 +85,13 @@ namespace RosSharp.IntegrationTests
             obs.Subscribe(publisher);
 
             scheduler.AdvanceBy(10);
-            observer.Timeout(TestTimeout).First().data.Is("abc");
+            observer.Timeout(TestTimeout).Wait().data.Is("abc");
 
             scheduler.AdvanceBy(10);
-            observer.Timeout(TestTimeout).First().data.Is("defg");
+            observer.Timeout(TestTimeout).Wait().data.Is("defg");
             
             scheduler.AdvanceBy(10);
-            observer.Timeout(TestTimeout).First().data.Is("hijklmn");
+            observer.Timeout(TestTimeout).Wait().data.Is("hijklmn");
             
             
 
@@ -126,13 +126,13 @@ namespace RosSharp.IntegrationTests
             obs.Subscribe(publisher);
 
             scheduler.AdvanceBy(10);
-            observer.Timeout(TestTimeout).First().data.Is("abc");
+            observer.Timeout(TestTimeout).Wait().data.Is("abc");
 
             scheduler.AdvanceBy(10);
-            observer.Timeout(TestTimeout).First().data.Is("defg");
+            observer.Timeout(TestTimeout).Wait().data.Is("defg");
 
             scheduler.AdvanceBy(10);
-            observer.Timeout(TestTimeout).First().data.Is("hijklmn");
+            observer.Timeout(TestTimeout).Wait().data.Is("hijklmn");
 
 
             subscriber.Dispose();
@@ -176,21 +176,21 @@ namespace RosSharp.IntegrationTests
             obs.Subscribe(publisher);
 
             scheduler.AdvanceBy(10);
-            observer1.Timeout(TestTimeout).First().data.Is("abc");
-            observer2.Timeout(TestTimeout).First().data.Is("abc");
-            observer3.Timeout(TestTimeout).First().data.Is("abc");
+            observer1.Timeout(TestTimeout).Wait().data.Is("abc");
+            observer2.Timeout(TestTimeout).Wait().data.Is("abc");
+            observer3.Timeout(TestTimeout).Wait().data.Is("abc");
 
             observer1.Dispose();
             scheduler.AdvanceBy(10);
-            AssertEx.Throws<TimeoutException>(() => observer1.Timeout(TestTimeout).First());
-            observer2.Timeout(TestTimeout).First().data.Is("defg");
-            observer3.Timeout(TestTimeout).First().data.Is("defg");
+            AssertEx.Throws<TimeoutException>(() => observer1.Timeout(TestTimeout).Wait());
+            observer2.Timeout(TestTimeout).Wait().data.Is("defg");
+            observer3.Timeout(TestTimeout).Wait().data.Is("defg");
 
             observer2.Dispose();
             scheduler.AdvanceBy(10);
-            AssertEx.Throws<TimeoutException>(() => observer1.Timeout(TestTimeout).First());
-            AssertEx.Throws<TimeoutException>(() => observer2.Timeout(TestTimeout).First());
-            observer3.Timeout(TestTimeout).First().data.Is("hijklmn");
+            AssertEx.Throws<TimeoutException>(() => observer1.Timeout(TestTimeout).Wait());
+            AssertEx.Throws<TimeoutException>(() => observer2.Timeout(TestTimeout).Wait());
+            observer3.Timeout(TestTimeout).Wait().data.Is("hijklmn");
 
 
             subscriber1.Dispose();
@@ -246,31 +246,31 @@ namespace RosSharp.IntegrationTests
             obs3.Subscribe(publisher3);
 
             scheduler.AdvanceTo(110);
-            observer.Timeout(TestTimeout).First().data.Is("abc1");
+            observer.Timeout(TestTimeout).Wait().data.Is("abc1");
 
             scheduler.AdvanceTo(120);
-            observer.Timeout(TestTimeout).First().data.Is("abc2");
+            observer.Timeout(TestTimeout).Wait().data.Is("abc2");
 
             scheduler.AdvanceTo(130);
-            observer.Timeout(TestTimeout).First().data.Is("abc3");
+            observer.Timeout(TestTimeout).Wait().data.Is("abc3");
 
             scheduler.AdvanceTo(210);
-            observer.Timeout(TestTimeout).First().data.Is("defg1");
+            observer.Timeout(TestTimeout).Wait().data.Is("defg1");
 
             scheduler.AdvanceTo(220);
-            observer.Timeout(TestTimeout).First().data.Is("defg2");
+            observer.Timeout(TestTimeout).Wait().data.Is("defg2");
 
             scheduler.AdvanceTo(230);
-            observer.Timeout(TestTimeout).First().data.Is("defg3");
+            observer.Timeout(TestTimeout).Wait().data.Is("defg3");
 
             scheduler.AdvanceTo(310);
-            observer.Timeout(TestTimeout).First().data.Is("hijklmn1");
+            observer.Timeout(TestTimeout).Wait().data.Is("hijklmn1");
 
             scheduler.AdvanceTo(320);
-            observer.Timeout(TestTimeout).First().data.Is("hijklmn2");
+            observer.Timeout(TestTimeout).Wait().data.Is("hijklmn2");
 
             scheduler.AdvanceTo(330);
-            observer.Timeout(TestTimeout).First().data.Is("hijklmn3");
+            observer.Timeout(TestTimeout).Wait().data.Is("hijklmn3");
 
 
             subscriber.Dispose();
