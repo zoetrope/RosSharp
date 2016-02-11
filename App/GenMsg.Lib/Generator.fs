@@ -28,7 +28,7 @@ let generateHeader =
 let saveFile outputDir typeName text = 
     if Directory.Exists(outputDir) = false then
         Directory.CreateDirectory(outputDir) |> ignore
-    let fileName = outputDir + @"\" + typeName + ".cs"
+    let fileName = Path.Combine(outputDir, typeName + ".cs")
     File.WriteAllText(fileName, generateHeader + text)
     fileName
 
