@@ -15,10 +15,10 @@ type Md5GeneratorSetting() =
     static member includeDirectories = dirs
 
 let getFileName (names : string list) =
-   String.Join(@"\",names) + ".msg"
+   String.Join(System.IO.Path.DirectorySeparatorChar.ToString(),names) + ".msg"
 
 let searchMsgFile dirs fileName =
-   dirs |> Seq.map(fun dir -> dir + "\\" + (getFileName fileName))
+   dirs |> Seq.map(fun dir -> dir + System.IO.Path.DirectorySeparatorChar.ToString() + (getFileName fileName))
         |> Seq.find(fun file -> File.Exists(file))
         
 let getOriginalConstValue v =

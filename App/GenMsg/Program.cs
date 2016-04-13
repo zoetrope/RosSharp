@@ -10,8 +10,7 @@ namespace RosSharp.GenMsg
         {
             string generateType = "";
             string ns = "";
-            string outputDir = @".\";
-            var includeDirs = new List<string>();
+            string outputDir = @"." + System.IO.Path.DirectorySeparatorChar.ToString();            var includeDirs = new List<string>();
 
             var optionSet = new OptionSet()
             {
