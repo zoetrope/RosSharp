@@ -136,7 +136,7 @@ let rec getSerializeLength t v =
     | UInt64 -> "8"
     | Float32 -> "4"
     | Float64 -> "8"
-    | String -> "4 + " + v + ".Length"
+    | String -> "4 + System.Text.Encoding.UTF8.GetByteCount(" + v + ")"
     | Time -> "8"
     | Duration -> "8"
     | FixedArray (x, size) -> v + ".Sum(x => " + getSerializeLength x "x" + ")"
